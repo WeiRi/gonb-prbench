@@ -1,0 +1,61 @@
+diff --git a/client/container_exec.go b/client/container_exec.go
+index eb732fd027d7d..08a98f3efdb65 100644
+--- a/client/container_exec.go
++++ b/client/container_exec.go
+@@ -46,6 +46,15 @@ func (cli *Client) ContainerExecCreate(ctx context.Context, containerID string,
+ 
+ // ContainerExecStart starts an exec process already created in the docker host.
+ func (cli *Client) ContainerExecStart(ctx context.Context, execID string, config container.ExecStartOptions) error {
++	// Make sure we negotiated (if the client is configured to do so),
++	// as code below contains API-version specific handling of options.
++	//
++	// Normally, version-negotiation (if enabled) would not happen until
++	// the API request is made.
++	if err := cli.checkVersion(ctx); err != nil {
++		return err
++	}
++
+ 	if versions.LessThan(cli.ClientVersion(), "1.42") {
+ 		config.ConsoleSize = nil
+ 	}
+diff --git a/client/container_list.go b/client/container_list.go
+index e17b14acff32a..e7b197f0c5a8b 100644
+--- a/client/container_list.go
++++ b/client/container_list.go
+@@ -35,6 +35,15 @@ func (cli *Client) ContainerList(ctx context.Context, options container.ListOpti
+ 	}
+ 
+ 	if options.Filters.Len() > 0 {
++		// Make sure we negotiated (if the client is configured to do so),
++		// as code below contains API-version specific handling of options.
++		//
++		// Normally, version-negotiation (if enabled) would not happen until
++		// the API request is made.
++		if err := cli.checkVersion(ctx); err != nil {
++			return nil, err
++		}
++
+ 		//nolint:staticcheck // ignore SA1019 for old code
+ 		filterJSON, err := filters.ToParamWithVersion(cli.version, options.Filters)
+ 		if err != nil {
+diff --git a/client/events.go b/client/events.go
+index 498fe46314041..7e8044560aa46 100644
+--- a/client/events.go
++++ b/client/events.go
+@@ -23,6 +23,16 @@ func (cli *Client) Events(ctx context.Context, options events.ListOptions) (<-ch
+ 	go func() {
+ 		defer close(errs)
+ 
++		// Make sure we negotiated (if the client is configured to do so),
++		// as code below contains API-version specific handling of options.
++		//
++		// Normally, version-negotiation (if enabled) would not happen until
++		// the API request is made.
++		if err := cli.checkVersion(ctx); err != nil {
++			close(started)
++			errs <- err
++			return
++		}
+ 		query, err := buildEventsQueryParams(cli.version, options)
+ 		if err != nil {
+ 			close(started)

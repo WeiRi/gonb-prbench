@@ -1,0 +1,13 @@
+diff --git a/container/health.go b/container/health.go
+index 167ee9b476700..3e93142b98599 100644
+--- a/container/health.go
++++ b/container/health.go
+@@ -22,7 +22,7 @@ func (s *Health) String() string {
+ 	case types.Starting:
+ 		return "health: starting"
+ 	default: // Healthy and Unhealthy are clear on their own
+-		return s.Health.Status
++		return status
+ 	}
+ }
+ 

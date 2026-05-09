@@ -1,0 +1,16 @@
+diff --git a/layer/layer_store.go b/layer/layer_store.go
+index fa436f098ba00..12de1d598315b 100644
+--- a/layer/layer_store.go
++++ b/layer/layer_store.go
+@@ -334,7 +334,10 @@ func (ls *layerStore) get(l ChainID) *roLayer {
+ }
+ 
+ func (ls *layerStore) Get(l ChainID) (Layer, error) {
+-	layer := ls.get(l)
++	ls.layerL.Lock()
++	defer ls.layerL.Unlock()
++
++	layer := ls.getWithoutLock(l)
+ 	if layer == nil {
+ 		return nil, ErrLayerDoesNotExist
+ 	}

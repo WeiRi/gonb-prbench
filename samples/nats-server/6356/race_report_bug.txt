@@ -1,0 +1,82 @@
+WARNING: DATA RACE
+Read at 0x00c0000b61f8 by goroutine 10:
+  ase/nats-server-6356.TestRaceJsConsumerInfoRequestMeta.func1()
+      /work/verified_test.go:48 +0xd9
+
+Previous write at 0x00c0000b61f8 by goroutine 92:
+  ase/nats-server-6356.TestRaceJsConsumerInfoRequestMeta.func2()
+      /work/verified_test.go:64 +0xfc
+
+Goroutine 10 (running) created at:
+  ase/nats-server-6356.TestRaceJsConsumerInfoRequestMeta()
+      /work/verified_test.go:42 +0x116
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1934 +0x21c
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1997 +0x44
+
+Goroutine 92 (running) created at:
+  ase/nats-server-6356.TestRaceJsConsumerInfoRequestMeta()
+      /work/verified_test.go:59 +0x24a
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1934 +0x21c
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1997 +0x44
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c0000b61f8 by goroutine 92:
+  ase/nats-server-6356.TestRaceJsConsumerInfoRequestMeta.func2()
+      /work/verified_test.go:67 +0x164
+
+Previous read at 0x00c0000b61f8 by goroutine 66:
+  ase/nats-server-6356.TestRaceJsConsumerInfoRequestMeta.func1()
+      /work/verified_test.go:48 +0xd9
+
+Goroutine 92 (running) created at:
+  ase/nats-server-6356.TestRaceJsConsumerInfoRequestMeta()
+      /work/verified_test.go:59 +0x24a
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1934 +0x21c
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1997 +0x44
+
+Goroutine 66 (finished) created at:
+  ase/nats-server-6356.TestRaceJsConsumerInfoRequestMeta()
+      /work/verified_test.go:42 +0x116
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1934 +0x21c
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1997 +0x44
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c000322008 by goroutine 47:
+  ase/nats-server-6356.TestRaceJsConsumerInfoRequestMeta.func1()
+      /work/verified_test.go:50 +0xef
+
+Previous write at 0x00c000322008 by goroutine 92:
+  ase/nats-server-6356.TestRaceJsConsumerInfoRequestMeta.func2()
+      /work/verified_test.go:67 +0x14e
+
+Goroutine 47 (running) created at:
+  ase/nats-server-6356.TestRaceJsConsumerInfoRequestMeta()
+      /work/verified_test.go:42 +0x116
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1934 +0x21c
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1997 +0x44
+
+Goroutine 92 (running) created at:
+  ase/nats-server-6356.TestRaceJsConsumerInfoRequestMeta()
+      /work/verified_test.go:59 +0x24a
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1934 +0x21c
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1997 +0x44
+==================
+--- FAIL: TestRaceJsConsumerInfoRequestMeta (0.02s)
+    testing.go:1617: race detected during execution of test
+FAIL
+FAIL	ase/nats-server-6356	0.040s
+FAIL

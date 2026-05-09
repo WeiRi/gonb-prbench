@@ -1,0 +1,133 @@
+WARNING: DATA RACE
+Read at 0x00c4200e4060 by goroutine 58:
+  _/work.TestRace.func2()
+      /work/verified_test.go:26 +0x67
+
+Previous write at 0x00c4200e4060 by goroutine 57:
+  sync/atomic.AddInt64()
+      /usr/local/go/src/runtime/race_amd64.s:276 +0xb
+  _/work.(*ttlCache).IncrementEvictions()
+      /work/verified_test.go:38 +0x43
+  _/work.TestRace.func1()
+      /work/verified_test.go:51 +0x61
+
+Goroutine 58 (running) created at:
+  _/work.TestRace()
+      /work/verified_test.go:59 +0x108
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:777 +0x16d
+
+Goroutine 57 (finished) created at:
+  _/work.TestRace()
+      /work/verified_test.go:47 +0xc4
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:777 +0x16d
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c4200e4068 by goroutine 58:
+  _/work.TestRace.func2()
+      /work/verified_test.go:26 +0x67
+
+Previous write at 0x00c4200e4068 by goroutine 57:
+  sync/atomic.AddInt64()
+      /usr/local/go/src/runtime/race_amd64.s:276 +0xb
+  _/work.(*ttlCache).IncrementHits()
+      /work/verified_test.go:30 +0x47
+  _/work.TestRace.func1()
+      /work/verified_test.go:49 +0x45
+
+Goroutine 58 (running) created at:
+  _/work.TestRace()
+      /work/verified_test.go:59 +0x108
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:777 +0x16d
+
+Goroutine 57 (finished) created at:
+  _/work.TestRace()
+      /work/verified_test.go:47 +0xc4
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:777 +0x16d
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c4200e4068 by goroutine 59:
+  _/work.TestRace.func2()
+      /work/verified_test.go:26 +0x67
+
+Previous write at 0x00c4200e4068 by goroutine 57:
+  sync/atomic.AddInt64()
+      /usr/local/go/src/runtime/race_amd64.s:276 +0xb
+  _/work.(*ttlCache).IncrementHits()
+      /work/verified_test.go:30 +0x47
+  _/work.TestRace.func1()
+      /work/verified_test.go:49 +0x45
+
+Goroutine 59 (running) created at:
+  _/work.TestRace()
+      /work/verified_test.go:59 +0x108
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:777 +0x16d
+
+Goroutine 57 (finished) created at:
+  _/work.TestRace()
+      /work/verified_test.go:47 +0xc4
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:777 +0x16d
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c4200e4078 by goroutine 59:
+  _/work.TestRace.func2()
+      /work/verified_test.go:26 +0x67
+
+Previous write at 0x00c4200e4078 by goroutine 57:
+  sync/atomic.AddInt64()
+      /usr/local/go/src/runtime/race_amd64.s:276 +0xb
+  _/work.(*ttlCache).IncrementWrites()
+      /work/verified_test.go:34 +0x47
+  _/work.TestRace.func1()
+      /work/verified_test.go:50 +0x53
+
+Goroutine 59 (running) created at:
+  _/work.TestRace()
+      /work/verified_test.go:59 +0x108
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:777 +0x16d
+
+Goroutine 57 (finished) created at:
+  _/work.TestRace()
+      /work/verified_test.go:47 +0xc4
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:777 +0x16d
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c4200e4078 by goroutine 58:
+  _/work.TestRace.func2()
+      /work/verified_test.go:26 +0x67
+
+Previous write at 0x00c4200e4078 by goroutine 57:
+  sync/atomic.AddInt64()
+      /usr/local/go/src/runtime/race_amd64.s:276 +0xb
+  _/work.(*ttlCache).IncrementWrites()
+      /work/verified_test.go:34 +0x47
+  _/work.TestRace.func1()
+      /work/verified_test.go:50 +0x53
+
+Goroutine 58 (running) created at:
+  _/work.TestRace()
+      /work/verified_test.go:59 +0x108
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:777 +0x16d
+
+Goroutine 57 (finished) created at:
+  _/work.TestRace()
+      /work/verified_test.go:47 +0xc4
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:777 +0x16d
+==================
+--- FAIL: TestRace (0.06s)
+	testing.go:730: race detected during execution of test
+FAIL
+FAIL	_/work	0.073s

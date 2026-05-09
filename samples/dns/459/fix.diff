@@ -1,0 +1,94 @@
+diff --git a/client.go b/client.go
+index 8b09e189e..d54d6422e 100644
+--- a/client.go
++++ b/client.go
+@@ -121,12 +121,12 @@ func (c *Client) Exchange(m *Msg, a string) (r *Msg, rtt time.Duration, err erro
+ 	r, rtt, err, shared := c.group.Do(m.Question[0].Name+t+cl, func() (*Msg, time.Duration, error) {
+ 		return c.exchange(m, a)
+ 	})
++	if r != nil && shared {
++		r = r.Copy()
++	}
+ 	if err != nil {
+ 		return r, rtt, err
+ 	}
+-	if shared {
+-		return r.Copy(), rtt, nil
+-	}
+ 	return r, rtt, nil
+ }
+ 
+diff --git a/client_test.go b/client_test.go
+index 559afc5c5..dee585f36 100644
+--- a/client_test.go
++++ b/client_test.go
+@@ -5,6 +5,7 @@ import (
+ 	"fmt"
+ 	"net"
+ 	"strconv"
++	"sync"
+ 	"testing"
+ 	"time"
+ )
+@@ -450,3 +451,61 @@ func TestTimeout(t *testing.T) {
+ 		t.Errorf("exchange took longer (%v) than specified Timeout (%v)", length, timeout)
+ 	}
+ }
++
++// Check that responses from deduplicated requests aren't shared between callers
++func TestConcurrentExchanges(t *testing.T) {
++	cases := make([]*Msg, 2)
++	cases[0] = new(Msg)
++	cases[1] = new(Msg)
++	cases[1].Truncated = true
++	for _, m := range cases {
++		block := make(chan struct{})
++		waiting := make(chan struct{})
++
++		handler := func(w ResponseWriter, req *Msg) {
++			r := m.Copy()
++			r.SetReply(req)
++
++			waiting <- struct{}{}
++			<-block
++			w.WriteMsg(r)
++		}
++
++		HandleFunc("miek.nl.", handler)
++		defer HandleRemove("miek.nl.")
++
++		s, addrstr, err := RunLocalUDPServer("127.0.0.1:0")
++		if err != nil {
++			t.Fatalf("unable to run test server: %s", err)
++		}
++		defer s.Shutdown()
++
++		m := new(Msg)
++		m.SetQuestion("miek.nl.", TypeSRV)
++		c := &Client{
++			SingleInflight: true,
++		}
++		r := make([]*Msg, 2)
++
++		var wg sync.WaitGroup
++		wg.Add(len(r))
++		for i := 0; i < len(r); i++ {
++			go func(i int) {
++				r[i], _, _ = c.Exchange(m.Copy(), addrstr)
++				wg.Done()
++			}(i)
++		}
++		select {
++		case <-waiting:
++		case <-time.After(time.Second):
++			t.FailNow()
++		}
++		close(block)
++		wg.Wait()
++
++		if r[0] == r[1] {
++			t.Log("Got same response object, expected non-shared responses")
++			t.Fail()
++		}
++	}
++}

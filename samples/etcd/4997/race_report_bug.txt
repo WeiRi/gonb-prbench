@@ -1,0 +1,25 @@
+WARNING: DATA RACE
+Write at 0x00c4200e8068 by goroutine 9:
+  _/work.TestRace_4997.func1()
+      /work/verified_test.go:7 +0x6b
+
+Previous write at 0x00c4200e8068 by goroutine 8:
+  _/work.TestRace_4997.func1()
+      /work/verified_test.go:7 +0x6b
+
+Goroutine 9 (running) created at:
+  _/work.TestRace_4997()
+      /work/verified_test.go:13 +0xdb
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:777 +0x16d
+
+Goroutine 8 (finished) created at:
+  _/work.TestRace_4997()
+      /work/verified_test.go:13 +0xdb
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:777 +0x16d
+==================
+--- FAIL: TestRace_4997 (0.01s)
+	testing.go:730: race detected during execution of test
+FAIL
+FAIL	_/work	0.025s

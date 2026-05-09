@@ -1,0 +1,76 @@
+WARNING: DATA RACE
+Write at 0x00c000016348 by goroutine 29:
+  github.com/miekg/dns.(*Conn).WriteMsg()
+      /work/client.go:364 +0x2b9
+  github.com/miekg/dns.TestRaceConnSharedMutableState.func2()
+      /work/race_656_capture_test.go:45 +0x7c
+  github.com/miekg/dns.TestRaceConnSharedMutableState.gowrap4()
+      /work/race_656_capture_test.go:54 +0x41
+
+Previous write at 0x00c000016348 by goroutine 14:
+  github.com/miekg/dns.(*Conn).WriteMsg()
+      /work/client.go:364 +0x2b9
+  github.com/miekg/dns.TestRaceConnSharedMutableState.func2()
+      /work/race_656_capture_test.go:45 +0x7c
+  github.com/miekg/dns.TestRaceConnSharedMutableState.gowrap4()
+      /work/race_656_capture_test.go:54 +0x41
+
+Goroutine 29 (running) created at:
+  github.com/miekg/dns.TestRaceConnSharedMutableState()
+      /work/race_656_capture_test.go:40 +0x430
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1934 +0x21c
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1997 +0x44
+
+Goroutine 14 (running) created at:
+  github.com/miekg/dns.TestRaceConnSharedMutableState()
+      /work/race_656_capture_test.go:40 +0x430
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1934 +0x21c
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1997 +0x44
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c000016340 by goroutine 70:
+  github.com/miekg/dns.(*Conn).ReadMsgHeader()
+      /work/client.go:251 +0x227
+  github.com/miekg/dns.(*Conn).ReadMsg()
+      /work/client.go:200 +0x3d
+  github.com/miekg/dns.TestRaceConnSharedMutableState.func2()
+      /work/race_656_capture_test.go:48 +0x8e
+  github.com/miekg/dns.TestRaceConnSharedMutableState.gowrap4()
+      /work/race_656_capture_test.go:54 +0x41
+
+Previous write at 0x00c000016340 by goroutine 14:
+  github.com/miekg/dns.(*Conn).ReadMsgHeader()
+      /work/client.go:251 +0x227
+  github.com/miekg/dns.(*Conn).ReadMsg()
+      /work/client.go:200 +0x3d
+  github.com/miekg/dns.TestRaceConnSharedMutableState.func2()
+      /work/race_656_capture_test.go:48 +0x8e
+  github.com/miekg/dns.TestRaceConnSharedMutableState.gowrap4()
+      /work/race_656_capture_test.go:54 +0x41
+
+Goroutine 70 (running) created at:
+  github.com/miekg/dns.TestRaceConnSharedMutableState()
+      /work/race_656_capture_test.go:40 +0x430
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1934 +0x21c
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1997 +0x44
+
+Goroutine 14 (finished) created at:
+  github.com/miekg/dns.TestRaceConnSharedMutableState()
+      /work/race_656_capture_test.go:40 +0x430
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1934 +0x21c
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1997 +0x44
+==================
+--- FAIL: TestRaceConnSharedMutableState (0.24s)
+    testing.go:1617: race detected during execution of test
+FAIL
+FAIL	github.com/miekg/dns	0.259s
+FAIL

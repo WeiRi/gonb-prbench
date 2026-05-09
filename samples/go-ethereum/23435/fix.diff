@@ -1,0 +1,51 @@
+diff --git a/eth/gasprice/gasprice_test.go b/eth/gasprice/gasprice_test.go
+index dea8fea95ae3..ed0297191e93 100644
+--- a/eth/gasprice/gasprice_test.go
++++ b/eth/gasprice/gasprice_test.go
+@@ -146,7 +146,7 @@ func newTestBackend(t *testing.T, londonBlock *big.Int, pending bool) *testBacke
+ 	// Construct testing chain
+ 	diskdb := rawdb.NewMemoryDatabase()
+ 	gspec.Commit(diskdb)
+-	chain, err := core.NewBlockChain(diskdb, nil, gspec.Config, engine, vm.Config{}, nil, nil)
++	chain, err := core.NewBlockChain(diskdb, &core.CacheConfig{TrieCleanNoPrefetch: true}, gspec.Config, engine, vm.Config{}, nil, nil)
+ 	if err != nil {
+ 		t.Fatalf("Failed to create local chain, %v", err)
+ 	}
+diff --git a/eth/handler_eth_test.go b/eth/handler_eth_test.go
+index 038de469908e..0303d1420b1b 100644
+--- a/eth/handler_eth_test.go
++++ b/eth/handler_eth_test.go
+@@ -490,7 +490,6 @@ func TestCheckpointChallenge(t *testing.T) {
+ }
+ 
+ func testCheckpointChallenge(t *testing.T, syncmode downloader.SyncMode, checkpoint bool, timeout bool, empty bool, match bool, drop bool) {
+-	t.Parallel()
+ 
+ 	// Reduce the checkpoint handshake challenge timeout
+ 	defer func(old time.Duration) { syncChallengeTimeout = old }(syncChallengeTimeout)
+diff --git a/miner/worker.go b/miner/worker.go
+index 8bdb1eff7ca0..b9935fbbf47d 100644
+--- a/miner/worker.go
++++ b/miner/worker.go
+@@ -318,9 +318,6 @@ func (w *worker) isRunning() bool {
+ // close terminates all background threads maintained by the worker.
+ // Note the worker does not support being closed multiple times.
+ func (w *worker) close() {
+-	if w.current != nil && w.current.state != nil {
+-		w.current.state.StopPrefetcher()
+-	}
+ 	atomic.StoreInt32(&w.running, 0)
+ 	close(w.exitCh)
+ }
+@@ -449,6 +446,11 @@ func (w *worker) mainLoop() {
+ 	defer w.txsSub.Unsubscribe()
+ 	defer w.chainHeadSub.Unsubscribe()
+ 	defer w.chainSideSub.Unsubscribe()
++	defer func() {
++		if w.current != nil && w.current.state != nil {
++			w.current.state.StopPrefetcher()
++		}
++	}()
+ 
+ 	for {
+ 		select {

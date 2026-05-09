@@ -1,0 +1,91 @@
+WARNING: DATA RACE
+Write at 0x00c420010300 by goroutine 9:
+  _/work.TestRace.func2()
+      /work/verified_test.go:27 +0x3c
+
+Previous read at 0x00c420010300 by goroutine 8:
+  _/work.TestRace.func1()
+      /work/verified_test.go:19 +0x45
+
+Goroutine 9 (running) created at:
+  _/work.TestRace()
+      /work/verified_test.go:54 +0xae
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:777 +0x16d
+
+Goroutine 8 (finished) created at:
+  _/work.TestRace()
+      /work/verified_test.go:44 +0x82
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:777 +0x16d
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c420010318 by goroutine 9:
+  _/work.TestRace.func2()
+      /work/verified_test.go:28 +0x6f
+
+Previous read at 0x00c420010318 by goroutine 8:
+  _/work.TestRace.func1()
+      /work/verified_test.go:23 +0x59
+
+Goroutine 9 (running) created at:
+  _/work.TestRace()
+      /work/verified_test.go:54 +0xae
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:777 +0x16d
+
+Goroutine 8 (finished) created at:
+  _/work.TestRace()
+      /work/verified_test.go:44 +0x82
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:777 +0x16d
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c420010440 by goroutine 13:
+  _/work.TestRace.func2()
+      /work/verified_test.go:30 +0xbc
+
+Previous read at 0x00c420010440 by goroutine 12:
+  _/work.TestRace.func1()
+      /work/verified_test.go:48 +0x6b
+
+Goroutine 13 (running) created at:
+  _/work.TestRace()
+      /work/verified_test.go:54 +0xae
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:777 +0x16d
+
+Goroutine 12 (finished) created at:
+  _/work.TestRace()
+      /work/verified_test.go:44 +0x82
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:777 +0x16d
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c420010320 by goroutine 9:
+  _/work.TestRace.func2()
+      /work/verified_test.go:30 +0xbc
+
+Previous read at 0x00c420010320 by goroutine 8:
+  _/work.TestRace.func1()
+      /work/verified_test.go:48 +0x6b
+
+Goroutine 9 (running) created at:
+  _/work.TestRace()
+      /work/verified_test.go:54 +0xae
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:777 +0x16d
+
+Goroutine 8 (finished) created at:
+  _/work.TestRace()
+      /work/verified_test.go:44 +0x82
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:777 +0x16d
+==================
+--- FAIL: TestRace (0.05s)
+	testing.go:730: race detected during execution of test
+FAIL
+FAIL	_/work	0.069s

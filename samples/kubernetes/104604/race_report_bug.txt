@@ -1,0 +1,36 @@
+WARNING: DATA RACE
+Write at 0x00c00012ca50 by goroutine 21:
+  ase/kubernetes-104604.(*objectCacheItem).stopThreadUnsafe()
+      /work/watch_based_manager.go:43 +0x1e9
+  ase/kubernetes-104604.(*objectCacheItem).stopIfIdle()
+      /work/watch_based_manager.go:53 +0x219
+  ase/kubernetes-104604.TestRace_104604.func2()
+      /work/verified_test.go:28 +0xd4
+
+Previous read at 0x00c00012ca50 by goroutine 20:
+  ase/kubernetes-104604.(*objectCacheItem).Get()
+      /work/watch_based_manager.go:64 +0x2f
+  ase/kubernetes-104604.TestRace_104604.func1()
+      /work/verified_test.go:22 +0xa4
+
+Goroutine 21 (running) created at:
+  ase/kubernetes-104604.TestRace_104604()
+      /work/verified_test.go:25 +0x56
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1595 +0x261
+  testing.(*T).Run.func1()
+      /usr/local/go/src/testing/testing.go:1648 +0x44
+
+Goroutine 20 (running) created at:
+  ase/kubernetes-104604.TestRace_104604()
+      /work/verified_test.go:19 +0x2bc
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1595 +0x261
+  testing.(*T).Run.func1()
+      /usr/local/go/src/testing/testing.go:1648 +0x44
+==================
+--- FAIL: TestRace_104604 (0.01s)
+    testing.go:1465: race detected during execution of test
+FAIL
+FAIL	ase/kubernetes-104604	0.028s
+FAIL

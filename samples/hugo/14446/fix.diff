@@ -1,0 +1,13 @@
+diff --git a/config/commonConfig.go b/config/commonConfig.go
+index 9470786724f..2c10ba9cfc6 100644
+--- a/config/commonConfig.go
++++ b/config/commonConfig.go
+@@ -437,7 +437,7 @@ func (c *CacheBuster) CompileConfig(logger loggers.Logger) error {
+ 			return nil
+ 		}
+ 		return func(ss string) bool {
+-			match = targetRe.MatchString(ss)
++			match := targetRe.MatchString(ss)
+ 			matchString := "no match"
+ 			if match {
+ 				matchString = "match!"

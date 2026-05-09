@@ -1,0 +1,34 @@
+WARNING: DATA RACE
+Write at 0x00c000166010 by goroutine 9:
+  ase/grpc-go-3062.(*Stream).operateHeaders()
+      /work/transport.go:22 +0x89
+  ase/grpc-go-3062.TestRace_PR3062_WaitOnHeaderRecvCompress.func2()
+      /work/verified_test.go:42 +0x81
+
+Previous read at 0x00c000166010 by goroutine 8:
+  ase/grpc-go-3062.(*Stream).RecvCompress()
+      /work/transport.go:15 +0x17b
+  ase/grpc-go-3062.TestRace_PR3062_WaitOnHeaderRecvCompress.func1()
+      /work/verified_test.go:38 +0x17c
+
+Goroutine 9 (running) created at:
+  ase/grpc-go-3062.TestRace_PR3062_WaitOnHeaderRecvCompress()
+      /work/verified_test.go:40 +0x2a
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 8 (finished) created at:
+  ase/grpc-go-3062.TestRace_PR3062_WaitOnHeaderRecvCompress()
+      /work/verified_test.go:35 +0x22c
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+    testing.go:1398: race detected during execution of test
+--- FAIL: TestRace_PR3062_WaitOnHeaderRecvCompress (0.01s)
+FAIL
+FAIL	ase/grpc-go-3062	0.024s
+FAIL

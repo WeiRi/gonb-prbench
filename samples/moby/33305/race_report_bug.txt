@@ -1,0 +1,120 @@
+WARNING: DATA RACE
+Write at 0x00c0000d4578 by goroutine 8:
+  ase/moby-33305.(*RotateFileWriter).Write()
+      /work/rotatefilewriter.go:36 +0x2a4
+  ase/moby-33305.TestRace_33305.func1()
+      /work/verified_test.go:36 +0x16c
+  ase/moby-33305.TestRace_33305.gowrap3()
+      /work/verified_test.go:38 +0x41
+
+Previous read at 0x00c0000d4578 by goroutine 47:
+  ase/moby-33305.(*RotateFileWriter).LogPath()
+      /work/rotatefilewriter.go:47 +0xa7
+  ase/moby-33305.TestRace_33305.func2()
+      /work/verified_test.go:45 +0x9f
+
+Goroutine 8 (running) created at:
+  ase/moby-33305.TestRace_33305()
+      /work/verified_test.go:33 +0x408
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 47 (finished) created at:
+  ase/moby-33305.TestRace_33305()
+      /work/verified_test.go:42 +0x564
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c000212000 by goroutine 32:
+  os.(*File).Name()
+      /usr/local/go/src/os/file.go:56 +0xbc
+  ase/moby-33305.(*RotateFileWriter).LogPath()
+      /work/rotatefilewriter.go:47 +0x8b
+  ase/moby-33305.TestRace_33305.func2()
+      /work/verified_test.go:45 +0x9f
+
+Previous write at 0x00c000212000 by goroutine 8:
+  os.newFile()
+      /usr/local/go/src/os/file_unix.go:168 +0x168
+  os.openFileNolog()
+      /usr/local/go/src/os/file_unix.go:301 +0x1e8
+  os.OpenFile()
+      /usr/local/go/src/os/file.go:374 +0x55
+  os.Create()
+      /usr/local/go/src/os/file.go:363 +0x27e
+  ase/moby-33305.(*RotateFileWriter).Write()
+      /work/rotatefilewriter.go:34 +0x26f
+  ase/moby-33305.TestRace_33305.func1()
+      /work/verified_test.go:36 +0x16c
+  ase/moby-33305.TestRace_33305.gowrap3()
+      /work/verified_test.go:38 +0x41
+
+Goroutine 32 (running) created at:
+  ase/moby-33305.TestRace_33305()
+      /work/verified_test.go:42 +0x564
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 8 (running) created at:
+  ase/moby-33305.TestRace_33305()
+      /work/verified_test.go:33 +0x408
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c000214038 by goroutine 32:
+  os.(*File).Name()
+      /usr/local/go/src/os/file.go:56 +0xcf
+  ase/moby-33305.(*RotateFileWriter).LogPath()
+      /work/rotatefilewriter.go:47 +0x8b
+  ase/moby-33305.TestRace_33305.func2()
+      /work/verified_test.go:45 +0x9f
+
+Previous write at 0x00c000214038 by goroutine 8:
+  os.newFile()
+      /usr/local/go/src/os/file_unix.go:168 +0x78
+  os.openFileNolog()
+      /usr/local/go/src/os/file_unix.go:301 +0x1e8
+  os.OpenFile()
+      /usr/local/go/src/os/file.go:374 +0x55
+  os.Create()
+      /usr/local/go/src/os/file.go:363 +0x27e
+  ase/moby-33305.(*RotateFileWriter).Write()
+      /work/rotatefilewriter.go:34 +0x26f
+  ase/moby-33305.TestRace_33305.func1()
+      /work/verified_test.go:36 +0x16c
+  ase/moby-33305.TestRace_33305.gowrap3()
+      /work/verified_test.go:38 +0x41
+
+Goroutine 32 (running) created at:
+  ase/moby-33305.TestRace_33305()
+      /work/verified_test.go:42 +0x564
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 8 (running) created at:
+  ase/moby-33305.TestRace_33305()
+      /work/verified_test.go:33 +0x408
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+    testing.go:1398: race detected during execution of test
+--- FAIL: TestRace_33305 (13.01s)
+FAIL
+FAIL	ase/moby-33305	13.034s
+FAIL

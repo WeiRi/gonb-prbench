@@ -1,0 +1,14 @@
+diff --git a/balancer_conn_wrappers.go b/balancer_conn_wrappers.go
+index c673b98fd2b9..ebfee4a88914 100644
+--- a/balancer_conn_wrappers.go
++++ b/balancer_conn_wrappers.go
+@@ -246,7 +246,9 @@ func (acbw *acBalancerWrapper) UpdateAddresses(addrs []resolver.Address) {
+ 			return
+ 		}
+ 		acbw.ac = ac
++		ac.mu.Lock()
+ 		ac.acbw = acbw
++		ac.mu.Unlock()
+ 		if acState != connectivity.Idle {
+ 			ac.connect()
+ 		}

@@ -1,0 +1,250 @@
+WARNING: DATA RACE
+Write at 0x00c00020a000 by goroutine 13:
+  runtime.mapassign_faststr()
+      /usr/local/go/src/runtime/map_faststr.go:203 +0x0
+  ase/moby-26695.(*pauseMonitor).append()
+      /work/pausemonitor.go:14 +0x144
+  ase/moby-26695.TestRace26695PauseMonitor.func2()
+      /work/verified_test.go:28 +0xb7
+
+Previous write at 0x00c00020a000 by goroutine 17:
+  runtime.mapassign_faststr()
+      /usr/local/go/src/runtime/map_faststr.go:203 +0x0
+  ase/moby-26695.(*pauseMonitor).append()
+      /work/pausemonitor.go:14 +0x144
+  ase/moby-26695.TestRace26695PauseMonitor.func2()
+      /work/verified_test.go:28 +0xb7
+
+Goroutine 13 (running) created at:
+  ase/moby-26695.TestRace26695PauseMonitor()
+      /work/verified_test.go:25 +0x9d
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 17 (running) created at:
+  ase/moby-26695.TestRace26695PauseMonitor()
+      /work/verified_test.go:25 +0x9d
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c00020a000 by goroutine 11:
+  runtime.mapdelete_faststr()
+      /usr/local/go/src/runtime/map_faststr.go:301 +0x0
+  ase/moby-26695.(*pauseMonitor).handle()
+      /work/pausemonitor.go:25 +0x348
+  ase/moby-26695.TestRace26695PauseMonitor.func2()
+      /work/verified_test.go:29 +0x349
+
+Previous write at 0x00c00020a000 by goroutine 20:
+  runtime.mapassign_faststr()
+      /usr/local/go/src/runtime/map_faststr.go:203 +0x0
+  ase/moby-26695.(*pauseMonitor).append()
+      /work/pausemonitor.go:14 +0x144
+  ase/moby-26695.TestRace26695PauseMonitor.func1()
+      /work/verified_test.go:22 +0xb7
+
+Goroutine 11 (running) created at:
+  ase/moby-26695.TestRace26695PauseMonitor()
+      /work/verified_test.go:25 +0x9d
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 20 (finished) created at:
+  ase/moby-26695.TestRace26695PauseMonitor()
+      /work/verified_test.go:19 +0x164
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c00020a000 by goroutine 9:
+  runtime.mapassign_faststr()
+      /usr/local/go/src/runtime/map_faststr.go:203 +0x0
+  ase/moby-26695.(*pauseMonitor).append()
+      /work/pausemonitor.go:14 +0x144
+  ase/moby-26695.TestRace26695PauseMonitor.func2()
+      /work/verified_test.go:28 +0xb7
+
+Previous write at 0x00c00020a000 by goroutine 20:
+  runtime.mapdelete_faststr()
+      /usr/local/go/src/runtime/map_faststr.go:301 +0x0
+  ase/moby-26695.(*pauseMonitor).handle()
+      /work/pausemonitor.go:25 +0x348
+  ase/moby-26695.TestRace26695PauseMonitor.func1()
+      /work/verified_test.go:23 +0x349
+
+Goroutine 9 (running) created at:
+  ase/moby-26695.TestRace26695PauseMonitor()
+      /work/verified_test.go:25 +0x9d
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 20 (finished) created at:
+  ase/moby-26695.TestRace26695PauseMonitor()
+      /work/verified_test.go:19 +0x164
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c00020c0a0 by goroutine 9:
+  ase/moby-26695.(*pauseMonitor).append()
+      /work/pausemonitor.go:14 +0x153
+  ase/moby-26695.TestRace26695PauseMonitor.func2()
+      /work/verified_test.go:28 +0xb7
+
+Previous write at 0x00c00020c0a0 by goroutine 20:
+  ase/moby-26695.(*pauseMonitor).append()
+      /work/pausemonitor.go:14 +0x204
+  ase/moby-26695.TestRace26695PauseMonitor.func1()
+      /work/verified_test.go:22 +0xb7
+
+Goroutine 9 (running) created at:
+  ase/moby-26695.TestRace26695PauseMonitor()
+      /work/verified_test.go:25 +0x9d
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 20 (finished) created at:
+  ase/moby-26695.TestRace26695PauseMonitor()
+      /work/verified_test.go:19 +0x164
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c00020a000 by goroutine 10:
+  runtime.mapassign_faststr()
+      /usr/local/go/src/runtime/map_faststr.go:203 +0x0
+  ase/moby-26695.(*pauseMonitor).append()
+      /work/pausemonitor.go:14 +0x144
+  ase/moby-26695.TestRace26695PauseMonitor.func1()
+      /work/verified_test.go:22 +0xb7
+
+Previous write at 0x00c00020a000 by goroutine 11:
+  runtime.mapassign_faststr()
+      /usr/local/go/src/runtime/map_faststr.go:203 +0x0
+  ase/moby-26695.(*pauseMonitor).append()
+      /work/pausemonitor.go:14 +0x144
+  ase/moby-26695.TestRace26695PauseMonitor.func2()
+      /work/verified_test.go:28 +0xb7
+
+Goroutine 10 (running) created at:
+  ase/moby-26695.TestRace26695PauseMonitor()
+      /work/verified_test.go:19 +0x164
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 11 (running) created at:
+  ase/moby-26695.TestRace26695PauseMonitor()
+      /work/verified_test.go:25 +0x9d
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c00020c088 by goroutine 17:
+  ase/moby-26695.(*pauseMonitor).append()
+      /work/pausemonitor.go:14 +0x153
+  ase/moby-26695.TestRace26695PauseMonitor.func2()
+      /work/verified_test.go:28 +0xb7
+
+Previous write at 0x00c00020c088 by goroutine 11:
+  ase/moby-26695.(*pauseMonitor).append()
+      /work/pausemonitor.go:14 +0x204
+  ase/moby-26695.TestRace26695PauseMonitor.func2()
+      /work/verified_test.go:28 +0xb7
+
+Goroutine 17 (running) created at:
+  ase/moby-26695.TestRace26695PauseMonitor()
+      /work/verified_test.go:25 +0x9d
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 11 (running) created at:
+  ase/moby-26695.TestRace26695PauseMonitor()
+      /work/verified_test.go:25 +0x9d
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c000124078 by goroutine 8:
+  ase/moby-26695.(*pauseMonitor).append()
+      /work/pausemonitor.go:11 +0xc4
+  ase/moby-26695.TestRace26695PauseMonitor.func1()
+      /work/verified_test.go:22 +0xb7
+
+Previous write at 0x00c000124078 by goroutine 11:
+  ase/moby-26695.(*pauseMonitor).append()
+      /work/pausemonitor.go:12 +0xe6
+  ase/moby-26695.TestRace26695PauseMonitor.func2()
+      /work/verified_test.go:28 +0xb7
+
+Goroutine 8 (running) created at:
+  ase/moby-26695.TestRace26695PauseMonitor()
+      /work/verified_test.go:19 +0x164
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 11 (running) created at:
+  ase/moby-26695.TestRace26695PauseMonitor()
+      /work/verified_test.go:25 +0x9d
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c00020a000 by goroutine 8:
+  runtime.mapassign_faststr()
+      /usr/local/go/src/runtime/map_faststr.go:203 +0x0
+  ase/moby-26695.(*pauseMonitor).append()
+      /work/pausemonitor.go:14 +0x144
+  ase/moby-26695.TestRace26695PauseMonitor.func1()
+      /work/verified_test.go:22 +0xb7
+
+Previous read at 0x00c00020a000 by goroutine 17:
+  runtime.mapaccess1_faststr()
+      /usr/local/go/src/runtime/map_faststr.go:13 +0x0
+  ase/moby-26695.(*pauseMonitor).handle()
+      /work/pausemonitor.go:22 +0x286
+  ase/moby-26695.TestRace26695PauseMonitor.func2()
+      /work/verified_test.go:29 +0x349
+
+Goroutine 8 (running) created at:
+  ase/moby-26695.TestRace26695PauseMonitor()
+      /work/verified_test.go:19 +0x164
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44

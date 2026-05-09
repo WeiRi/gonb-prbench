@@ -1,0 +1,56 @@
+WARNING: DATA RACE
+Read at 0x00c0001904a8 by goroutine 9:
+  ase/consul-1214.(*LockCommand).killChild()
+      /work/verified_test.go:41 +0x73
+  ase/consul-1214.TestRace.func2()
+      /work/verified_test.go:70 +0x66
+
+Previous write at 0x00c0001904a8 by goroutine 8:
+  ase/consul-1214.(*LockCommand).startChild()
+      /work/verified_test.go:32 +0x84
+  ase/consul-1214.TestRace.func1()
+      /work/verified_test.go:62 +0x6c
+
+Goroutine 9 (running) created at:
+  ase/consul-1214.TestRace()
+      /work/verified_test.go:68 +0x7a
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1203 +0x202
+
+Goroutine 8 (finished) created at:
+  ase/consul-1214.TestRace()
+      /work/verified_test.go:60 +0x184
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1203 +0x202
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c000116000 by goroutine 10:
+  ase/consul-1214.(*LockCommand).killChild()
+      /work/verified_test.go:44 +0xa4
+  ase/consul-1214.TestRace.func2()
+      /work/verified_test.go:70 +0x66
+
+Previous write at 0x00c000116000 by goroutine 8:
+  ase/consul-1214.(*LockCommand).startChild()
+      /work/verified_test.go:29 +0x51
+  ase/consul-1214.TestRace.func1()
+      /work/verified_test.go:62 +0x6c
+
+Goroutine 10 (running) created at:
+  ase/consul-1214.TestRace()
+      /work/verified_test.go:68 +0x7a
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1203 +0x202
+
+Goroutine 8 (finished) created at:
+  ase/consul-1214.TestRace()
+      /work/verified_test.go:60 +0x184
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1203 +0x202
+==================
+--- FAIL: TestRace (1.44s)
+    testing.go:1102: race detected during execution of test
+FAIL
+FAIL	ase/consul-1214	1.454s
+FAIL

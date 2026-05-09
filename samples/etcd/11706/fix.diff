@@ -1,0 +1,40 @@
+diff --git a/.words b/.words
+index 7e36e7d257fc..c112c5324539 100644
+--- a/.words
++++ b/.words
+@@ -46,6 +46,7 @@ mutex
+ prefetching
+ protobuf
+ prometheus
++racey
+ rafthttp
+ repin
+ rpc
+diff --git a/clientv3/ctx.go b/clientv3/ctx.go
+index 869b0fa69117..012eefbdc0c5 100644
+--- a/clientv3/ctx.go
++++ b/clientv3/ctx.go
+@@ -30,9 +30,10 @@ func WithRequireLeader(ctx context.Context) context.Context {
+ 		md = metadata.Pairs(rpctypes.MetadataRequireLeaderKey, rpctypes.MetadataHasLeader)
+ 		return metadata.NewOutgoingContext(ctx, md)
+ 	}
++	copied := md.Copy() // avoid racey updates
+ 	// overwrite/add 'hasleader' key/value
+-	md.Set(rpctypes.MetadataRequireLeaderKey, rpctypes.MetadataHasLeader)
+-	return metadata.NewOutgoingContext(ctx, md)
++	copied.Set(rpctypes.MetadataRequireLeaderKey, rpctypes.MetadataHasLeader)
++	return metadata.NewOutgoingContext(ctx, copied)
+ }
+ 
+ // embeds client version
+@@ -42,7 +43,8 @@ func withVersion(ctx context.Context) context.Context {
+ 		md = metadata.Pairs(rpctypes.MetadataClientAPIVersionKey, version.APIVersion)
+ 		return metadata.NewOutgoingContext(ctx, md)
+ 	}
++	copied := md.Copy() // avoid racey updates
+ 	// overwrite/add version key/value
+-	md.Set(rpctypes.MetadataClientAPIVersionKey, version.APIVersion)
+-	return metadata.NewOutgoingContext(ctx, md)
++	copied.Set(rpctypes.MetadataClientAPIVersionKey, version.APIVersion)
++	return metadata.NewOutgoingContext(ctx, copied)
+ }

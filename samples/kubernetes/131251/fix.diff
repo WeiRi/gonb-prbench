@@ -1,0 +1,15 @@
+diff --git a/pkg/kubelet/images/image_gc_manager.go b/pkg/kubelet/images/image_gc_manager.go
+index 6065037622268..03823deca290d 100644
+--- a/pkg/kubelet/images/image_gc_manager.go
++++ b/pkg/kubelet/images/image_gc_manager.go
+@@ -521,7 +521,10 @@ func (im *realImageGCManager) freeImage(ctx context.Context, image evictionInfo,
+ 	if isRuntimeClassInImageCriAPIEnabled {
+ 		imageKey = getImageTuple(image.id, image.runtimeHandlerUsedToPullImage)
+ 	}
++
++	im.imageRecordsLock.Lock()
+ 	delete(im.imageRecords, imageKey)
++	im.imageRecordsLock.Unlock()
+ 
+ 	metrics.ImageGarbageCollectedTotal.WithLabelValues(reason).Inc()
+ 	return err

@@ -1,0 +1,148 @@
+WARNING: DATA RACE
+Write at 0x00c0005188e8 by goroutine 139:
+  github.com/thanos-io/thanos/pkg/query.TestRace_5972.func4()
+      /workspace/pkg/query/race_5972_test.go:75 +0x16e
+
+Previous read at 0x00c0005188e8 by goroutine 115:
+  github.com/thanos-io/thanos/pkg/query.(*EndpointSet).getTimedOutRefs()
+      /workspace/pkg/query/endpointset.go:455 +0x4b
+  github.com/thanos-io/thanos/pkg/query.TestRace_5972.func3()
+      /workspace/pkg/query/race_5972_test.go:63 +0xa4
+
+Goroutine 139 (running) created at:
+  github.com/thanos-io/thanos/pkg/query.TestRace_5972()
+      /workspace/pkg/query/race_5972_test.go:71 +0x87c
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1934 +0x21c
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1997 +0x44
+
+Goroutine 115 (running) created at:
+  github.com/thanos-io/thanos/pkg/query.TestRace_5972()
+      /workspace/pkg/query/race_5972_test.go:60 +0x647
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1934 +0x21c
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1997 +0x44
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c000195e00 by goroutine 124:
+  runtime.mapIterStart()
+      /usr/local/go/src/runtime/map_swiss.go:160 +0x0
+  github.com/thanos-io/thanos/pkg/query.(*EndpointSet).getTimedOutRefs()
+      /workspace/pkg/query/endpointset.go:457 +0xc8
+  github.com/thanos-io/thanos/pkg/query.TestRace_5972.func3()
+      /workspace/pkg/query/race_5972_test.go:63 +0xa4
+
+Previous write at 0x00c000195e00 by goroutine 139:
+  runtime.mapassign_faststr()
+      /usr/local/go/src/internal/runtime/maps/runtime_faststr_swiss.go:263 +0x0
+  github.com/thanos-io/thanos/pkg/query.TestRace_5972.func4()
+      /workspace/pkg/query/race_5972_test.go:75 +0x11a
+
+Goroutine 124 (running) created at:
+  github.com/thanos-io/thanos/pkg/query.TestRace_5972()
+      /workspace/pkg/query/race_5972_test.go:60 +0x647
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1934 +0x21c
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1997 +0x44
+
+Goroutine 139 (running) created at:
+  github.com/thanos-io/thanos/pkg/query.TestRace_5972()
+      /workspace/pkg/query/race_5972_test.go:71 +0x87c
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1934 +0x21c
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1997 +0x44
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c000259e28 by goroutine 124:
+  github.com/thanos-io/thanos/pkg/query.(*EndpointSet).getTimedOutRefs()
+      /workspace/pkg/query/endpointset.go:457 +0x13e
+  github.com/thanos-io/thanos/pkg/query.TestRace_5972.func3()
+      /workspace/pkg/query/race_5972_test.go:63 +0xa4
+
+Previous write at 0x00c000259e28 by goroutine 139:
+  github.com/thanos-io/thanos/pkg/query.TestRace_5972.func4()
+      /workspace/pkg/query/race_5972_test.go:75 +0x129
+
+Goroutine 124 (running) created at:
+  github.com/thanos-io/thanos/pkg/query.TestRace_5972()
+      /workspace/pkg/query/race_5972_test.go:60 +0x647
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1934 +0x21c
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1997 +0x44
+
+Goroutine 139 (running) created at:
+  github.com/thanos-io/thanos/pkg/query.TestRace_5972()
+      /workspace/pkg/query/race_5972_test.go:71 +0x87c
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1934 +0x21c
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1997 +0x44
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c00031a360 by goroutine 140:
+  runtime.mapIterStart()
+      /usr/local/go/src/runtime/map_swiss.go:160 +0x0
+  github.com/thanos-io/thanos/pkg/query.TestRace_5972.func5()
+      /workspace/pkg/query/race_5972_test.go:89 +0x104
+
+Previous write at 0x00c00031a360 by goroutine 139:
+  runtime.mapassign_faststr()
+      /usr/local/go/src/internal/runtime/maps/runtime_faststr_swiss.go:263 +0x0
+  github.com/thanos-io/thanos/pkg/query.TestRace_5972.func4()
+      /workspace/pkg/query/race_5972_test.go:75 +0x11a
+
+Goroutine 140 (running) created at:
+  github.com/thanos-io/thanos/pkg/query.TestRace_5972()
+      /workspace/pkg/query/race_5972_test.go:85 +0x96b
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1934 +0x21c
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1997 +0x44
+
+Goroutine 139 (running) created at:
+  github.com/thanos-io/thanos/pkg/query.TestRace_5972()
+      /workspace/pkg/query/race_5972_test.go:71 +0x87c
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1934 +0x21c
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1997 +0x44
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c0005188e8 by goroutine 139:
+  github.com/thanos-io/thanos/pkg/query.TestRace_5972.func4()
+      /workspace/pkg/query/race_5972_test.go:75 +0x16e
+
+Previous read at 0x00c0005188e8 by goroutine 140:
+  github.com/thanos-io/thanos/pkg/query.TestRace_5972.func5()
+      /workspace/pkg/query/race_5972_test.go:89 +0xc7
+
+Goroutine 139 (running) created at:
+  github.com/thanos-io/thanos/pkg/query.TestRace_5972()
+      /workspace/pkg/query/race_5972_test.go:71 +0x87c
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1934 +0x21c
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1997 +0x44
+
+Goroutine 140 (running) created at:
+  github.com/thanos-io/thanos/pkg/query.TestRace_5972()
+      /workspace/pkg/query/race_5972_test.go:85 +0x96b
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1934 +0x21c
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1997 +0x44
+==================
+    testing.go:1617: race detected during execution of test
+--- FAIL: TestRace_5972 (0.01s)
+FAIL
+FAIL	github.com/thanos-io/thanos/pkg/query	0.066s
+FAIL

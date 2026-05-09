@@ -1,0 +1,68 @@
+WARNING: DATA RACE
+Write at 0x00c0001e6018 by goroutine 10:
+  ase/nats-server-6620.(*Server).rotateSysAccount()
+      /work/server.go:23 +0xe6
+  ase/nats-server-6620.TestRaceConfigureAccountsSysAccount.func1()
+      /work/verified_test.go:28 +0x174
+  ase/nats-server-6620.TestRaceConfigureAccountsSysAccount.gowrap1()
+      /work/verified_test.go:30 +0x41
+
+Previous read at 0x00c0001e6018 by goroutine 23:
+  ase/nats-server-6620.(*Server).configureAccounts()
+      /work/server.go:33 +0x50
+  ase/nats-server-6620.TestRaceConfigureAccountsSysAccount.func2()
+      /work/verified_test.go:37 +0x99
+
+Goroutine 10 (running) created at:
+  ase/nats-server-6620.TestRaceConfigureAccountsSysAccount()
+      /work/verified_test.go:25 +0x186
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 23 (running) created at:
+  ase/nats-server-6620.TestRaceConfigureAccountsSysAccount()
+      /work/verified_test.go:34 +0x2d1
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c000294008 by goroutine 18:
+  ase/nats-server-6620.(*Server).configureAccounts()
+      /work/server.go:36 +0x7b
+  ase/nats-server-6620.TestRaceConfigureAccountsSysAccount.func2()
+      /work/verified_test.go:37 +0x99
+
+Previous write at 0x00c000294008 by goroutine 14:
+  ase/nats-server-6620.(*Server).rotateSysAccount()
+      /work/server.go:23 +0xa4
+  ase/nats-server-6620.TestRaceConfigureAccountsSysAccount.func1()
+      /work/verified_test.go:28 +0x174
+  ase/nats-server-6620.TestRaceConfigureAccountsSysAccount.gowrap1()
+      /work/verified_test.go:30 +0x41
+
+Goroutine 18 (running) created at:
+  ase/nats-server-6620.TestRaceConfigureAccountsSysAccount()
+      /work/verified_test.go:34 +0x2d1
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 14 (running) created at:
+  ase/nats-server-6620.TestRaceConfigureAccountsSysAccount()
+      /work/verified_test.go:25 +0x186
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+    testing.go:1398: race detected during execution of test
+--- FAIL: TestRaceConfigureAccountsSysAccount (0.28s)
+FAIL
+FAIL	ase/nats-server-6620	0.297s
+FAIL

@@ -1,0 +1,31 @@
+diff --git a/pkg/kubelet/cm/devicemanager/manager_test.go b/pkg/kubelet/cm/devicemanager/manager_test.go
+index 9034498c66f4f..5c8c320223e51 100644
+--- a/pkg/kubelet/cm/devicemanager/manager_test.go
++++ b/pkg/kubelet/cm/devicemanager/manager_test.go
+@@ -282,8 +282,8 @@ func setup(t *testing.T, devs []*pluginapi.Device, callback monitorCallback, soc
+ 
+ func setupInProbeMode(t *testing.T, devs []*pluginapi.Device, callback monitorCallback, socketName string, pluginSocketName string) (Manager, <-chan interface{}, *Stub, pluginmanager.PluginManager) {
+ 	m, updateChan := setupDeviceManager(t, devs, callback, socketName)
+-	pm := setupPluginManager(t, pluginSocketName, m)
+ 	p := setupDevicePlugin(t, devs, pluginSocketName)
++	pm := setupPluginManager(t, pluginSocketName, m)
+ 	return m, updateChan, p, pm
+ }
+ 
+diff --git a/pkg/kubelet/pluginmanager/reconciler/reconciler.go b/pkg/kubelet/pluginmanager/reconciler/reconciler.go
+index 2f12da5506530..6cba00454692a 100644
+--- a/pkg/kubelet/pluginmanager/reconciler/reconciler.go
++++ b/pkg/kubelet/pluginmanager/reconciler/reconciler.go
+@@ -100,7 +100,11 @@ func (rc *reconciler) getHandlers() map[string]cache.PluginHandler {
+ 	rc.RLock()
+ 	defer rc.RUnlock()
+ 
+-	return rc.handlers
++	var copyHandlers = make(map[string]cache.PluginHandler)
++	for pluginType, handler := range rc.handlers {
++		copyHandlers[pluginType] = handler
++	}
++	return copyHandlers
+ }
+ 
+ func (rc *reconciler) reconcile() {

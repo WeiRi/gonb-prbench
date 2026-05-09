@@ -1,0 +1,56 @@
+WARNING: DATA RACE
+Read at 0x00c000216000 by goroutine 10:
+  ase/syncthing-8321.(*service).HandleConns.func1()
+      /work/service.go:34 +0x9e
+
+Previous write at 0x00c000216000 by goroutine 9:
+  ase/syncthing-8321.(*service).HandleConns()
+      /work/service.go:30 +0x155
+  ase/syncthing-8321.TestRace_8321.func2()
+      /work/verified_test.go:33 +0xa4
+
+Goroutine 10 (running) created at:
+  ase/syncthing-8321.(*service).HandleConns()
+      /work/service.go:32 +0x73
+  ase/syncthing-8321.TestRace_8321.func2()
+      /work/verified_test.go:33 +0xa4
+
+Goroutine 9 (running) created at:
+  ase/syncthing-8321.TestRace_8321()
+      /work/verified_test.go:31 +0x356
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c000216000 by goroutine 9:
+  ase/syncthing-8321.(*service).HandleConns()
+      /work/service.go:30 +0x155
+  ase/syncthing-8321.TestRace_8321.func2()
+      /work/verified_test.go:33 +0xa4
+
+Previous read at 0x00c000216000 by goroutine 12:
+  ase/syncthing-8321.(*service).HandleConns.func1()
+      /work/service.go:34 +0xef
+
+Goroutine 9 (running) created at:
+  ase/syncthing-8321.TestRace_8321()
+      /work/verified_test.go:31 +0x356
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 12 (running) created at:
+  ase/syncthing-8321.(*service).HandleConns()
+      /work/service.go:32 +0x73
+  ase/syncthing-8321.TestRace_8321.func2()
+      /work/verified_test.go:33 +0xa4
+==================
+    testing.go:1398: race detected during execution of test
+--- FAIL: TestRace_8321 (0.20s)
+FAIL
+FAIL	ase/syncthing-8321	0.223s
+FAIL

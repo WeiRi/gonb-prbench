@@ -1,0 +1,29 @@
+WARNING: DATA RACE
+Read at 0x00c420014060 by goroutine 58:
+  _/work.TestRace.func2()
+      /work/verified_test.go:29 +0x4a
+
+Previous write at 0x00c420014060 by goroutine 57:
+  sync/atomic.AddInt64()
+      /usr/local/go/src/runtime/race_amd64.s:276 +0xb
+  _/work.(*lruCache).SetWithExpiration()
+      /work/verified_test.go:25 +0x43
+  _/work.TestRace.func1()
+      /work/verified_test.go:40 +0x41
+
+Goroutine 58 (running) created at:
+  _/work.TestRace()
+      /work/verified_test.go:48 +0x104
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:777 +0x16d
+
+Goroutine 57 (running) created at:
+  _/work.TestRace()
+      /work/verified_test.go:38 +0xc0
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:777 +0x16d
+==================
+--- FAIL: TestRace (0.02s)
+	testing.go:730: race detected during execution of test
+FAIL
+FAIL	_/work	0.036s

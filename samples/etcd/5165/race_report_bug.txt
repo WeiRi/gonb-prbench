@@ -1,0 +1,26 @@
+WARNING: DATA RACE
+Read at 0x00c000192040 by goroutine 58:
+  ase/etcd-5165.(*node).ReadPropc()
+      /work/node.go:26 +0x84
+  ase/etcd-5165.TestRace_5165.func1.2()
+      /work/verified_test.go:37 +0x7d
+
+Previous write at 0x00c000192040 by goroutine 57:
+  ase/etcd-5165.(*node).ClearPropc()
+      /work/node.go:21 +0x84
+  ase/etcd-5165.TestRace_5165.func1.1()
+      /work/verified_test.go:33 +0x7d
+
+Goroutine 58 (running) created at:
+  ase/etcd-5165.TestRace_5165.func1()
+      /work/verified_test.go:35 +0xaf
+
+Goroutine 57 (finished) created at:
+  ase/etcd-5165.TestRace_5165.func1()
+      /work/verified_test.go:31 +0x4a4
+==================
+    testing.go:1398: race detected during execution of test
+--- FAIL: TestRace_5165 (0.70s)
+FAIL
+FAIL	ase/etcd-5165	0.731s
+FAIL

@@ -1,0 +1,200 @@
+WARNING: DATA RACE
+Read at 0x00c0000a2568 by goroutine 14:
+  ase/moby-39644.(*Control).SetQuota()
+      /work/projectquota.go:7 +0xcc
+  ase/moby-39644.TestRace_39644.func1()
+      /work/verified_test.go:21 +0xb8
+
+Previous write at 0x00c0000a2568 by goroutine 8:
+  ase/moby-39644.(*Control).SetQuota()
+      /work/projectquota.go:8 +0x144
+  ase/moby-39644.TestRace_39644.func1()
+      /work/verified_test.go:21 +0xb8
+
+Goroutine 14 (running) created at:
+  ase/moby-39644.TestRace_39644()
+      /work/verified_test.go:18 +0x196
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1446 +0x216
+  testing.(*T).Run.func1()
+      /usr/local/go/src/testing/testing.go:1493 +0x47
+
+Goroutine 8 (finished) created at:
+  ase/moby-39644.TestRace_39644()
+      /work/verified_test.go:18 +0x196
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1446 +0x216
+  testing.(*T).Run.func1()
+      /usr/local/go/src/testing/testing.go:1493 +0x47
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c00010e088 by goroutine 9:
+  ase/moby-39644.(*Control).GetQuota()
+      /work/projectquota.go:14 +0xdd
+  ase/moby-39644.TestRace_39644.func2()
+      /work/verified_test.go:27 +0xb3
+
+Previous write at 0x00c00010e088 by goroutine 8:
+  ase/moby-39644.(*Control).SetQuota()
+      /work/projectquota.go:7 +0x10c
+  ase/moby-39644.TestRace_39644.func1()
+      /work/verified_test.go:21 +0xb8
+
+Goroutine 9 (running) created at:
+  ase/moby-39644.TestRace_39644()
+      /work/verified_test.go:24 +0xcd
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1446 +0x216
+  testing.(*T).Run.func1()
+      /usr/local/go/src/testing/testing.go:1493 +0x47
+
+Goroutine 8 (finished) created at:
+  ase/moby-39644.TestRace_39644()
+      /work/verified_test.go:18 +0x196
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1446 +0x216
+  testing.(*T).Run.func1()
+      /usr/local/go/src/testing/testing.go:1493 +0x47
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c0000cc390 by goroutine 11:
+  runtime.mapaccess2_faststr()
+      /usr/local/go/src/runtime/map_faststr.go:108 +0x0
+  ase/moby-39644.(*Control).GetQuota()
+      /work/projectquota.go:14 +0xd8
+  ase/moby-39644.TestRace_39644.func2()
+      /work/verified_test.go:27 +0xb3
+
+Previous write at 0x00c0000cc390 by goroutine 8:
+  runtime.mapassign_faststr()
+      /usr/local/go/src/runtime/map_faststr.go:203 +0x0
+  ase/moby-39644.(*Control).SetQuota()
+      /work/projectquota.go:7 +0xfd
+  ase/moby-39644.TestRace_39644.func1()
+      /work/verified_test.go:21 +0xb8
+
+Goroutine 11 (running) created at:
+  ase/moby-39644.TestRace_39644()
+      /work/verified_test.go:24 +0xcd
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1446 +0x216
+  testing.(*T).Run.func1()
+      /usr/local/go/src/testing/testing.go:1493 +0x47
+
+Goroutine 8 (finished) created at:
+  ase/moby-39644.TestRace_39644()
+      /work/verified_test.go:18 +0x196
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1446 +0x216
+  testing.(*T).Run.func1()
+      /usr/local/go/src/testing/testing.go:1493 +0x47
+==================
+fatal error: concurrent map read and map write
+fatal error: concurrent map writes
+fatal error: concurrent map writes
+fatal error: concurrent map read and map write
+
+goroutine 14 [running]:
+ase/moby-39644.(*Control).GetQuota(...)
+	/work/projectquota.go:14
+ase/moby-39644.TestRace_39644.func2()
+	/work/verified_test.go:27 +0xd9
+created by ase/moby-39644.TestRace_39644
+	/work/verified_test.go:24 +0xce
+
+goroutine 1 [chan receive]:
+testing.(*T).Run(0xc0000f4000, {0x5be7ce, 0xe}, 0x5c7db0)
+	/usr/local/go/src/testing/testing.go:1494 +0x789
+testing.runTests.func1(0x0?)
+	/usr/local/go/src/testing/testing.go:1846 +0x9a
+testing.tRunner(0xc0000f4000, 0xc0000d5ba0)
+	/usr/local/go/src/testing/testing.go:1446 +0x217
+testing.runTests(0xc000000140?, {0x6ca350, 0x1, 0x1}, {0x40?, 0x7f8ee20b6268?, 0x6d3120?})
+	/usr/local/go/src/testing/testing.go:1844 +0x7ed
+testing.(*M).Run(0xc000000140)
+	/usr/local/go/src/testing/testing.go:1726 +0xa85
+main.main()
+	_testmain.go:47 +0x2ea
+
+goroutine 6 [runnable]:
+ase/moby-39644.TestRace_39644(0x0?)
+	/work/verified_test.go:24 +0x1a5
+testing.tRunner(0xc0000f41a0, 0x5c7db0)
+	/usr/local/go/src/testing/testing.go:1446 +0x217
+created by testing.(*T).Run
+	/usr/local/go/src/testing/testing.go:1493 +0x75e
+
+goroutine 9 [running]:
+	goroutine running on other thread; stack unavailable
+created by ase/moby-39644.TestRace_39644
+	/work/verified_test.go:18 +0x197
+
+goroutine 12 [running]:
+	goroutine running on other thread; stack unavailable
+created by ase/moby-39644.TestRace_39644
+	/work/verified_test.go:24 +0xce
+
+goroutine 15 [running]:
+	goroutine running on other thread; stack unavailable
+created by ase/moby-39644.TestRace_39644
+	/work/verified_test.go:18 +0x197
+
+goroutine 16 [runnable]:
+ase/moby-39644.TestRace_39644.func2()
+	/work/verified_test.go:24
+created by ase/moby-39644.TestRace_39644
+	/work/verified_test.go:24 +0xce
+
+goroutine 19 [runnable]:
+ase/moby-39644.TestRace_39644.func2()
+	/work/verified_test.go:24
+created by ase/moby-39644.TestRace_39644
+	/work/verified_test.go:24 +0xce
+
+goroutine 20 [runnable]:
+ase/moby-39644.(*Control).SetQuota(...)
+	/work/projectquota.go:7
+ase/moby-39644.TestRace_39644.func1()
+	/work/verified_test.go:21 +0xfe
+created by ase/moby-39644.TestRace_39644
+	/work/verified_test.go:18 +0x197
+
+goroutine 21 [runnable]:
+ase/moby-39644.TestRace_39644.func2()
+	/work/verified_test.go:24
+created by ase/moby-39644.TestRace_39644
+	/work/verified_test.go:24 +0xce
+
+goroutine 22 [runnable]:
+ase/moby-39644.TestRace_39644.func1()
+	/work/verified_test.go:18
+created by ase/moby-39644.TestRace_39644
+	/work/verified_test.go:18 +0x197
+
+goroutine 23 [runnable]:
+ase/moby-39644.TestRace_39644.func2()
+	/work/verified_test.go:24
+created by ase/moby-39644.TestRace_39644
+	/work/verified_test.go:24 +0xce
+
+goroutine 24 [runnable]:
+ase/moby-39644.TestRace_39644.func1()
+	/work/verified_test.go:18
+created by ase/moby-39644.TestRace_39644
+	/work/verified_test.go:18 +0x197
+
+goroutine 15 [running]:
+ase/moby-39644.(*Control).SetQuota(...)
+	/work/projectquota.go:7
+ase/moby-39644.TestRace_39644.func1()
+	/work/verified_test.go:21 +0xfe
+created by ase/moby-39644.TestRace_39644
+	/work/verified_test.go:18 +0x197
+
+goroutine 9 [running]:
+ase/moby-39644.(*Control).SetQuota(...)
+	/work/projectquota.go:7
+ase/moby-39644.TestRace_39644.func1()
+	/work/verified_test.go:21 +0xfe

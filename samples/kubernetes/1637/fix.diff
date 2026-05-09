@@ -1,0 +1,141 @@
+diff --git a/pkg/api/types.go b/pkg/api/types.go
+index c1fe4eec4b0fd..a4491e3fb9b48 100644
+--- a/pkg/api/types.go
++++ b/pkg/api/types.go
+@@ -252,7 +252,7 @@ type TypeMeta struct {
+ 	SelfLink          string    `json:"selfLink,omitempty" yaml:"selfLink,omitempty"`
+ 	ResourceVersion   uint64    `json:"resourceVersion,omitempty" yaml:"resourceVersion,omitempty"`
+ 	APIVersion        string    `json:"apiVersion,omitempty" yaml:"apiVersion,omitempty"`
+-	Namespace         string    `json:"namespace",omitempty" yaml:"namespace,omitempty"`
++	Namespace         string    `json:"namespace,omitempty" yaml:"namespace,omitempty"`
+ 	UID               string    `json:"uid,omitempty" yaml:"uid,omitempty"`
+ 
+ 	// Annotations are unstructured key value data stored with a resource that may be set by
+diff --git a/pkg/api/v1beta1/types.go b/pkg/api/v1beta1/types.go
+index 6548303103efe..b0180d3ddb5c2 100644
+--- a/pkg/api/v1beta1/types.go
++++ b/pkg/api/v1beta1/types.go
+@@ -262,7 +262,7 @@ type TypeMeta struct {
+ 	SelfLink          string    `json:"selfLink,omitempty" yaml:"selfLink,omitempty"`
+ 	ResourceVersion   uint64    `json:"resourceVersion,omitempty" yaml:"resourceVersion,omitempty"`
+ 	APIVersion        string    `json:"apiVersion,omitempty" yaml:"apiVersion,omitempty"`
+-	Namespace         string    `json:"namespace",omitempty" yaml:"namespace,omitempty"`
++	Namespace         string    `json:"namespace,omitempty" yaml:"namespace,omitempty"`
+ 
+ 	// Annotations are unstructured key value data stored with a resource that may be set by
+ 	// external tooling. They are not queryable and should be preserved when modifying
+diff --git a/pkg/api/v1beta2/types.go b/pkg/api/v1beta2/types.go
+index 1bb3e8e737dce..0d45d527943b6 100644
+--- a/pkg/api/v1beta2/types.go
++++ b/pkg/api/v1beta2/types.go
+@@ -260,7 +260,7 @@ type TypeMeta struct {
+ 	SelfLink          string    `json:"selfLink,omitempty" yaml:"selfLink,omitempty"`
+ 	ResourceVersion   uint64    `json:"resourceVersion,omitempty" yaml:"resourceVersion,omitempty"`
+ 	APIVersion        string    `json:"apiVersion,omitempty" yaml:"apiVersion,omitempty"`
+-	Namespace         string    `json:"namespace",omitempty" yaml:"namespace,omitempty"`
++	Namespace         string    `json:"namespace,omitempty" yaml:"namespace,omitempty"`
+ 
+ 	// Annotations are unstructured key value data stored with a resource that may be set by
+ 	// external tooling. They are not queryable and should be preserved when modifying
+diff --git a/pkg/api/validation/validation_test.go b/pkg/api/validation/validation_test.go
+index 47ddb1893a012..ca2ea7de104dc 100644
+--- a/pkg/api/validation/validation_test.go
++++ b/pkg/api/validation/validation_test.go
+@@ -28,8 +28,8 @@ import (
+ 
+ func expectPrefix(t *testing.T, prefix string, errs errors.ErrorList) {
+ 	for i := range errs {
+-		if !strings.HasPrefix(errs[i].(errors.ValidationError).Field, prefix) {
+-			t.Errorf("expected prefix '%s' for %v", errs[i])
++		if f, p := errs[i].(errors.ValidationError).Field, prefix; !strings.HasPrefix(f, p) {
++			t.Errorf("expected prefix '%s' for field '%s' (%v)", p, f, errs[i])
+ 		}
+ 	}
+ }
+diff --git a/pkg/kubelet/runonce.go b/pkg/kubelet/runonce.go
+index 524972eee8296..ca41dbf50293f 100644
+--- a/pkg/kubelet/runonce.go
++++ b/pkg/kubelet/runonce.go
+@@ -59,7 +59,8 @@ func (kl *Kubelet) runOnce(pods []Pod) (results []RunPodResult, err error) {
+ 	pods = filterHostPortConflicts(pods)
+ 
+ 	ch := make(chan RunPodResult)
+-	for _, pod := range pods {
++	for i := range pods {
++		pod := pods[i] // Make a copy
+ 		go func() {
+ 			info, err := kl.runPod(pod)
+ 			ch <- RunPodResult{&pod, info, err}
+diff --git a/pkg/proxy/config/file.go b/pkg/proxy/config/file.go
+index 6a90ce0a4aafe..259bc3b46e28c 100644
+--- a/pkg/proxy/config/file.go
++++ b/pkg/proxy/config/file.go
+@@ -44,12 +44,13 @@ import (
+ )
+ 
+ // serviceConfig is a deserialized form of the config file format which ConfigSourceFile accepts.
++// TODO: this is apparently untested; is it used?
+ type serviceConfig struct {
+ 	Services []struct {
+ 		Name      string   `json: "name"`
+ 		Port      int      `json: "port"`
+ 		Endpoints []string `json: "endpoints"`
+-	} `json: "service"`
++	} `json:"service"`
+ }
+ 
+ // ConfigSourceFile periodically reads service configurations in JSON from a file, and sends the services and endpoints defined in the file to the specified channels.
+diff --git a/pkg/registry/minion/healthy_registry.go b/pkg/registry/minion/healthy_registry.go
+index 92fb24ba0c288..3fdb14a8c7467 100644
+--- a/pkg/registry/minion/healthy_registry.go
++++ b/pkg/registry/minion/healthy_registry.go
+@@ -75,7 +75,7 @@ func (r *HealthyRegistry) ListMinions(ctx api.Context) (currentMinions *api.Mini
+ 	for _, minion := range list.Items {
+ 		status, err := health.DoHTTPCheck(r.makeMinionURL(minion.ID), r.client)
+ 		if err != nil {
+-			glog.Errorf("%s failed health check with error: %s", minion, err)
++			glog.Errorf("%#v failed health check with error: %s", minion, err)
+ 			continue
+ 		}
+ 		if status == health.Healthy {
+diff --git a/pkg/registry/pod/rest.go b/pkg/registry/pod/rest.go
+index e8cea1fbfcc7d..597ff3df007c7 100644
+--- a/pkg/registry/pod/rest.go
++++ b/pkg/registry/pod/rest.go
+@@ -340,5 +340,4 @@ func (rs *REST) waitForPodRunning(ctx api.Context, pod *api.Pod) (runtime.Object
+ 			time.Sleep(rs.podPollPeriod)
+ 		}
+ 	}
+-	return pod, nil
+ }
+diff --git a/pkg/runtime/scheme.go b/pkg/runtime/scheme.go
+index 74ba81c9fa92f..015534c2a3542 100644
+--- a/pkg/runtime/scheme.go
++++ b/pkg/runtime/scheme.go
+@@ -368,6 +368,9 @@ func (s *Scheme) CopyOrDie(obj Object) Object {
+ 	return newObj
+ }
+ 
++// ObjectDiff writes the two objects out as JSON and prints out the identical part of
++// the objects followed by the remaining part of 'a' and finally the remaining part of 'b'.
++// For debugging tests.
+ func ObjectDiff(a, b Object) string {
+ 	ab, err := json.Marshal(a)
+ 	if err != nil {
+@@ -378,10 +381,13 @@ func ObjectDiff(a, b Object) string {
+ 		panic(fmt.Sprintf("b: %v", err))
+ 	}
+ 	return util.StringDiff(string(ab), string(bb))
++}
+ 
+-	// An alternate diff attempt, in case json isn't showing you
+-	// the difference. (reflect.DeepEqual makes a distinction between
+-	// nil and empty slices, for example.)
++// ObjectGoPrintDiff is like ObjectDiff, but uses go's %#v formatter to print the
++// objects, in case json isn't showing you the difference. (reflect.DeepEqual makes
++// a distinction between nil and empty slices, for example, even though nothing else
++// really does.)
++func ObjectGoPrintDiff(a, b Object) string {
+ 	return util.StringDiff(
+ 		fmt.Sprintf("%#v", a),
+ 		fmt.Sprintf("%#v", b),

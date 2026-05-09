@@ -1,0 +1,166 @@
+diff --git a/pkg/compact/compact.go b/pkg/compact/compact.go
+index 84569627546..e9a5dcdd340 100644
+--- a/pkg/compact/compact.go
++++ b/pkg/compact/compact.go
+@@ -773,8 +773,7 @@ func (cg *Group) Compact(ctx context.Context, dir string, planner Planner, comp
+ 		return false, ulid.ULID{}, errors.Wrap(err, "create compaction group dir")
+ 	}
+ 
+-	var err error
+-	tracing.DoInSpanWithErr(ctx, "compaction_group", func(ctx context.Context) error {
++	err := tracing.DoInSpanWithErr(ctx, "compaction_group", func(ctx context.Context) (err error) {
+ 		shouldRerun, compID, err = cg.compact(ctx, subDir, planner, comp)
+ 		return err
+ 	}, opentracing.Tags{"group.key": cg.Key()})
+@@ -977,7 +976,7 @@ func RepairIssue347(ctx context.Context, logger log.Logger, bkt objstore.Bucket,
+ 	return nil
+ }
+ 
+-func (cg *Group) compact(ctx context.Context, dir string, planner Planner, comp Compactor) (shouldRerun bool, compID ulid.ULID, err error) {
++func (cg *Group) compact(ctx context.Context, dir string, planner Planner, comp Compactor) (shouldRerun bool, compID ulid.ULID, _ error) {
+ 	cg.mtx.Lock()
+ 	defer cg.mtx.Unlock()
+ 
+@@ -994,11 +993,10 @@ func (cg *Group) compact(ctx context.Context, dir string, planner Planner, comp
+ 	}
+ 
+ 	var toCompact []*metadata.Meta
+-	tracing.DoInSpanWithErr(ctx, "compaction_planning", func(ctx context.Context) error {
+-		toCompact, err = planner.Plan(ctx, cg.metasByMinTime)
+-		return err
+-	})
+-	if err != nil {
++	if err := tracing.DoInSpanWithErr(ctx, "compaction_planning", func(ctx context.Context) (e error) {
++		toCompact, e = planner.Plan(ctx, cg.metasByMinTime)
++		return e
++	}); err != nil {
+ 		return false, ulid.ULID{}, errors.Wrap(err, "plan compaction")
+ 	}
+ 	if len(toCompact) == 0 {
+@@ -1026,24 +1024,20 @@ func (cg *Group) compact(ctx context.Context, dir string, planner Planner, comp
+ 			}
+ 			uniqueSources[s] = struct{}{}
+ 		}
+-
+ 		func(ctx context.Context, meta *metadata.Meta) {
+ 			g.Go(func() error {
+-				tracing.DoInSpanWithErr(ctx, "compaction_block_download", func(ctx context.Context) error {
+-					err = block.Download(ctx, cg.logger, cg.bkt, meta.ULID, bdir, objstore.WithFetchConcurrency(cg.blockFilesConcurrency))
+-					return err
+-				}, opentracing.Tags{"block.id": meta.ULID})
+-				if err != nil {
++				if err := tracing.DoInSpanWithErr(ctx, "compaction_block_download", func(ctx context.Context) error {
++					return block.Download(ctx, cg.logger, cg.bkt, meta.ULID, bdir, objstore.WithFetchConcurrency(cg.blockFilesConcurrency))
++				}, opentracing.Tags{"block.id": meta.ULID}); err != nil {
+ 					return retry(errors.Wrapf(err, "download block %s", meta.ULID))
+ 				}
+ 
+ 				// Ensure all input blocks are valid.
+ 				var stats block.HealthStats
+-				tracing.DoInSpanWithErr(ctx, "compaction_block_health_stats", func(ctx context.Context) error {
+-					stats, err = block.GatherIndexHealthStats(cg.logger, filepath.Join(bdir, block.IndexFilename), meta.MinTime, meta.MaxTime)
+-					return err
+-				}, opentracing.Tags{"block.id": meta.ULID})
+-				if err != nil {
++				if err := tracing.DoInSpanWithErr(ctx, "compaction_block_health_stats", func(ctx context.Context) (e error) {
++					stats, e = block.GatherIndexHealthStats(cg.logger, filepath.Join(bdir, block.IndexFilename), meta.MinTime, meta.MaxTime)
++					return e
++				}, opentracing.Tags{"block.id": meta.ULID}); err != nil {
+ 					return errors.Wrapf(err, "gather index issues for block %s", bdir)
+ 				}
+ 
+@@ -1077,11 +1071,10 @@ func (cg *Group) compact(ctx context.Context, dir string, planner Planner, comp
+ 	level.Info(cg.logger).Log("msg", "downloaded and verified blocks; compacting blocks", "plan", fmt.Sprintf("%v", toCompactDirs), "duration", time.Since(begin), "duration_ms", time.Since(begin).Milliseconds())
+ 
+ 	begin = time.Now()
+-	tracing.DoInSpanWithErr(ctx, "compaction", func(ctx context.Context) error {
+-		compID, err = comp.Compact(dir, toCompactDirs, nil)
+-		return err
+-	})
+-	if err != nil {
++	if err := tracing.DoInSpanWithErr(ctx, "compaction", func(ctx context.Context) (e error) {
++		compID, e = comp.Compact(dir, toCompactDirs, nil)
++		return e
++	}); err != nil {
+ 		return false, ulid.ULID{}, halt(errors.Wrapf(err, "compact blocks %v", toCompactDirs))
+ 	}
+ 	if compID == (ulid.ULID{}) {
+@@ -1122,9 +1115,8 @@ func (cg *Group) compact(ctx context.Context, dir string, planner Planner, comp
+ 	}
+ 
+ 	// Ensure the output block is valid.
+-	tracing.DoInSpanWithErr(ctx, "compaction_verify_index", func(ctx context.Context) error {
+-		err = block.VerifyIndex(cg.logger, index, newMeta.MinTime, newMeta.MaxTime)
+-		return err
++	err = tracing.DoInSpanWithErr(ctx, "compaction_verify_index", func(ctx context.Context) error {
++		return block.VerifyIndex(cg.logger, index, newMeta.MinTime, newMeta.MaxTime)
+ 	})
+ 	if !cg.acceptMalformedIndex && err != nil {
+ 		return false, ulid.ULID{}, halt(errors.Wrapf(err, "invalid result block %s", bdir))
+@@ -1140,9 +1132,8 @@ func (cg *Group) compact(ctx context.Context, dir string, planner Planner, comp
+ 
+ 	begin = time.Now()
+ 
+-	tracing.DoInSpanWithErr(ctx, "compaction_block_upload", func(ctx context.Context) error {
+-		err = block.Upload(ctx, cg.logger, cg.bkt, bdir, cg.hashFunc, objstore.WithUploadConcurrency(cg.blockFilesConcurrency))
+-		return err
++	err = tracing.DoInSpanWithErr(ctx, "compaction_block_upload", func(ctx context.Context) error {
++		return block.Upload(ctx, cg.logger, cg.bkt, bdir, cg.hashFunc, objstore.WithUploadConcurrency(cg.blockFilesConcurrency))
+ 	})
+ 	if err != nil {
+ 		return false, ulid.ULID{}, retry(errors.Wrapf(err, "upload of %s failed", compID))
+@@ -1153,9 +1144,8 @@ func (cg *Group) compact(ctx context.Context, dir string, planner Planner, comp
+ 	// into the next planning cycle.
+ 	// Eventually the block we just uploaded should get synced into the group again (including sync-delay).
+ 	for _, meta := range toCompact {
+-		tracing.DoInSpanWithErr(ctx, "compaction_block_delete", func(ctx context.Context) error {
+-			err = cg.deleteBlock(meta.ULID, filepath.Join(dir, meta.ULID.String()))
+-			return err
++		err = tracing.DoInSpanWithErr(ctx, "compaction_block_delete", func(ctx context.Context) error {
++			return cg.deleteBlock(meta.ULID, filepath.Join(dir, meta.ULID.String()))
+ 		}, opentracing.Tags{"block.id": meta.ULID})
+ 		if err != nil {
+ 			return false, ulid.ULID{}, retry(errors.Wrapf(err, "mark old block for deletion from bucket"))
+diff --git a/pkg/compact/compact_e2e_test.go b/pkg/compact/compact_e2e_test.go
+index 30ac42cf76d..8f12ed5f69c 100644
+--- a/pkg/compact/compact_e2e_test.go
++++ b/pkg/compact/compact_e2e_test.go
+@@ -139,7 +139,7 @@ func TestSyncer_GarbageCollect_e2e(t *testing.T) {
+ 		testutil.Ok(t, sy.GarbageCollect(ctx))
+ 
+ 		// Only the level 3 block, the last source block in both resolutions should be left.
+-		grouper := NewDefaultGrouper(nil, bkt, false, false, nil, blocksMarkedForDeletion, garbageCollectedBlocks, blockMarkedForNoCompact, metadata.NoneFunc, 1, 1)
++		grouper := NewDefaultGrouper(nil, bkt, false, false, nil, blocksMarkedForDeletion, garbageCollectedBlocks, blockMarkedForNoCompact, metadata.NoneFunc, 10, 10)
+ 		groups, err := grouper.Groups(sy.Metas())
+ 		testutil.Ok(t, err)
+ 
+@@ -214,7 +214,7 @@ func testGroupCompactE2e(t *testing.T, mergeFunc storage.VerticalChunkSeriesMerg
+ 		testutil.Ok(t, err)
+ 
+ 		planner := NewPlanner(logger, []int64{1000, 3000}, noCompactMarkerFilter)
+-		grouper := NewDefaultGrouper(logger, bkt, false, false, reg, blocksMarkedForDeletion, garbageCollectedBlocks, blocksMaredForNoCompact, metadata.NoneFunc, 1, 1)
++		grouper := NewDefaultGrouper(logger, bkt, false, false, reg, blocksMarkedForDeletion, garbageCollectedBlocks, blocksMaredForNoCompact, metadata.NoneFunc, 10, 10)
+ 		bComp, err := NewBucketCompactor(logger, sy, grouper, planner, comp, dir, bkt, 2, true)
+ 		testutil.Ok(t, err)
+ 
+diff --git a/pkg/tracing/tracing.go b/pkg/tracing/tracing.go
+index 1987382d589..9ddb904280a 100644
+--- a/pkg/tracing/tracing.go
++++ b/pkg/tracing/tracing.go
+@@ -76,13 +76,15 @@ func StartSpan(ctx context.Context, operationName string, opts ...opentracing.St
+ // DoInSpanWtihErr executes function doFn inside new span with `operationName` name and hooking as child to a span found within given context if any.
+ // It uses opentracing.Tracer propagated in context. If no found, it uses noop tracer notification.
+ // It logs the error inside the new span created, which differentiates it from DoInSpan and DoWithSpan.
+-func DoInSpanWithErr(ctx context.Context, operationName string, doFn func(context.Context) error, opts ...opentracing.StartSpanOption) {
++func DoInSpanWithErr(ctx context.Context, operationName string, doFn func(context.Context) error, opts ...opentracing.StartSpanOption) error {
+ 	span, newCtx := StartSpan(ctx, operationName, opts...)
+ 	defer span.Finish()
+ 	err := doFn(newCtx)
+ 	if err != nil {
+ 		ext.LogError(span, err)
+ 	}
++
++	return err
+ }
+ 
+ // DoInSpan executes function doFn inside new span with `operationName` name and hooking as child to a span found within given context if any.

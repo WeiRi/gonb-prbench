@@ -1,0 +1,39 @@
+diff --git a/CHANGELOG.md b/CHANGELOG.md
+index 48afc2b50ec..45808a58538 100644
+--- a/CHANGELOG.md
++++ b/CHANGELOG.md
+@@ -45,6 +45,8 @@ BUG FIXES:
+    [GH_-3452]
+  * client: Fix lock contention that could cause a node to miss a heartbeat and
+    be marked as down [GH-3195]
++ * client: Fix data race that could lead to concurrent map read/writes during
++   hearbeating and fingerprinting [GH-3461]
+  * driver/docker: Fix docker user specified syslogging [GH-3184]
+  * driver/docker: Fix issue where CPU usage statistics were artificially high
+    [GH-3229]
+diff --git a/client/client.go b/client/client.go
+index 796d6e6ed5f..79fbba606dc 100644
+--- a/client/client.go
++++ b/client/client.go
+@@ -501,7 +501,7 @@ func (c *Client) CollectAllAllocs() error {
+ func (c *Client) Node() *structs.Node {
+ 	c.configLock.RLock()
+ 	defer c.configLock.RUnlock()
+-	return c.config.Node
++	return c.configCopy.Node
+ }
+ 
+ // StatsReporter exposes the various APIs related resource usage of a Nomad
+diff --git a/client/client_test.go b/client/client_test.go
+index 407009de24b..fbd49de2cf6 100644
+--- a/client/client_test.go
++++ b/client/client_test.go
+@@ -222,7 +222,7 @@ func TestClient_HasNodeChanged(t *testing.T) {
+ 	c := testClient(t, nil)
+ 	defer c.Shutdown()
+ 
+-	node := c.Node()
++	node := c.config.Node
+ 	attrHash, err := hashstructure.Hash(node.Attributes, nil)
+ 	if err != nil {
+ 		c.logger.Printf("[DEBUG] client: unable to calculate node attributes hash: %v", err)

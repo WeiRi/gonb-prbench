@@ -1,0 +1,116 @@
+diff --git a/staging/src/k8s.io/dynamic-resource-allocation/structured/internal/experimental/allocator_experimental.go b/staging/src/k8s.io/dynamic-resource-allocation/structured/internal/experimental/allocator_experimental.go
+index 268850ec85a43..84218307c6be8 100644
+--- a/staging/src/k8s.io/dynamic-resource-allocation/structured/internal/experimental/allocator_experimental.go
++++ b/staging/src/k8s.io/dynamic-resource-allocation/structured/internal/experimental/allocator_experimental.go
+@@ -86,12 +86,11 @@ var SupportedFeatures = internal.Features{
+ }
+ 
+ type Allocator struct {
+-	features         Features
+-	claimsToAllocate []*resourceapi.ResourceClaim
+-	allocatedState   AllocatedState
+-	classLister      DeviceClassLister
+-	slices           []*resourceapi.ResourceSlice
+-	celCache         *cel.Cache
++	features       Features
++	allocatedState AllocatedState
++	classLister    DeviceClassLister
++	slices         []*resourceapi.ResourceSlice
++	celCache       *cel.Cache
+ 	// availableCounters contains the available counters for individual
+ 	// ResourceSlices. It acts as a cache that is updated the first time
+ 	// the available counters are needed for each ResourceSlice. The information
+@@ -139,6 +138,7 @@ func (a *Allocator) Allocate(ctx context.Context, node *v1.Node, claims []*resou
+ 		ctx:                  ctx, // all methods share the same a and thus ctx
+ 		logger:               klog.FromContext(ctx),
+ 		node:                 node,
++		claimsToAllocate:     claims,
+ 		deviceMatchesRequest: make(map[matchKey]bool),
+ 		constraints:          make([][]constraint, len(claims)),
+ 		consumedCounters:     make(map[string]counterSets),
+@@ -146,7 +146,6 @@ func (a *Allocator) Allocate(ctx context.Context, node *v1.Node, claims []*resou
+ 		result:               make([]internalAllocationResult, len(claims)),
+ 		allocatingCapacity:   NewConsumedCapacityCollection(),
+ 	}
+-	alloc.claimsToAllocate = claims
+ 	alloc.logger.V(5).Info("Starting allocation", "numClaims", len(alloc.claimsToAllocate))
+ 	defer alloc.logger.V(5).Info("Done with allocation", "success", len(finalResult) == len(alloc.claimsToAllocate), "err", finalErr)
+ 
+@@ -577,6 +576,7 @@ type allocator struct {
+ 	ctx                  context.Context
+ 	logger               klog.Logger
+ 	node                 *v1.Node
++	claimsToAllocate     []*resourceapi.ResourceClaim
+ 	pools                []*Pool
+ 	deviceMatchesRequest map[matchKey]bool
+ 	constraints          [][]constraint // one list of constraints per claim
+diff --git a/staging/src/k8s.io/dynamic-resource-allocation/structured/internal/incubating/allocator_incubating.go b/staging/src/k8s.io/dynamic-resource-allocation/structured/internal/incubating/allocator_incubating.go
+index ad1e4d74ad135..d65235e35b016 100644
+--- a/staging/src/k8s.io/dynamic-resource-allocation/structured/internal/incubating/allocator_incubating.go
++++ b/staging/src/k8s.io/dynamic-resource-allocation/structured/internal/incubating/allocator_incubating.go
+@@ -58,7 +58,6 @@ var SupportedFeatures = internal.Features{
+ 
+ type Allocator struct {
+ 	features         Features
+-	claimsToAllocate []*resourceapi.ResourceClaim
+ 	allocatedDevices sets.Set[DeviceID]
+ 	classLister      DeviceClassLister
+ 	slices           []*resourceapi.ResourceSlice
+@@ -110,13 +109,13 @@ func (a *Allocator) Allocate(ctx context.Context, node *v1.Node, claims []*resou
+ 		ctx:                  ctx, // all methods share the same a and thus ctx
+ 		logger:               klog.FromContext(ctx),
+ 		node:                 node,
++		claimsToAllocate:     claims,
+ 		deviceMatchesRequest: make(map[matchKey]bool),
+ 		constraints:          make([][]constraint, len(claims)),
+ 		consumedCounters:     make(map[string]counterSets),
+ 		requestData:          make(map[requestIndices]requestData),
+ 		result:               make([]internalAllocationResult, len(claims)),
+ 	}
+-	alloc.claimsToAllocate = claims
+ 	alloc.logger.V(5).Info("Starting allocation", "numClaims", len(alloc.claimsToAllocate))
+ 	defer alloc.logger.V(5).Info("Done with allocation", "success", len(finalResult) == len(alloc.claimsToAllocate), "err", finalErr)
+ 
+@@ -471,6 +470,7 @@ type allocator struct {
+ 	ctx                  context.Context
+ 	logger               klog.Logger
+ 	node                 *v1.Node
++	claimsToAllocate     []*resourceapi.ResourceClaim
+ 	pools                []*Pool
+ 	deviceMatchesRequest map[matchKey]bool
+ 	constraints          [][]constraint // one list of constraints per claim
+diff --git a/staging/src/k8s.io/dynamic-resource-allocation/structured/internal/stable/allocator_stable.go b/staging/src/k8s.io/dynamic-resource-allocation/structured/internal/stable/allocator_stable.go
+index a24d4b25b8e0b..d5b118e931e1e 100644
+--- a/staging/src/k8s.io/dynamic-resource-allocation/structured/internal/stable/allocator_stable.go
++++ b/staging/src/k8s.io/dynamic-resource-allocation/structured/internal/stable/allocator_stable.go
+@@ -56,7 +56,6 @@ var SupportedFeatures = internal.Features{}
+ 
+ type Allocator struct {
+ 	features         Features
+-	claimsToAllocate []*resourceapi.ResourceClaim
+ 	allocatedDevices sets.Set[DeviceID]
+ 	classLister      DeviceClassLister
+ 	slices           []*resourceapi.ResourceSlice
+@@ -101,13 +100,13 @@ func (a *Allocator) Allocate(ctx context.Context, node *v1.Node, claims []*resou
+ 		ctx:                  ctx, // all methods share the same a and thus ctx
+ 		logger:               klog.FromContext(ctx),
+ 		node:                 node,
++		claimsToAllocate:     claims,
+ 		deviceMatchesRequest: make(map[matchKey]bool),
+ 		constraints:          make([][]constraint, len(claims)),
+ 		consumedCounters:     make(map[string]counterSets),
+ 		requestData:          make(map[requestIndices]requestData),
+ 		result:               make([]internalAllocationResult, len(claims)),
+ 	}
+-	alloc.claimsToAllocate = claims
+ 	alloc.logger.V(5).Info("Starting allocation", "numClaims", len(alloc.claimsToAllocate))
+ 	defer alloc.logger.V(5).Info("Done with allocation", "success", len(finalResult) == len(alloc.claimsToAllocate), "err", finalErr)
+ 
+@@ -453,6 +452,7 @@ type allocator struct {
+ 	ctx                  context.Context
+ 	logger               klog.Logger
+ 	node                 *v1.Node
++	claimsToAllocate     []*resourceapi.ResourceClaim
+ 	pools                []*Pool
+ 	deviceMatchesRequest map[matchKey]bool
+ 	constraints          [][]constraint // one list of constraints per claim

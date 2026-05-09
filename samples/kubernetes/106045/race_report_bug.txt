@@ -1,0 +1,250 @@
+WARNING: DATA RACE
+Write at 0x00c00011e3f0 by goroutine 9:
+  runtime.mapassign_faststr()
+      /usr/local/go/src/runtime/map_faststr.go:203 +0x0
+  ase/kubernetes-106045.(*auditHandler).logAnnotations()
+      /work/audit.go:24 +0x1a8
+  ase/kubernetes-106045.(*auditHandler).Admit()
+      /work/audit.go:29 +0x1ee
+  ase/kubernetes-106045.TestRace_106045_AuditAnnotations.func2()
+      /work/verified_test.go:24 +0xcf
+
+Previous write at 0x00c00011e3f0 by goroutine 8:
+  runtime.mapassign_faststr()
+      /usr/local/go/src/runtime/map_faststr.go:203 +0x0
+  ase/kubernetes-106045.(*auditHandler).logAnnotations()
+      /work/audit.go:24 +0x1a8
+  ase/kubernetes-106045.(*auditHandler).Admit()
+      /work/audit.go:29 +0x1ee
+  ase/kubernetes-106045.TestRace_106045_AuditAnnotations.func1()
+      /work/verified_test.go:18 +0xcf
+
+Goroutine 9 (running) created at:
+  ase/kubernetes-106045.TestRace_106045_AuditAnnotations()
+      /work/verified_test.go:21 +0x56
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1595 +0x261
+  testing.(*T).Run.func1()
+      /usr/local/go/src/testing/testing.go:1648 +0x44
+
+Goroutine 8 (finished) created at:
+  ase/kubernetes-106045.TestRace_106045_AuditAnnotations()
+      /work/verified_test.go:15 +0x1dc
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1595 +0x261
+  testing.(*T).Run.func1()
+      /usr/local/go/src/testing/testing.go:1648 +0x44
+==================
+fatal error: concurrent map writes
+
+goroutine 29 [running]:
+ase/kubernetes-106045.(*auditHandler).logAnnotations(...)
+	/work/audit.go:24
+ase/kubernetes-106045.(*auditHandler).Admit(...)
+	/work/audit.go:29
+ase/kubernetes-106045.TestRace_106045_AuditAnnotations.func2()
+	/work/verified_test.go:24 +0x1a9
+created by ase/kubernetes-106045.TestRace_106045_AuditAnnotations in goroutine 19
+	/work/verified_test.go:21 +0x57
+
+goroutine 1 [chan receive]:
+testing.(*T).Run(0xc000102b60, {0x5d6b06, 0x20}, 0x5dc018)
+	/usr/local/go/src/testing/testing.go:1649 +0x871
+testing.runTests.func1(0x0?)
+	/usr/local/go/src/testing/testing.go:2054 +0x85
+testing.tRunner(0xc000102b60, 0xc000137af8)
+	/usr/local/go/src/testing/testing.go:1595 +0x262
+testing.runTests(0xc0001220a0?, {0x6f1060, 0x1, 0x1}, {0x1c?, 0x1e?, 0x6fa120?})
+	/usr/local/go/src/testing/testing.go:2052 +0x8ae
+testing.(*M).Run(0xc0001220a0)
+	/usr/local/go/src/testing/testing.go:1925 +0xcd8
+main.main()
+	_testmain.go:47 +0x2be
+
+goroutine 19 [runnable]:
+ase/kubernetes-106045.TestRace_106045_AuditAnnotations(0x0?)
+	/work/verified_test.go:15 +0x13b
+testing.tRunner(0xc000102d00, 0x5dc018)
+	/usr/local/go/src/testing/testing.go:1595 +0x262
+created by testing.(*T).Run in goroutine 1
+	/usr/local/go/src/testing/testing.go:1648 +0x846
+
+goroutine 24 [runnable]:
+ase/kubernetes-106045.TestRace_106045_AuditAnnotations.func1()
+	/work/verified_test.go:18 +0xdd
+created by ase/kubernetes-106045.TestRace_106045_AuditAnnotations in goroutine 19
+	/work/verified_test.go:15 +0x1dd
+
+goroutine 25 [runnable]:
+fmt.(*pp).doPrintf(0xc0000dc750, {0x5cff42, 0x3}, {0xc000180fb0?, 0x1, 0x1})
+	/usr/local/go/src/fmt/print.go:1021 +0x1db9
+fmt.Sprintf({0x5cff42, 0x3}, {0xc000180fb0, 0x1, 0x1})
+	/usr/local/go/src/fmt/print.go:239 +0x5d
+ase/kubernetes-106045.TestRace_106045_AuditAnnotations.func2()
+	/work/verified_test.go:24 +0x132
+created by ase/kubernetes-106045.TestRace_106045_AuditAnnotations in goroutine 19
+	/work/verified_test.go:21 +0x57
+
+goroutine 26 [runnable]:
+ase/kubernetes-106045.TestRace_106045_AuditAnnotations.func1()
+	/work/verified_test.go:15
+created by ase/kubernetes-106045.TestRace_106045_AuditAnnotations in goroutine 19
+	/work/verified_test.go:15 +0x1dd
+
+goroutine 28 [runnable]:
+fmt.(*pp).doPrintf(0xc0007961a0, {0x5cff45, 0x3}, {0xc000792fb0?, 0x1, 0x1})
+	/usr/local/go/src/fmt/print.go:1021 +0x1db9
+fmt.Sprintf({0x5cff45, 0x3}, {0xc000792fb0, 0x1, 0x1})
+	/usr/local/go/src/fmt/print.go:239 +0x5d
+ase/kubernetes-106045.TestRace_106045_AuditAnnotations.func1()
+	/work/verified_test.go:18 +0x132
+created by ase/kubernetes-106045.TestRace_106045_AuditAnnotations in goroutine 19
+	/work/verified_test.go:15 +0x1dd
+
+goroutine 32 [runnable]:
+fmt.(*pp).free(0xc0002b3380)
+	/usr/local/go/src/fmt/print.go:161 +0x1ba
+fmt.Sprintf({0x5cff45, 0x3}, {0xc00020efb0, 0x1, 0x1})
+	/usr/local/go/src/fmt/print.go:241 +0x93
+ase/kubernetes-106045.TestRace_106045_AuditAnnotations.func1()
+	/work/verified_test.go:18 +0x132
+created by ase/kubernetes-106045.TestRace_106045_AuditAnnotations in goroutine 19
+	/work/verified_test.go:15 +0x1dd
+
+goroutine 33 [runnable]:
+ase/kubernetes-106045.TestRace_106045_AuditAnnotations.func2()
+	/work/verified_test.go:21
+created by ase/kubernetes-106045.TestRace_106045_AuditAnnotations in goroutine 19
+	/work/verified_test.go:21 +0x57
+
+goroutine 34 [runnable]:
+ase/kubernetes-106045.TestRace_106045_AuditAnnotations.func1()
+	/work/verified_test.go:15
+created by ase/kubernetes-106045.TestRace_106045_AuditAnnotations in goroutine 19
+	/work/verified_test.go:15 +0x1dd
+
+goroutine 35 [runnable]:
+ase/kubernetes-106045.TestRace_106045_AuditAnnotations.func2()
+	/work/verified_test.go:21
+created by ase/kubernetes-106045.TestRace_106045_AuditAnnotations in goroutine 19
+	/work/verified_test.go:21 +0x57
+
+goroutine 36 [runnable]:
+ase/kubernetes-106045.TestRace_106045_AuditAnnotations.func1()
+	/work/verified_test.go:15
+created by ase/kubernetes-106045.TestRace_106045_AuditAnnotations in goroutine 19
+	/work/verified_test.go:15 +0x1dd
+
+goroutine 37 [runnable]:
+ase/kubernetes-106045.TestRace_106045_AuditAnnotations.func2()
+	/work/verified_test.go:21
+created by ase/kubernetes-106045.TestRace_106045_AuditAnnotations in goroutine 19
+	/work/verified_test.go:21 +0x57
+
+goroutine 38 [runnable]:
+ase/kubernetes-106045.TestRace_106045_AuditAnnotations.func1()
+	/work/verified_test.go:15
+created by ase/kubernetes-106045.TestRace_106045_AuditAnnotations in goroutine 19
+	/work/verified_test.go:15 +0x1dd
+
+goroutine 39 [runnable]:
+ase/kubernetes-106045.TestRace_106045_AuditAnnotations.func2()
+	/work/verified_test.go:21
+created by ase/kubernetes-106045.TestRace_106045_AuditAnnotations in goroutine 19
+	/work/verified_test.go:21 +0x57
+
+goroutine 40 [runnable]:
+ase/kubernetes-106045.TestRace_106045_AuditAnnotations.func1()
+	/work/verified_test.go:15
+created by ase/kubernetes-106045.TestRace_106045_AuditAnnotations in goroutine 19
+	/work/verified_test.go:15 +0x1dd
+
+goroutine 42 [runnable]:
+ase/kubernetes-106045.TestRace_106045_AuditAnnotations.func1()
+	/work/verified_test.go:15
+created by ase/kubernetes-106045.TestRace_106045_AuditAnnotations in goroutine 19
+	/work/verified_test.go:15 +0x1dd
+
+goroutine 43 [runnable]:
+ase/kubernetes-106045.TestRace_106045_AuditAnnotations.func2()
+	/work/verified_test.go:21
+created by ase/kubernetes-106045.TestRace_106045_AuditAnnotations in goroutine 19
+	/work/verified_test.go:21 +0x57
+
+goroutine 44 [runnable]:
+ase/kubernetes-106045.TestRace_106045_AuditAnnotations.func1()
+	/work/verified_test.go:15
+created by ase/kubernetes-106045.TestRace_106045_AuditAnnotations in goroutine 19
+	/work/verified_test.go:15 +0x1dd
+
+goroutine 45 [runnable]:
+ase/kubernetes-106045.TestRace_106045_AuditAnnotations.func2()
+	/work/verified_test.go:21
+created by ase/kubernetes-106045.TestRace_106045_AuditAnnotations in goroutine 19
+	/work/verified_test.go:21 +0x57
+
+goroutine 46 [runnable]:
+ase/kubernetes-106045.TestRace_106045_AuditAnnotations.func1()
+	/work/verified_test.go:15
+created by ase/kubernetes-106045.TestRace_106045_AuditAnnotations in goroutine 19
+	/work/verified_test.go:15 +0x1dd
+
+goroutine 47 [runnable]:
+ase/kubernetes-106045.TestRace_106045_AuditAnnotations.func2()
+	/work/verified_test.go:21
+created by ase/kubernetes-106045.TestRace_106045_AuditAnnotations in goroutine 19
+	/work/verified_test.go:21 +0x57
+
+goroutine 48 [runnable]:
+ase/kubernetes-106045.TestRace_106045_AuditAnnotations.func1()
+	/work/verified_test.go:15
+created by ase/kubernetes-106045.TestRace_106045_AuditAnnotations in goroutine 19
+	/work/verified_test.go:15 +0x1dd
+
+goroutine 49 [runnable]:
+ase/kubernetes-106045.TestRace_106045_AuditAnnotations.func2()
+	/work/verified_test.go:21
+created by ase/kubernetes-106045.TestRace_106045_AuditAnnotations in goroutine 19
+	/work/verified_test.go:21 +0x57
+
+goroutine 50 [runnable]:
+ase/kubernetes-106045.TestRace_106045_AuditAnnotations.func1()
+	/work/verified_test.go:15
+created by ase/kubernetes-106045.TestRace_106045_AuditAnnotations in goroutine 19
+	/work/verified_test.go:15 +0x1dd
+
+goroutine 51 [runnable]:
+ase/kubernetes-106045.TestRace_106045_AuditAnnotations.func2()
+	/work/verified_test.go:21
+created by ase/kubernetes-106045.TestRace_106045_AuditAnnotations in goroutine 19
+	/work/verified_test.go:21 +0x57
+
+goroutine 52 [runnable]:
+ase/kubernetes-106045.TestRace_106045_AuditAnnotations.func1()
+	/work/verified_test.go:15
+created by ase/kubernetes-106045.TestRace_106045_AuditAnnotations in goroutine 19
+	/work/verified_test.go:15 +0x1dd
+
+goroutine 53 [runnable]:
+ase/kubernetes-106045.TestRace_106045_AuditAnnotations.func2()
+	/work/verified_test.go:21
+created by ase/kubernetes-106045.TestRace_106045_AuditAnnotations in goroutine 19
+	/work/verified_test.go:21 +0x57
+
+goroutine 54 [runnable]:
+ase/kubernetes-106045.TestRace_106045_AuditAnnotations.func1()
+	/work/verified_test.go:15
+created by ase/kubernetes-106045.TestRace_106045_AuditAnnotations in goroutine 19
+	/work/verified_test.go:15 +0x1dd
+
+goroutine 55 [runnable]:
+ase/kubernetes-106045.TestRace_106045_AuditAnnotations.func2()
+	/work/verified_test.go:21
+created by ase/kubernetes-106045.TestRace_106045_AuditAnnotations in goroutine 19
+	/work/verified_test.go:21 +0x57
+
+goroutine 56 [runnable]:
+ase/kubernetes-106045.TestRace_106045_AuditAnnotations.func1()
+	/work/verified_test.go:15
+created by ase/kubernetes-106045.TestRace_106045_AuditAnnotations in goroutine 19
+	/work/verified_test.go:15 +0x1dd

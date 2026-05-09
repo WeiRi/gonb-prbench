@@ -1,0 +1,200 @@
+WARNING: DATA RACE
+Write at 0x00c0000d6510 by goroutine 8:
+  runtime.mapassign_faststr()
+      /usr/local/go/src/runtime/map_faststr.go:203 +0x0
+  ase/serving-5865.(*RevisionWatcher).CheckDests()
+      /work/revision_backends.go:18 +0xca
+  ase/serving-5865.TestRace_5865.func1()
+      /work/verified_test.go:21 +0xa2
+  ase/serving-5865.TestRace_5865.gowrap1()
+      /work/verified_test.go:23 +0x41
+
+Previous write at 0x00c0000d6510 by goroutine 11:
+  runtime.mapassign_faststr()
+      /usr/local/go/src/runtime/map_faststr.go:203 +0x0
+  ase/serving-5865.(*RevisionWatcher).CheckDests()
+      /work/revision_backends.go:18 +0xca
+  ase/serving-5865.TestRace_5865.func1()
+      /work/verified_test.go:21 +0xa2
+  ase/serving-5865.TestRace_5865.gowrap1()
+      /work/verified_test.go:23 +0x41
+
+Goroutine 8 (running) created at:
+  ase/serving-5865.TestRace_5865()
+      /work/verified_test.go:18 +0x104
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 11 (finished) created at:
+  ase/serving-5865.TestRace_5865()
+      /work/verified_test.go:18 +0x104
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c000188088 by goroutine 10:
+  ase/serving-5865.(*RevisionWatcher).CheckDests()
+      /work/revision_backends.go:18 +0xd6
+  ase/serving-5865.TestRace_5865.func1()
+      /work/verified_test.go:21 +0xa2
+  ase/serving-5865.TestRace_5865.gowrap1()
+      /work/verified_test.go:23 +0x41
+
+Previous write at 0x00c000188088 by goroutine 11:
+  ase/serving-5865.(*RevisionWatcher).CheckDests()
+      /work/revision_backends.go:18 +0xd6
+  ase/serving-5865.TestRace_5865.func1()
+      /work/verified_test.go:21 +0xa2
+  ase/serving-5865.TestRace_5865.gowrap1()
+      /work/verified_test.go:23 +0x41
+
+Goroutine 10 (running) created at:
+  ase/serving-5865.TestRace_5865()
+      /work/verified_test.go:18 +0x104
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 11 (finished) created at:
+  ase/serving-5865.TestRace_5865()
+      /work/verified_test.go:18 +0x104
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+fatal error: concurrent map writes
+
+goroutine 8 [running]:
+ase/serving-5865.(*RevisionWatcher).CheckDests(...)
+	/work/revision_backends.go:18
+ase/serving-5865.TestRace_5865.func1(0x0?)
+	/work/verified_test.go:21 +0xcb
+created by ase/serving-5865.TestRace_5865 in goroutine 6
+	/work/verified_test.go:18 +0x105
+
+goroutine 1 [chan receive]:
+testing.(*T).Run(0xc0000fa340, {0x5e69ec, 0xd}, 0x5f14c0)
+	/usr/local/go/src/testing/testing.go:1750 +0x851
+testing.runTests.func1(0xc0000fa340)
+	/usr/local/go/src/testing/testing.go:2161 +0x86
+testing.tRunner(0xc0000fa340, 0xc0000e7b10)
+	/usr/local/go/src/testing/testing.go:1689 +0x21f
+testing.runTests(0xc0000120c0, {0x717120, 0x1, 0x1}, {0xc0000e7bb8?, 0xc0000e7c00?, 0x7208a0?})
+	/usr/local/go/src/testing/testing.go:2159 +0x8bf
+testing.(*M).Run(0xc0000da0a0)
+	/usr/local/go/src/testing/testing.go:2027 +0xf18
+main.main()
+	_testmain.go:47 +0x2be
+
+goroutine 6 [runnable]:
+sync.(*WaitGroup).Add(0xc000014220, 0x1)
+	/usr/local/go/src/sync/waitgroup.go:43 +0x1c8
+ase/serving-5865.TestRace_5865(0xc0000fa4e0?)
+	/work/verified_test.go:17 +0x127
+testing.tRunner(0xc0000fa4e0, 0x5f14c0)
+	/usr/local/go/src/testing/testing.go:1689 +0x21f
+created by testing.(*T).Run in goroutine 1
+	/usr/local/go/src/testing/testing.go:1742 +0x826
+
+goroutine 11 [runnable]:
+ase/serving-5865.(*RevisionWatcher).CheckDests(...)
+	/work/revision_backends.go:18
+ase/serving-5865.TestRace_5865.func1(0x0?)
+	/work/verified_test.go:21 +0xcb
+created by ase/serving-5865.TestRace_5865 in goroutine 6
+	/work/verified_test.go:18 +0x105
+
+goroutine 12 [runnable]:
+ase/serving-5865.(*RevisionWatcher).CheckDests(...)
+	/work/revision_backends.go:18
+ase/serving-5865.TestRace_5865.func1(0x0?)
+	/work/verified_test.go:21 +0xcb
+created by ase/serving-5865.TestRace_5865 in goroutine 6
+	/work/verified_test.go:18 +0x105
+
+goroutine 14 [runnable]:
+ase/serving-5865.TestRace_5865.gowrap1()
+	/work/verified_test.go:18
+runtime.goexit({})
+	/usr/local/go/src/runtime/asm_amd64.s:1695 +0x1
+created by ase/serving-5865.TestRace_5865 in goroutine 6
+	/work/verified_test.go:18 +0x105
+
+goroutine 15 [runnable]:
+sync/atomic.(*Uint64).Add(0xc000014220, 0xffffffff00000000)
+	/usr/local/go/src/sync/atomic/type.go:159 +0x5f
+sync.(*WaitGroup).Add(0xc000014220, 0xffffffffffffffff)
+	/usr/local/go/src/sync/waitgroup.go:52 +0x85
+sync.(*WaitGroup).Done(0xc000014220)
+	/usr/local/go/src/sync/waitgroup.go:87 +0x2e
+ase/serving-5865.TestRace_5865.func1(0x0?)
+	/work/verified_test.go:23 +0xef
+created by ase/serving-5865.TestRace_5865 in goroutine 6
+	/work/verified_test.go:18 +0x105
+
+goroutine 16 [runnable]:
+ase/serving-5865.(*RevisionWatcher).CheckDests(...)
+	/work/revision_backends.go:18
+ase/serving-5865.TestRace_5865.func1(0x0?)
+	/work/verified_test.go:21 +0xcb
+created by ase/serving-5865.TestRace_5865 in goroutine 6
+	/work/verified_test.go:18 +0x105
+
+goroutine 18 [runnable]:
+ase/serving-5865.TestRace_5865.gowrap1()
+	/work/verified_test.go:18
+runtime.goexit({})
+	/usr/local/go/src/runtime/asm_amd64.s:1695 +0x1
+created by ase/serving-5865.TestRace_5865 in goroutine 6
+	/work/verified_test.go:18 +0x105
+
+goroutine 20 [runnable]:
+ase/serving-5865.TestRace_5865.gowrap1()
+	/work/verified_test.go:18
+runtime.goexit({})
+	/usr/local/go/src/runtime/asm_amd64.s:1695 +0x1
+created by ase/serving-5865.TestRace_5865 in goroutine 6
+	/work/verified_test.go:18 +0x105
+
+goroutine 21 [runnable]:
+ase/serving-5865.(*RevisionWatcher).CheckDests(...)
+	/work/revision_backends.go:18
+ase/serving-5865.TestRace_5865.func1(0x0?)
+	/work/verified_test.go:21 +0xcb
+created by ase/serving-5865.TestRace_5865 in goroutine 6
+	/work/verified_test.go:18 +0x105
+
+goroutine 22 [runnable]:
+ase/serving-5865.TestRace_5865.gowrap1()
+	/work/verified_test.go:18
+runtime.goexit({})
+	/usr/local/go/src/runtime/asm_amd64.s:1695 +0x1
+created by ase/serving-5865.TestRace_5865 in goroutine 6
+	/work/verified_test.go:18 +0x105
+
+goroutine 24 [runnable]:
+ase/serving-5865.TestRace_5865.gowrap1()
+	/work/verified_test.go:18
+runtime.goexit({})
+	/usr/local/go/src/runtime/asm_amd64.s:1695 +0x1
+created by ase/serving-5865.TestRace_5865 in goroutine 6
+	/work/verified_test.go:18 +0x105
+
+goroutine 25 [runnable]:
+ase/serving-5865.TestRace_5865.gowrap1()
+	/work/verified_test.go:18
+runtime.goexit({})
+	/usr/local/go/src/runtime/asm_amd64.s:1695 +0x1
+created by ase/serving-5865.TestRace_5865 in goroutine 6
+	/work/verified_test.go:18 +0x105
+
+goroutine 26 [runnable]:
+ase/serving-5865.TestRace_5865.gowrap1()
+	/work/verified_test.go:18

@@ -1,0 +1,206 @@
+WARNING: DATA RACE
+Read at 0x00c00019e550 by goroutine 14:
+  ase/etcd-20656.(*RecordingClient).AppendRespUnsafe()
+      /work/client.go:18 +0xdd
+  ase/etcd-20656.TestRace_20656.func1()
+      /work/verified_test.go:24 +0xad
+  ase/etcd-20656.TestRace_20656.gowrap1()
+      /work/verified_test.go:28 +0x41
+
+Previous write at 0x00c00019e550 by goroutine 8:
+  ase/etcd-20656.(*RecordingClient).AppendRespUnsafe()
+      /work/client.go:18 +0x1a4
+  ase/etcd-20656.TestRace_20656.func1()
+      /work/verified_test.go:24 +0xad
+  ase/etcd-20656.TestRace_20656.gowrap1()
+      /work/verified_test.go:28 +0x41
+
+Goroutine 14 (running) created at:
+  ase/etcd-20656.TestRace_20656()
+      /work/verified_test.go:22 +0x177
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 8 (finished) created at:
+  ase/etcd-20656.TestRace_20656()
+      /work/verified_test.go:22 +0x177
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c000118000 by goroutine 9:
+  runtime.growslice()
+      /usr/local/go/src/runtime/slice.go:155 +0x0
+  ase/etcd-20656.(*RecordingClient).AppendRespUnsafe()
+      /work/client.go:18 +0x116
+  ase/etcd-20656.TestRace_20656.func1()
+      /work/verified_test.go:24 +0xad
+  ase/etcd-20656.TestRace_20656.gowrap1()
+      /work/verified_test.go:28 +0x41
+
+Previous write at 0x00c000118000 by goroutine 8:
+  ase/etcd-20656.(*RecordingClient).AppendRespUnsafe()
+      /work/client.go:18 +0x14d
+  ase/etcd-20656.TestRace_20656.func1()
+      /work/verified_test.go:24 +0xad
+  ase/etcd-20656.TestRace_20656.gowrap1()
+      /work/verified_test.go:28 +0x41
+
+Goroutine 9 (running) created at:
+  ase/etcd-20656.TestRace_20656()
+      /work/verified_test.go:22 +0x177
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 8 (finished) created at:
+  ase/etcd-20656.TestRace_20656()
+      /work/verified_test.go:22 +0x177
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c00019e550 by goroutine 16:
+  ase/etcd-20656.(*RecordingClient).AppendRespUnsafe()
+      /work/client.go:18 +0x1a4
+  ase/etcd-20656.TestRace_20656.func1()
+      /work/verified_test.go:24 +0xad
+  ase/etcd-20656.TestRace_20656.gowrap1()
+      /work/verified_test.go:28 +0x41
+
+Previous write at 0x00c00019e550 by goroutine 21:
+  ase/etcd-20656.(*RecordingClient).AppendRespUnsafe()
+      /work/client.go:18 +0x1a4
+  ase/etcd-20656.TestRace_20656.func1()
+      /work/verified_test.go:24 +0xad
+  ase/etcd-20656.TestRace_20656.gowrap1()
+      /work/verified_test.go:28 +0x41
+
+Goroutine 16 (running) created at:
+  ase/etcd-20656.TestRace_20656()
+      /work/verified_test.go:22 +0x177
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 21 (finished) created at:
+  ase/etcd-20656.TestRace_20656()
+      /work/verified_test.go:22 +0x177
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c00030e050 by goroutine 22:
+  ase/etcd-20656.(*RecordingClient).AppendRespUnsafe()
+      /work/client.go:18 +0x14d
+  ase/etcd-20656.TestRace_20656.func1()
+      /work/verified_test.go:24 +0xad
+  ase/etcd-20656.TestRace_20656.gowrap1()
+      /work/verified_test.go:28 +0x41
+
+Previous write at 0x00c00030e050 by goroutine 32:
+  ase/etcd-20656.(*RecordingClient).AppendRespUnsafe()
+      /work/client.go:18 +0x14d
+  ase/etcd-20656.TestRace_20656.func1()
+      /work/verified_test.go:24 +0xad
+  ase/etcd-20656.TestRace_20656.gowrap1()
+      /work/verified_test.go:28 +0x41
+
+Goroutine 22 (running) created at:
+  ase/etcd-20656.TestRace_20656()
+      /work/verified_test.go:22 +0x177
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 32 (running) created at:
+  ase/etcd-20656.TestRace_20656()
+      /work/verified_test.go:22 +0x177
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c00019e550 by goroutine 58:
+  ase/etcd-20656.(*RecordingClient).ReadRespsUnsafe()
+      /work/client.go:24 +0xba
+  ase/etcd-20656.TestRace_20656.func2()
+      /work/verified_test.go:34 +0x89
+
+Previous write at 0x00c00019e550 by goroutine 54:
+  ase/etcd-20656.(*RecordingClient).AppendRespUnsafe()
+      /work/client.go:18 +0x1a4
+  ase/etcd-20656.TestRace_20656.func1()
+      /work/verified_test.go:24 +0xad
+  ase/etcd-20656.TestRace_20656.gowrap1()
+      /work/verified_test.go:28 +0x41
+
+Goroutine 58 (running) created at:
+  ase/etcd-20656.TestRace_20656()
+      /work/verified_test.go:32 +0x2b0
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 54 (finished) created at:
+  ase/etcd-20656.TestRace_20656()
+      /work/verified_test.go:22 +0x177
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c000290100 by goroutine 58:
+  ase/etcd-20656.(*RecordingClient).ReadRespsUnsafe()
+      /work/client.go:24 +0x106
+  ase/etcd-20656.TestRace_20656.func2()
+      /work/verified_test.go:34 +0x89
+
+Previous write at 0x00c000290100 by goroutine 50:
+  ase/etcd-20656.(*RecordingClient).AppendRespUnsafe()
+      /work/client.go:18 +0x14d
+  ase/etcd-20656.TestRace_20656.func1()
+      /work/verified_test.go:24 +0xad
+  ase/etcd-20656.TestRace_20656.gowrap1()
+      /work/verified_test.go:28 +0x41
+
+Goroutine 58 (running) created at:
+  ase/etcd-20656.TestRace_20656()
+      /work/verified_test.go:32 +0x2b0
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 50 (finished) created at:
+  ase/etcd-20656.TestRace_20656()
+      /work/verified_test.go:22 +0x177
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+    testing.go:1398: race detected during execution of test
+--- FAIL: TestRace_20656 (0.30s)
+FAIL
+FAIL	ase/etcd-20656	0.325s
+FAIL

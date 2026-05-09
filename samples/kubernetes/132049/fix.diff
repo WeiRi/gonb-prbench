@@ -1,0 +1,107 @@
+diff --git a/staging/src/k8s.io/apiserver/pkg/endpoints/handlers/patch.go b/staging/src/k8s.io/apiserver/pkg/endpoints/handlers/patch.go
+index 0dc9ffb3397ed..060c7cc3023b8 100644
+--- a/staging/src/k8s.io/apiserver/pkg/endpoints/handlers/patch.go
++++ b/staging/src/k8s.io/apiserver/pkg/endpoints/handlers/patch.go
+@@ -726,6 +726,14 @@ func (p *patcher) patchResource(ctx context.Context, scope *RequestScope) (runti
+ 		}
+ 		return result, err
+ 	})
++
++	// In case of a timeout error, the goroutine handling the request is still running.
++	// https://github.com/kubernetes/kubernetes/blob/d2c12afa4593e50a187075157d38748292b02733/staging/src/k8s.io/apiserver/pkg/endpoints/handlers/finisher/finisher.go#L127-L146
++	// We cannot reliably read the variable (data race!) and have to assume that
++	// the object was not created.
++	if errors.IsTimeout(err) {
++		return result, false, err
++	}
+ 	return result, wasCreated, err
+ }
+ 
+diff --git a/staging/src/k8s.io/apiserver/pkg/endpoints/handlers/rest_test.go b/staging/src/k8s.io/apiserver/pkg/endpoints/handlers/rest_test.go
+index c7bcb7f5923a1..5ae5ff76e7f13 100644
+--- a/staging/src/k8s.io/apiserver/pkg/endpoints/handlers/rest_test.go
++++ b/staging/src/k8s.io/apiserver/pkg/endpoints/handlers/rest_test.go
+@@ -29,6 +29,7 @@ import (
+ 
+ 	"github.com/google/go-cmp/cmp"
+ 	jsonpatch "gopkg.in/evanphx/json-patch.v4"
++
+ 	apiequality "k8s.io/apimachinery/pkg/api/equality"
+ 	apierrors "k8s.io/apimachinery/pkg/api/errors"
+ 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+@@ -313,6 +314,25 @@ func TestPatchCustomResource(t *testing.T) {
+ 	}
+ }
+ 
++type testTimeoutPatcher struct {
++	t *testing.T
++}
++
++func (p *testTimeoutPatcher) New() runtime.Object {
++	return &example.Pod{}
++}
++
++func (p *testTimeoutPatcher) Update(ctx context.Context, _ string, _ rest.UpdatedObjectInfo, _ rest.ValidateObjectFunc, _ rest.ValidateObjectUpdateFunc, _ bool, _ *metav1.UpdateOptions) (runtime.Object, bool, error) {
++	// Block until the context is canceled to simulate a timeout scenario.
++	<-ctx.Done()
++	return nil, false, ctx.Err()
++}
++
++func (p *testTimeoutPatcher) Get(ctx context.Context, name string, options *metav1.GetOptions) (runtime.Object, error) {
++	p.t.Fatal("unexpected call to testPatcher.Get")
++	return nil, errors.New("unexpected call to testPatcher.Get")
++}
++
+ type testPatcher struct {
+ 	t *testing.T
+ 
+@@ -422,6 +442,9 @@ type patchTestCase struct {
+ 	expectedError string
+ 	// if set, indicates the number of times patching was expected to be attempted
+ 	expectedTries int
++
++	// isTimeout for this test case
++	isTimeout bool
+ }
+ 
+ func (tc *patchTestCase) Run(t *testing.T) {
+@@ -554,8 +577,16 @@ func (tc *patchTestCase) Run(t *testing.T) {
+ 				FieldManager: "test-manager",
+ 			},
+ 		}
+-
+-		ctx, cancel := context.WithTimeout(ctx, time.Second)
++		var timeout time.Duration
++		if tc.isTimeout {
++			// Simulate timeout by using a zero-duration timeout and the timeout patcher
++			// replace testPatcher with the timeout simulator
++			timeout = 0
++			p.restPatcher = &testTimeoutPatcher{t: t}
++		} else {
++			timeout = time.Second
++		}
++		ctx, cancel := context.WithTimeout(ctx, timeout)
+ 		resultObj, _, err := p.patchResource(ctx, &RequestScope{
+ 			FieldManager: fieldmanager,
+ 		})
+@@ -669,6 +700,20 @@ func TestPatchResourceNumberConversion(t *testing.T) {
+ 	tc.Run(t)
+ }
+ 
++func TestPatchResourceTimeout(t *testing.T) {
++	tc := &patchTestCase{
++		name:          "TestPatchResourceTimeout",
++		startingPod:   &example.Pod{},
++		changedPod:    &example.Pod{},
++		updatePod:     &example.Pod{},
++		expectedPod:   nil,
++		isTimeout:     true,
++		expectedError: "Timeout: request did not complete within requested timeout - context deadline exceeded",
++	}
++
++	tc.Run(t)
++}
++
+ func TestPatchResourceWithVersionConflict(t *testing.T) {
+ 	namespace := "bar"
+ 	name := "foo"

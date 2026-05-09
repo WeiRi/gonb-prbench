@@ -1,0 +1,95 @@
+diff --git a/core/state/snapshot/difflayer.go b/core/state/snapshot/difflayer.go
+index ee88938b774d..bc57ab0af347 100644
+--- a/core/state/snapshot/difflayer.go
++++ b/core/state/snapshot/difflayer.go
+@@ -258,6 +258,9 @@ func (dl *diffLayer) Root() common.Hash {
+ 
+ // Parent returns the subsequent layer of a diff layer.
+ func (dl *diffLayer) Parent() snapshot {
++	dl.lock.RLock()
++	defer dl.lock.RUnlock()
++
+ 	return dl.parent
+ }
+ 
+diff --git a/eth/protocols/snap/sync.go b/eth/protocols/snap/sync.go
+index 665d7601cfe2..5bbf5ee48214 100644
+--- a/eth/protocols/snap/sync.go
++++ b/eth/protocols/snap/sync.go
+@@ -422,6 +422,8 @@ type Syncer struct {
+ 	storageSynced  uint64             // Number of storage slots downloaded
+ 	storageBytes   common.StorageSize // Number of storage trie bytes persisted to disk
+ 
++	extProgress *SyncProgress // progress that can be exposed to external caller.
++
+ 	// Request tracking during healing phase
+ 	trienodeHealIdlers map[string]struct{} // Peers that aren't serving trie node requests
+ 	bytecodeHealIdlers map[string]struct{} // Peers that aren't serving bytecode requests
+@@ -477,6 +479,8 @@ func NewSyncer(db ethdb.KeyValueStore) *Syncer {
+ 		trienodeHealReqs: make(map[uint64]*trienodeHealRequest),
+ 		bytecodeHealReqs: make(map[uint64]*bytecodeHealRequest),
+ 		stateWriter:      db.NewBatch(),
++
++		extProgress: new(SyncProgress),
+ 	}
+ }
+ 
+@@ -633,6 +637,21 @@ func (s *Syncer) Sync(root common.Hash, cancel chan struct{}) error {
+ 			s.assignTrienodeHealTasks(trienodeHealResps, trienodeHealReqFails, cancel)
+ 			s.assignBytecodeHealTasks(bytecodeHealResps, bytecodeHealReqFails, cancel)
+ 		}
++		// Update sync progress
++		s.lock.Lock()
++		s.extProgress = &SyncProgress{
++			AccountSynced:      s.accountSynced,
++			AccountBytes:       s.accountBytes,
++			BytecodeSynced:     s.bytecodeSynced,
++			BytecodeBytes:      s.bytecodeBytes,
++			StorageSynced:      s.storageSynced,
++			StorageBytes:       s.storageBytes,
++			TrienodeHealSynced: s.trienodeHealSynced,
++			TrienodeHealBytes:  s.trienodeHealBytes,
++			BytecodeHealSynced: s.bytecodeHealSynced,
++			BytecodeHealBytes:  s.bytecodeHealBytes,
++		}
++		s.lock.Unlock()
+ 		// Wait for something to happen
+ 		select {
+ 		case <-s.update:
+@@ -705,6 +724,9 @@ func (s *Syncer) loadSyncStatus() {
+ 					}
+ 				}
+ 			}
++			s.lock.Lock()
++			defer s.lock.Unlock()
++
+ 			s.snapped = len(s.tasks) == 0
+ 
+ 			s.accountSynced = progress.AccountSynced
+@@ -802,25 +824,12 @@ func (s *Syncer) saveSyncStatus() {
+ func (s *Syncer) Progress() (*SyncProgress, *SyncPending) {
+ 	s.lock.Lock()
+ 	defer s.lock.Unlock()
+-
+-	progress := &SyncProgress{
+-		AccountSynced:      s.accountSynced,
+-		AccountBytes:       s.accountBytes,
+-		BytecodeSynced:     s.bytecodeSynced,
+-		BytecodeBytes:      s.bytecodeBytes,
+-		StorageSynced:      s.storageSynced,
+-		StorageBytes:       s.storageBytes,
+-		TrienodeHealSynced: s.trienodeHealSynced,
+-		TrienodeHealBytes:  s.trienodeHealBytes,
+-		BytecodeHealSynced: s.bytecodeHealSynced,
+-		BytecodeHealBytes:  s.bytecodeHealBytes,
+-	}
+ 	pending := new(SyncPending)
+ 	if s.healer != nil {
+ 		pending.TrienodeHeal = uint64(len(s.healer.trieTasks))
+ 		pending.BytecodeHeal = uint64(len(s.healer.codeTasks))
+ 	}
+-	return progress, pending
++	return s.extProgress, pending
+ }
+ 
+ // cleanAccountTasks removes account range retrieval tasks that have already been

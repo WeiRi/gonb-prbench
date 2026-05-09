@@ -1,0 +1,47 @@
+diff --git a/server/accounts.go b/server/accounts.go
+index e95fd7bd578..fa224662587 100644
+--- a/server/accounts.go
++++ b/server/accounts.go
+@@ -2017,7 +2017,14 @@ func (a *Account) removeAllServiceImportSubs() {
+ 
+ // Add in subscriptions for all registered service imports.
+ func (a *Account) addAllServiceImportSubs() {
++	var sis [32]*serviceImport
++	serviceImports := sis[:0]
++	a.mu.RLock()
+ 	for _, si := range a.imports.services {
++		serviceImports = append(serviceImports, si)
++	}
++	a.mu.RUnlock()
++	for _, si := range serviceImports {
+ 		a.addServiceImportSub(si)
+ 	}
+ }
+diff --git a/server/server.go b/server/server.go
+index 2e62a68ec75..6ffd02472e9 100644
+--- a/server/server.go
++++ b/server/server.go
+@@ -1594,13 +1594,23 @@ func (s *Server) fetchAccount(name string) (*Account, error) {
+ 	}
+ 	// The sub imports may have been setup but will not have had their
+ 	// subscriptions properly setup. Do that here.
++	var needImportSubs bool
++
++	acc.mu.Lock()
+ 	if len(acc.imports.services) > 0 {
+ 		if acc.ic == nil {
+ 			acc.ic = s.createInternalAccountClient()
+ 			acc.ic.acc = acc
+ 		}
++		needImportSubs = true
++	}
++	acc.mu.Unlock()
++
++	// Do these outside the lock.
++	if needImportSubs {
+ 		acc.addAllServiceImportSubs()
+ 	}
++
+ 	return acc, nil
+ }
+ 

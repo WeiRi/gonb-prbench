@@ -1,0 +1,56 @@
+WARNING: DATA RACE
+Write at 0x00c00011a000 by goroutine 28:
+  ase/etcd-3077.(*EtcdServer).run.func1()
+      /work/raft.go:24 +0x5a
+
+Previous read at 0x00c00011a000 by goroutine 14:
+  ase/etcd-3077.(*EtcdServer).run()
+      /work/raft.go:30 +0xa8
+  ase/etcd-3077.TestRace_PR3077_RaftInitOrdering.func1()
+      /work/verified_test.go:19 +0x10a
+
+Goroutine 28 (running) created at:
+  ase/etcd-3077.(*EtcdServer).run()
+      /work/raft.go:22 +0x8d
+  ase/etcd-3077.TestRace_PR3077_RaftInitOrdering.func1()
+      /work/verified_test.go:19 +0x10a
+
+Goroutine 14 (finished) created at:
+  ase/etcd-3077.TestRace_PR3077_RaftInitOrdering()
+      /work/verified_test.go:16 +0x64
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c00011a008 by goroutine 28:
+  ase/etcd-3077.(*EtcdServer).run.func1()
+      /work/raft.go:25 +0xc4
+
+Previous read at 0x00c00011a008 by goroutine 14:
+  ase/etcd-3077.(*EtcdServer).run()
+      /work/raft.go:31 +0xc5
+  ase/etcd-3077.TestRace_PR3077_RaftInitOrdering.func1()
+      /work/verified_test.go:19 +0x10a
+
+Goroutine 28 (running) created at:
+  ase/etcd-3077.(*EtcdServer).run()
+      /work/raft.go:22 +0x8d
+  ase/etcd-3077.TestRace_PR3077_RaftInitOrdering.func1()
+      /work/verified_test.go:19 +0x10a
+
+Goroutine 14 (finished) created at:
+  ase/etcd-3077.TestRace_PR3077_RaftInitOrdering()
+      /work/verified_test.go:16 +0x64
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+    testing.go:1398: race detected during execution of test
+--- FAIL: TestRace_PR3077_RaftInitOrdering (0.01s)
+FAIL
+FAIL	ase/etcd-3077	0.020s
+FAIL

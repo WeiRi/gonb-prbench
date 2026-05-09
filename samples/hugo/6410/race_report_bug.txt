@@ -1,0 +1,136 @@
+WARNING: DATA RACE
+Write at 0x000000717338 by goroutine 220:
+  ase/hugo-6410.InitLoggers()
+      /work/helpers_general.go:53 +0x14c
+  ase/hugo-6410.TestRaceInitLoggers.func2()
+      /work/verified_test.go:23 +0x71
+
+Previous read at 0x000000717338 by goroutine 89:
+  ase/hugo-6410.TestRaceInitLoggers.func1()
+      /work/verified_test.go:16 +0x12f
+  ase/hugo-6410.TestRaceInitLoggers.gowrap1()
+      /work/verified_test.go:17 +0x41
+
+Goroutine 220 (running) created at:
+  ase/hugo-6410.TestRaceInitLoggers()
+      /work/verified_test.go:21 +0x174
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 89 (running) created at:
+  ase/hugo-6410.TestRaceInitLoggers()
+      /work/verified_test.go:14 +0x70
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Write at 0x000000717338 by goroutine 234:
+  ase/hugo-6410.InitLoggers()
+      /work/helpers_general.go:53 +0x14c
+  ase/hugo-6410.TestRaceInitLoggers.func2()
+      /work/verified_test.go:23 +0x71
+
+Previous write at 0x000000717338 by goroutine 208:
+  ase/hugo-6410.InitLoggers()
+      /work/helpers_general.go:53 +0x14c
+  ase/hugo-6410.TestRaceInitLoggers.func2()
+      /work/verified_test.go:23 +0x71
+
+Goroutine 234 (running) created at:
+  ase/hugo-6410.TestRaceInitLoggers()
+      /work/verified_test.go:21 +0x174
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 208 (finished) created at:
+  ase/hugo-6410.TestRaceInitLoggers()
+      /work/verified_test.go:21 +0x174
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c0003b0058 by goroutine 167:
+  ase/hugo-6410.(*DistinctLogger).print()
+      /work/helpers_general.go:33 +0x4c
+  ase/hugo-6410.(*DistinctLogger).Println()
+      /work/helpers_general.go:28 +0x59
+  ase/hugo-6410.TestRaceInitLoggers.func1()
+      /work/verified_test.go:16 +0x148
+  ase/hugo-6410.TestRaceInitLoggers.gowrap1()
+      /work/verified_test.go:17 +0x41
+
+Previous write at 0x00c0003b0058 by goroutine 220:
+  ase/hugo-6410.NewDistinctErrorLogger()
+      /work/helpers_general.go:47 +0x96
+  ase/hugo-6410.InitLoggers()
+      /work/helpers_general.go:53 +0x141
+  ase/hugo-6410.TestRaceInitLoggers.func2()
+      /work/verified_test.go:23 +0x71
+
+Goroutine 167 (running) created at:
+  ase/hugo-6410.TestRaceInitLoggers()
+      /work/verified_test.go:14 +0x70
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 220 (finished) created at:
+  ase/hugo-6410.TestRaceInitLoggers()
+      /work/verified_test.go:21 +0x174
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c0003b0048 by goroutine 167:
+  ase/hugo-6410.(*DistinctLogger).print()
+      /work/helpers_general.go:40 +0x154
+  ase/hugo-6410.(*DistinctLogger).Println()
+      /work/helpers_general.go:28 +0x59
+  ase/hugo-6410.TestRaceInitLoggers.func1()
+      /work/verified_test.go:16 +0x148
+  ase/hugo-6410.TestRaceInitLoggers.gowrap1()
+      /work/verified_test.go:17 +0x41
+
+Previous write at 0x00c0003b0048 by goroutine 220:
+  ase/hugo-6410.NewDistinctErrorLogger()
+      /work/helpers_general.go:47 +0x96
+  ase/hugo-6410.InitLoggers()
+      /work/helpers_general.go:53 +0x141
+  ase/hugo-6410.TestRaceInitLoggers.func2()
+      /work/verified_test.go:23 +0x71
+
+Goroutine 167 (running) created at:
+  ase/hugo-6410.TestRaceInitLoggers()
+      /work/verified_test.go:14 +0x70
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 220 (finished) created at:
+  ase/hugo-6410.TestRaceInitLoggers()
+      /work/verified_test.go:21 +0x174
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+--- FAIL: TestRaceInitLoggers (0.01s)
+    testing.go:1398: race detected during execution of test
+FAIL
+FAIL	ase/hugo-6410	0.024s
+FAIL

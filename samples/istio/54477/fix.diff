@@ -1,0 +1,350 @@
+diff --git a/pilot/pkg/xds/ads.go b/pilot/pkg/xds/ads.go
+index c65aff773ea..9e88319ec13 100644
+--- a/pilot/pkg/xds/ads.go
++++ b/pilot/pkg/xds/ads.go
+@@ -386,6 +386,8 @@ func (s *DiscoveryServer) initializeProxy(con *Connection) error {
+ }
+ 
+ func (s *DiscoveryServer) computeProxyState(proxy *model.Proxy, request *model.PushRequest) {
++	proxy.Lock()
++	defer proxy.Unlock()
+ 	var shouldResetGateway, shouldResetSidecarScope bool
+ 	// 1. If request == nil(initiation phase) or request.ConfigsUpdated == nil(global push), set proxy serviceTargets.
+ 	// 2. otherwise only set when svc update, this is for the case that a service may select the proxy
+diff --git a/pilot/pkg/xds/bench_test.go b/pilot/pkg/xds/bench_test.go
+index c9a03468033..77858916737 100644
+--- a/pilot/pkg/xds/bench_test.go
++++ b/pilot/pkg/xds/bench_test.go
+@@ -338,7 +338,6 @@ func runBenchmark(b *testing.B, tpe string, testCases []ConfigInput) {
+ }
+ 
+ func testBenchmark(t *testing.T, tpe string, testCases []ConfigInput) {
+-	test.SetForTest(t, &features.EnableAmbient, true)
+ 	for _, tt := range testCases {
+ 		if tt.OnlyRunType != "" && tt.OnlyRunType != tpe {
+ 			// Not applicable for this type
+diff --git a/pilot/pkg/xds/debug.go b/pilot/pkg/xds/debug.go
+index ddc77231db3..d72486468ae 100644
+--- a/pilot/pkg/xds/debug.go
++++ b/pilot/pkg/xds/debug.go
+@@ -47,6 +47,7 @@ import (
+ 	"istio.io/istio/pkg/config/schema/resource"
+ 	"istio.io/istio/pkg/config/xds"
+ 	istiolog "istio.io/istio/pkg/log"
++	"istio.io/istio/pkg/maps"
+ 	"istio.io/istio/pkg/security"
+ 	"istio.io/istio/pkg/slices"
+ 	"istio.io/istio/pkg/util/protomarshal"
+@@ -875,6 +876,11 @@ func (s *DiscoveryServer) pushContextHandler(w http.ResponseWriter, req *http.Re
+ 	writeJSON(w, push, req)
+ }
+ 
++// DebugEndpoints lists all the supported debug endpoints.
++func (s *DiscoveryServer) DebugEndpoints() []string {
++	return slices.Sort(maps.Keys(s.debugHandlers))
++}
++
+ // Debug lists all the supported debug endpoints.
+ func (s *DiscoveryServer) Debug(w http.ResponseWriter, req *http.Request) {
+ 	type debugEndpoint struct {
+diff --git a/pilot/pkg/xds/delta_test.go b/pilot/pkg/xds/delta_test.go
+index 181efcf4a4f..e03155d1291 100644
+--- a/pilot/pkg/xds/delta_test.go
++++ b/pilot/pkg/xds/delta_test.go
+@@ -21,7 +21,6 @@ import (
+ 
+ 	discovery "github.com/envoyproxy/go-control-plane/envoy/service/discovery/v3"
+ 
+-	"istio.io/istio/pilot/pkg/features"
+ 	"istio.io/istio/pilot/pkg/model"
+ 	v3 "istio.io/istio/pilot/pkg/xds/v3"
+ 	"istio.io/istio/pilot/test/xds"
+@@ -29,7 +28,6 @@ import (
+ 	"istio.io/istio/pkg/config/protocol"
+ 	"istio.io/istio/pkg/config/schema/kind"
+ 	"istio.io/istio/pkg/slices"
+-	"istio.io/istio/pkg/test"
+ 	"istio.io/istio/pkg/test/util/assert"
+ 	"istio.io/istio/pkg/test/util/retry"
+ 	"istio.io/istio/pkg/util/sets"
+@@ -80,6 +78,7 @@ func TestDeltaCDS(t *testing.T) {
+ 		assert.Equal(t, sets.New(got...), sets.New(names...).Merge(base))
+ 	}
+ 	s := xds.NewFakeDiscoveryServer(t, xds.FakeOptions{})
++	spamDebugEndpointsToDetectRace(t, s)
+ 	addTestClientEndpoints(s.MemRegistry)
+ 	s.MemRegistry.AddHTTPService(edsIncSvc, edsIncVip, 8080)
+ 	s.MemRegistry.SetEndpoints(edsIncSvc, "",
+@@ -331,7 +330,6 @@ func TestDeltaReconnectRequests(t *testing.T) {
+ }
+ 
+ func TestDeltaWDS(t *testing.T) {
+-	test.SetForTest(t, &features.EnableAmbient, true)
+ 	s := xds.NewFakeDiscoveryServer(t, xds.FakeOptions{})
+ 	wlA := &model.WorkloadInfo{
+ 		Workload: &workloadapi.Workload{
+diff --git a/pilot/pkg/xds/waypoint_test.go b/pilot/pkg/xds/waypoint_test.go
+index 65aeb5fd0a7..52ae9988f9b 100644
+--- a/pilot/pkg/xds/waypoint_test.go
++++ b/pilot/pkg/xds/waypoint_test.go
+@@ -493,7 +493,6 @@ spec:
+ }
+ 
+ func setupWaypointTest(t *testing.T, configs ...string) (*xds.FakeDiscoveryServer, *model.Proxy) {
+-	test.SetForTest(t, &features.EnableAmbient, true)
+ 	test.SetForTest(t, &features.EnableDualStack, true)
+ 	c := joinYaml(configs...)
+ 	mc := mesh.DefaultMeshConfig()
+diff --git a/pilot/pkg/xds/workload.go b/pilot/pkg/xds/workload.go
+index f03e61e43e0..f8ee9396d37 100644
+--- a/pilot/pkg/xds/workload.go
++++ b/pilot/pkg/xds/workload.go
+@@ -137,6 +137,8 @@ func (e WorkloadGenerator) GenerateDeltas(
+ 		removed = subs.Difference(have).Difference(haveAliases).Merge(removed)
+ 	}
+ 
++	proxy.Lock()
++	defer proxy.Unlock()
+ 	if !w.Wildcard {
+ 		// For on-demand, we may have requested a VIP but gotten Pod IPs back. We need to update
+ 		// the internal book-keeping to subscribe to the Pods, so that we push updates to those Pods.
+diff --git a/pilot/pkg/xds/workload_test.go b/pilot/pkg/xds/workload_test.go
+index e3a1c70486a..1b45f896cb9 100644
+--- a/pilot/pkg/xds/workload_test.go
++++ b/pilot/pkg/xds/workload_test.go
+@@ -16,6 +16,10 @@ package xds_test
+ 
+ import (
+ 	"context"
++	"io"
++	"net/http"
++	"net/http/httptest"
++	"strings"
+ 	"testing"
+ 	"time"
+ 
+@@ -36,11 +40,17 @@ import (
+ 	"istio.io/istio/pkg/config/constants"
+ 	"istio.io/istio/pkg/config/schema/gvk"
+ 	"istio.io/istio/pkg/kube/kclient/clienttest"
++	"istio.io/istio/pkg/log"
+ 	"istio.io/istio/pkg/test"
+ 	"istio.io/istio/pkg/test/util/assert"
+ 	"istio.io/istio/pkg/util/sets"
+ )
+ 
++func init() {
++	// Most tests need this, and setting it per-test can trigger races from tests still executing after completion
++	features.EnableAmbient = true
++}
++
+ func buildExpect(t *testing.T) func(resp *discovery.DeltaDiscoveryResponse, names ...string) {
+ 	return func(resp *discovery.DeltaDiscoveryResponse, names ...string) {
+ 		t.Helper()
+@@ -90,7 +100,6 @@ func buildExpectAddedAndRemoved(t *testing.T) func(resp *discovery.DeltaDiscover
+ }
+ 
+ func TestWorkloadReconnect(t *testing.T) {
+-	test.SetForTest(t, &features.EnableAmbient, true)
+ 	t.Run("ondemand", func(t *testing.T) {
+ 		expect := buildExpect(t)
+ 		s := xds.NewFakeDiscoveryServer(t, xds.FakeOptions{
+@@ -165,7 +174,6 @@ func TestWorkloadReconnect(t *testing.T) {
+ }
+ 
+ func TestWorkload(t *testing.T) {
+-	test.SetForTest(t, &features.EnableAmbient, true)
+ 	t.Run("ondemand", func(t *testing.T) {
+ 		expect := buildExpect(t)
+ 		expectRemoved := buildExpectExpectRemoved(t)
+@@ -173,6 +181,7 @@ func TestWorkload(t *testing.T) {
+ 			DebounceTime: time.Millisecond * 25,
+ 		})
+ 		ads := s.ConnectDeltaADS().WithTimeout(time.Second * 5).WithType(v3.AddressType).WithMetadata(model.NodeMetadata{NodeName: "node"})
++		spamDebugEndpointsToDetectRace(t, s)
+ 
+ 		ads.Request(&discovery.DeltaDiscoveryRequest{
+ 			ResourceNamesSubscribe:   []string{"*"},
+@@ -250,6 +259,7 @@ func TestWorkload(t *testing.T) {
+ 			DebounceTime: time.Millisecond * 25,
+ 		})
+ 		ads := s.ConnectDeltaADS().WithTimeout(time.Second * 5).WithType(v3.AddressType).WithMetadata(model.NodeMetadata{NodeName: "node"})
++		spamDebugEndpointsToDetectRace(t, s)
+ 
+ 		ads.Request(&discovery.DeltaDiscoveryRequest{
+ 			ResourceNamesSubscribe: []string{"*"},
+@@ -281,6 +291,45 @@ func TestWorkload(t *testing.T) {
+ 	})
+ }
+ 
++// Historically, the debug interface has been a common source of race conditions in the discovery server
++// spamDebugEndpointsToDetectRace hits all the endpoints, attempting to trigger any latent race conditions.
++func spamDebugEndpointsToDetectRace(t *testing.T, s *xds.FakeDiscoveryServer) {
++	stop := test.NewStop(t)
++	go func() {
++		for _, proxySpecific := range []bool{true, false} {
++			for range 10 {
++				for _, url := range s.Discovery.DebugEndpoints() {
++					select {
++					case <-stop:
++						// Test is over, stop early
++						return
++					default:
++					}
++					// Drop mutating URLs
++					if strings.Contains(url, "push=true") {
++						continue
++					}
++					if strings.Contains(url, "clear=true") {
++						continue
++					}
++					if proxySpecific {
++						url += "?proxyID=test"
++					}
++					req, err := http.NewRequest(http.MethodGet, url, nil)
++					if err != nil {
++						panic(err.Error())
++					}
++					log.Debugf("calling %v..", req.URL)
++					rr := httptest.NewRecorder()
++					h, _ := s.DiscoveryDebug.Handler(req)
++					h.ServeHTTP(rr, req)
++					_, _ = io.Copy(io.Discard, rr.Body)
++				}
++			}
++		}
++	}()
++}
++
+ func deletePod(s *xds.FakeDiscoveryServer, name string) {
+ 	err := s.KubeClient().Kube().CoreV1().Pods("default").Delete(context.Background(), name, metav1.DeleteOptions{})
+ 	if err != nil {
+@@ -384,7 +433,6 @@ func createService(s *xds.FakeDiscoveryServer, name, namespace string, selector
+ }
+ 
+ func TestWorkloadAuthorizationPolicy(t *testing.T) {
+-	test.SetForTest(t, &features.EnableAmbient, true)
+ 	expect := buildExpect(t)
+ 	expectRemoved := buildExpectExpectRemoved(t)
+ 	s := xds.NewFakeDiscoveryServer(t, xds.FakeOptions{})
+@@ -412,7 +460,6 @@ func TestWorkloadAuthorizationPolicy(t *testing.T) {
+ }
+ 
+ func TestWorkloadPeerAuthentication(t *testing.T) {
+-	test.SetForTest(t, &features.EnableAmbient, true)
+ 	expect := buildExpect(t)
+ 	expectAddedAndRemoved := buildExpectAddedAndRemoved(t)
+ 	s := xds.NewFakeDiscoveryServer(t, xds.FakeOptions{})
+@@ -457,7 +504,6 @@ func TestWorkloadPeerAuthentication(t *testing.T) {
+ 
+ // Regression tests for NOP PeerAuthentication triggering a removal
+ func TestPeerAuthenticationUpdate(t *testing.T) {
+-	test.SetForTest(t, &features.EnableAmbient, true)
+ 	expectAddedAndRemoved := buildExpectAddedAndRemoved(t)
+ 	s := xds.NewFakeDiscoveryServer(t, xds.FakeOptions{})
+ 	ads := s.ConnectDeltaADS().WithType(v3.WorkloadAuthorizationType).WithTimeout(time.Second * 10).WithNodeType(model.Ztunnel)
+diff --git a/pilot/test/xds/fake.go b/pilot/test/xds/fake.go
+index 042cf720ae7..ccf7a2b6372 100644
+--- a/pilot/test/xds/fake.go
++++ b/pilot/test/xds/fake.go
+@@ -18,6 +18,7 @@ import (
+ 	"context"
+ 	"fmt"
+ 	"net"
++	"net/http"
+ 	"strings"
+ 	"time"
+ 
+@@ -113,14 +114,15 @@ type FakeOptions struct {
+ 
+ type FakeDiscoveryServer struct {
+ 	*core.ConfigGenTest
+-	t            test.Failer
+-	Discovery    *xds.DiscoveryServer
+-	Listener     net.Listener
+-	BufListener  *bufconn.Listener
+-	kubeClient   kubelib.Client
+-	KubeRegistry *kube.FakeController
+-	XdsUpdater   model.XDSUpdater
+-	MemRegistry  *memregistry.ServiceDiscovery
++	t              test.Failer
++	Discovery      *xds.DiscoveryServer
++	DiscoveryDebug *http.ServeMux
++	Listener       net.Listener
++	BufListener    *bufconn.Listener
++	kubeClient     kubelib.Client
++	KubeRegistry   *kube.FakeController
++	XdsUpdater     model.XDSUpdater
++	MemRegistry    *memregistry.ServiceDiscovery
+ }
+ 
+ func NewFakeDiscoveryServer(t test.Failer, opts FakeOptions) *FakeDiscoveryServer {
+@@ -256,6 +258,10 @@ func NewFakeDiscoveryServer(t test.Failer, opts FakeOptions) *FakeDiscoveryServe
+ 	s.Generators[v3.SecretType] = xds.NewSecretGen(creds, s.Cache, opts.DefaultClusterName, nil)
+ 	s.Generators[v3.ExtensionConfigurationType].(*xds.EcdsGenerator).SetCredController(creds)
+ 
++	debugMux := s.InitDebug(http.NewServeMux(), false, func() map[string]string {
++		return nil
++	})
++
+ 	memRegistry := cg.MemRegistry
+ 	memRegistry.XdsUpdater = s
+ 
+@@ -343,15 +349,16 @@ func NewFakeDiscoveryServer(t test.Failer, opts FakeOptions) *FakeDiscoveryServe
+ 
+ 	bufListener, _ := listener.(*bufconn.Listener)
+ 	fake := &FakeDiscoveryServer{
+-		t:             t,
+-		Discovery:     s,
+-		Listener:      listener,
+-		BufListener:   bufListener,
+-		ConfigGenTest: cg,
+-		kubeClient:    defaultKubeClient,
+-		KubeRegistry:  defaultKubeController,
+-		XdsUpdater:    xdsUpdater,
+-		MemRegistry:   memRegistry,
++		t:              t,
++		Discovery:      s,
++		DiscoveryDebug: debugMux,
++		Listener:       listener,
++		BufListener:    bufListener,
++		ConfigGenTest:  cg,
++		kubeClient:     defaultKubeClient,
++		KubeRegistry:   defaultKubeController,
++		XdsUpdater:     xdsUpdater,
++		MemRegistry:    memRegistry,
+ 	}
+ 
+ 	return fake
+diff --git a/pkg/kube/krt/collection.go b/pkg/kube/krt/collection.go
+index d38dd5cdc7d..02120879b33 100644
+--- a/pkg/kube/krt/collection.go
++++ b/pkg/kube/krt/collection.go
+@@ -232,6 +232,8 @@ func (h *manyCollection[I, O]) onPrimaryInputEvent(items []Event[I]) {
+ func (h *manyCollection[I, O]) onPrimaryInputEventLocked(items []Event[I]) {
+ 	var events []Event[O]
+ 	recomputedResults := make([]map[Key[O]]O, len(items))
++
++	pendingDepStateUpdates := make(map[Key[I]]*collectionDependencyTracker[I, O], len(items))
+ 	for idx, a := range items {
+ 		if a.Event == controllers.EventDelete {
+ 			// handled below, with full lock...
+@@ -243,8 +245,8 @@ func (h *manyCollection[I, O]) onPrimaryInputEventLocked(items []Event[I]) {
+ 		ctx := &collectionDependencyTracker[I, O]{h, nil, iKey}
+ 		results := slices.GroupUnique(h.transformation(ctx, i), GetKey[O])
+ 		recomputedResults[idx] = results
+-		// Update the I -> Dependency mapping
+-		h.objectDependencies[iKey] = ctx.d
++		// Store new dependency state, to insert in the next loop under the lock
++		pendingDepStateUpdates[iKey] = ctx
+ 	}
+ 
+ 	// Now acquire the full lock. Note we still have recomputeMu held!
+@@ -277,6 +279,7 @@ func (h *manyCollection[I, O]) onPrimaryInputEventLocked(items []Event[I]) {
+ 			delete(h.collectionState.inputs, iKey)
+ 			delete(h.objectDependencies, iKey)
+ 		} else {
++			h.objectDependencies[iKey] = pendingDepStateUpdates[iKey].d
+ 			results := recomputedResults[idx]
+ 			newKeys := sets.New(maps.Keys(results)...)
+ 			oldKeys := h.collectionState.mappings[iKey]

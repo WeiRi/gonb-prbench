@@ -1,0 +1,145 @@
+diff --git a/container/state.go b/container/state.go
+index a12a193e32b5b..e0ede8a33aaa4 100644
+--- a/container/state.go
++++ b/container/state.go
+@@ -117,25 +117,6 @@ func wait(waitChan <-chan struct{}, timeout time.Duration) error {
+ 	}
+ }
+ 
+-// WaitRunning waits until state is running. If state is already
+-// running it returns immediately. If you want wait forever you must
+-// supply negative timeout. Returns pid, that was passed to
+-// SetRunning.
+-func (s *State) WaitRunning(timeout time.Duration) (int, error) {
+-	s.Lock()
+-	if s.Running {
+-		pid := s.Pid
+-		s.Unlock()
+-		return pid, nil
+-	}
+-	waitChan := s.waitChan
+-	s.Unlock()
+-	if err := wait(waitChan, timeout); err != nil {
+-		return -1, err
+-	}
+-	return s.GetPID(), nil
+-}
+-
+ // WaitStop waits until state is stopped. If state already stopped it returns
+ // immediately. If you want wait forever you must supply negative timeout.
+ // Returns exit code, that was passed to SetStoppedLocking
+@@ -188,8 +169,6 @@ func (s *State) SetRunning(pid int, initial bool) {
+ 	if initial {
+ 		s.StartedAt = time.Now().UTC()
+ 	}
+-	close(s.waitChan) // fire waiters for start
+-	s.waitChan = make(chan struct{})
+ }
+ 
+ // SetStoppedLocking locks the container state is sets it to "stopped".
+diff --git a/container/state_test.go b/container/state_test.go
+index 7b35b17820261..0d0acab3853c5 100644
+--- a/container/state_test.go
++++ b/container/state_test.go
+@@ -9,13 +9,6 @@ import (
+ func TestStateRunStop(t *testing.T) {
+ 	s := NewState()
+ 	for i := 1; i < 3; i++ { // full lifecycle two times
+-		started := make(chan struct{})
+-		var pid int64
+-		go func() {
+-			runPid, _ := s.WaitRunning(-1 * time.Second)
+-			atomic.StoreInt64(&pid, int64(runPid))
+-			close(started)
+-		}()
+ 		s.Lock()
+ 		s.SetRunning(i+100, false)
+ 		s.Unlock()
+@@ -29,19 +22,6 @@ func TestStateRunStop(t *testing.T) {
+ 		if s.ExitCode != 0 {
+ 			t.Fatalf("ExitCode %v, expected 0", s.ExitCode)
+ 		}
+-		select {
+-		case <-time.After(100 * time.Millisecond):
+-			t.Fatal("Start callback doesn't fire in 100 milliseconds")
+-		case <-started:
+-			t.Log("Start callback fired")
+-		}
+-		runPid := int(atomic.LoadInt64(&pid))
+-		if runPid != i+100 {
+-			t.Fatalf("Pid %v, expected %v", runPid, i+100)
+-		}
+-		if pid, err := s.WaitRunning(-1 * time.Second); err != nil || pid != i+100 {
+-			t.Fatalf("WaitRunning returned pid: %v, err: %v, expected pid: %v, err: %v", pid, err, i+100, nil)
+-		}
+ 
+ 		stopped := make(chan struct{})
+ 		var exit int64
+@@ -78,32 +58,30 @@ func TestStateRunStop(t *testing.T) {
+ 
+ func TestStateTimeoutWait(t *testing.T) {
+ 	s := NewState()
+-	started := make(chan struct{})
++	stopped := make(chan struct{})
+ 	go func() {
+-		s.WaitRunning(100 * time.Millisecond)
+-		close(started)
++		s.WaitStop(100 * time.Millisecond)
++		close(stopped)
+ 	}()
+ 	select {
+ 	case <-time.After(200 * time.Millisecond):
+-		t.Fatal("Start callback doesn't fire in 100 milliseconds")
+-	case <-started:
+-		t.Log("Start callback fired")
++		t.Fatal("Stop callback doesn't fire in 100 milliseconds")
++	case <-stopped:
++		t.Log("Stop callback fired")
+ 	}
+ 
+-	s.Lock()
+-	s.SetRunning(49, false)
+-	s.Unlock()
++	s.SetStoppedLocking(&ExitStatus{ExitCode: 1})
+ 
+-	stopped := make(chan struct{})
++	stopped = make(chan struct{})
+ 	go func() {
+-		s.WaitRunning(100 * time.Millisecond)
++		s.WaitStop(100 * time.Millisecond)
+ 		close(stopped)
+ 	}()
+ 	select {
+ 	case <-time.After(200 * time.Millisecond):
+-		t.Fatal("Start callback doesn't fire in 100 milliseconds")
++		t.Fatal("Stop callback doesn't fire in 100 milliseconds")
+ 	case <-stopped:
+-		t.Log("Start callback fired")
++		t.Log("Stop callback fired")
+ 	}
+ 
+ }
+diff --git a/daemon/update.go b/daemon/update.go
+index fee470a39cf23..05a41b2e9547f 100644
+--- a/daemon/update.go
++++ b/daemon/update.go
+@@ -2,7 +2,6 @@ package daemon
+ 
+ import (
+ 	"fmt"
+-	"time"
+ 
+ 	"github.com/docker/engine-api/types/container"
+ )
+@@ -74,11 +73,6 @@ func (daemon *Daemon) update(name string, hostConfig *container.HostConfig) erro
+ 	// if Restart Policy changed, we need to update container monitor
+ 	container.UpdateMonitor(hostConfig.RestartPolicy)
+ 
+-	// if container is restarting, wait 5 seconds until it's running
+-	if container.IsRestarting() {
+-		container.WaitRunning(5 * time.Second)
+-	}
+-
+ 	// If container is not running, update hostConfig struct is enough,
+ 	// resources will be updated when the container is started again.
+ 	// If container is running (including paused), we need to update configs

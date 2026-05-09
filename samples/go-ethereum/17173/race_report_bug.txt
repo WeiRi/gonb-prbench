@@ -1,0 +1,150 @@
+WARNING: DATA RACE
+Read at 0x00c000124510 by goroutine 9:
+  runtime.mapiterinit()
+      /usr/local/go/src/runtime/map.go:816 +0x0
+  ase/go-ethereum-17173.(*StateDB).Copy()
+      /work/worker.go:25 +0x1a4
+  ase/go-ethereum-17173.(*worker).Pending()
+      /work/worker.go:58 +0xb4
+  ase/go-ethereum-17173.TestRace_17173_state_concurrent_map.func2()
+      /work/verified_test.go:24 +0x99
+
+Previous write at 0x00c000124510 by goroutine 8:
+  runtime.mapassign_fast64()
+      /usr/local/go/src/runtime/map_fast64.go:93 +0x0
+  ase/go-ethereum-17173.(*StateDB).Update()
+      /work/worker.go:21 +0x14d
+  ase/go-ethereum-17173.(*worker).Wait()
+      /work/worker.go:48 +0xdd
+  ase/go-ethereum-17173.TestRace_17173_state_concurrent_map.func1()
+      /work/verified_test.go:18 +0xbc
+
+Goroutine 9 (running) created at:
+  ase/go-ethereum-17173.TestRace_17173_state_concurrent_map()
+      /work/verified_test.go:21 +0x2dc
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 8 (running) created at:
+  ase/go-ethereum-17173.TestRace_17173_state_concurrent_map()
+      /work/verified_test.go:15 +0x22c
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c000124510 by goroutine 9:
+  runtime.mapiternext()
+      /usr/local/go/src/runtime/map.go:862 +0x0
+  runtime.mapiterinit()
+      /usr/local/go/src/runtime/map.go:859 +0x22e
+  ase/go-ethereum-17173.TestRace_17173_state_concurrent_map.func2()
+      /work/verified_test.go:24 +0x99
+
+Previous write at 0x00c000124510 by goroutine 8:
+  runtime.mapassign_fast64()
+      /usr/local/go/src/runtime/map_fast64.go:93 +0x0
+  ase/go-ethereum-17173.(*StateDB).Update()
+      /work/worker.go:21 +0x14d
+  ase/go-ethereum-17173.(*worker).Wait()
+      /work/worker.go:48 +0xdd
+  ase/go-ethereum-17173.TestRace_17173_state_concurrent_map.func1()
+      /work/verified_test.go:18 +0xbc
+
+Goroutine 9 (running) created at:
+  ase/go-ethereum-17173.TestRace_17173_state_concurrent_map()
+      /work/verified_test.go:21 +0x2dc
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 8 (running) created at:
+  ase/go-ethereum-17173.TestRace_17173_state_concurrent_map()
+      /work/verified_test.go:15 +0x22c
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c00016eaf8 by goroutine 9:
+  ase/go-ethereum-17173.(*StateDB).Copy()
+      /work/worker.go:25 +0x238
+  ase/go-ethereum-17173.(*worker).Pending()
+      /work/worker.go:58 +0xb4
+  ase/go-ethereum-17173.TestRace_17173_state_concurrent_map.func2()
+      /work/verified_test.go:24 +0x99
+
+Previous write at 0x00c00016eaf8 by goroutine 8:
+  ase/go-ethereum-17173.(*StateDB).Update()
+      /work/worker.go:21 +0x15c
+  ase/go-ethereum-17173.(*worker).Wait()
+      /work/worker.go:48 +0xdd
+  ase/go-ethereum-17173.TestRace_17173_state_concurrent_map.func1()
+      /work/verified_test.go:18 +0xbc
+
+Goroutine 9 (running) created at:
+  ase/go-ethereum-17173.TestRace_17173_state_concurrent_map()
+      /work/verified_test.go:21 +0x2dc
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 8 (running) created at:
+  ase/go-ethereum-17173.TestRace_17173_state_concurrent_map()
+      /work/verified_test.go:15 +0x22c
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c000124510 by goroutine 8:
+  runtime.mapassign_fast64()
+      /usr/local/go/src/runtime/map_fast64.go:93 +0x0
+  ase/go-ethereum-17173.(*StateDB).Update()
+      /work/worker.go:21 +0x14d
+  ase/go-ethereum-17173.(*worker).Wait()
+      /work/worker.go:48 +0xdd
+  ase/go-ethereum-17173.TestRace_17173_state_concurrent_map.func1()
+      /work/verified_test.go:18 +0xbc
+
+Previous read at 0x00c000124510 by goroutine 9:
+  runtime.mapiternext()
+      /usr/local/go/src/runtime/map.go:862 +0x0
+  ase/go-ethereum-17173.(*StateDB).Copy()
+      /work/worker.go:25 +0x294
+  ase/go-ethereum-17173.(*worker).Pending()
+      /work/worker.go:58 +0xb4
+  ase/go-ethereum-17173.TestRace_17173_state_concurrent_map.func2()
+      /work/verified_test.go:24 +0x99
+
+Goroutine 8 (running) created at:
+  ase/go-ethereum-17173.TestRace_17173_state_concurrent_map()
+      /work/verified_test.go:15 +0x22c
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 9 (running) created at:
+  ase/go-ethereum-17173.TestRace_17173_state_concurrent_map()
+      /work/verified_test.go:21 +0x2dc
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+--- FAIL: TestRace_17173_state_concurrent_map (0.06s)
+    testing.go:1398: race detected during execution of test
+FAIL
+FAIL	ase/go-ethereum-17173	0.073s
+FAIL

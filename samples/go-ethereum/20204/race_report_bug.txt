@@ -1,0 +1,248 @@
+WARNING: DATA RACE
+Read at 0x00c00009a078 by goroutine 8:
+  ase/go-ethereum-20204.(*Downloader).processFastSyncContent.func1()
+      /work/downloader.go:32 +0x2e
+
+Previous write at 0x00c00009a078 by goroutine 7:
+  ase/go-ethereum-20204.(*Downloader).processFastSyncContent()
+      /work/downloader.go:38 +0x1d2
+  ase/go-ethereum-20204.TestRace_20204_downloader_capture()
+      /work/verified_test.go:12 +0x26
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 8 (running) created at:
+  ase/go-ethereum-20204.(*Downloader).processFastSyncContent()
+      /work/downloader.go:31 +0x13c
+  ase/go-ethereum-20204.TestRace_20204_downloader_capture()
+      /work/verified_test.go:12 +0x26
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 7 (running) created at:
+  testing.(*T).Run()
+      /usr/local/go/src/testing/testing.go:1742 +0x825
+  testing.runTests.func1()
+      /usr/local/go/src/testing/testing.go:2161 +0x85
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.runTests()
+      /usr/local/go/src/testing/testing.go:2159 +0x8be
+  testing.(*M).Run()
+      /usr/local/go/src/testing/testing.go:2027 +0xf17
+  main.main()
+      _testmain.go:47 +0x2bd
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c00009a078 by goroutine 8:
+  ase/go-ethereum-20204.(*Downloader).processFastSyncContent.func1()
+      /work/downloader.go:34 +0x38
+
+Previous write at 0x00c00009a078 by goroutine 7:
+  ase/go-ethereum-20204.(*Downloader).processFastSyncContent()
+      /work/downloader.go:38 +0x1d2
+  ase/go-ethereum-20204.TestRace_20204_downloader_capture()
+      /work/verified_test.go:12 +0x26
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 8 (running) created at:
+  ase/go-ethereum-20204.(*Downloader).processFastSyncContent()
+      /work/downloader.go:31 +0x13c
+  ase/go-ethereum-20204.TestRace_20204_downloader_capture()
+      /work/verified_test.go:12 +0x26
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 7 (running) created at:
+  testing.(*T).Run()
+      /usr/local/go/src/testing/testing.go:1742 +0x825
+  testing.runTests.func1()
+      /usr/local/go/src/testing/testing.go:2161 +0x85
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.runTests()
+      /usr/local/go/src/testing/testing.go:2159 +0x8be
+  testing.(*M).Run()
+      /usr/local/go/src/testing/testing.go:2027 +0xf17
+  main.main()
+      _testmain.go:47 +0x2bd
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c0000b6060 by goroutine 8:
+  ase/go-ethereum-20204.(*Downloader).processFastSyncContent.func1()
+      /work/downloader.go:34 +0x47
+
+Previous write at 0x00c0000b6060 by goroutine 7:
+  ase/go-ethereum-20204.(*Downloader).syncState()
+      /work/downloader.go:23 +0x188
+  ase/go-ethereum-20204.(*Downloader).processFastSyncContent()
+      /work/downloader.go:38 +0x1c9
+  ase/go-ethereum-20204.TestRace_20204_downloader_capture()
+      /work/verified_test.go:12 +0x26
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 8 (running) created at:
+  ase/go-ethereum-20204.(*Downloader).processFastSyncContent()
+      /work/downloader.go:31 +0x13c
+  ase/go-ethereum-20204.TestRace_20204_downloader_capture()
+      /work/verified_test.go:12 +0x26
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 7 (running) created at:
+  testing.(*T).Run()
+      /usr/local/go/src/testing/testing.go:1742 +0x825
+  testing.runTests.func1()
+      /usr/local/go/src/testing/testing.go:2161 +0x85
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.runTests()
+      /usr/local/go/src/testing/testing.go:2159 +0x8be
+  testing.(*M).Run()
+      /usr/local/go/src/testing/testing.go:2027 +0xf17
+  main.main()
+      _testmain.go:47 +0x2bd
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c00009a078 by goroutine 7:
+  ase/go-ethereum-20204.(*Downloader).processFastSyncContent()
+      /work/downloader.go:38 +0x1d2
+  ase/go-ethereum-20204.TestRace_20204_downloader_capture()
+      /work/verified_test.go:12 +0x26
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Previous read at 0x00c00009a078 by goroutine 9:
+  ase/go-ethereum-20204.(*Downloader).processFastSyncContent.func2()
+      /work/downloader.go:40 +0x2e
+
+Goroutine 7 (running) created at:
+  testing.(*T).Run()
+      /usr/local/go/src/testing/testing.go:1742 +0x825
+  testing.runTests.func1()
+      /usr/local/go/src/testing/testing.go:2161 +0x85
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.runTests()
+      /usr/local/go/src/testing/testing.go:2159 +0x8be
+  testing.(*M).Run()
+      /usr/local/go/src/testing/testing.go:2027 +0xf17
+  main.main()
+      _testmain.go:47 +0x2bd
+
+Goroutine 9 (finished) created at:
+  ase/go-ethereum-20204.(*Downloader).processFastSyncContent()
+      /work/downloader.go:39 +0x14c
+  ase/go-ethereum-20204.TestRace_20204_downloader_capture()
+      /work/verified_test.go:12 +0x26
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c00009a078 by goroutine 11:
+  ase/go-ethereum-20204.(*Downloader).processFastSyncContent.func2()
+      /work/downloader.go:41 +0x38
+
+Previous write at 0x00c00009a078 by goroutine 7:
+  ase/go-ethereum-20204.(*Downloader).processFastSyncContent()
+      /work/downloader.go:38 +0x1d2
+  ase/go-ethereum-20204.TestRace_20204_downloader_capture()
+      /work/verified_test.go:12 +0x26
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 11 (running) created at:
+  ase/go-ethereum-20204.(*Downloader).processFastSyncContent()
+      /work/downloader.go:39 +0x14c
+  ase/go-ethereum-20204.TestRace_20204_downloader_capture()
+      /work/verified_test.go:12 +0x26
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 7 (running) created at:
+  testing.(*T).Run()
+      /usr/local/go/src/testing/testing.go:1742 +0x825
+  testing.runTests.func1()
+      /usr/local/go/src/testing/testing.go:2161 +0x85
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.runTests()
+      /usr/local/go/src/testing/testing.go:2159 +0x8be
+  testing.(*M).Run()
+      /usr/local/go/src/testing/testing.go:2027 +0xf17
+  main.main()
+      _testmain.go:47 +0x2bd
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c0000b6120 by goroutine 11:
+  ase/go-ethereum-20204.(*Downloader).processFastSyncContent.func2()
+      /work/downloader.go:41 +0x47
+
+Previous write at 0x00c0000b6120 by goroutine 7:
+  ase/go-ethereum-20204.(*Downloader).syncState()
+      /work/downloader.go:23 +0x188
+  ase/go-ethereum-20204.(*Downloader).processFastSyncContent()
+      /work/downloader.go:38 +0x1c9
+  ase/go-ethereum-20204.TestRace_20204_downloader_capture()
+      /work/verified_test.go:12 +0x26
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 11 (running) created at:
+  ase/go-ethereum-20204.(*Downloader).processFastSyncContent()
+      /work/downloader.go:39 +0x14c
+  ase/go-ethereum-20204.TestRace_20204_downloader_capture()
+      /work/verified_test.go:12 +0x26
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 7 (running) created at:
+  testing.(*T).Run()
+      /usr/local/go/src/testing/testing.go:1742 +0x825
+  testing.runTests.func1()
+      /usr/local/go/src/testing/testing.go:2161 +0x85
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.runTests()
+      /usr/local/go/src/testing/testing.go:2159 +0x8be
+  testing.(*M).Run()
+      /usr/local/go/src/testing/testing.go:2027 +0xf17
+  main.main()
+      _testmain.go:47 +0x2bd
+==================
+--- FAIL: TestRace_20204_downloader_capture (0.00s)
+    testing.go:1398: race detected during execution of test
+FAIL
+FAIL	ase/go-ethereum-20204	0.018s
+FAIL

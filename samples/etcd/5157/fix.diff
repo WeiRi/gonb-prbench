@@ -1,0 +1,14 @@
+diff --git a/etcdserver/stats/server.go b/etcdserver/stats/server.go
+index 8e2e7701dc1a..7ef7de4e5d58 100644
+--- a/etcdserver/stats/server.go
++++ b/etcdserver/stats/server.go
+@@ -142,6 +142,9 @@ func (ss *ServerStats) SendAppendReq(reqSize int) {
+ }
+ 
+ func (ss *ServerStats) BecomeLeader() {
++	ss.Lock()
++	defer ss.Unlock()
++
+ 	if ss.State != raft.StateLeader {
+ 		ss.State = raft.StateLeader
+ 		ss.LeaderInfo.Name = ss.ID

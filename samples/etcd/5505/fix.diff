@@ -1,0 +1,81 @@
+diff --git a/etcdserver/api/v3rpc/watch.go b/etcdserver/api/v3rpc/watch.go
+index f6e2abfae23b..9088397ce4f3 100644
+--- a/etcdserver/api/v3rpc/watch.go
++++ b/etcdserver/api/v3rpc/watch.go
+@@ -139,6 +139,7 @@ func (ws *watchServer) Watch(stream pb.Watch_WatchServer) (err error) {
+ }
+ 
+ func (sws *serverWatchStream) recvLoop() error {
++	defer close(sws.ctrlStream)
+ 	for {
+ 		req, err := sws.gRPCStream.Recv()
+ 		if err == io.EOF {
+@@ -172,12 +173,17 @@ func (sws *serverWatchStream) recvLoop() error {
+ 			if id != -1 && creq.ProgressNotify {
+ 				sws.progress[id] = true
+ 			}
+-			sws.ctrlStream <- &pb.WatchResponse{
++			wr := &pb.WatchResponse{
+ 				Header:   sws.newResponseHeader(wsrev),
+ 				WatchId:  int64(id),
+ 				Created:  true,
+ 				Canceled: id == -1,
+ 			}
++			select {
++			case sws.ctrlStream <- wr:
++			case <-sws.closec:
++				return nil
++			}
+ 		case *pb.WatchRequest_CancelRequest:
+ 			if uv.CancelRequest != nil {
+ 				id := uv.CancelRequest.WatchId
+@@ -301,7 +307,6 @@ func (sws *serverWatchStream) sendLoop() {
+ func (sws *serverWatchStream) close() {
+ 	sws.watchStream.Close()
+ 	close(sws.closec)
+-	close(sws.ctrlStream)
+ 	sws.wg.Wait()
+ }
+ 
+diff --git a/integration/v3_watch_test.go b/integration/v3_watch_test.go
+index 692fc9b67d69..5451c99fd617 100644
+--- a/integration/v3_watch_test.go
++++ b/integration/v3_watch_test.go
+@@ -976,3 +976,37 @@ func TestWatchWithProgressNotify(t *testing.T) {
+ 		t.Errorf("unexpected pb.WatchResponse is received %+v", resp)
+ 	}
+ }
++
++// TestV3WatcMultiOpenhClose opens many watchers concurrently on multiple streams.
++func TestV3WatchClose(t *testing.T) {
++	defer testutil.AfterTest(t)
++	clus := NewClusterV3(t, &ClusterConfig{Size: 1})
++	defer clus.Terminate(t)
++
++	c := clus.RandClient()
++	wapi := toGRPC(c).Watch
++
++	var wg sync.WaitGroup
++	wg.Add(100)
++	for i := 0; i < 100; i++ {
++		go func() {
++			ctx, cancel := context.WithCancel(context.TODO())
++			defer func() {
++				wg.Done()
++				cancel()
++			}()
++			ws, err := wapi.Watch(ctx)
++			if err != nil {
++				return
++			}
++			cr := &pb.WatchCreateRequest{Key: []byte("a")}
++			req := &pb.WatchRequest{
++				RequestUnion: &pb.WatchRequest_CreateRequest{
++					CreateRequest: cr}}
++			ws.Send(req)
++			ws.Recv()
++		}()
++	}
++	c.ActiveConnection().Close()
++	wg.Wait()
++}

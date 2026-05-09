@@ -1,0 +1,250 @@
+WARNING: DATA RACE
+Read at 0x00c000014240 by goroutine 12:
+  ase/cockroach-88279.(*TokenBucket).Adjust()
+      /work/elastic_cpu_granter.go:23 +0x111
+  ase/cockroach-88279.(*elasticCPUGranter).tookWithoutPermission()
+      /work/elastic_cpu_granter.go:41 +0xea
+  ase/cockroach-88279.Test88279Race.func1()
+      /work/verified_test.go:19 +0x135
+  ase/cockroach-88279.Test88279Race.gowrap1()
+      /work/verified_test.go:23 +0x41
+
+Previous write at 0x00c000014240 by goroutine 8:
+  ase/cockroach-88279.(*TokenBucket).TryToFulfill()
+      /work/elastic_cpu_granter.go:17 +0x186
+  ase/cockroach-88279.(*elasticCPUGranter).tryGet()
+      /work/elastic_cpu_granter.go:36 +0x137
+  ase/cockroach-88279.Test88279Race.func1()
+      /work/verified_test.go:17 +0x142
+  ase/cockroach-88279.Test88279Race.gowrap1()
+      /work/verified_test.go:23 +0x41
+
+Goroutine 12 (running) created at:
+  ase/cockroach-88279.Test88279Race()
+      /work/verified_test.go:13 +0x144
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 8 (finished) created at:
+  ase/cockroach-88279.Test88279Race()
+      /work/verified_test.go:13 +0x144
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c000014240 by goroutine 15:
+  ase/cockroach-88279.(*TokenBucket).Adjust()
+      /work/elastic_cpu_granter.go:23 +0x111
+  ase/cockroach-88279.(*elasticCPUGranter).tookWithoutPermission()
+      /work/elastic_cpu_granter.go:41 +0xea
+  ase/cockroach-88279.Test88279Race.func1()
+      /work/verified_test.go:19 +0x135
+  ase/cockroach-88279.Test88279Race.gowrap1()
+      /work/verified_test.go:23 +0x41
+
+Previous write at 0x00c000014240 by goroutine 12:
+  ase/cockroach-88279.(*TokenBucket).Adjust()
+      /work/elastic_cpu_granter.go:23 +0x124
+  ase/cockroach-88279.(*elasticCPUGranter).tookWithoutPermission()
+      /work/elastic_cpu_granter.go:41 +0xea
+  ase/cockroach-88279.Test88279Race.func1()
+      /work/verified_test.go:19 +0x135
+  ase/cockroach-88279.Test88279Race.gowrap1()
+      /work/verified_test.go:23 +0x41
+
+Goroutine 15 (running) created at:
+  ase/cockroach-88279.Test88279Race()
+      /work/verified_test.go:13 +0x144
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 12 (finished) created at:
+  ase/cockroach-88279.Test88279Race()
+      /work/verified_test.go:13 +0x144
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c000014240 by goroutine 11:
+  ase/cockroach-88279.(*TokenBucket).TryToFulfill()
+      /work/elastic_cpu_granter.go:16 +0x164
+  ase/cockroach-88279.(*elasticCPUGranter).tryGet()
+      /work/elastic_cpu_granter.go:36 +0x137
+  ase/cockroach-88279.Test88279Race.func1()
+      /work/verified_test.go:17 +0x142
+  ase/cockroach-88279.Test88279Race.gowrap1()
+      /work/verified_test.go:23 +0x41
+
+Previous write at 0x00c000014240 by goroutine 14:
+  ase/cockroach-88279.(*TokenBucket).TryToFulfill()
+      /work/elastic_cpu_granter.go:17 +0x186
+  ase/cockroach-88279.(*elasticCPUGranter).tryGet()
+      /work/elastic_cpu_granter.go:36 +0x137
+  ase/cockroach-88279.Test88279Race.func1()
+      /work/verified_test.go:17 +0x142
+  ase/cockroach-88279.Test88279Race.gowrap1()
+      /work/verified_test.go:23 +0x41
+
+Goroutine 11 (running) created at:
+  ase/cockroach-88279.Test88279Race()
+      /work/verified_test.go:13 +0x144
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 14 (finished) created at:
+  ase/cockroach-88279.Test88279Race()
+      /work/verified_test.go:13 +0x144
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c000014240 by goroutine 15:
+  ase/cockroach-88279.(*TokenBucket).Adjust()
+      /work/elastic_cpu_granter.go:23 +0x124
+  ase/cockroach-88279.(*elasticCPUGranter).tookWithoutPermission()
+      /work/elastic_cpu_granter.go:41 +0xea
+  ase/cockroach-88279.Test88279Race.func1()
+      /work/verified_test.go:19 +0x135
+  ase/cockroach-88279.Test88279Race.gowrap1()
+      /work/verified_test.go:23 +0x41
+
+Previous write at 0x00c000014240 by goroutine 13:
+  ase/cockroach-88279.(*TokenBucket).UpdateConfig()
+      /work/elastic_cpu_granter.go:24 +0xb7
+  ase/cockroach-88279.(*elasticCPUGranter).setUtilizationLimit()
+      /work/elastic_cpu_granter.go:51 +0x5a
+  ase/cockroach-88279.Test88279Race.func1()
+      /work/verified_test.go:21 +0xe4
+  ase/cockroach-88279.Test88279Race.gowrap1()
+      /work/verified_test.go:23 +0x41
+
+Goroutine 15 (running) created at:
+  ase/cockroach-88279.Test88279Race()
+      /work/verified_test.go:13 +0x144
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 13 (finished) created at:
+  ase/cockroach-88279.Test88279Race()
+      /work/verified_test.go:13 +0x144
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c000014248 by goroutine 10:
+  ase/cockroach-88279.(*TokenBucket).UpdateConfig()
+      /work/elastic_cpu_granter.go:24 +0xa4
+  ase/cockroach-88279.(*elasticCPUGranter).setUtilizationLimit()
+      /work/elastic_cpu_granter.go:51 +0x5a
+  ase/cockroach-88279.Test88279Race.func1()
+      /work/verified_test.go:21 +0xe4
+  ase/cockroach-88279.Test88279Race.gowrap1()
+      /work/verified_test.go:23 +0x41
+
+Previous write at 0x00c000014248 by goroutine 13:
+  ase/cockroach-88279.(*TokenBucket).UpdateConfig()
+      /work/elastic_cpu_granter.go:24 +0xa4
+  ase/cockroach-88279.(*elasticCPUGranter).setUtilizationLimit()
+      /work/elastic_cpu_granter.go:51 +0x5a
+  ase/cockroach-88279.Test88279Race.func1()
+      /work/verified_test.go:21 +0xe4
+  ase/cockroach-88279.Test88279Race.gowrap1()
+      /work/verified_test.go:23 +0x41
+
+Goroutine 10 (running) created at:
+  ase/cockroach-88279.Test88279Race()
+      /work/verified_test.go:13 +0x144
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 13 (finished) created at:
+  ase/cockroach-88279.Test88279Race()
+      /work/verified_test.go:13 +0x144
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c000014240 by goroutine 17:
+  ase/cockroach-88279.(*TokenBucket).TryToFulfill()
+      /work/elastic_cpu_granter.go:17 +0x174
+  ase/cockroach-88279.(*elasticCPUGranter).tryGet()
+      /work/elastic_cpu_granter.go:36 +0x137
+  ase/cockroach-88279.Test88279Race.func1()
+      /work/verified_test.go:17 +0x142
+  ase/cockroach-88279.Test88279Race.gowrap1()
+      /work/verified_test.go:23 +0x41
+
+Previous write at 0x00c000014240 by goroutine 10:
+  ase/cockroach-88279.(*TokenBucket).UpdateConfig()
+      /work/elastic_cpu_granter.go:24 +0xb7
+  ase/cockroach-88279.(*elasticCPUGranter).setUtilizationLimit()
+      /work/elastic_cpu_granter.go:51 +0x5a
+  ase/cockroach-88279.Test88279Race.func1()
+      /work/verified_test.go:21 +0xe4
+  ase/cockroach-88279.Test88279Race.gowrap1()
+      /work/verified_test.go:23 +0x41
+
+Goroutine 17 (running) created at:
+  ase/cockroach-88279.Test88279Race()
+      /work/verified_test.go:13 +0x144
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 10 (finished) created at:
+  ase/cockroach-88279.Test88279Race()
+      /work/verified_test.go:13 +0x144
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c000014240 by goroutine 25:
+  ase/cockroach-88279.(*TokenBucket).UpdateConfig()
+      /work/elastic_cpu_granter.go:24 +0xb7
+  ase/cockroach-88279.(*elasticCPUGranter).setUtilizationLimit()
+      /work/elastic_cpu_granter.go:51 +0x5a
+  ase/cockroach-88279.Test88279Race.func1()
+      /work/verified_test.go:21 +0xe4
+  ase/cockroach-88279.Test88279Race.gowrap1()
+      /work/verified_test.go:23 +0x41
+
+Previous write at 0x00c000014240 by goroutine 19:
+  ase/cockroach-88279.(*TokenBucket).UpdateConfig()
+      /work/elastic_cpu_granter.go:24 +0xb7
+  ase/cockroach-88279.(*elasticCPUGranter).setUtilizationLimit()
+      /work/elastic_cpu_granter.go:51 +0x5a
+  ase/cockroach-88279.Test88279Race.func1()
+      /work/verified_test.go:21 +0xe4
+  ase/cockroach-88279.Test88279Race.gowrap1()
+      /work/verified_test.go:23 +0x41
+
+Goroutine 25 (running) created at:

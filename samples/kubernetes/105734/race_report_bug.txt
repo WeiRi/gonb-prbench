@@ -1,0 +1,234 @@
+WARNING: DATA RACE
+Read at 0x00c0001a5320 by goroutine 133:
+  ase/kubernetes-105734.(*respLogger).Log()
+      /work/httplog.go:34 +0x1cf
+  ase/kubernetes-105734.TestRace_105734_HttplogConcurrent.func3()
+      /work/verified_test.go:29 +0x151
+
+Previous write at 0x00c0001a5320 by goroutine 131:
+  ase/kubernetes-105734.(*respLogger).AddKeyValue()
+      /work/httplog.go:28 +0x23a
+  ase/kubernetes-105734.TestRace_105734_HttplogConcurrent.func1()
+      /work/verified_test.go:17 +0xd0
+
+Goroutine 133 (running) created at:
+  ase/kubernetes-105734.TestRace_105734_HttplogConcurrent()
+      /work/verified_test.go:26 +0x56
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1595 +0x261
+  testing.(*T).Run.func1()
+      /usr/local/go/src/testing/testing.go:1648 +0x44
+
+Goroutine 131 (finished) created at:
+  ase/kubernetes-105734.TestRace_105734_HttplogConcurrent()
+      /work/verified_test.go:14 +0x1e4
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1595 +0x261
+  testing.(*T).Run.func1()
+      /usr/local/go/src/testing/testing.go:1648 +0x44
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c000113400 by goroutine 13:
+  runtime.slicecopy()
+      /usr/local/go/src/runtime/slice.go:310 +0x0
+  ase/kubernetes-105734.(*respLogger).Log()
+      /work/httplog.go:34 +0xde
+  ase/kubernetes-105734.TestRace_105734_HttplogConcurrent.func3()
+      /work/verified_test.go:29 +0x151
+
+Previous write at 0x00c000113400 by goroutine 11:
+  ase/kubernetes-105734.(*respLogger).AddKeyValue()
+      /work/httplog.go:28 +0x17e
+  ase/kubernetes-105734.TestRace_105734_HttplogConcurrent.func1()
+      /work/verified_test.go:17 +0xd0
+
+Goroutine 13 (running) created at:
+  ase/kubernetes-105734.TestRace_105734_HttplogConcurrent()
+      /work/verified_test.go:26 +0x56
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1595 +0x261
+  testing.(*T).Run.func1()
+      /usr/local/go/src/testing/testing.go:1648 +0x44
+
+Goroutine 11 (finished) created at:
+  ase/kubernetes-105734.TestRace_105734_HttplogConcurrent()
+      /work/verified_test.go:14 +0x1e4
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1595 +0x261
+  testing.(*T).Run.func1()
+      /usr/local/go/src/testing/testing.go:1648 +0x44
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c0001a4908 by goroutine 13:
+  strings.(*Builder).String()
+      /usr/local/go/src/strings/builder.go:49 +0x108
+  ase/kubernetes-105734.(*respLogger).Log()
+      /work/httplog.go:35 +0x100
+  ase/kubernetes-105734.TestRace_105734_HttplogConcurrent.func3()
+      /work/verified_test.go:29 +0x151
+
+Previous write at 0x00c0001a4908 by goroutine 12:
+  strings.(*Builder).WriteString()
+      /usr/local/go/src/strings/builder.go:116 +0x14e
+  ase/kubernetes-105734.(*respLogger).Addf()
+      /work/httplog.go:22 +0x3e
+  ase/kubernetes-105734.TestRace_105734_HttplogConcurrent.func2()
+      /work/verified_test.go:23 +0xbb
+
+Goroutine 13 (running) created at:
+  ase/kubernetes-105734.TestRace_105734_HttplogConcurrent()
+      /work/verified_test.go:26 +0x56
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1595 +0x261
+  testing.(*T).Run.func1()
+      /usr/local/go/src/testing/testing.go:1648 +0x44
+
+Goroutine 12 (finished) created at:
+  ase/kubernetes-105734.TestRace_105734_HttplogConcurrent()
+      /work/verified_test.go:20 +0x28c
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1595 +0x261
+  testing.(*T).Run.func1()
+      /usr/local/go/src/testing/testing.go:1648 +0x44
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c00031a410 by goroutine 16:
+  runtime.slicecopy()
+      /usr/local/go/src/runtime/slice.go:310 +0x0
+  ase/kubernetes-105734.(*respLogger).Log()
+      /work/httplog.go:34 +0xde
+  ase/kubernetes-105734.TestRace_105734_HttplogConcurrent.func3()
+      /work/verified_test.go:29 +0x151
+
+Previous write at 0x00c00031a410 by goroutine 14:
+  ase/kubernetes-105734.(*respLogger).AddKeyValue()
+      /work/httplog.go:28 +0x1e4
+  ase/kubernetes-105734.TestRace_105734_HttplogConcurrent.func1()
+      /work/verified_test.go:17 +0xd0
+
+Goroutine 16 (running) created at:
+  ase/kubernetes-105734.TestRace_105734_HttplogConcurrent()
+      /work/verified_test.go:26 +0x56
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1595 +0x261
+  testing.(*T).Run.func1()
+      /usr/local/go/src/testing/testing.go:1648 +0x44
+
+Goroutine 14 (finished) created at:
+  ase/kubernetes-105734.TestRace_105734_HttplogConcurrent()
+      /work/verified_test.go:14 +0x1e4
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1595 +0x261
+  testing.(*T).Run.func1()
+      /usr/local/go/src/testing/testing.go:1648 +0x44
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c00028a808 by goroutine 385:
+  strings.(*Builder).String()
+      /usr/local/go/src/strings/builder.go:49 +0x108
+  ase/kubernetes-105734.(*respLogger).Log()
+      /work/httplog.go:35 +0x100
+  ase/kubernetes-105734.TestRace_105734_HttplogConcurrent.func3()
+      /work/verified_test.go:29 +0x151
+
+Previous write at 0x00c00028a808 by goroutine 384:
+  strings.(*Builder).WriteString()
+      /usr/local/go/src/strings/builder.go:116 +0x14e
+  ase/kubernetes-105734.(*respLogger).Addf()
+      /work/httplog.go:23 +0x52
+  ase/kubernetes-105734.TestRace_105734_HttplogConcurrent.func2()
+      /work/verified_test.go:23 +0xbb
+
+Goroutine 385 (running) created at:
+  ase/kubernetes-105734.TestRace_105734_HttplogConcurrent()
+      /work/verified_test.go:26 +0x56
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1595 +0x261
+  testing.(*T).Run.func1()
+      /usr/local/go/src/testing/testing.go:1648 +0x44
+
+Goroutine 384 (finished) created at:
+  ase/kubernetes-105734.TestRace_105734_HttplogConcurrent()
+      /work/verified_test.go:20 +0x28c
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1595 +0x261
+  testing.(*T).Run.func1()
+      /usr/local/go/src/testing/testing.go:1648 +0x44
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c0001a5d08 by goroutine 253:
+  strings.(*Builder).String()
+      /usr/local/go/src/strings/builder.go:49 +0x126
+  ase/kubernetes-105734.(*respLogger).Log()
+      /work/httplog.go:35 +0x100
+  ase/kubernetes-105734.TestRace_105734_HttplogConcurrent.func3()
+      /work/verified_test.go:29 +0x151
+
+Previous write at 0x00c0001a5d08 by goroutine 252:
+  strings.(*Builder).WriteString()
+      /usr/local/go/src/strings/builder.go:116 +0x14e
+  ase/kubernetes-105734.(*respLogger).Addf()
+      /work/httplog.go:22 +0x3e
+  ase/kubernetes-105734.TestRace_105734_HttplogConcurrent.func2()
+      /work/verified_test.go:23 +0xbb
+
+Goroutine 253 (running) created at:
+  ase/kubernetes-105734.TestRace_105734_HttplogConcurrent()
+      /work/verified_test.go:26 +0x56
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1595 +0x261
+  testing.(*T).Run.func1()
+      /usr/local/go/src/testing/testing.go:1648 +0x44
+
+Goroutine 252 (running) created at:
+  ase/kubernetes-105734.TestRace_105734_HttplogConcurrent()
+      /work/verified_test.go:20 +0x28c
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1595 +0x261
+  testing.(*T).Run.func1()
+      /usr/local/go/src/testing/testing.go:1648 +0x44
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c0001a5d48 by goroutine 255:
+  strings.(*Builder).WriteString()
+      /usr/local/go/src/strings/builder.go:116 +0x14e
+  ase/kubernetes-105734.(*respLogger).Addf()
+      /work/httplog.go:23 +0x52
+  ase/kubernetes-105734.TestRace_105734_HttplogConcurrent.func2()
+      /work/verified_test.go:23 +0xbb
+
+Previous read at 0x00c0001a5d48 by goroutine 256:
+  strings.(*Builder).String()
+      /usr/local/go/src/strings/builder.go:49 +0x126
+  ase/kubernetes-105734.(*respLogger).Log()
+      /work/httplog.go:35 +0x100
+  ase/kubernetes-105734.TestRace_105734_HttplogConcurrent.func3()
+      /work/verified_test.go:29 +0x151
+
+Goroutine 255 (running) created at:
+  ase/kubernetes-105734.TestRace_105734_HttplogConcurrent()
+      /work/verified_test.go:20 +0x28c
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1595 +0x261
+  testing.(*T).Run.func1()
+      /usr/local/go/src/testing/testing.go:1648 +0x44
+
+Goroutine 256 (running) created at:
+  ase/kubernetes-105734.TestRace_105734_HttplogConcurrent()
+      /work/verified_test.go:26 +0x56
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1595 +0x261
+  testing.(*T).Run.func1()
+      /usr/local/go/src/testing/testing.go:1648 +0x44
+==================
+--- FAIL: TestRace_105734_HttplogConcurrent (0.05s)
+    testing.go:1465: race detected during execution of test
+FAIL
+FAIL	ase/kubernetes-105734	0.073s
+FAIL

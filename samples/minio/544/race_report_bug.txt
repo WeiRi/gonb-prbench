@@ -1,0 +1,40 @@
+WARNING: DATA RACE
+Write at 0x00c0000d4570 by goroutine 9:
+  runtime.mapassign_faststr()
+      /usr/local/go/src/runtime/map_faststr.go:203 +0x0
+  ase/minio-544.(*memoryDriver).CreateObject()
+      /work/memory.go:45 +0xca
+  ase/minio-544.TestRaceExpireObjects.func1()
+      /work/verified_test.go:37 +0x167
+  ase/minio-544.TestRaceExpireObjects.gowrap1()
+      /work/verified_test.go:39 +0x41
+
+Previous read at 0x00c0000d4570 by goroutine 8:
+  ase/minio-544.(*memoryDriver).expireObjects()
+      /work/memory.go:54 +0x5b
+  ase/minio-544.Start.gowrap1()
+      /work/memory.go:31 +0x17
+
+Goroutine 9 (running) created at:
+  ase/minio-544.TestRaceExpireObjects()
+      /work/verified_test.go:30 +0x14b
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 8 (running) created at:
+  ase/minio-544.Start()
+      /work/memory.go:31 +0x1a4
+  ase/minio-544.TestRaceExpireObjects()
+      /work/verified_test.go:19 +0x3d
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+    testing.go:1398: race detected during execution of test
+--- FAIL: TestRaceExpireObjects (0.09s)
+FAIL
+FAIL	ase/minio-544	0.116s
+FAIL

@@ -1,0 +1,30 @@
+WARNING: DATA RACE
+Read at 0x00c00019a000 by goroutine 52:
+  ase/kubernetes-1637.(*Kubelet).runOnce.func1()
+      /work/runonce.go:39 +0x4d
+
+Previous write at 0x00c00019a000 by goroutine 12:
+  ase/kubernetes-1637.(*Kubelet).runOnce()
+      /work/runonce.go:37 +0xf6
+  ase/kubernetes-1637.TestRace_PR1637_RunOnceLoopVarCapture.func1()
+      /work/verified_test.go:73 +0xc5
+
+Goroutine 52 (running) created at:
+  ase/kubernetes-1637.(*Kubelet).runOnce()
+      /work/runonce.go:38 +0x87
+  ase/kubernetes-1637.TestRace_PR1637_RunOnceLoopVarCapture.func1()
+      /work/verified_test.go:73 +0xc5
+
+Goroutine 12 (running) created at:
+  ase/kubernetes-1637.TestRace_PR1637_RunOnceLoopVarCapture()
+      /work/verified_test.go:70 +0x2aa
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+    testing.go:1398: race detected during execution of test
+--- FAIL: TestRace_PR1637_RunOnceLoopVarCapture (0.03s)
+FAIL
+FAIL	ase/kubernetes-1637	0.135s
+FAIL

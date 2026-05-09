@@ -1,0 +1,265 @@
+diff --git a/ctx.go b/ctx.go
+index 34b2b68ef02..2810f072df9 100644
+--- a/ctx.go
++++ b/ctx.go
+@@ -121,6 +121,9 @@ func (c *DefaultCtx) RequestCtx() *fasthttp.RequestCtx {
+ // Context returns a context implementation that was set by
+ // user earlier or returns a non-nil, empty context, if it was not set earlier.
+ func (c *DefaultCtx) Context() context.Context {
++	if c.fasthttp == nil {
++		return context.Background()
++	}
+ 	if ctx, ok := c.fasthttp.UserValue(userContextKey).(context.Context); ok && ctx != nil {
+ 		return ctx
+ 	}
+@@ -131,6 +134,9 @@ func (c *DefaultCtx) Context() context.Context {
+ 
+ // SetContext sets a context implementation by user.
+ func (c *DefaultCtx) SetContext(ctx context.Context) {
++	if c.fasthttp == nil {
++		return
++	}
+ 	c.fasthttp.SetUserValue(userContextKey, ctx)
+ }
+ 
+@@ -167,14 +173,22 @@ func (*DefaultCtx) Err() error {
+ // Request return the *fasthttp.Request object
+ // This allows you to use all fasthttp request methods
+ // https://godoc.org/github.com/valyala/fasthttp#Request
++// Returns nil if the context has been released.
+ func (c *DefaultCtx) Request() *fasthttp.Request {
++	if c.fasthttp == nil {
++		return nil
++	}
+ 	return &c.fasthttp.Request
+ }
+ 
+ // Response return the *fasthttp.Response object
+ // This allows you to use all fasthttp response methods
+ // https://godoc.org/github.com/valyala/fasthttp#Response
++// Returns nil if the context has been released.
+ func (c *DefaultCtx) Response() *fasthttp.Response {
++	if c.fasthttp == nil {
++		return nil
++	}
+ 	return &c.fasthttp.Response
+ }
+ 
+@@ -590,8 +604,12 @@ func (c *DefaultCtx) String() string {
+ }
+ 
+ // Value makes it possible to retrieve values (Locals) under keys scoped to the request
+-// and therefore available to all following routes that match the request.
++// and therefore available to all following routes that match the request. If the context
++// has been released and c.fasthttp is nil (for example, after ReleaseCtx), Value returns nil.
+ func (c *DefaultCtx) Value(key any) any {
++	if c.fasthttp == nil {
++		return nil
++	}
+ 	return c.fasthttp.UserValue(key)
+ }
+ 
+diff --git a/ctx_test.go b/ctx_test.go
+index c3569530edc..650f51f2fe4 100644
+--- a/ctx_test.go
++++ b/ctx_test.go
+@@ -3226,6 +3226,85 @@ func Test_Ctx_Value(t *testing.T) {
+ 	require.Equal(t, StatusOK, resp.StatusCode, "Status code")
+ }
+ 
++// go test -run Test_Ctx_Value_AfterRelease
++func Test_Ctx_Value_AfterRelease(t *testing.T) {
++	t.Parallel()
++	app := New()
++	var ctx Ctx
++	app.Get("/test", func(c Ctx) error {
++		ctx = c
++		c.Locals("test", "value")
++		return nil
++	})
++	resp, err := app.Test(httptest.NewRequest(MethodGet, "/test", http.NoBody))
++	require.NoError(t, err, "app.Test(req)")
++	require.Equal(t, StatusOK, resp.StatusCode, "Status code")
++
++	// After the handler completes, the context is released and fasthttp is nil
++	// Value should return nil instead of panicking
++	require.NotPanics(t, func() {
++		val := ctx.Value("test")
++		require.Nil(t, val)
++	})
++}
++
++// go test -run Test_Ctx_Value_InGoroutine
++func Test_Ctx_Value_InGoroutine(t *testing.T) {
++	t.Parallel()
++	app := New()
++	done := make(chan bool, 1)   // Buffered to prevent goroutine leak
++	errCh := make(chan error, 1) // Channel to communicate errors from goroutine
++
++	// Use a synchronization point to avoid race detector complaints
++	// while still testing the defensive nil behavior
++	start := make(chan struct{})
++
++	app.Get("/test", func(c Ctx) error {
++		c.Locals("test", "value")
++
++		// Simulate a goroutine that uses the context (like minio.GetObject)
++		go func() {
++			// Wait for handler to complete and context to be released
++			<-start
++
++			defer func() {
++				if r := recover(); r != nil {
++					errCh <- fmt.Errorf("panic in goroutine: %v", r)
++					return
++				}
++				done <- true
++			}()
++
++			// This simulates what happens when minio or other libraries
++			// use the fiber.Ctx as a context.Context in a goroutine
++			// The Value method should not panic even if fasthttp is nil
++			val := c.Value("test")
++			// The value might be nil if the context was released
++			_ = val
++		}()
++
++		return nil
++	})
++
++	resp, err := app.Test(httptest.NewRequest(MethodGet, "/test", http.NoBody))
++	require.NoError(t, err, "app.Test(req)")
++	require.Equal(t, StatusOK, resp.StatusCode, "Status code")
++
++	// Signal goroutine to proceed - context has been released after app.Test returns
++	// since the handler (and its deferred ReleaseCtx) has completed
++	close(start)
++
++	// Wait for goroutine to complete with timeout
++	select {
++	case <-done:
++		// Success - goroutine completed without panic
++	case err := <-errCh:
++		t.Fatalf("error from goroutine: %v", err)
++	case <-time.After(1 * time.Second):
++		t.Fatal("test timed out waiting for goroutine")
++	}
++}
++
+ // go test -run Test_Ctx_Context
+ func Test_Ctx_Context(t *testing.T) {
+ 	t.Parallel()
+@@ -3274,8 +3353,35 @@ func Test_Ctx_Context_AfterHandlerPanics(t *testing.T) {
+ 	resp, err := app.Test(httptest.NewRequest(MethodGet, "/test", http.NoBody))
+ 	require.NoError(t, err, "app.Test(req)")
+ 	require.Equal(t, StatusOK, resp.StatusCode, "Status code")
+-	require.Panics(t, func() {
+-		_ = ctx.Context()
++	// After the fix, Context() returns context.Background() instead of panicking
++	require.NotPanics(t, func() {
++		c := ctx.Context()
++		require.NotNil(t, c)
++		require.Equal(t, context.Background(), c)
++	})
++}
++
++// go test -run Test_Ctx_Request_Response_AfterRelease
++func Test_Ctx_Request_Response_AfterRelease(t *testing.T) {
++	t.Parallel()
++	app := New()
++	var ctx Ctx
++	app.Get("/test", func(c Ctx) error {
++		ctx = c
++		return nil
++	})
++	resp, err := app.Test(httptest.NewRequest(MethodGet, "/test", http.NoBody))
++	require.NoError(t, err, "app.Test(req)")
++	require.Equal(t, StatusOK, resp.StatusCode, "Status code")
++
++	// After the handler completes and context is released,
++	// Request() and Response() should return nil instead of panicking
++	require.NotPanics(t, func() {
++		req := ctx.Request()
++		require.Nil(t, req)
++
++		res := ctx.Response()
++		require.Nil(t, res)
+ 	})
+ }
+ 
+diff --git a/docs/api/ctx.md b/docs/api/ctx.md
+index c4c75da9f4b..82e99646c46 100644
+--- a/docs/api/ctx.md
++++ b/docs/api/ctx.md
+@@ -482,6 +482,10 @@ Returns the [*fasthttp.Request](https://pkg.go.dev/github.com/valyala/fasthttp#R
+ func (c fiber.Ctx) Request() *fasthttp.Request
+ ```
+ 
++:::info
++Returns `nil` if the context has been released (e.g., after the handler completes and the context is returned to the pool).
++:::
++
+ ```go title="Example"
+ app.Get("/", func(c fiber.Ctx) error {
+   c.Request().Header.Method()
+@@ -519,6 +523,10 @@ Returns the [\*fasthttp.Response](https://pkg.go.dev/github.com/valyala/fasthttp
+ func (c fiber.Ctx) Response() *fasthttp.Response
+ ```
+ 
++:::info
++Returns `nil` if the context has been released (e.g., after the handler completes and the context is returned to the pool).
++:::
++
+ ```go title="Example"
+ app.Get("/", func(c fiber.Ctx) error {
+   c.Response().BodyWriter().Write([]byte("Hello, World!"))
+@@ -2704,6 +2712,24 @@ Sets the response body to a stream of data and adds an optional body size.
+ func (c fiber.Ctx) SendStream(stream io.Reader, size ...int) error
+ ```
+ 
++:::info
++`SendStream` operates asynchronously. The handler returns immediately after setting up the stream,
++but the actual reading and sending of data happens **after** the handler completes. This is handled
++by the underlying `fasthttp` library.
++
++If the provided stream implements `io.Closer`, it will be automatically closed by `fasthttp` after
++the response is fully sent or if an error occurs.
++:::
++
++:::caution
++When passing `fiber.Ctx` as a `context.Context` to libraries that spawn goroutines (e.g., for streaming operations),
++those goroutines may attempt to access the context after the handler returns. Since `fiber.Ctx` is recycled and
++released after the handler completes, this can cause issues.
++
++**Recommended approach**: Use `c.Context()` or `c.RequestCtx()` instead of passing `c` directly to such libraries.
++See the [Context Guide](../guide/context.md) for more details.
++:::
++
+ ```go title="Example"
+ app.Get("/", func(c fiber.Ctx) error {
+   return c.SendStream(bytes.NewReader([]byte("Hello, World!")))
+@@ -2711,6 +2737,24 @@ app.Get("/", func(c fiber.Ctx) error {
+ })
+ ```
+ 
++```go title="Example with file streaming"
++app.Get("/download", func(c fiber.Ctx) error {
++  file, err := os.Open("large-file.zip")
++  if err != nil {
++    return err
++  }
++  // File will be automatically closed by fasthttp after streaming completes
++  
++  stat, err := file.Stat()
++  if err != nil {
++    file.Close()
++    return err
++  }
++  
++  return c.SendStream(file, int(stat.Size()))
++})
++```
++
+ ### SendStreamWriter
+ 
+ Sets the response body stream writer.

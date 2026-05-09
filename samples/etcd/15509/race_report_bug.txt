@@ -1,0 +1,56 @@
+WARNING: DATA RACE
+Read at 0x00c000188008 by goroutine 39:
+  ase/etcd-15509.runServe.func1()
+      /work/serve.go:20 +0x2e
+
+Previous write at 0x00c000188008 by goroutine 8:
+  ase/etcd-15509.runServe()
+      /work/serve.go:23 +0x1b0
+  ase/etcd-15509.TestRace_PR15509_GsClosureCapture.gowrap1()
+      /work/verified_test.go:16 +0x33
+
+Goroutine 39 (running) created at:
+  ase/etcd-15509.runServe()
+      /work/serve.go:19 +0x184
+  ase/etcd-15509.TestRace_PR15509_GsClosureCapture.gowrap1()
+      /work/verified_test.go:16 +0x33
+
+Goroutine 8 (finished) created at:
+  ase/etcd-15509.TestRace_PR15509_GsClosureCapture()
+      /work/verified_test.go:16 +0x64
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c00018a048 by goroutine 39:
+  ase/etcd-15509.runServe.func1()
+      /work/serve.go:20 +0x3d
+
+Previous write at 0x00c00018a048 by goroutine 8:
+  ase/etcd-15509.runServe()
+      /work/serve.go:23 +0x19a
+  ase/etcd-15509.TestRace_PR15509_GsClosureCapture.gowrap1()
+      /work/verified_test.go:16 +0x33
+
+Goroutine 39 (running) created at:
+  ase/etcd-15509.runServe()
+      /work/serve.go:19 +0x184
+  ase/etcd-15509.TestRace_PR15509_GsClosureCapture.gowrap1()
+      /work/verified_test.go:16 +0x33
+
+Goroutine 8 (finished) created at:
+  ase/etcd-15509.TestRace_PR15509_GsClosureCapture()
+      /work/verified_test.go:16 +0x64
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+    testing.go:1398: race detected during execution of test
+--- FAIL: TestRace_PR15509_GsClosureCapture (0.00s)
+FAIL
+FAIL	ase/etcd-15509	0.022s
+FAIL

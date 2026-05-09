@@ -1,0 +1,465 @@
+diff --git a/staging/src/k8s.io/component-base/metrics/counter.go b/staging/src/k8s.io/component-base/metrics/counter.go
+index 8a7dd71541c23..22be3254018fa 100644
+--- a/staging/src/k8s.io/component-base/metrics/counter.go
++++ b/staging/src/k8s.io/component-base/metrics/counter.go
+@@ -30,7 +30,6 @@ import (
+ // Counter is our internal representation for our wrapping struct around prometheus
+ // counters. Counter implements both kubeCollector and CounterMetric.
+ type Counter struct {
+-	ctx context.Context
+ 	CounterMetric
+ 	*CounterOpts
+ 	lazyMetric
+@@ -40,12 +39,10 @@ type Counter struct {
+ // The implementation of the Metric interface is expected by testutil.GetCounterMetricValue.
+ var _ Metric = &Counter{}
+ 
+-// All supported exemplar metric types implement the metricWithExemplar interface.
+-var _ metricWithExemplar = &Counter{}
+-
+ // exemplarCounterMetric holds a context to extract exemplar labels from, and a counter metric to attach them to. It implements the metricWithExemplar interface.
+ type exemplarCounterMetric struct {
+-	*Counter
++	ctx      context.Context
++	delegate CounterMetric
+ }
+ 
+ // NewCounter returns an object which satisfies the kubeCollector and CounterMetric interfaces.
+@@ -107,26 +104,12 @@ func (c *Counter) initializeDeprecatedMetric() {
+ 
+ // WithContext allows the normal Counter metric to pass in context.
+ func (c *Counter) WithContext(ctx context.Context) CounterMetric {
+-	c.ctx = ctx
+-	return c.CounterMetric
+-}
+-
+-// withExemplar initializes the exemplarMetric object and sets the exemplar value.
+-func (c *Counter) withExemplar(v float64) {
+-	(&exemplarCounterMetric{c}).withExemplar(v)
+-}
+-
+-func (c *Counter) Add(v float64) {
+-	c.withExemplar(v)
+-}
+-
+-func (c *Counter) Inc() {
+-	c.withExemplar(1)
++	return &exemplarCounterMetric{ctx: ctx, delegate: c.CounterMetric}
+ }
+ 
+-// withExemplar attaches an exemplar to the metric.
+-func (e *exemplarCounterMetric) withExemplar(v float64) {
+-	if m, ok := e.CounterMetric.(prometheus.ExemplarAdder); ok {
++// Add attaches an exemplar to the metric and then calls the delegate.
++func (e *exemplarCounterMetric) Add(v float64) {
++	if m, ok := e.delegate.(prometheus.ExemplarAdder); ok {
+ 		maybeSpanCtx := trace.SpanContextFromContext(e.ctx)
+ 		if maybeSpanCtx.IsValid() && maybeSpanCtx.IsSampled() {
+ 			exemplarLabels := prometheus.Labels{
+@@ -138,7 +121,12 @@ func (e *exemplarCounterMetric) withExemplar(v float64) {
+ 		}
+ 	}
+ 
+-	e.CounterMetric.Add(v)
++	e.delegate.Add(v)
++}
++
++// Inc attaches an exemplar to the metric and then calls the delegate.
++func (e *exemplarCounterMetric) Inc() {
++	e.Add(1)
+ }
+ 
+ // CounterVec is the internal representation of our wrapping struct around prometheus
+diff --git a/staging/src/k8s.io/component-base/metrics/counter_test.go b/staging/src/k8s.io/component-base/metrics/counter_test.go
+index 2afcc4d63044c..cc3691cf8bfff 100644
+--- a/staging/src/k8s.io/component-base/metrics/counter_test.go
++++ b/staging/src/k8s.io/component-base/metrics/counter_test.go
+@@ -19,6 +19,7 @@ package metrics
+ import (
+ 	"bytes"
+ 	"context"
++	"sync"
+ 	"testing"
+ 
+ 	"github.com/blang/semver/v4"
+@@ -27,6 +28,7 @@ import (
+ 	"github.com/stretchr/testify/assert"
+ 	"github.com/stretchr/testify/require"
+ 	"go.opentelemetry.io/otel/trace"
++	tracenoop "go.opentelemetry.io/otel/trace/noop"
+ 
+ 	apimachineryversion "k8s.io/apimachinery/pkg/version"
+ )
+@@ -314,7 +316,6 @@ func TestCounterWithExemplar(t *testing.T) {
+ 		Name: "metric_exemplar_test",
+ 		Help: "helpless",
+ 	})
+-	_ = counter.WithContext(ctxForSpanCtx)
+ 
+ 	// Register counter.
+ 	registry := newKubeRegistry(apimachineryversion.Info{
+@@ -325,9 +326,9 @@ func TestCounterWithExemplar(t *testing.T) {
+ 	registry.MustRegister(counter)
+ 
+ 	// Call underlying exemplar methods.
+-	counter.Add(toAdd)
+-	counter.Inc()
+-	counter.Inc()
++	counter.WithContext(ctxForSpanCtx).Add(toAdd)
++	counter.WithContext(ctxForSpanCtx).Inc()
++	counter.WithContext(ctxForSpanCtx).Inc()
+ 
+ 	// Gather.
+ 	mfs, err := registry.Gather()
+@@ -382,3 +383,118 @@ func TestCounterWithExemplar(t *testing.T) {
+ 		}
+ 	}
+ }
++
++// TestCounterConcurrentWithContextRace reproduces the race condition in Counter.WithContext
++// where c.ctx is written concurrently with reads in withExemplar method.
++// This test simulates the real authentication flow that triggers the race:
++// x509.AuthenticateRequest -> union.AuthenticateRequest -> group.AuthenticateRequest
++func TestCounterConcurrentWithContextRace(t *testing.T) {
++	opts := &CounterOpts{
++		Namespace: "apiserver",
++		Subsystem: "authentication",
++		Name:      "requests_total",
++		Help:      "Authentication requests counter for race condition testing",
++	}
++
++	c := NewCounter(opts)
++
++	// Force initialization by calling initializeMetric directly
++	c.initializeMetric()
++
++	// Create contexts with trace spans to trigger exemplar code path
++	ctx1, span1 := createContextWithSpanCounter("x509-auth", "authenticate-request")
++	defer span1.End()
++	ctx2, span2 := createContextWithSpanCounter("union-auth", "union-authenticate")
++	defer span2.End()
++
++	var wg sync.WaitGroup
++	iterations := 10000 // Increase iterations to make race more likely
++
++	// Goroutine 1: Simulate x509 Authenticator calling WithContext
++	// This matches: x509.(*Authenticator).AuthenticateRequest() calling WithContext
++	wg.Add(1)
++	go func() {
++		defer wg.Done()
++		for i := 0; i < iterations; i++ {
++			// Simulate authentication request processing
++			simulateX509AuthenticateRequestCounter(c, ctx1, i)
++		}
++	}()
++
++	// Goroutine 2: Simulate concurrent Add/Inc calls (metrics collection)
++	// This matches the withExemplar/Add path that reads c.ctx
++	wg.Add(1)
++	go func() {
++		defer wg.Done()
++		for i := 0; i < iterations; i++ {
++			c.Add(float64(i % 10))
++			if i%2 == 0 {
++				c.Inc()
++			}
++		}
++	}()
++
++	// Goroutine 3: Simulate union AuthenticateRequest calling WithContext
++	// This matches: union.(*unionAuthRequestHandler).AuthenticateRequest()
++	wg.Add(1)
++	go func() {
++		defer wg.Done()
++		for i := 0; i < iterations; i++ {
++			// Simulate union authentication processing
++			simulateUnionAuthenticateRequestCounter(c, ctx2, i)
++		}
++	}()
++
++	// Goroutine 4: Simulate group AuthenticateRequest calling WithContext
++	// This matches: group.(*AuthenticatedGroupAdder).AuthenticateRequest()
++	wg.Add(1)
++	go func() {
++		defer wg.Done()
++		for i := 0; i < iterations; i++ {
++			// Simulate group authentication processing
++			simulateGroupAuthenticateRequestCounter(c, ctx1, ctx2, i)
++		}
++	}()
++
++	wg.Wait()
++}
++
++// simulateX509AuthenticateRequestCounter simulates the call path from x509 authenticator
++func simulateX509AuthenticateRequestCounter(c CounterMetric, ctx context.Context, iteration int) {
++	// Simulate the authentication request processing that calls WithContext
++	if cWithCtx, ok := c.(*Counter); ok {
++		cWithCtx.WithContext(ctx)
++	}
++}
++
++// simulateUnionAuthenticateRequestCounter simulates the call path from union authenticator
++func simulateUnionAuthenticateRequestCounter(c CounterMetric, ctx context.Context, iteration int) {
++	// Simulate union authentication processing
++	if cWithCtx, ok := c.(*Counter); ok {
++		cWithCtx.WithContext(ctx)
++	}
++}
++
++// simulateGroupAuthenticateRequestCounter simulates the call path from group authenticator
++func simulateGroupAuthenticateRequestCounter(c CounterMetric, ctx1, ctx2 context.Context, iteration int) {
++	// Alternate between contexts to simulate different authentication scenarios
++	ctx := ctx1
++	if iteration%3 == 0 {
++		ctx = ctx2
++	}
++
++	if cWithCtx, ok := c.(*Counter); ok {
++		cWithCtx.WithContext(ctx)
++	}
++}
++
++// Helper function to create a context with a valid trace span
++func createContextWithSpanCounter(traceID, spanID string) (context.Context, trace.Span) {
++	ctx := context.Background()
++
++	// Create a noop tracer and span for testing
++	tracer := tracenoop.NewTracerProvider().Tracer("test")
++	ctx, span := tracer.Start(ctx, "test-span")
++
++	return ctx, span
++}
+diff --git a/staging/src/k8s.io/component-base/metrics/histogram.go b/staging/src/k8s.io/component-base/metrics/histogram.go
+index 3065486ab41d1..ec82fa272c30a 100644
+--- a/staging/src/k8s.io/component-base/metrics/histogram.go
++++ b/staging/src/k8s.io/component-base/metrics/histogram.go
+@@ -28,7 +28,6 @@ import (
+ // Histogram is our internal representation for our wrapping struct around prometheus
+ // histograms. Summary implements both kubeCollector and ObserverMetric
+ type Histogram struct {
+-	ctx context.Context
+ 	ObserverMetric
+ 	*HistogramOpts
+ 	lazyMetric
+@@ -37,7 +36,8 @@ type Histogram struct {
+ 
+ // exemplarHistogramMetric holds a context to extract exemplar labels from, and a historgram metric to attach them to. It implements the metricWithExemplar interface.
+ type exemplarHistogramMetric struct {
+-	*Histogram
++	ctx      context.Context
++	delegate ObserverMetric
+ }
+ 
+ type exemplarHistogramVec struct {
+@@ -45,18 +45,9 @@ type exemplarHistogramVec struct {
+ 	observer prometheus.Observer
+ }
+ 
+-func (h *Histogram) Observe(v float64) {
+-	h.withExemplar(v)
+-}
+-
+-// withExemplar initializes the exemplarMetric object and sets the exemplar value.
+-func (h *Histogram) withExemplar(v float64) {
+-	(&exemplarHistogramMetric{h}).withExemplar(v)
+-}
+-
+-// withExemplar attaches an exemplar to the metric.
+-func (e *exemplarHistogramMetric) withExemplar(v float64) {
+-	if m, ok := e.Histogram.ObserverMetric.(prometheus.ExemplarObserver); ok {
++// Observe attaches an exemplar to the metric and then calls the delegate.
++func (e *exemplarHistogramMetric) Observe(v float64) {
++	if m, ok := e.delegate.(prometheus.ExemplarObserver); ok {
+ 		maybeSpanCtx := trace.SpanContextFromContext(e.ctx)
+ 		if maybeSpanCtx.IsValid() && maybeSpanCtx.IsSampled() {
+ 			exemplarLabels := prometheus.Labels{
+@@ -68,7 +59,7 @@ func (e *exemplarHistogramMetric) withExemplar(v float64) {
+ 		}
+ 	}
+ 
+-	e.ObserverMetric.Observe(v)
++	e.delegate.Observe(v)
+ }
+ 
+ // NewHistogram returns an object which is Histogram-like. However, nothing
+@@ -113,8 +104,7 @@ func (h *Histogram) initializeDeprecatedMetric() {
+ 
+ // WithContext allows the normal Histogram metric to pass in context. The context is no-op now.
+ func (h *Histogram) WithContext(ctx context.Context) ObserverMetric {
+-	h.ctx = ctx
+-	return h.ObserverMetric
++	return &exemplarHistogramMetric{ctx: ctx, delegate: h.ObserverMetric}
+ }
+ 
+ // HistogramVec is the internal representation of our wrapping struct around prometheus
+diff --git a/staging/src/k8s.io/component-base/metrics/histogram_test.go b/staging/src/k8s.io/component-base/metrics/histogram_test.go
+index 5efbfb6eeae2d..ed53a5a4b1aef 100644
+--- a/staging/src/k8s.io/component-base/metrics/histogram_test.go
++++ b/staging/src/k8s.io/component-base/metrics/histogram_test.go
+@@ -18,6 +18,7 @@ package metrics
+ 
+ import (
+ 	"context"
++	"sync"
+ 	"testing"
+ 
+ 	"github.com/blang/semver/v4"
+@@ -26,6 +27,7 @@ import (
+ 	"github.com/stretchr/testify/assert"
+ 	"github.com/stretchr/testify/require"
+ 	"go.opentelemetry.io/otel/trace"
++	tracenoop "go.opentelemetry.io/otel/trace/noop"
+ 
+ 	apimachineryversion "k8s.io/apimachinery/pkg/version"
+ )
+@@ -333,7 +335,6 @@ func TestHistogramWithExemplar(t *testing.T) {
+ 		Help:    "helpless",
+ 		Buckets: []float64{100},
+ 	})
+-	_ = histogram.WithContext(ctxForSpanCtx)
+ 
+ 	registry := newKubeRegistry(apimachineryversion.Info{
+ 		Major:      "1",
+@@ -343,7 +344,7 @@ func TestHistogramWithExemplar(t *testing.T) {
+ 	registry.MustRegister(histogram)
+ 
+ 	// Act.
+-	histogram.Observe(value)
++	histogram.WithContext(ctxForSpanCtx).Observe(value)
+ 
+ 	// Assert.
+ 	mfs, err := registry.Gather()
+@@ -492,3 +493,116 @@ func TestHistogramVecWithExemplar(t *testing.T) {
+ 		}
+ 	}
+ }
++
++// TestHistogramConcurrentWithContextRace reproduces the race condition in Histogram.WithContext
++// where h.ctx is written concurrently with reads in withExemplar method.
++// This test simulates the real authentication flow that triggers the race:
++// x509.AuthenticateRequest -> union.AuthenticateRequest -> group.AuthenticateRequest
++func TestHistogramConcurrentWithContextRace(t *testing.T) {
++	opts := &HistogramOpts{
++		Namespace: "apiserver",
++		Subsystem: "authentication",
++		Name:      "requests_total",
++		Help:      "Authentication requests histogram for race condition testing",
++		Buckets:   prometheus.DefBuckets,
++	}
++
++	h := NewHistogram(opts)
++
++	// Force initialization by calling initializeMetric directly
++	h.initializeMetric()
++
++	// Create contexts with trace spans to trigger exemplar code path
++	ctx1, span1 := createContextWithSpan("x509-auth", "authenticate-request")
++	defer span1.End()
++	ctx2, span2 := createContextWithSpan("union-auth", "union-authenticate")
++	defer span2.End()
++
++	var wg sync.WaitGroup
++	iterations := 10000 // Increase iterations to make race more likely
++
++	// Goroutine 1: Simulate x509 Authenticator calling WithContext
++	// This matches: x509.(*Authenticator).AuthenticateRequest() calling WithContext
++	wg.Add(1)
++	go func() {
++		defer wg.Done()
++		for i := 0; i < iterations; i++ {
++			// Simulate authentication request processing
++			simulateX509AuthenticateRequest(h, ctx1, i)
++		}
++	}()
++
++	// Goroutine 2: Simulate concurrent Observe calls (metrics collection)
++	// This matches the withExemplar/Observe path that reads h.ctx
++	wg.Add(1)
++	go func() {
++		defer wg.Done()
++		for i := 0; i < iterations; i++ {
++			h.Observe(float64(i % 10))
++		}
++	}()
++
++	// Goroutine 3: Simulate union AuthenticateRequest calling WithContext
++	// This matches: union.(*unionAuthRequestHandler).AuthenticateRequest()
++	wg.Add(1)
++	go func() {
++		defer wg.Done()
++		for i := 0; i < iterations; i++ {
++			// Simulate union authentication processing
++			simulateUnionAuthenticateRequest(h, ctx2, i)
++		}
++	}()
++
++	// Goroutine 4: Simulate group AuthenticateRequest calling WithContext
++	// This matches: group.(*AuthenticatedGroupAdder).AuthenticateRequest()
++	wg.Add(1)
++	go func() {
++		defer wg.Done()
++		for i := 0; i < iterations; i++ {
++			// Simulate group authentication processing
++			simulateGroupAuthenticateRequest(h, ctx1, ctx2, i)
++		}
++	}()
++
++	wg.Wait()
++}
++
++// simulateX509AuthenticateRequest simulates the call path from x509 authenticator
++func simulateX509AuthenticateRequest(h ObserverMetric, ctx context.Context, iteration int) {
++	// Simulate the authentication request processing that calls WithContext
++	if hWithCtx, ok := h.(*Histogram); ok {
++		hWithCtx.WithContext(ctx)
++	}
++}
++
++// simulateUnionAuthenticateRequest simulates the call path from union authenticator
++func simulateUnionAuthenticateRequest(h ObserverMetric, ctx context.Context, iteration int) {
++	// Simulate union authentication processing
++	if hWithCtx, ok := h.(*Histogram); ok {
++		hWithCtx.WithContext(ctx)
++	}
++}
++
++// simulateGroupAuthenticateRequest simulates the call path from group authenticator
++func simulateGroupAuthenticateRequest(h ObserverMetric, ctx1, ctx2 context.Context, iteration int) {
++	// Alternate between contexts to simulate different authentication scenarios
++	ctx := ctx1
++	if iteration%3 == 0 {
++		ctx = ctx2
++	}
++
++	if hWithCtx, ok := h.(*Histogram); ok {
++		hWithCtx.WithContext(ctx)
++	}
++}
++
++// Helper function to create a context with a valid trace span
++func createContextWithSpan(traceID, spanID string) (context.Context, trace.Span) {
++	ctx := context.Background()
++
++	// Create a noop tracer and span for testing
++	tracer := tracenoop.NewTracerProvider().Tracer("test")
++	ctx, span := tracer.Start(ctx, "test-span")
++
++	return ctx, span
++}
+diff --git a/staging/src/k8s.io/component-base/metrics/metric.go b/staging/src/k8s.io/component-base/metrics/metric.go
+index c8b083995af21..e3052a52dd5f7 100644
+--- a/staging/src/k8s.io/component-base/metrics/metric.go
++++ b/staging/src/k8s.io/component-base/metrics/metric.go
+@@ -210,11 +210,6 @@ func (c *selfCollector) Collect(ch chan<- prometheus.Metric) {
+ 	ch <- c.metric
+ }
+ 
+-// metricWithExemplar is an interface that knows how to attach an exemplar to certain supported metric types.
+-type metricWithExemplar interface {
+-	withExemplar(v float64)
+-}
+-
+ // no-op vecs for convenience
+ var noopCounterVec = &prometheus.CounterVec{}
+ var noopHistogramVec = &prometheus.HistogramVec{}

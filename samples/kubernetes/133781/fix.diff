@@ -1,0 +1,185 @@
+diff --git a/pkg/apis/scheduling/v1/helpers.go b/pkg/apis/scheduling/v1/helpers.go
+index d4af4933cfa69..907014a7f4254 100644
+--- a/pkg/apis/scheduling/v1/helpers.go
++++ b/pkg/apis/scheduling/v1/helpers.go
+@@ -43,16 +43,29 @@ var systemPriorityClasses = []*v1.PriorityClass{
+ 	},
+ }
+ 
+-// SystemPriorityClasses returns the list of system priority classes.
+-// NOTE: be careful not to modify any of elements of the returned array directly.
++// SystemPriorityClasses returns a deep copy of the list of system priority classes.
++// If only the names are needed, use SystemPriorityClassNames().
+ func SystemPriorityClasses() []*v1.PriorityClass {
+-	return systemPriorityClasses
++	retval := make([]*v1.PriorityClass, 0, len(systemPriorityClasses))
++	for _, c := range systemPriorityClasses {
++		retval = append(retval, c.DeepCopy())
++	}
++	return retval
++}
++
++// SystemPriorityClassNames returns the names of system priority classes.
++func SystemPriorityClassNames() []string {
++	retval := make([]string, 0, len(systemPriorityClasses))
++	for _, c := range systemPriorityClasses {
++		retval = append(retval, c.Name)
++	}
++	return retval
+ }
+ 
+ // IsKnownSystemPriorityClass returns true if there's any of the system priority classes exactly
+ // matches "name", "value", "globalDefault". otherwise it will return an error.
+ func IsKnownSystemPriorityClass(name string, value int32, globalDefault bool) (bool, error) {
+-	for _, spc := range SystemPriorityClasses() {
++	for _, spc := range systemPriorityClasses {
+ 		if spc.Name == name {
+ 			if spc.Value != value {
+ 				return false, fmt.Errorf("value of %v PriorityClass must be %v", spc.Name, spc.Value)
+diff --git a/pkg/registry/scheduling/priorityclass/storage/storage.go b/pkg/registry/scheduling/priorityclass/storage/storage.go
+index 428ed730131c2..e1822af7b08ad 100644
+--- a/pkg/registry/scheduling/priorityclass/storage/storage.go
++++ b/pkg/registry/scheduling/priorityclass/storage/storage.go
+@@ -19,6 +19,7 @@ package storage
+ import (
+ 	"context"
+ 	"errors"
++
+ 	apierrors "k8s.io/apimachinery/pkg/api/errors"
+ 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+ 	"k8s.io/apimachinery/pkg/runtime"
+@@ -70,9 +71,9 @@ func (r *REST) ShortNames() []string {
+ 
+ // Delete ensures that system priority classes are not deleted.
+ func (r *REST) Delete(ctx context.Context, name string, deleteValidation rest.ValidateObjectFunc, options *metav1.DeleteOptions) (runtime.Object, bool, error) {
+-	for _, spc := range schedulingapiv1.SystemPriorityClasses() {
+-		if name == spc.Name {
+-			return nil, false, apierrors.NewForbidden(scheduling.Resource("priorityclasses"), spc.Name, errors.New("this is a system priority class and cannot be deleted"))
++	for _, spcName := range schedulingapiv1.SystemPriorityClassNames() {
++		if name == spcName {
++			return nil, false, apierrors.NewForbidden(scheduling.Resource("priorityclasses"), spcName, errors.New("this is a system priority class and cannot be deleted"))
+ 		}
+ 	}
+ 
+diff --git a/plugin/pkg/admission/defaulttolerationseconds/admission.go b/plugin/pkg/admission/defaulttolerationseconds/admission.go
+index 08b22cdb9b16c..03dfffcdc9768 100644
+--- a/plugin/pkg/admission/defaulttolerationseconds/admission.go
++++ b/plugin/pkg/admission/defaulttolerationseconds/admission.go
+@@ -20,6 +20,7 @@ import (
+ 	"context"
+ 	"fmt"
+ 	"io"
++	"sync"
+ 
+ 	"github.com/spf13/pflag"
+ 	v1 "k8s.io/api/core/v1"
+@@ -34,11 +35,21 @@ import (
+ const PluginName = "DefaultTolerationSeconds"
+ 
+ var (
++	// tolerationSecondsMutex protects registration and read in InspectFeatureGates, which is
++	// good enough for concurrent use in integration tests as long as the command
++	// line flags are not actually used by some test. In commands the registration,
++	// parsing and InspectFeatureGates are serialized.
++	tolerationSecondsMutex sync.RWMutex
++
+ 	defaultNotReadyTolerationSeconds    = int64(300)
+ 	defaultUnreachableTolerationSeconds = int64(300)
+ )
+ 
+ func RegisterFlags(fs *pflag.FlagSet) {
++	// Indirect writes of the default value!
++	tolerationSecondsMutex.Lock()
++	defer tolerationSecondsMutex.Unlock()
++
+ 	fs.Int64Var(&defaultNotReadyTolerationSeconds, "default-not-ready-toleration-seconds", defaultNotReadyTolerationSeconds,
+ 		"Indicates the tolerationSeconds of the toleration for notReady:NoExecute"+
+ 			" that is added by default to every pod that does not already have such a toleration.")
+@@ -78,17 +89,24 @@ func NewDefaultTolerationSeconds() *Plugin {
+ 
+ // InspectFeatureGates runs after command-line flags have been parsed
+ func (p *Plugin) InspectFeatureGates(featureGates featuregate.FeatureGate) {
++	// Read the default values while holding a read lock.
++	tolerationSecondsMutex.RLock()
++	defer tolerationSecondsMutex.RUnlock()
++
++	notReadyTolerationSeconds := defaultNotReadyTolerationSeconds
++	unreachableTolerationSeconds := defaultUnreachableTolerationSeconds
++
+ 	p.notReadyToleration = api.Toleration{
+ 		Key:               v1.TaintNodeNotReady,
+ 		Operator:          api.TolerationOpExists,
+ 		Effect:            api.TaintEffectNoExecute,
+-		TolerationSeconds: &defaultNotReadyTolerationSeconds,
++		TolerationSeconds: &notReadyTolerationSeconds,
+ 	}
+ 	p.unreachableToleration = api.Toleration{
+ 		Key:               v1.TaintNodeUnreachable,
+ 		Operator:          api.TolerationOpExists,
+ 		Effect:            api.TaintEffectNoExecute,
+-		TolerationSeconds: &defaultUnreachableTolerationSeconds,
++		TolerationSeconds: &unreachableTolerationSeconds,
+ 	}
+ }
+ 
+diff --git a/test/integration/apiserver/oidc/oidc_test.go b/test/integration/apiserver/oidc/oidc_test.go
+index bbbe08adc2f3c..c0b3d1649089e 100644
+--- a/test/integration/apiserver/oidc/oidc_test.go
++++ b/test/integration/apiserver/oidc/oidc_test.go
+@@ -34,7 +34,6 @@ import (
+ 	"path/filepath"
+ 	"regexp"
+ 	"strings"
+-	"sync"
+ 	"testing"
+ 	"time"
+ 
+@@ -79,12 +78,6 @@ const (
+ 	rsaKeyBitSize = 2048
+ )
+ 
+-var (
+-	// testServerMutex serializes test server starts to prevent data races
+-	// in admission plugin flag registration
+-	testServerMutex sync.Mutex
+-)
+-
+ var (
+ 	defaultRole = &rbacv1.Role{
+ 		TypeMeta:   metav1.TypeMeta{APIVersion: "rbac.authorization.k8s.io/v1", Kind: "Role"},
+@@ -2011,15 +2004,12 @@ egressSelections:
+ 	}
+ 	customFlags = append(customFlags, "--authorization-mode=RBAC")
+ 
+-	// Serialize test server starts to prevent data races in admission plugin flag registration
+-	testServerMutex.Lock()
+ 	server, err := kubeapiserverapptesting.StartTestServer(
+ 		t,
+ 		kubeapiserverapptesting.NewDefaultTestServerOptions(),
+ 		customFlags,
+ 		framework.SharedEtcd(),
+ 	)
+-	testServerMutex.Unlock()
+ 	require.NoError(t, err)
+ 
+ 	t.Cleanup(server.TearDownFn)
+diff --git a/test/integration/controlplane/transformation/kmsv2_transformation_test.go b/test/integration/controlplane/transformation/kmsv2_transformation_test.go
+index a0ecbbc1c952c..90193a7ae5ce8 100644
+--- a/test/integration/controlplane/transformation/kmsv2_transformation_test.go
++++ b/test/integration/controlplane/transformation/kmsv2_transformation_test.go
+@@ -405,13 +405,13 @@ resources:
+ // 7. when kms-plugin is down, no-op update for a pod should succeed and not result in RV change even once the DEK/seed is valid
+ func TestKMSv2ProviderKeyIDStaleness(t *testing.T) {
+ 	t.Parallel()
++	// testKMSv2ProviderKeyIDStaleness modifies global state (kmsv2.NowFunc) and thus the following two tests
++	// have to run sequentially. No other test is allowed to change kmsv2.NowFunc.
+ 	t.Run("regular gcm", func(t *testing.T) {
+-		t.Parallel()
+ 		kmsName := "kms-provider-key-id-stale-false"
+ 		testKMSv2ProviderKeyIDStaleness(t, kmsName, encryptionconfig.SetKDFForTests(kmsName, false))
+ 	})
+ 	t.Run("extended nonce gcm", func(t *testing.T) {
+-		t.Parallel()
+ 		testKMSv2ProviderKeyIDStaleness(t, "kms-provider-key-id-stale-true", func() {})
+ 	})
+ }

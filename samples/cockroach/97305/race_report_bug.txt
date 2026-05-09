@@ -1,0 +1,106 @@
+WARNING: DATA RACE
+Read at 0x00c000014248 by goroutine 12:
+  ase/cockroach-97305.(*Stream).Query()
+      /work/detector.go:14 +0x11e
+  ase/cockroach-97305.(*anomalyDetector).GetPercentileValues()
+      /work/detector.go:32 +0x104
+  ase/cockroach-97305.Test97305Race.func1()
+      /work/verified_test.go:15 +0x84
+
+Previous write at 0x00c000014248 by goroutine 8:
+  ase/cockroach-97305.(*Stream).Query()
+      /work/detector.go:14 +0x130
+  ase/cockroach-97305.(*anomalyDetector).GetPercentileValues()
+      /work/detector.go:32 +0x104
+  ase/cockroach-97305.Test97305Race.func1()
+      /work/verified_test.go:15 +0x84
+
+Goroutine 12 (running) created at:
+  ase/cockroach-97305.Test97305Race()
+      /work/verified_test.go:13 +0x1b3
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 8 (finished) created at:
+  ase/cockroach-97305.Test97305Race()
+      /work/verified_test.go:13 +0x1b3
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c000014248 by goroutine 12:
+  ase/cockroach-97305.(*Stream).Query()
+      /work/detector.go:14 +0x130
+  ase/cockroach-97305.(*anomalyDetector).GetPercentileValues()
+      /work/detector.go:32 +0x104
+  ase/cockroach-97305.Test97305Race.func1()
+      /work/verified_test.go:15 +0x84
+
+Previous write at 0x00c000014248 by goroutine 9:
+  ase/cockroach-97305.(*Stream).Query()
+      /work/detector.go:14 +0x130
+  ase/cockroach-97305.(*anomalyDetector).GetPercentileValues()
+      /work/detector.go:32 +0x104
+  ase/cockroach-97305.Test97305Race.func1()
+      /work/verified_test.go:15 +0x84
+
+Goroutine 12 (running) created at:
+  ase/cockroach-97305.Test97305Race()
+      /work/verified_test.go:13 +0x1b3
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 9 (finished) created at:
+  ase/cockroach-97305.Test97305Race()
+      /work/verified_test.go:13 +0x1b3
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c000014248 by goroutine 16:
+  ase/cockroach-97305.(*Stream).Query()
+      /work/detector.go:14 +0x130
+  ase/cockroach-97305.(*anomalyDetector).GetPercentileValues()
+      /work/detector.go:32 +0x104
+  ase/cockroach-97305.Test97305Race.func1()
+      /work/verified_test.go:15 +0x84
+
+Previous read at 0x00c000014248 by goroutine 12:
+  ase/cockroach-97305.(*Stream).Query()
+      /work/detector.go:15 +0x145
+  ase/cockroach-97305.(*anomalyDetector).GetPercentileValues()
+      /work/detector.go:32 +0x104
+  ase/cockroach-97305.Test97305Race.func1()
+      /work/verified_test.go:15 +0x84
+
+Goroutine 16 (running) created at:
+  ase/cockroach-97305.Test97305Race()
+      /work/verified_test.go:13 +0x1b3
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 12 (finished) created at:
+  ase/cockroach-97305.Test97305Race()
+      /work/verified_test.go:13 +0x1b3
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+--- FAIL: Test97305Race (0.00s)
+    testing.go:1398: race detected during execution of test
+FAIL
+FAIL	ase/cockroach-97305	0.016s
+FAIL

@@ -1,0 +1,17 @@
+diff --git a/staging/src/k8s.io/apiserver/pkg/server/mux/pathrecorder.go b/staging/src/k8s.io/apiserver/pkg/server/mux/pathrecorder.go
+index beb7a8d807c3f..3ed92d96c6d29 100644
+--- a/staging/src/k8s.io/apiserver/pkg/server/mux/pathrecorder.go
++++ b/staging/src/k8s.io/apiserver/pkg/server/mux/pathrecorder.go
+@@ -96,9 +96,11 @@ func NewPathRecorderMux(name string) *PathRecorderMux {
+ 
+ // ListedPaths returns the registered handler exposedPaths.
+ func (m *PathRecorderMux) ListedPaths() []string {
++	m.lock.Lock()
+ 	handledPaths := append([]string{}, m.exposedPaths...)
+-	sort.Strings(handledPaths)
++	m.lock.Unlock()
+ 
++	sort.Strings(handledPaths)
+ 	return handledPaths
+ }
+ 

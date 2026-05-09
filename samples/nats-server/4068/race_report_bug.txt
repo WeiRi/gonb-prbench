@@ -1,0 +1,250 @@
+WARNING: DATA RACE
+Write at 0x00c0000d90e0 by goroutine 96:
+  runtime.mapassign_faststr()
+      /usr/local/go/src/internal/runtime/maps/runtime_faststr_swiss.go:263 +0x0
+  ase/nats-server-4068.TestRaceAddAllServiceImportSubs.func2()
+      /work/verified_test.go:65 +0x217
+  ase/nats-server-4068.TestRaceAddAllServiceImportSubs.gowrap2()
+      /work/verified_test.go:71 +0x41
+
+Previous read at 0x00c0000d90e0 by goroutine 11:
+  runtime.mapIterStart()
+      /usr/local/go/src/runtime/map_swiss.go:160 +0x0
+  ase/nats-server-4068.TestRaceAddAllServiceImportSubs.func1()
+      /work/verified_test.go:48 +0x124
+  ase/nats-server-4068.TestRaceAddAllServiceImportSubs.gowrap1()
+      /work/verified_test.go:52 +0x41
+
+Goroutine 96 (running) created at:
+  ase/nats-server-4068.TestRaceAddAllServiceImportSubs()
+      /work/verified_test.go:58 +0x2b9
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1934 +0x21c
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1997 +0x44
+
+Goroutine 11 (running) created at:
+  ase/nats-server-4068.TestRaceAddAllServiceImportSubs()
+      /work/verified_test.go:43 +0x10e
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1934 +0x21c
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1997 +0x44
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c000316018 by goroutine 45:
+  ase/nats-server-4068.TestRaceAddAllServiceImportSubs.func1()
+      /work/verified_test.go:48 +0x194
+  ase/nats-server-4068.TestRaceAddAllServiceImportSubs.gowrap1()
+      /work/verified_test.go:52 +0x41
+
+Previous write at 0x00c000316018 by goroutine 96:
+  ase/nats-server-4068.TestRaceAddAllServiceImportSubs.func2()
+      /work/verified_test.go:65 +0x226
+  ase/nats-server-4068.TestRaceAddAllServiceImportSubs.gowrap2()
+      /work/verified_test.go:71 +0x41
+
+Goroutine 45 (running) created at:
+  ase/nats-server-4068.TestRaceAddAllServiceImportSubs()
+      /work/verified_test.go:43 +0x10e
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1934 +0x21c
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1997 +0x44
+
+Goroutine 96 (running) created at:
+  ase/nats-server-4068.TestRaceAddAllServiceImportSubs()
+      /work/verified_test.go:58 +0x2b9
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1934 +0x21c
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1997 +0x44
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c000314000 by goroutine 87:
+  ase/nats-server-4068.TestRaceAddAllServiceImportSubs.func1()
+      /work/verified_test.go:49 +0x1a6
+  ase/nats-server-4068.TestRaceAddAllServiceImportSubs.gowrap1()
+      /work/verified_test.go:52 +0x41
+
+Previous write at 0x00c000314000 by goroutine 96:
+  ase/nats-server-4068.TestRaceAddAllServiceImportSubs.func2()
+      /work/verified_test.go:62 +0xf3
+  ase/nats-server-4068.TestRaceAddAllServiceImportSubs.gowrap2()
+      /work/verified_test.go:71 +0x41
+
+Goroutine 87 (running) created at:
+  ase/nats-server-4068.TestRaceAddAllServiceImportSubs()
+      /work/verified_test.go:43 +0x10e
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1934 +0x21c
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1997 +0x44
+
+Goroutine 96 (running) created at:
+  ase/nats-server-4068.TestRaceAddAllServiceImportSubs()
+      /work/verified_test.go:58 +0x2b9
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1934 +0x21c
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1997 +0x44
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c0000d90e0 by goroutine 96:
+  runtime.mapdelete_faststr()
+      /usr/local/go/src/internal/runtime/maps/runtime_faststr_swiss.go:401 +0x0
+  ase/nats-server-4068.TestRaceAddAllServiceImportSubs.func2()
+      /work/verified_test.go:68 +0x193
+  ase/nats-server-4068.TestRaceAddAllServiceImportSubs.gowrap2()
+      /work/verified_test.go:71 +0x41
+
+Previous read at 0x00c0000d90e0 by goroutine 66:
+  runtime.mapIterStart()
+      /usr/local/go/src/runtime/map_swiss.go:160 +0x0
+  ase/nats-server-4068.TestRaceAddAllServiceImportSubs.func1()
+      /work/verified_test.go:48 +0x124
+  ase/nats-server-4068.TestRaceAddAllServiceImportSubs.gowrap1()
+      /work/verified_test.go:52 +0x41
+
+Goroutine 96 (running) created at:
+  ase/nats-server-4068.TestRaceAddAllServiceImportSubs()
+      /work/verified_test.go:58 +0x2b9
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1934 +0x21c
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1997 +0x44
+
+Goroutine 66 (finished) created at:
+  ase/nats-server-4068.TestRaceAddAllServiceImportSubs()
+      /work/verified_test.go:43 +0x10e
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1934 +0x21c
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1997 +0x44
+==================
+fatal error: concurrent map iteration and map write
+==================
+WARNING: DATA RACE
+Write at 0x00c0000d90e0 by goroutine 96:
+  runtime.mapassign_faststr()
+      /usr/local/go/src/internal/runtime/maps/runtime_faststr_swiss.go:263 +0x0
+  ase/nats-server-4068.TestRaceAddAllServiceImportSubs.func2()
+      /work/verified_test.go:65 +0x217
+  ase/nats-server-4068.TestRaceAddAllServiceImportSubs.gowrap2()
+      /work/verified_test.go:71 +0x41
+
+Previous read at 0x00c0000d90e0 by goroutine 85:
+  runtime.mapIterNext()
+      /usr/local/go/src/runtime/map_swiss.go:172 +0x0
+  ase/nats-server-4068.TestRaceAddAllServiceImportSubs.func1()
+      /work/verified_test.go:48 +0x1b0
+  ase/nats-server-4068.TestRaceAddAllServiceImportSubs.gowrap1()
+      /work/verified_test.go:52 +0x41
+
+Goroutine 96 (running) created at:
+  ase/nats-server-4068.TestRaceAddAllServiceImportSubs()
+      /work/verified_test.go:58 +0x2b9
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1934 +0x21c
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1997 +0x44
+
+Goroutine 85 (running) created at:
+  ase/nats-server-4068.TestRaceAddAllServiceImportSubs()
+      /work/verified_test.go:43 +0x10e
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1934 +0x21c
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1997 +0x44
+==================
+
+goroutine 70 [running]:
+internal/runtime/maps.fatal({0x64bfd6?, 0xc000580540?})
+	/usr/local/go/src/runtime/panic.go:1046 +0x18
+internal/runtime/maps.(*Iter).Next(0xc000490f38?)
+	/usr/local/go/src/internal/runtime/maps/table.go:792 +0x86
+ase/nats-server-4068.TestRaceAddAllServiceImportSubs.func1(0x0?)
+	/work/verified_test.go:48 +0x125
+created by ase/nats-server-4068.TestRaceAddAllServiceImportSubs in goroutine 6
+	/work/verified_test.go:43 +0x10f
+
+goroutine 1 [chan receive]:
+testing.(*T).Run(0xc000218000, {0x649cae, 0x1f}, 0x650b80)
+	/usr/local/go/src/testing/testing.go:2005 +0x9fe
+testing.runTests.func1(0xc000218000)
+	/usr/local/go/src/testing/testing.go:2477 +0x86
+testing.tRunner(0xc000218000, 0xc0000e9ae0)
+	/usr/local/go/src/testing/testing.go:1934 +0x21d
+testing.runTests(0xc000012300, {0x7b15d0, 0x1, 0x1}, {0x0?, 0x4b23c5?, 0x7bbb60?})
+	/usr/local/go/src/testing/testing.go:2475 +0x96d
+testing.(*M).Run(0xc0000d6a00)
+	/usr/local/go/src/testing/testing.go:2337 +0xed5
+main.main()
+	_testmain.go:45 +0x165
+
+goroutine 6 [sync.WaitGroup.Wait]:
+sync.runtime_SemacquireWaitGroup(0xc000014230?, 0x0?)
+	/usr/local/go/src/runtime/sema.go:114 +0x2e
+sync.(*WaitGroup).Wait(0xc000014230)
+	/usr/local/go/src/sync/waitgroup.go:206 +0xd3
+ase/nats-server-4068.TestRaceAddAllServiceImportSubs(0xc0002181c0?)
+	/work/verified_test.go:75 +0x44f
+testing.tRunner(0xc0002181c0, 0x650b80)
+	/usr/local/go/src/testing/testing.go:1934 +0x21d
+created by testing.(*T).Run in goroutine 1
+	/usr/local/go/src/testing/testing.go:1997 +0x9d3
+
+goroutine 7 [runnable]:
+ase/nats-server-4068.TestRaceAddAllServiceImportSubs.func1(0x650b80?)
+	/work/verified_test.go:45 +0xa5
+created by ase/nats-server-4068.TestRaceAddAllServiceImportSubs in goroutine 6
+	/work/verified_test.go:43 +0x10f
+
+goroutine 8 [runnable]:
+ase/nats-server-4068.TestRaceAddAllServiceImportSubs.func1(0x0?)
+	/work/verified_test.go:45 +0xa5
+created by ase/nats-server-4068.TestRaceAddAllServiceImportSubs in goroutine 6
+	/work/verified_test.go:43 +0x10f
+
+goroutine 9 [runnable]:
+ase/nats-server-4068.TestRaceAddAllServiceImportSubs.func1(0x0?)
+	/work/verified_test.go:45 +0xa5
+created by ase/nats-server-4068.TestRaceAddAllServiceImportSubs in goroutine 6
+	/work/verified_test.go:43 +0x10f
+
+goroutine 11 [runnable]:
+ase/nats-server-4068.TestRaceAddAllServiceImportSubs.func1(0x0?)
+	/work/verified_test.go:45 +0xa5
+created by ase/nats-server-4068.TestRaceAddAllServiceImportSubs in goroutine 6
+	/work/verified_test.go:43 +0x10f
+
+goroutine 12 [runnable]:
+ase/nats-server-4068.TestRaceAddAllServiceImportSubs.func1(0x0?)
+	/work/verified_test.go:45 +0xa5
+created by ase/nats-server-4068.TestRaceAddAllServiceImportSubs in goroutine 6
+	/work/verified_test.go:43 +0x10f
+
+goroutine 13 [runnable]:
+ase/nats-server-4068.TestRaceAddAllServiceImportSubs.func1(0x0?)
+	/work/verified_test.go:45 +0xa5
+created by ase/nats-server-4068.TestRaceAddAllServiceImportSubs in goroutine 6
+	/work/verified_test.go:43 +0x10f
+
+goroutine 14 [runnable]:
+ase/nats-server-4068.TestRaceAddAllServiceImportSubs.func1(0x0?)
+	/work/verified_test.go:45 +0xa5
+created by ase/nats-server-4068.TestRaceAddAllServiceImportSubs in goroutine 6
+	/work/verified_test.go:43 +0x10f
+
+goroutine 15 [runnable]:
+ase/nats-server-4068.TestRaceAddAllServiceImportSubs.func1(0x0?)
+	/work/verified_test.go:45 +0xa5
+created by ase/nats-server-4068.TestRaceAddAllServiceImportSubs in goroutine 6
+	/work/verified_test.go:43 +0x10f
+
+goroutine 16 [runnable]:
+ase/nats-server-4068.TestRaceAddAllServiceImportSubs.func1(0x0?)
+	/work/verified_test.go:45 +0xa5

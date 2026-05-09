@@ -1,0 +1,194 @@
+WARNING: DATA RACE
+Write at 0x00c0001963f0 by goroutine 12:
+  ase/moby-49985.(*_bugKeyring).UseKey()
+      /work/verified_test.go:45 +0x271
+  ase/moby-49985.(*_BugNetworkDB).SetPrimaryKey()
+      /work/verified_test.go:66 +0x187
+  ase/moby-49985.TestRace_PR49985_SetPrimaryKey.func1()
+      /work/verified_test.go:101 +0x14d
+  ase/moby-49985.TestRace_PR49985_SetPrimaryKey.func2()
+      /work/verified_test.go:107 +0x41
+
+Previous write at 0x00c0001963f0 by goroutine 14:
+  ase/moby-49985.(*_bugKeyring).UseKey()
+      /work/verified_test.go:45 +0x271
+  ase/moby-49985.(*_BugNetworkDB).SetPrimaryKey()
+      /work/verified_test.go:66 +0x187
+  ase/moby-49985.TestRace_PR49985_SetPrimaryKey.func1()
+      /work/verified_test.go:101 +0x14d
+  ase/moby-49985.TestRace_PR49985_SetPrimaryKey.func2()
+      /work/verified_test.go:107 +0x41
+
+Goroutine 12 (running) created at:
+  ase/moby-49985.TestRace_PR49985_SetPrimaryKey()
+      /work/verified_test.go:97 +0x637
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1595 +0x261
+  testing.(*T).Run.func1()
+      /usr/local/go/src/testing/testing.go:1648 +0x44
+
+Goroutine 14 (finished) created at:
+  ase/moby-49985.TestRace_PR49985_SetPrimaryKey()
+      /work/verified_test.go:97 +0x637
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1595 +0x261
+  testing.(*T).Run.func1()
+      /usr/local/go/src/testing/testing.go:1648 +0x44
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c0001963f0 by goroutine 12:
+  ase/moby-49985.(*_bugKeyring).PrimaryKey()
+      /work/verified_test.go:51 +0xe5
+  ase/moby-49985.(*_BugNetworkDB).readPrimary()
+      /work/verified_test.go:77 +0xc4
+  ase/moby-49985.TestRace_PR49985_SetPrimaryKey.func1()
+      /work/verified_test.go:105 +0x107
+  ase/moby-49985.TestRace_PR49985_SetPrimaryKey.func2()
+      /work/verified_test.go:107 +0x41
+
+Previous write at 0x00c0001963f0 by goroutine 14:
+  ase/moby-49985.(*_bugKeyring).UseKey()
+      /work/verified_test.go:45 +0x271
+  ase/moby-49985.(*_BugNetworkDB).SetPrimaryKey()
+      /work/verified_test.go:66 +0x187
+  ase/moby-49985.TestRace_PR49985_SetPrimaryKey.func1()
+      /work/verified_test.go:103 +0x16e
+  ase/moby-49985.TestRace_PR49985_SetPrimaryKey.func2()
+      /work/verified_test.go:107 +0x41
+
+Goroutine 12 (running) created at:
+  ase/moby-49985.TestRace_PR49985_SetPrimaryKey()
+      /work/verified_test.go:97 +0x637
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1595 +0x261
+  testing.(*T).Run.func1()
+      /usr/local/go/src/testing/testing.go:1648 +0x44
+
+Goroutine 14 (finished) created at:
+  ase/moby-49985.TestRace_PR49985_SetPrimaryKey()
+      /work/verified_test.go:97 +0x637
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1595 +0x261
+  testing.(*T).Run.func1()
+      /usr/local/go/src/testing/testing.go:1648 +0x44
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c0001963f0 by goroutine 8:
+  ase/moby-49985.(*_bugKeyring).UseKey()
+      /work/verified_test.go:45 +0x271
+  ase/moby-49985.(*_BugNetworkDB).SetPrimaryKey()
+      /work/verified_test.go:66 +0x187
+  ase/moby-49985.TestRace_PR49985_SetPrimaryKey.func1()
+      /work/verified_test.go:101 +0x14d
+  ase/moby-49985.TestRace_PR49985_SetPrimaryKey.func2()
+      /work/verified_test.go:107 +0x41
+
+Previous write at 0x00c0001963f0 by goroutine 14:
+  ase/moby-49985.(*_bugKeyring).UseKey()
+      /work/verified_test.go:45 +0x271
+  ase/moby-49985.(*_BugNetworkDB).SetPrimaryKey()
+      /work/verified_test.go:66 +0x187
+  ase/moby-49985.TestRace_PR49985_SetPrimaryKey.func1()
+      /work/verified_test.go:103 +0x16e
+  ase/moby-49985.TestRace_PR49985_SetPrimaryKey.func2()
+      /work/verified_test.go:107 +0x41
+
+Goroutine 8 (running) created at:
+  ase/moby-49985.TestRace_PR49985_SetPrimaryKey()
+      /work/verified_test.go:97 +0x637
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1595 +0x261
+  testing.(*T).Run.func1()
+      /usr/local/go/src/testing/testing.go:1648 +0x44
+
+Goroutine 14 (finished) created at:
+  ase/moby-49985.TestRace_PR49985_SetPrimaryKey()
+      /work/verified_test.go:97 +0x637
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1595 +0x261
+  testing.(*T).Run.func1()
+      /usr/local/go/src/testing/testing.go:1648 +0x44
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c0001963f0 by goroutine 12:
+  ase/moby-49985.(*_bugKeyring).PrimaryKey()
+      /work/verified_test.go:51 +0xe5
+  ase/moby-49985.(*_BugNetworkDB).readPrimary()
+      /work/verified_test.go:77 +0xc4
+  ase/moby-49985.TestRace_PR49985_SetPrimaryKey.func1()
+      /work/verified_test.go:105 +0x107
+  ase/moby-49985.TestRace_PR49985_SetPrimaryKey.func2()
+      /work/verified_test.go:107 +0x41
+
+Previous write at 0x00c0001963f0 by goroutine 15:
+  ase/moby-49985.(*_bugKeyring).UseKey()
+      /work/verified_test.go:45 +0x271
+  ase/moby-49985.(*_BugNetworkDB).SetPrimaryKey()
+      /work/verified_test.go:66 +0x187
+  ase/moby-49985.TestRace_PR49985_SetPrimaryKey.func1()
+      /work/verified_test.go:101 +0x14d
+  ase/moby-49985.TestRace_PR49985_SetPrimaryKey.func2()
+      /work/verified_test.go:107 +0x41
+
+Goroutine 12 (running) created at:
+  ase/moby-49985.TestRace_PR49985_SetPrimaryKey()
+      /work/verified_test.go:97 +0x637
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1595 +0x261
+  testing.(*T).Run.func1()
+      /usr/local/go/src/testing/testing.go:1648 +0x44
+
+Goroutine 15 (running) created at:
+  ase/moby-49985.TestRace_PR49985_SetPrimaryKey()
+      /work/verified_test.go:97 +0x637
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1595 +0x261
+  testing.(*T).Run.func1()
+      /usr/local/go/src/testing/testing.go:1648 +0x44
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c0001963f0 by goroutine 9:
+  ase/moby-49985.(*_bugKeyring).UseKey()
+      /work/verified_test.go:45 +0x271
+  ase/moby-49985.(*_BugNetworkDB).SetPrimaryKey()
+      /work/verified_test.go:66 +0x187
+  ase/moby-49985.TestRace_PR49985_SetPrimaryKey.func1()
+      /work/verified_test.go:103 +0x16e
+  ase/moby-49985.TestRace_PR49985_SetPrimaryKey.func2()
+      /work/verified_test.go:107 +0x41
+
+Previous write at 0x00c0001963f0 by goroutine 13:
+  ase/moby-49985.(*_bugKeyring).UseKey()
+      /work/verified_test.go:45 +0x271
+  ase/moby-49985.(*_BugNetworkDB).SetPrimaryKey()
+      /work/verified_test.go:66 +0x187
+  ase/moby-49985.TestRace_PR49985_SetPrimaryKey.func1()
+      /work/verified_test.go:103 +0x16e
+  ase/moby-49985.TestRace_PR49985_SetPrimaryKey.func2()
+      /work/verified_test.go:107 +0x41
+
+Goroutine 9 (running) created at:
+  ase/moby-49985.TestRace_PR49985_SetPrimaryKey()
+      /work/verified_test.go:97 +0x637
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1595 +0x261
+  testing.(*T).Run.func1()
+      /usr/local/go/src/testing/testing.go:1648 +0x44
+
+Goroutine 13 (running) created at:
+  ase/moby-49985.TestRace_PR49985_SetPrimaryKey()
+      /work/verified_test.go:97 +0x637
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1595 +0x261
+  testing.(*T).Run.func1()
+      /usr/local/go/src/testing/testing.go:1648 +0x44
+==================
+--- FAIL: TestRace_PR49985_SetPrimaryKey (0.01s)
+    testing.go:1465: race detected during execution of test
+FAIL
+FAIL	ase/moby-49985	0.026s
+FAIL

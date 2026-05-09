@@ -1,0 +1,21 @@
+diff --git a/etcdserver/api/rafthttp/transport.go b/etcdserver/api/rafthttp/transport.go
+index d6e55091c33f..7191c3d6063f 100644
+--- a/etcdserver/api/rafthttp/transport.go
++++ b/etcdserver/api/rafthttp/transport.go
+@@ -437,12 +437,16 @@ type Pausable interface {
+ }
+ 
+ func (t *Transport) Pause() {
++	t.mu.RLock()
++	defer t.mu.RUnlock()
+ 	for _, p := range t.peers {
+ 		p.(Pausable).Pause()
+ 	}
+ }
+ 
+ func (t *Transport) Resume() {
++	t.mu.RLock()
++	defer t.mu.RUnlock()
+ 	for _, p := range t.peers {
+ 		p.(Pausable).Resume()
+ 	}

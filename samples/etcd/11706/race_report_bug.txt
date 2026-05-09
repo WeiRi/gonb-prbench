@@ -1,0 +1,222 @@
+WARNING: DATA RACE
+Read at 0x00c00019e540 by goroutine 15:
+  runtime.mapiterinit()
+      /usr/local/go/src/runtime/map.go:816 +0x0
+  ase/etcd-11706.WithRequireLeader()
+      /work/ctx.go:13 +0xa4
+  ase/etcd-11706.TestRace_11706.func2()
+      /work/verified_test.go:26 +0x69
+
+Previous write at 0x00c00019e540 by goroutine 8:
+  runtime.mapassign_faststr()
+      /usr/local/go/src/runtime/map_faststr.go:203 +0x0
+  ase/etcd-11706.MDLocal.Set()
+      /work/metadata_stub.go:17 +0xaf
+  ase/etcd-11706.TestRace_11706.func1()
+      /work/verified_test.go:19 +0x51
+
+Goroutine 15 (running) created at:
+  ase/etcd-11706.TestRace_11706()
+      /work/verified_test.go:23 +0x26a
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 8 (finished) created at:
+  ase/etcd-11706.TestRace_11706()
+      /work/verified_test.go:17 +0x336
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c0001f0088 by goroutine 15:
+  ase/etcd-11706.WithRequireLeader()
+      /work/ctx.go:13 +0x110
+  ase/etcd-11706.TestRace_11706.func2()
+      /work/verified_test.go:26 +0x69
+
+Previous write at 0x00c0001f0088 by goroutine 8:
+  ase/etcd-11706.MDLocal.Set()
+      /work/metadata_stub.go:17 +0xbb
+  ase/etcd-11706.TestRace_11706.func1()
+      /work/verified_test.go:19 +0x51
+
+Goroutine 15 (running) created at:
+  ase/etcd-11706.TestRace_11706()
+      /work/verified_test.go:23 +0x26a
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 8 (finished) created at:
+  ase/etcd-11706.TestRace_11706()
+      /work/verified_test.go:17 +0x336
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c00019e540 by goroutine 12:
+  runtime.mapassign_faststr()
+      /usr/local/go/src/runtime/map_faststr.go:203 +0x0
+  ase/etcd-11706.MDLocal.Set()
+      /work/metadata_stub.go:17 +0xaf
+  ase/etcd-11706.TestRace_11706.func1()
+      /work/verified_test.go:19 +0x51
+
+Previous write at 0x00c00019e540 by goroutine 8:
+  runtime.mapassign_faststr()
+      /usr/local/go/src/runtime/map_faststr.go:203 +0x0
+  ase/etcd-11706.MDLocal.Set()
+      /work/metadata_stub.go:17 +0xaf
+  ase/etcd-11706.TestRace_11706.func1()
+      /work/verified_test.go:19 +0x51
+
+Goroutine 12 (running) created at:
+  ase/etcd-11706.TestRace_11706()
+      /work/verified_test.go:17 +0x336
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 8 (finished) created at:
+  ase/etcd-11706.TestRace_11706()
+      /work/verified_test.go:17 +0x336
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c00019e540 by goroutine 12:
+  runtime.mapassign_faststr()
+      /usr/local/go/src/runtime/map_faststr.go:203 +0x0
+  ase/etcd-11706.MDLocal.Set()
+      /work/metadata_stub.go:17 +0xaf
+  ase/etcd-11706.TestRace_11706.func1()
+      /work/verified_test.go:19 +0x51
+
+Previous read at 0x00c00019e540 by goroutine 15:
+  runtime.mapiternext()
+      /usr/local/go/src/runtime/map.go:862 +0x0
+  runtime.mapiterinit()
+      /usr/local/go/src/runtime/map.go:859 +0x22e
+  ase/etcd-11706.TestRace_11706.func2()
+      /work/verified_test.go:26 +0x69
+
+Goroutine 12 (running) created at:
+  ase/etcd-11706.TestRace_11706()
+      /work/verified_test.go:17 +0x336
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 15 (running) created at:
+  ase/etcd-11706.TestRace_11706()
+      /work/verified_test.go:23 +0x26a
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+fatal error: concurrent map iteration and map write
+
+goroutine 43 [running]:
+ase/etcd-11706.WithRequireLeader({0x622790, 0xc0001f7710})
+	/work/ctx.go:13 +0xa5
+ase/etcd-11706.TestRace_11706.func2()
+	/work/verified_test.go:26 +0x6a
+created by ase/etcd-11706.TestRace_11706 in goroutine 35
+	/work/verified_test.go:23 +0x26b
+
+goroutine 1 [chan receive]:
+testing.(*T).Run(0xc0001d0340, {0x5e937a, 0xe}, 0x5f3a68)
+	/usr/local/go/src/testing/testing.go:1750 +0x851
+testing.runTests.func1(0xc0001d0340)
+	/usr/local/go/src/testing/testing.go:2161 +0x86
+testing.tRunner(0xc0001d0340, 0xc0001b7b10)
+	/usr/local/go/src/testing/testing.go:1689 +0x21f
+testing.runTests(0xc00019c0a8, {0x71a120, 0x1, 0x1}, {0xc0001b7bb8?, 0xc0001b7c00?, 0x7238e0?})
+	/usr/local/go/src/testing/testing.go:2159 +0x8bf
+testing.(*M).Run(0xc0001a20a0)
+	/usr/local/go/src/testing/testing.go:2027 +0xf18
+main.main()
+	_testmain.go:47 +0x2be
+
+goroutine 35 [semacquire]:
+sync.runtime_Semacquire(0xc0001a8178?)
+	/usr/local/go/src/runtime/sema.go:62 +0x25
+sync.(*WaitGroup).Wait(0xc0001a8170)
+	/usr/local/go/src/sync/waitgroup.go:116 +0xa5
+ase/etcd-11706.TestRace_11706(0xc0001d04e0?)
+	/work/verified_test.go:31 +0x3f9
+testing.tRunner(0xc0001d04e0, 0x5f3a68)
+	/usr/local/go/src/testing/testing.go:1689 +0x21f
+created by testing.(*T).Run in goroutine 1
+	/usr/local/go/src/testing/testing.go:1742 +0x826
+
+goroutine 37 [runnable]:
+context.WithValue({0x622720, 0x783240}, {0x5c3600, 0x783240}, {0x5c9d60, 0xc00019e540})
+	/usr/local/go/src/context/context.go:713 +0x1bf
+ase/etcd-11706.NewOutgoingContextLocal(...)
+	/work/metadata_stub.go:27
+ase/etcd-11706.TestRace_11706.func2()
+	/work/verified_test.go:25 +0x65
+created by ase/etcd-11706.TestRace_11706 in goroutine 35
+	/work/verified_test.go:23 +0x26b
+
+goroutine 38 [runnable]:
+ase/etcd-11706.MDLocal.Set(...)
+	/work/metadata_stub.go:17
+ase/etcd-11706.TestRace_11706.func1()
+	/work/verified_test.go:19 +0x5e
+created by ase/etcd-11706.TestRace_11706 in goroutine 35
+	/work/verified_test.go:17 +0x337
+
+goroutine 39 [runnable]:
+context.WithValue({0x622720, 0x783240}, {0x5c3600, 0x783240}, {0x5c9d60, 0xc00019e540})
+	/usr/local/go/src/context/context.go:713 +0x1bf
+ase/etcd-11706.NewOutgoingContextLocal(...)
+	/work/metadata_stub.go:27
+ase/etcd-11706.TestRace_11706.func2()
+	/work/verified_test.go:25 +0x65
+created by ase/etcd-11706.TestRace_11706 in goroutine 35
+	/work/verified_test.go:23 +0x26b
+
+goroutine 40 [runnable]:
+ase/etcd-11706.MDLocal.Set(...)
+	/work/metadata_stub.go:17
+ase/etcd-11706.TestRace_11706.func1()
+	/work/verified_test.go:19 +0x5e
+created by ase/etcd-11706.TestRace_11706 in goroutine 35
+	/work/verified_test.go:17 +0x337
+
+goroutine 41 [runnable]:
+context.WithValue({0x622720, 0x783240}, {0x5c3600, 0x783240}, {0x5c9d60, 0xc00019e540})
+	/usr/local/go/src/context/context.go:713 +0x1bf
+ase/etcd-11706.NewOutgoingContextLocal(...)
+	/work/metadata_stub.go:27
+ase/etcd-11706.TestRace_11706.func2()
+	/work/verified_test.go:25 +0x65
+created by ase/etcd-11706.TestRace_11706 in goroutine 35
+	/work/verified_test.go:23 +0x26b
+
+goroutine 42 [runnable]:
+ase/etcd-11706.MDLocal.Set(...)
+	/work/metadata_stub.go:17
+ase/etcd-11706.TestRace_11706.func1()
+	/work/verified_test.go:19 +0x5e
+created by ase/etcd-11706.TestRace_11706 in goroutine 35
+	/work/verified_test.go:17 +0x337
+FAIL	ase/etcd-11706	0.021s
+FAIL

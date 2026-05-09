@@ -1,0 +1,23 @@
+diff --git a/pkg/controller/garbagecollector/graph.go b/pkg/controller/garbagecollector/graph.go
+index de017b4c40ba7..77715309729e1 100644
+--- a/pkg/controller/garbagecollector/graph.go
++++ b/pkg/controller/garbagecollector/graph.go
+@@ -206,10 +206,17 @@ func ownerReferenceMatchesCoordinates(a, b metav1.OwnerReference) bool {
+ }
+ 
+ // String renders node as a string using fmt. Acquires a read lock to ensure the
+-// reflective dump of dependents doesn't race with any concurrent writes.
++// reflective dump of fields doesn't race with any concurrent writes.
+ func (n *node) String() string {
++	n.beingDeletedLock.RLock()
++	defer n.beingDeletedLock.RUnlock()
++
++	n.virtualLock.RLock()
++	defer n.virtualLock.RUnlock()
++
+ 	n.dependentsLock.RLock()
+ 	defer n.dependentsLock.RUnlock()
++
+ 	return fmt.Sprintf("%#v", n)
+ }
+ 

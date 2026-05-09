@@ -1,0 +1,24 @@
+diff --git a/daemon/graphdriver/counter.go b/daemon/graphdriver/counter.go
+index 5ea604f5b6d4c..b1cf953c7e490 100644
+--- a/daemon/graphdriver/counter.go
++++ b/daemon/graphdriver/counter.go
+@@ -40,8 +40,9 @@ func (c *RefCounter) Increment(path string) int {
+ 		}
+ 	}
+ 	m.count++
++	count := m.count
+ 	c.mu.Unlock()
+-	return m.count
++	return count
+ }
+ 
+ // Decrement decreases the ref count for the given id and returns the current count
+@@ -62,6 +63,7 @@ func (c *RefCounter) Decrement(path string) int {
+ 		}
+ 	}
+ 	m.count--
++	count := m.count
+ 	c.mu.Unlock()
+-	return m.count
++	return count
+ }

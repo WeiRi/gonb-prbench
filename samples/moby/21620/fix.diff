@@ -1,0 +1,97 @@
+diff --git a/libcontainerd/client.go b/libcontainerd/client.go
+index 4485b75cf917e..7e8e47bcfac7c 100644
+--- a/libcontainerd/client.go
++++ b/libcontainerd/client.go
+@@ -4,35 +4,23 @@ import (
+ 	"fmt"
+ 	"sync"
+ 
+-	"github.com/Sirupsen/logrus"
++	"github.com/docker/docker/pkg/locker"
+ )
+ 
+ // clientCommon contains the platform agnostic fields used in the client structure
+ type clientCommon struct {
+-	backend          Backend
+-	containers       map[string]*container
+-	containerMutexes map[string]*sync.Mutex // lock by container ID
+-	mapMutex         sync.RWMutex           // protects read/write oprations from containers map
+-	sync.Mutex                              // lock for containerMutexes map access
++	backend    Backend
++	containers map[string]*container
++	locker     *locker.Locker
++	mapMutex   sync.RWMutex // protects read/write oprations from containers map
+ }
+ 
+ func (clnt *client) lock(containerID string) {
+-	clnt.Lock()
+-	if _, ok := clnt.containerMutexes[containerID]; !ok {
+-		clnt.containerMutexes[containerID] = &sync.Mutex{}
+-	}
+-	clnt.Unlock()
+-	clnt.containerMutexes[containerID].Lock()
++	clnt.locker.Lock(containerID)
+ }
+ 
+ func (clnt *client) unlock(containerID string) {
+-	clnt.Lock()
+-	if l, ok := clnt.containerMutexes[containerID]; ok {
+-		l.Unlock()
+-	} else {
+-		logrus.Warnf("unlock of non-existing mutex: %s", containerID)
+-	}
+-	clnt.Unlock()
++	clnt.locker.Unlock(containerID)
+ }
+ 
+ // must hold a lock for cont.containerID
+diff --git a/libcontainerd/remote_linux.go b/libcontainerd/remote_linux.go
+index eddcc7fba330b..4df3e1f098aff 100644
+--- a/libcontainerd/remote_linux.go
++++ b/libcontainerd/remote_linux.go
+@@ -16,6 +16,7 @@ import (
+ 
+ 	"github.com/Sirupsen/logrus"
+ 	containerd "github.com/docker/containerd/api/grpc/types"
++	"github.com/docker/docker/pkg/locker"
+ 	sysinfo "github.com/docker/docker/pkg/system"
+ 	"github.com/docker/docker/utils"
+ 	"golang.org/x/net/context"
+@@ -169,9 +170,9 @@ func (r *remote) Cleanup() {
+ func (r *remote) Client(b Backend) (Client, error) {
+ 	c := &client{
+ 		clientCommon: clientCommon{
+-			backend:          b,
+-			containerMutexes: make(map[string]*sync.Mutex),
+-			containers:       make(map[string]*container),
++			backend:    b,
++			containers: make(map[string]*container),
++			locker:     locker.New(),
+ 		},
+ 		remote:        r,
+ 		exitNotifiers: make(map[string]*exitNotifier),
+diff --git a/libcontainerd/remote_windows.go b/libcontainerd/remote_windows.go
+index c313779ee26cd..ce01f74f25c0d 100644
+--- a/libcontainerd/remote_windows.go
++++ b/libcontainerd/remote_windows.go
+@@ -1,6 +1,6 @@
+ package libcontainerd
+ 
+-import "sync"
++import "github.com/docker/docker/pkg/locker"
+ 
+ type remote struct {
+ }
+@@ -8,9 +8,9 @@ type remote struct {
+ func (r *remote) Client(b Backend) (Client, error) {
+ 	c := &client{
+ 		clientCommon: clientCommon{
+-			backend:          b,
+-			containerMutexes: make(map[string]*sync.Mutex),
+-			containers:       make(map[string]*container),
++			backend:    b,
++			containers: make(map[string]*container),
++			locker:     locker.New(),
+ 		},
+ 	}
+ 	return c, nil

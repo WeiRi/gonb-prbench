@@ -1,0 +1,56 @@
+WARNING: DATA RACE
+Write at 0x00c00012814f by goroutine 8:
+  ase/grpc-go-3763.TestRace_3763.func1()
+      /work/verified_test.go:14 +0xa4
+
+Previous read at 0x00c00012814f by goroutine 102:
+  ase/grpc-go-3763.TestRace_3763.func2()
+      /work/verified_test.go:17 +0xa4
+
+Goroutine 8 (running) created at:
+  ase/grpc-go-3763.TestRace_3763()
+      /work/verified_test.go:13 +0x7e
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1595 +0x261
+  testing.(*T).Run.func1()
+      /usr/local/go/src/testing/testing.go:1648 +0x44
+
+Goroutine 102 (finished) created at:
+  ase/grpc-go-3763.TestRace_3763()
+      /work/verified_test.go:16 +0x151
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1595 +0x261
+  testing.(*T).Run.func1()
+      /usr/local/go/src/testing/testing.go:1648 +0x44
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c00012814f by goroutine 26:
+  ase/grpc-go-3763.TestRace_3763.func1()
+      /work/verified_test.go:14 +0xa4
+
+Previous write at 0x00c00012814f by goroutine 48:
+  ase/grpc-go-3763.TestRace_3763.func1()
+      /work/verified_test.go:14 +0xa4
+
+Goroutine 26 (running) created at:
+  ase/grpc-go-3763.TestRace_3763()
+      /work/verified_test.go:13 +0x7e
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1595 +0x261
+  testing.(*T).Run.func1()
+      /usr/local/go/src/testing/testing.go:1648 +0x44
+
+Goroutine 48 (running) created at:
+  ase/grpc-go-3763.TestRace_3763()
+      /work/verified_test.go:13 +0x7e
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1595 +0x261
+  testing.(*T).Run.func1()
+      /usr/local/go/src/testing/testing.go:1648 +0x44
+==================
+--- FAIL: TestRace_3763 (0.00s)
+    testing.go:1465: race detected during execution of test
+FAIL
+FAIL	ase/grpc-go-3763	0.025s
+FAIL

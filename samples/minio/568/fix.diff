@@ -1,0 +1,21 @@
+diff --git a/pkg/storage/drivers/memory/memory_intelligent.go b/pkg/storage/drivers/memory/memory_intelligent.go
+index 8d0d4bbbe86d3..31660f9373936 100644
+--- a/pkg/storage/drivers/memory/memory_intelligent.go
++++ b/pkg/storage/drivers/memory/memory_intelligent.go
+@@ -89,13 +89,14 @@ func (r *Intelligent) ExpireObjects(gcInterval time.Duration) {
+ 	r.gcInterval = gcInterval
+ 	go func() {
+ 		for range time.Tick(gcInterval) {
++			r.Lock()
+ 			for key := range r.items {
+-				r.Lock()
++
+ 				if !r.isValid(key) {
+ 					r.Delete(key)
+ 				}
+-				r.Unlock()
+ 			}
++			r.Unlock()
+ 		}
+ 	}()
+ }

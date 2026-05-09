@@ -1,0 +1,206 @@
+WARNING: DATA RACE
+Read at 0x00c000022310 by goroutine 7:
+  ase/go-ethereum-23435.(*worker).Close()
+      /work/worker.go:35 +0x1b9
+  ase/go-ethereum-23435.TestRace_23435_worker_close_vs_mainLoop_current()
+      /work/verified_test.go:15 +0x1af
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Previous write at 0x00c000022310 by goroutine 8:
+  ase/go-ethereum-23435.(*worker).MainLoop()
+      /work/worker.go:49 +0xe4
+  ase/go-ethereum-23435.TestRace_23435_worker_close_vs_mainLoop_current.gowrap1()
+      /work/verified_test.go:13 +0x1f
+
+Goroutine 7 (running) created at:
+  testing.(*T).Run()
+      /usr/local/go/src/testing/testing.go:1742 +0x825
+  testing.runTests.func1()
+      /usr/local/go/src/testing/testing.go:2161 +0x85
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.runTests()
+      /usr/local/go/src/testing/testing.go:2159 +0x8be
+  testing.(*M).Run()
+      /usr/local/go/src/testing/testing.go:2027 +0xf17
+  main.main()
+      _testmain.go:47 +0x2bd
+
+Goroutine 8 (running) created at:
+  ase/go-ethereum-23435.TestRace_23435_worker_close_vs_mainLoop_current()
+      /work/verified_test.go:13 +0x1a4
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c000022310 by goroutine 7:
+  ase/go-ethereum-23435.(*worker).Close()
+      /work/worker.go:35 +0x1c9
+  ase/go-ethereum-23435.TestRace_23435_worker_close_vs_mainLoop_current()
+      /work/verified_test.go:15 +0x1af
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Previous write at 0x00c000022310 by goroutine 8:
+  ase/go-ethereum-23435.(*worker).MainLoop()
+      /work/worker.go:49 +0xe4
+  ase/go-ethereum-23435.TestRace_23435_worker_close_vs_mainLoop_current.gowrap1()
+      /work/verified_test.go:13 +0x1f
+
+Goroutine 7 (running) created at:
+  testing.(*T).Run()
+      /usr/local/go/src/testing/testing.go:1742 +0x825
+  testing.runTests.func1()
+      /usr/local/go/src/testing/testing.go:2161 +0x85
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.runTests()
+      /usr/local/go/src/testing/testing.go:2159 +0x8be
+  testing.(*M).Run()
+      /usr/local/go/src/testing/testing.go:2027 +0xf17
+  main.main()
+      _testmain.go:47 +0x2bd
+
+Goroutine 8 (running) created at:
+  ase/go-ethereum-23435.TestRace_23435_worker_close_vs_mainLoop_current()
+      /work/verified_test.go:13 +0x1a4
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c00024eb78 by goroutine 7:
+  ase/go-ethereum-23435.(*worker).Close()
+      /work/worker.go:35 +0x1dd
+  ase/go-ethereum-23435.TestRace_23435_worker_close_vs_mainLoop_current()
+      /work/verified_test.go:15 +0x1af
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Previous write at 0x00c00024eb78 by goroutine 8:
+  ase/go-ethereum-23435.(*worker).MainLoop()
+      /work/worker.go:49 +0xa4
+  ase/go-ethereum-23435.TestRace_23435_worker_close_vs_mainLoop_current.gowrap1()
+      /work/verified_test.go:13 +0x1f
+
+Goroutine 7 (running) created at:
+  testing.(*T).Run()
+      /usr/local/go/src/testing/testing.go:1742 +0x825
+  testing.runTests.func1()
+      /usr/local/go/src/testing/testing.go:2161 +0x85
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.runTests()
+      /usr/local/go/src/testing/testing.go:2159 +0x8be
+  testing.(*M).Run()
+      /usr/local/go/src/testing/testing.go:2027 +0xf17
+  main.main()
+      _testmain.go:47 +0x2bd
+
+Goroutine 8 (running) created at:
+  ase/go-ethereum-23435.TestRace_23435_worker_close_vs_mainLoop_current()
+      /work/verified_test.go:13 +0x1a4
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c0002516ff by goroutine 7:
+  ase/go-ethereum-23435.(*stateDB).StopPrefetcher()
+      /work/worker.go:15 +0x21a
+  ase/go-ethereum-23435.(*worker).Close()
+      /work/worker.go:36 +0x1e9
+  ase/go-ethereum-23435.TestRace_23435_worker_close_vs_mainLoop_current()
+      /work/verified_test.go:15 +0x1af
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Previous write at 0x00c0002516ff by goroutine 8:
+  ase/go-ethereum-23435.(*worker).MainLoop()
+      /work/worker.go:49 +0x8e
+  ase/go-ethereum-23435.TestRace_23435_worker_close_vs_mainLoop_current.gowrap1()
+      /work/verified_test.go:13 +0x1f
+
+Goroutine 7 (running) created at:
+  testing.(*T).Run()
+      /usr/local/go/src/testing/testing.go:1742 +0x825
+  testing.runTests.func1()
+      /usr/local/go/src/testing/testing.go:2161 +0x85
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.runTests()
+      /usr/local/go/src/testing/testing.go:2159 +0x8be
+  testing.(*M).Run()
+      /usr/local/go/src/testing/testing.go:2027 +0xf17
+  main.main()
+      _testmain.go:47 +0x2bd
+
+Goroutine 8 (running) created at:
+  ase/go-ethereum-23435.TestRace_23435_worker_close_vs_mainLoop_current()
+      /work/verified_test.go:13 +0x1a4
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c000022310 by goroutine 8:
+  ase/go-ethereum-23435.(*worker).MainLoop()
+      /work/worker.go:49 +0xe4
+  ase/go-ethereum-23435.TestRace_23435_worker_close_vs_mainLoop_current.gowrap1()
+      /work/verified_test.go:13 +0x1f
+
+Previous read at 0x00c000022310 by goroutine 7:
+  ase/go-ethereum-23435.(*worker).Close()
+      /work/worker.go:36 +0x1f2
+  ase/go-ethereum-23435.TestRace_23435_worker_close_vs_mainLoop_current()
+      /work/verified_test.go:15 +0x1af
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 8 (running) created at:
+  ase/go-ethereum-23435.TestRace_23435_worker_close_vs_mainLoop_current()
+      /work/verified_test.go:13 +0x1a4
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 7 (running) created at:
+  testing.(*T).Run()
+      /usr/local/go/src/testing/testing.go:1742 +0x825
+  testing.runTests.func1()
+      /usr/local/go/src/testing/testing.go:2161 +0x85
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.runTests()
+      /usr/local/go/src/testing/testing.go:2159 +0x8be
+  testing.(*M).Run()
+      /usr/local/go/src/testing/testing.go:2027 +0xf17
+  main.main()
+      _testmain.go:47 +0x2bd
+==================
+--- FAIL: TestRace_23435_worker_close_vs_mainLoop_current (0.01s)
+    testing.go:1398: race detected during execution of test
+FAIL
+FAIL	ase/go-ethereum-23435	0.030s
+FAIL

@@ -1,0 +1,266 @@
+diff --git a/client/v3/client.go b/client/v3/client.go
+index c712b76c38ab..bcd9f0b837d8 100644
+--- a/client/v3/client.go
++++ b/client/v3/client.go
+@@ -20,6 +20,7 @@ import (
+ 	"fmt"
+ 	"strings"
+ 	"sync"
++	"sync/atomic"
+ 	"time"
+ 
+ 	"github.com/coreos/go-semver/semver"
+@@ -78,8 +79,7 @@ type Client struct {
+ 
+ 	callOpts []grpc.CallOption
+ 
+-	lgMu *sync.RWMutex
+-	lg   *zap.Logger
++	lg atomic.Pointer[zap.Logger]
+ }
+ 
+ // New creates a new etcdv3 client from a given configuration.
+@@ -96,12 +96,12 @@ func New(cfg Config) (*Client, error) {
+ // service interface implementations and do not need connection management.
+ func NewCtxClient(ctx context.Context, opts ...Option) *Client {
+ 	cctx, cancel := context.WithCancel(ctx)
+-	c := &Client{ctx: cctx, cancel: cancel, lgMu: new(sync.RWMutex), epMu: new(sync.RWMutex)}
++	c := &Client{ctx: cctx, cancel: cancel, epMu: new(sync.RWMutex)}
+ 	for _, opt := range opts {
+ 		opt(c)
+ 	}
+-	if c.lg == nil {
+-		c.lg = zap.NewNop()
++	if c.lg.Load() == nil {
++		c.lg.Store(zap.NewNop())
+ 	}
+ 	return c
+ }
+@@ -122,7 +122,7 @@ func NewFromURLs(urls []string) (*Client, error) {
+ // WithZapLogger is a NewCtxClient option that overrides the logger
+ func WithZapLogger(lg *zap.Logger) Option {
+ 	return func(c *Client) {
+-		c.lg = lg
++		c.lg.Store(lg)
+ 	}
+ }
+ 
+@@ -133,19 +133,14 @@ func WithZapLogger(lg *zap.Logger) Option {
+ // Does not changes grpcLogger, that can be explicitly configured
+ // using grpc_zap.ReplaceGrpcLoggerV2(..) method.
+ func (c *Client) WithLogger(lg *zap.Logger) *Client {
+-	c.lgMu.Lock()
+-	c.lg = lg
+-	c.lgMu.Unlock()
++	c.lg.Store(lg)
+ 	return c
+ }
+ 
+ // GetLogger gets the logger.
+ // NOTE: This method is for internal use of etcd-client library and should not be used as general-purpose logger.
+ func (c *Client) GetLogger() *zap.Logger {
+-	c.lgMu.RLock()
+-	l := c.lg
+-	c.lgMu.RUnlock()
+-	return l
++	return c.lg.Load()
+ }
+ 
+ // Close shuts down the client's etcd connections.
+@@ -205,7 +200,7 @@ func (c *Client) Sync(ctx context.Context) error {
+ 		return len(eps) > 0, nil
+ 	})
+ 	c.SetEndpoints(eps...)
+-	c.lg.Debug("set etcd endpoints by autoSync", zap.Strings("endpoints", eps))
++	c.GetLogger().Debug("set etcd endpoints by autoSync", zap.Strings("endpoints", eps))
+ 	return nil
+ }
+ 
+@@ -223,7 +218,7 @@ func (c *Client) autoSync() {
+ 			err := c.Sync(ctx)
+ 			cancel()
+ 			if err != nil && !errors.Is(err, c.ctx.Err()) {
+-				c.lg.Info("Auto sync endpoints failed.", zap.Error(err))
++				c.GetLogger().Info("Auto sync endpoints failed.", zap.Error(err))
+ 			}
+ 		}
+ 	}
+@@ -402,23 +397,24 @@ func newClient(cfg *Config) (*Client, error) {
+ 		cancel:   cancel,
+ 		epMu:     new(sync.RWMutex),
+ 		callOpts: defaultCallOpts,
+-		lgMu:     new(sync.RWMutex),
+ 	}
+ 
+ 	var err error
++	var lg *zap.Logger
+ 	if cfg.Logger != nil {
+-		client.lg = cfg.Logger
++		lg = cfg.Logger
+ 	} else if cfg.LogConfig != nil {
+-		client.lg, err = cfg.LogConfig.Build()
++		lg, err = cfg.LogConfig.Build()
+ 	} else {
+-		client.lg, err = logutil.CreateDefaultZapLogger(etcdClientDebugLevel())
+-		if client.lg != nil {
+-			client.lg = client.lg.Named("etcd-client")
++		lg, err = logutil.CreateDefaultZapLogger(etcdClientDebugLevel())
++		if lg != nil {
++			lg = lg.Named("etcd-client")
+ 		}
+ 	}
+ 	if err != nil {
+ 		return nil, err
+ 	}
++	client.lg.Store(lg)
+ 
+ 	if cfg.Username != "" && cfg.Password != "" {
+ 		client.Username = cfg.Username
+@@ -508,10 +504,10 @@ func (c *Client) roundRobinQuorumBackoff(waitBetween time.Duration, jitterFracti
+ 		n := uint(len(c.Endpoints()))
+ 		quorum := (n/2 + 1)
+ 		if attempt%quorum == 0 {
+-			c.lg.Debug("backoff", zap.Uint("attempt", attempt), zap.Uint("quorum", quorum), zap.Duration("waitBetween", waitBetween), zap.Float64("jitterFraction", jitterFraction))
++			c.GetLogger().Debug("backoff", zap.Uint("attempt", attempt), zap.Uint("quorum", quorum), zap.Duration("waitBetween", waitBetween), zap.Float64("jitterFraction", jitterFraction))
+ 			return jitterUp(waitBetween, jitterFraction)
+ 		}
+-		c.lg.Debug("backoff skipped", zap.Uint("attempt", attempt), zap.Uint("quorum", quorum))
++		c.GetLogger().Debug("backoff skipped", zap.Uint("attempt", attempt), zap.Uint("quorum", quorum))
+ 		return 0
+ 	}
+ }
+diff --git a/client/v3/client_test.go b/client/v3/client_test.go
+index 151c24166920..e6c9844be192 100644
+--- a/client/v3/client_test.go
++++ b/client/v3/client_test.go
+@@ -257,12 +257,12 @@ func TestCloseCtxClient(t *testing.T) {
+ func TestWithLogger(t *testing.T) {
+ 	ctx := t.Context()
+ 	c := NewCtxClient(ctx)
+-	if c.lg == nil {
++	if c.lg.Load() == nil {
+ 		t.Errorf("unexpected nil in *zap.Logger")
+ 	}
+ 
+ 	c.WithLogger(nil)
+-	if c.lg != nil {
++	if c.GetLogger() != nil {
+ 		t.Errorf("WithLogger should modify *zap.Logger")
+ 	}
+ }
+@@ -272,7 +272,7 @@ func TestZapWithLogger(t *testing.T) {
+ 	lg := zap.NewNop()
+ 	c := NewCtxClient(ctx, WithZapLogger(lg))
+ 
+-	if c.lg != lg {
++	if c.GetLogger() != lg {
+ 		t.Errorf("WithZapLogger should modify *zap.Logger")
+ 	}
+ }
+diff --git a/client/v3/lease.go b/client/v3/lease.go
+index 11b583482863..ab5c559a5487 100644
+--- a/client/v3/lease.go
++++ b/client/v3/lease.go
+@@ -204,7 +204,7 @@ func NewLeaseFromLeaseClient(remote pb.LeaseClient, c *Client, keepAliveTimeout
+ 		l.firstKeepAliveTimeout = defaultTTL
+ 	}
+ 	if c != nil {
+-		l.lg = c.lg
++		l.lg = c.GetLogger()
+ 		l.callOpts = c.callOpts
+ 	}
+ 	reqLeaderCtx := WithRequireLeader(context.Background())
+diff --git a/client/v3/maintenance.go b/client/v3/maintenance.go
+index 00aaacd15fdc..d76ae231feda 100644
+--- a/client/v3/maintenance.go
++++ b/client/v3/maintenance.go
+@@ -113,7 +113,7 @@ type maintenance struct {
+ 
+ func NewMaintenance(c *Client) Maintenance {
+ 	api := &maintenance{
+-		lg: c.lg,
++		lg: c.GetLogger(),
+ 		dial: func(endpoint string) (pb.MaintenanceClient, func(), error) {
+ 			conn, err := c.Dial(endpoint)
+ 			if err != nil {
+@@ -140,7 +140,7 @@ func NewMaintenanceFromMaintenanceClient(remote pb.MaintenanceClient, c *Client)
+ 	}
+ 	if c != nil {
+ 		api.callOpts = c.callOpts
+-		api.lg = c.lg
++		api.lg = c.GetLogger()
+ 	}
+ 	return api
+ }
+diff --git a/client/v3/retry_interceptor.go b/client/v3/retry_interceptor.go
+index 117220a96e4f..e54726b4693a 100644
+--- a/client/v3/retry_interceptor.go
++++ b/client/v3/retry_interceptor.go
+@@ -240,12 +240,12 @@ func (s *serverStreamingRetryingStream) RecvMsg(m any) error {
+ 		}
+ 		newStream, err := s.reestablishStreamAndResendBuffer(s.ctx)
+ 		if err != nil {
+-			s.client.lg.Error("failed reestablishStreamAndResendBuffer", zap.Error(err))
++			s.client.GetLogger().Error("failed reestablishStreamAndResendBuffer", zap.Error(err))
+ 			return err // TODO(mwitkow): Maybe dial and transport errors should be retriable?
+ 		}
+ 		s.setStream(newStream)
+ 
+-		s.client.lg.Warn("retrying RecvMsg", zap.Error(lastErr))
++		s.client.GetLogger().Warn("retrying RecvMsg", zap.Error(lastErr))
+ 		attemptRetry, lastErr = s.receiveMsgAndIndicateRetry(m)
+ 		if !attemptRetry {
+ 			return lastErr
+@@ -278,7 +278,7 @@ func (s *serverStreamingRetryingStream) receiveMsgAndIndicateRetry(m any) (bool,
+ 	if s.client.shouldRefreshToken(err, s.callOpts) {
+ 		gtErr := s.client.refreshToken(s.ctx)
+ 		if gtErr != nil {
+-			s.client.lg.Warn("retry failed to fetch new auth token", zap.Error(gtErr))
++			s.client.GetLogger().Warn("retry failed to fetch new auth token", zap.Error(gtErr))
+ 			return false, err // return the original error for simplicity
+ 		}
+ 		return true, err
+@@ -344,7 +344,7 @@ func isSafeRetry(c *Client, err error, callOpts *options) bool {
+ 	case nonRepeatable:
+ 		return isSafeRetryMutableRPC(err)
+ 	default:
+-		c.lg.Warn("unrecognized retry policy", zap.String("retryPolicy", callOpts.retryPolicy.String()))
++		c.GetLogger().Warn("unrecognized retry policy", zap.String("retryPolicy", callOpts.retryPolicy.String()))
+ 		return false
+ 	}
+ }
+diff --git a/client/v3/watch.go b/client/v3/watch.go
+index 389738d1c4d4..9c6fb22315af 100644
+--- a/client/v3/watch.go
++++ b/client/v3/watch.go
+@@ -254,7 +254,7 @@ func NewWatchFromWatchClient(wc pb.WatchClient, c *Client) Watcher {
+ 	}
+ 	if c != nil {
+ 		w.callOpts = c.callOpts
+-		w.lg = c.lg
++		w.lg = c.GetLogger()
+ 	}
+ 	return w
+ }
+diff --git a/tests/robustness/client/client.go b/tests/robustness/client/client.go
+index 2c13b25a3058..6b0393e9c775 100644
+--- a/tests/robustness/client/client.go
++++ b/tests/robustness/client/client.go
+@@ -35,7 +35,7 @@ import (
+ // allow for concurrent requests to conform to model.AppendableHistory requirements.
+ type RecordingClient struct {
+ 	ID     int
+-	client clientv3.Client
++	client *clientv3.Client
+ 	// using baseTime time-measuring operation to get monotonic clock reading
+ 	// see https://github.com/golang/go/blob/master/src/time/time.go#L17
+ 	baseTime time.Time
+@@ -66,7 +66,7 @@ func NewRecordingClient(endpoints []string, ids identity.Provider, baseTime time
+ 	}
+ 	return &RecordingClient{
+ 		ID:           ids.NewClientID(),
+-		client:       *cc,
++		client:       cc,
+ 		kvOperations: model.NewAppendableHistory(ids),
+ 		baseTime:     baseTime,
+ 	}, nil

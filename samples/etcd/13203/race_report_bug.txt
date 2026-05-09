@@ -1,0 +1,32 @@
+WARNING: DATA RACE
+Write at 0x00c0000d8518 by goroutine 9:
+  ase/etcd-13203.(*Client).SetEndpoints()
+      /work/client.go:21 +0xc6
+  ase/etcd-13203.TestRace_PR13203_Endpoints.func2()
+      /work/verified_test.go:32 +0xe4
+
+Previous read at 0x00c0000d8518 by goroutine 8:
+  ase/etcd-13203.TestRace_PR13203_Endpoints.func1()
+      /work/verified_test.go:25 +0xa4
+
+Goroutine 9 (running) created at:
+  ase/etcd-13203.TestRace_PR13203_Endpoints()
+      /work/verified_test.go:28 +0x1d1
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 8 (finished) created at:
+  ase/etcd-13203.TestRace_PR13203_Endpoints()
+      /work/verified_test.go:21 +0x29c
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+    testing.go:1398: race detected during execution of test
+--- FAIL: TestRace_PR13203_Endpoints (0.01s)
+FAIL
+FAIL	ase/etcd-13203	0.026s
+FAIL

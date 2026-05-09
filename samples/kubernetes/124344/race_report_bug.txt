@@ -1,0 +1,102 @@
+WARNING: DATA RACE
+Read at 0x00c000194130 by goroutine 17:
+  ase/kubernetes-124344.TestRace_PR124344_TransformerResync.func2()
+      /work/verified_test.go:47 +0x4e
+  ase/kubernetes-124344.(*DeltaFIFO).Replace()
+      /work/delta_fifo.go:45 +0x133
+  ase/kubernetes-124344.TestRace_PR124344_TransformerResync.func3()
+      /work/verified_test.go:77 +0xf9
+
+Previous write at 0x00c000194130 by goroutine 9:
+  ase/kubernetes-124344.TestRace_PR124344_TransformerResync.func2()
+      /work/verified_test.go:47 +0x66
+  ase/kubernetes-124344.(*DeltaFIFO).Replace()
+      /work/delta_fifo.go:45 +0x133
+  ase/kubernetes-124344.TestRace_PR124344_TransformerResync.func3()
+      /work/verified_test.go:77 +0xf9
+
+Goroutine 17 (running) created at:
+  ase/kubernetes-124344.TestRace_PR124344_TransformerResync()
+      /work/verified_test.go:70 +0x430
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 9 (running) created at:
+  ase/kubernetes-124344.TestRace_PR124344_TransformerResync()
+      /work/verified_test.go:70 +0x430
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c000194130 by goroutine 8:
+  ase/kubernetes-124344.TestRace_PR124344_TransformerResync.func2()
+      /work/verified_test.go:47 +0x66
+  ase/kubernetes-124344.(*DeltaFIFO).Replace()
+      /work/delta_fifo.go:45 +0x133
+  ase/kubernetes-124344.TestRace_PR124344_TransformerResync.func3()
+      /work/verified_test.go:77 +0xf9
+
+Previous write at 0x00c000194130 by goroutine 16:
+  ase/kubernetes-124344.TestRace_PR124344_TransformerResync.func2()
+      /work/verified_test.go:47 +0x66
+  ase/kubernetes-124344.(*DeltaFIFO).Replace()
+      /work/delta_fifo.go:45 +0x133
+  ase/kubernetes-124344.TestRace_PR124344_TransformerResync.func3()
+      /work/verified_test.go:77 +0xf9
+
+Goroutine 8 (running) created at:
+  ase/kubernetes-124344.TestRace_PR124344_TransformerResync()
+      /work/verified_test.go:70 +0x430
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 16 (running) created at:
+  ase/kubernetes-124344.TestRace_PR124344_TransformerResync()
+      /work/verified_test.go:70 +0x430
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c000194130 by goroutine 27:
+  ase/kubernetes-124344.TestRace_PR124344_TransformerResync.func2()
+      /work/verified_test.go:47 +0x66
+  ase/kubernetes-124344.(*DeltaFIFO).Replace()
+      /work/delta_fifo.go:45 +0x133
+  ase/kubernetes-124344.TestRace_PR124344_TransformerResync.func3()
+      /work/verified_test.go:77 +0xf9
+
+Previous read at 0x00c000194130 by goroutine 29:
+  ase/kubernetes-124344.TestRace_PR124344_TransformerResync.func4()
+      /work/verified_test.go:95 +0x1f3
+
+Goroutine 27 (running) created at:
+  ase/kubernetes-124344.TestRace_PR124344_TransformerResync()
+      /work/verified_test.go:70 +0x430
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 29 (running) created at:
+  ase/kubernetes-124344.TestRace_PR124344_TransformerResync()
+      /work/verified_test.go:87 +0x578
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+    testing.go:1398: race detected during execution of test
+--- FAIL: TestRace_PR124344_TransformerResync (36.36s)
+FAIL
+FAIL	ase/kubernetes-124344	36.390s
+FAIL

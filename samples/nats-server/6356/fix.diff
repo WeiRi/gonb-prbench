@@ -1,0 +1,39 @@
+diff --git a/server/jetstream_api.go b/server/jetstream_api.go
+index 072e3e21b0b..26460bd2a98 100644
+--- a/server/jetstream_api.go
++++ b/server/jetstream_api.go
+@@ -4701,10 +4701,14 @@ func (s *Server) jsConsumerInfoRequest(sub *subscription, c *client, _ *Account,
+ 			return
+ 		}
+ 
++		js.mu.RLock()
++		meta := cc.meta
++		js.mu.RUnlock()
++
+ 		// Since these could wait on the Raft group lock, don't do so under the JS lock.
+-		ourID := cc.meta.ID()
+-		groupLeader := cc.meta.GroupLeader()
+-		groupCreated := cc.meta.Created()
++		ourID := meta.ID()
++		groupLeader := meta.GroupLeader()
++		groupCreated := meta.Created()
+ 
+ 		js.mu.RLock()
+ 		isLeader, sa, ca := cc.isLeader(), js.streamAssignment(acc.Name, streamName), js.consumerAssignment(acc.Name, streamName, consumerName)
+diff --git a/server/jetstream_cluster_3_test.go b/server/jetstream_cluster_3_test.go
+index e027c4ea7e2..6ec202d1688 100644
+--- a/server/jetstream_cluster_3_test.go
++++ b/server/jetstream_cluster_3_test.go
+@@ -1602,10 +1602,10 @@ func TestJetStreamClusterParallelConsumerCreation(t *testing.T) {
+ func TestJetStreamClusterGhostEphemeralsAfterRestart(t *testing.T) {
+ 	consumerNotActiveStartInterval = time.Second
+ 	consumerNotActiveMaxInterval = time.Second
+-	defer func() {
++	t.Cleanup(func() {
+ 		consumerNotActiveStartInterval = defaultConsumerNotActiveStartInterval
+ 		consumerNotActiveMaxInterval = defaultConsumerNotActiveMaxInterval
+-	}()
++	})
+ 
+ 	c := createJetStreamClusterExplicit(t, "R3S", 3)
+ 	defer c.shutdown()

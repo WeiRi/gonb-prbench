@@ -1,0 +1,98 @@
+WARNING: DATA RACE
+Read at 0x00c000012018 by goroutine 32:
+  ase/kubernetes-135794.TestRace_135794.func1.1()
+      /work/verified_test.go:28 +0x104
+
+Previous write at 0x00c000012018 by goroutine 34:
+  ase/kubernetes-135794.TestRace_135794.func1.2()
+      /work/verified_test.go:32 +0x1cc
+
+Goroutine 32 (running) created at:
+  ase/kubernetes-135794.TestRace_135794.func1()
+      /work/verified_test.go:26 +0x22a
+
+Goroutine 34 (finished) created at:
+  ase/kubernetes-135794.TestRace_135794.func1()
+      /work/verified_test.go:30 +0xb6
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c00001e030 by goroutine 32:
+  runtime.growslice()
+      /usr/local/go/src/runtime/slice.go:157 +0x0
+  ase/kubernetes-135794.TestRace_135794.func1.1()
+      /work/verified_test.go:28 +0x144
+
+Previous write at 0x00c00001e030 by goroutine 34:
+  ase/kubernetes-135794.TestRace_135794.func1.2()
+      /work/verified_test.go:32 +0x176
+
+Goroutine 32 (running) created at:
+  ase/kubernetes-135794.TestRace_135794.func1()
+      /work/verified_test.go:26 +0x22a
+
+Goroutine 34 (finished) created at:
+  ase/kubernetes-135794.TestRace_135794.func1()
+      /work/verified_test.go:30 +0xb6
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c000188000 by goroutine 26:
+  ase/kubernetes-135794.TestRace_135794.func1.2()
+      /work/verified_test.go:32 +0x104
+
+Previous write at 0x00c000188000 by goroutine 24:
+  ase/kubernetes-135794.TestRace_135794.func1.1()
+      /work/verified_test.go:28 +0x1cc
+
+Goroutine 26 (running) created at:
+  ase/kubernetes-135794.TestRace_135794.func1()
+      /work/verified_test.go:30 +0xb6
+
+Goroutine 24 (finished) created at:
+  ase/kubernetes-135794.TestRace_135794.func1()
+      /work/verified_test.go:26 +0x22a
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c000296010 by goroutine 26:
+  runtime.growslice()
+      /usr/local/go/src/runtime/slice.go:157 +0x0
+  ase/kubernetes-135794.TestRace_135794.func1.2()
+      /work/verified_test.go:32 +0x144
+
+Previous write at 0x00c000296010 by goroutine 24:
+  ase/kubernetes-135794.TestRace_135794.func1.1()
+      /work/verified_test.go:28 +0x176
+
+Goroutine 26 (running) created at:
+  ase/kubernetes-135794.TestRace_135794.func1()
+      /work/verified_test.go:30 +0xb6
+
+Goroutine 24 (finished) created at:
+  ase/kubernetes-135794.TestRace_135794.func1()
+      /work/verified_test.go:26 +0x22a
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c000baa3d8 by goroutine 15885:
+  ase/kubernetes-135794.TestRace_135794.func1.2()
+      /work/verified_test.go:32 +0x1cc
+
+Previous write at 0x00c000baa3d8 by goroutine 15883:
+  ase/kubernetes-135794.TestRace_135794.func1.1()
+      /work/verified_test.go:28 +0x1cc
+
+Goroutine 15885 (running) created at:
+  ase/kubernetes-135794.TestRace_135794.func1()
+      /work/verified_test.go:30 +0xb6
+
+Goroutine 15883 (finished) created at:
+  ase/kubernetes-135794.TestRace_135794.func1()
+      /work/verified_test.go:26 +0x22a
+==================
+--- FAIL: TestRace_135794 (0.38s)
+    testing.go:1465: race detected during execution of test
+FAIL
+FAIL	ase/kubernetes-135794	0.397s
+FAIL

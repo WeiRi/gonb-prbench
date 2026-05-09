@@ -1,0 +1,66 @@
+diff --git a/pkg/util/tracing/crdbspan.go b/pkg/util/tracing/crdbspan.go
+index c9771b050233..c48331d57061 100644
+--- a/pkg/util/tracing/crdbspan.go
++++ b/pkg/util/tracing/crdbspan.go
+@@ -34,7 +34,6 @@ type crdbSpan struct {
+ 	parentSpanID uint64
+ 	goroutineID  uint64
+ 
+-	operation string
+ 	startTime time.Time
+ 
+ 	// logTags are set to the log tags that were available when this Span was
+@@ -58,7 +57,8 @@ type testingKnob struct {
+ type crdbSpanMu struct {
+ 	syncutil.Mutex
+ 	// duration is initialized to -1 and set on Finish().
+-	duration time.Duration
++	duration  time.Duration
++	operation string // name of operation associated with the span
+ 
+ 	recording struct {
+ 		// recordingType is the recording type of the ongoing recording, if any.
+@@ -324,7 +324,7 @@ func (s *crdbSpan) getRecordingLocked(wantTags bool) tracingpb.RecordedSpan {
+ 		SpanID:       s.spanID,
+ 		ParentSpanID: s.parentSpanID,
+ 		GoroutineID:  s.goroutineID,
+-		Operation:    s.operation,
++		Operation:    s.mu.operation,
+ 		StartTime:    s.startTime,
+ 		Duration:     s.mu.duration,
+ 	}
+diff --git a/pkg/util/tracing/span_inner.go b/pkg/util/tracing/span_inner.go
+index 765bacc58ca4..264832a5bc71 100644
+--- a/pkg/util/tracing/span_inner.go
++++ b/pkg/util/tracing/span_inner.go
+@@ -176,7 +176,9 @@ func (s *spanInner) SetOperationName(operationName string) *spanInner {
+ 	if s.ot.shadowSpan != nil {
+ 		s.ot.shadowSpan.SetOperationName(operationName)
+ 	}
+-	s.crdb.operation = operationName
++	s.crdb.mu.Lock()
++	s.crdb.mu.operation = operationName
++	s.crdb.mu.Unlock()
+ 	return s
+ }
+ 
+diff --git a/pkg/util/tracing/tracer.go b/pkg/util/tracing/tracer.go
+index 72b982968bc4..f96e91f349b1 100644
+--- a/pkg/util/tracing/tracer.go
++++ b/pkg/util/tracing/tracer.go
+@@ -378,7 +378,6 @@ func (t *Tracer) startSpanGeneric(
+ 		traceID:      traceID,
+ 		spanID:       spanID,
+ 		goroutineID:  goroutineID,
+-		operation:    opName,
+ 		startTime:    startTime,
+ 		parentSpanID: opts.parentSpanID(),
+ 		logTags:      opts.LogTags,
+@@ -387,6 +386,7 @@ func (t *Tracer) startSpanGeneric(
+ 		},
+ 		testing: t.testing,
+ 	}
++	helper.crdbSpan.mu.operation = opName
+ 	helper.crdbSpan.mu.recording.logs = newSizeLimitedBuffer(maxLogBytesPerSpan)
+ 	helper.crdbSpan.mu.recording.structured = newSizeLimitedBuffer(maxStructuredBytesPerSpan)
+ 	helper.span.i = spanInner{

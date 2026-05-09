@@ -1,0 +1,94 @@
+WARNING: DATA RACE
+Read at 0x00c000098078 by goroutine 13:
+  ase/hugo-7393.(*HugoSites).GetContentPage()
+      /work/hugolib_site.go:21 +0x84
+  ase/hugo-7393.TestRaceContentField.func2()
+      /work/verified_test.go:14 +0x12
+
+Previous write at 0x00c000098078 by goroutine 8:
+  ase/hugo-7393.(*HugoSites).readAndProcessContent()
+      /work/hugolib_site.go:16 +0xb0
+  ase/hugo-7393.TestRaceContentField.func1()
+      /work/verified_test.go:13 +0x12
+
+Goroutine 13 (running) created at:
+  ase/hugo-7393.TestRaceContentField()
+      /work/verified_test.go:14 +0xc4
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 8 (finished) created at:
+  ase/hugo-7393.TestRaceContentField()
+      /work/verified_test.go:13 +0x19c
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c000098078 by goroutine 12:
+  ase/hugo-7393.(*HugoSites).readAndProcessContent()
+      /work/hugolib_site.go:15 +0x84
+  ase/hugo-7393.TestRaceContentField.func1()
+      /work/verified_test.go:13 +0x12
+
+Previous write at 0x00c000098078 by goroutine 14:
+  ase/hugo-7393.(*HugoSites).readAndProcessContent()
+      /work/hugolib_site.go:16 +0xb0
+  ase/hugo-7393.TestRaceContentField.func1()
+      /work/verified_test.go:13 +0x12
+
+Goroutine 12 (running) created at:
+  ase/hugo-7393.TestRaceContentField()
+      /work/verified_test.go:13 +0x19c
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 14 (finished) created at:
+  ase/hugo-7393.TestRaceContentField()
+      /work/verified_test.go:13 +0x19c
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c000098078 by goroutine 140:
+  ase/hugo-7393.(*HugoSites).readAndProcessContent()
+      /work/hugolib_site.go:16 +0xb0
+  ase/hugo-7393.TestRaceContentField.func1()
+      /work/verified_test.go:13 +0x12
+
+Previous write at 0x00c000098078 by goroutine 138:
+  ase/hugo-7393.(*HugoSites).readAndProcessContent()
+      /work/hugolib_site.go:16 +0xb0
+  ase/hugo-7393.TestRaceContentField.func1()
+      /work/verified_test.go:13 +0x12
+
+Goroutine 140 (running) created at:
+  ase/hugo-7393.TestRaceContentField()
+      /work/verified_test.go:13 +0x19c
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 138 (finished) created at:
+  ase/hugo-7393.TestRaceContentField()
+      /work/verified_test.go:13 +0x19c
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+--- FAIL: TestRaceContentField (0.00s)
+    testing.go:1398: race detected during execution of test
+FAIL
+FAIL	ase/hugo-7393	0.021s
+FAIL

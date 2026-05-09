@@ -1,0 +1,34 @@
+WARNING: DATA RACE
+Write at 0x00c000110000 by goroutine 18:
+  runtime.slicecopy()
+      /usr/local/go/src/runtime/slice.go:325 +0x0
+  ase/grpc-go-1948.(*ClientConn).Invoke()
+      /work/call.go:19 +0xef
+  ase/grpc-go-1948.TestRace_1948_SliceBackingArray.func1.1()
+      /work/verified_test.go:34 +0x111
+  ase/grpc-go-1948.TestRace_1948_SliceBackingArray.func1.gowrap2()
+      /work/verified_test.go:36 +0x41
+
+Previous write at 0x00c000110000 by goroutine 19:
+  runtime.slicecopy()
+      /usr/local/go/src/runtime/slice.go:325 +0x0
+  ase/grpc-go-1948.(*ClientConn).Invoke()
+      /work/call.go:19 +0xef
+  ase/grpc-go-1948.TestRace_1948_SliceBackingArray.func1.1()
+      /work/verified_test.go:34 +0x111
+  ase/grpc-go-1948.TestRace_1948_SliceBackingArray.func1.gowrap2()
+      /work/verified_test.go:36 +0x41
+
+Goroutine 18 (running) created at:
+  ase/grpc-go-1948.TestRace_1948_SliceBackingArray.func1()
+      /work/verified_test.go:31 +0x177
+
+Goroutine 19 (running) created at:
+  ase/grpc-go-1948.TestRace_1948_SliceBackingArray.func1()
+      /work/verified_test.go:31 +0x177
+==================
+    testing.go:1398: race detected during execution of test
+--- FAIL: TestRace_1948_SliceBackingArray (0.03s)
+FAIL
+FAIL	ase/grpc-go-1948	0.050s
+FAIL

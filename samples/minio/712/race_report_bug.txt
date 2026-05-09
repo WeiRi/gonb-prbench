@@ -1,0 +1,250 @@
+WARNING: DATA RACE
+Write at 0x00c0000d4540 by goroutine 17:
+  runtime.mapassign_faststr()
+      /usr/local/go/src/runtime/map_faststr.go:203 +0x0
+  ase/minio-712.Disk.GetFSInfo()
+      /work/disk.go:11 +0x104
+  ase/minio-712.TestRaceGetFSInfo.func1()
+      /work/verified_test.go:30 +0xe4
+
+Previous write at 0x00c0000d4540 by goroutine 13:
+  runtime.mapassign_faststr()
+      /usr/local/go/src/runtime/map_faststr.go:203 +0x0
+  ase/minio-712.Disk.GetFSInfo()
+      /work/disk.go:11 +0x104
+  ase/minio-712.TestRaceGetFSInfo.func1()
+      /work/verified_test.go:30 +0xe4
+
+Goroutine 17 (running) created at:
+  ase/minio-712.TestRaceGetFSInfo()
+      /work/verified_test.go:25 +0x7c
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 13 (finished) created at:
+  ase/minio-712.TestRaceGetFSInfo()
+      /work/verified_test.go:25 +0x7c
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c0000d4540 by goroutine 17:
+  runtime.mapassign_faststr()
+      /usr/local/go/src/runtime/map_faststr.go:203 +0x0
+  ase/minio-712.Disk.GetFSInfo()
+      /work/disk.go:12 +0x171
+  ase/minio-712.TestRaceGetFSInfo.func1()
+      /work/verified_test.go:30 +0xe4
+
+Previous write at 0x00c0000d4540 by goroutine 8:
+  runtime.mapassign_faststr()
+      /usr/local/go/src/runtime/map_faststr.go:203 +0x0
+  ase/minio-712.Disk.GetFSInfo()
+      /work/disk.go:11 +0x104
+  ase/minio-712.TestRaceGetFSInfo.func1()
+      /work/verified_test.go:30 +0xe4
+
+Goroutine 17 (running) created at:
+  ase/minio-712.TestRaceGetFSInfo()
+      /work/verified_test.go:25 +0x7c
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 8 (running) created at:
+  ase/minio-712.TestRaceGetFSInfo()
+      /work/verified_test.go:25 +0x7c
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c000208088 by goroutine 8:
+  ase/minio-712.Disk.GetFSInfo()
+      /work/disk.go:11 +0x113
+  ase/minio-712.TestRaceGetFSInfo.func1()
+      /work/verified_test.go:30 +0xe4
+
+Previous write at 0x00c000208088 by goroutine 13:
+  ase/minio-712.Disk.GetFSInfo()
+      /work/disk.go:11 +0x113
+  ase/minio-712.TestRaceGetFSInfo.func1()
+      /work/verified_test.go:30 +0xe4
+
+Goroutine 8 (running) created at:
+  ase/minio-712.TestRaceGetFSInfo()
+      /work/verified_test.go:25 +0x7c
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 13 (finished) created at:
+  ase/minio-712.TestRaceGetFSInfo()
+      /work/verified_test.go:25 +0x7c
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c0002080a8 by goroutine 8:
+  ase/minio-712.Disk.GetFSInfo()
+      /work/disk.go:13 +0x1de
+  ase/minio-712.TestRaceGetFSInfo.func1()
+      /work/verified_test.go:30 +0xe4
+
+Previous write at 0x00c0002080a8 by goroutine 13:
+  ase/minio-712.Disk.GetFSInfo()
+      /work/disk.go:13 +0x1de
+  ase/minio-712.TestRaceGetFSInfo.func1()
+      /work/verified_test.go:30 +0xe4
+
+Goroutine 8 (running) created at:
+  ase/minio-712.TestRaceGetFSInfo()
+      /work/verified_test.go:25 +0x7c
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 13 (finished) created at:
+  ase/minio-712.TestRaceGetFSInfo()
+      /work/verified_test.go:25 +0x7c
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c000208098 by goroutine 17:
+  ase/minio-712.Disk.GetFSInfo()
+      /work/disk.go:12 +0x184
+  ase/minio-712.TestRaceGetFSInfo.func1()
+      /work/verified_test.go:30 +0xe4
+
+Previous write at 0x00c000208098 by goroutine 13:
+  ase/minio-712.Disk.GetFSInfo()
+      /work/disk.go:12 +0x184
+  ase/minio-712.TestRaceGetFSInfo.func1()
+      /work/verified_test.go:30 +0xe4
+
+Goroutine 17 (running) created at:
+  ase/minio-712.TestRaceGetFSInfo()
+      /work/verified_test.go:25 +0x7c
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 13 (finished) created at:
+  ase/minio-712.TestRaceGetFSInfo()
+      /work/verified_test.go:25 +0x7c
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c0000d4540 by goroutine 17:
+  runtime.mapassign_faststr()
+      /usr/local/go/src/runtime/map_faststr.go:203 +0x0
+  ase/minio-712.Disk.GetFSInfo()
+      /work/disk.go:13 +0x1d2
+  ase/minio-712.TestRaceGetFSInfo.func1()
+      /work/verified_test.go:30 +0xe4
+
+Previous write at 0x00c0000d4540 by goroutine 8:
+  runtime.mapassign_faststr()
+      /usr/local/go/src/runtime/map_faststr.go:203 +0x0
+  ase/minio-712.Disk.GetFSInfo()
+      /work/disk.go:12 +0x171
+  ase/minio-712.TestRaceGetFSInfo.func1()
+      /work/verified_test.go:30 +0xe4
+
+Goroutine 17 (running) created at:
+  ase/minio-712.TestRaceGetFSInfo()
+      /work/verified_test.go:25 +0x7c
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 8 (running) created at:
+  ase/minio-712.TestRaceGetFSInfo()
+      /work/verified_test.go:25 +0x7c
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c0000d4540 by goroutine 10:
+  runtime.mapassign_faststr()
+      /usr/local/go/src/runtime/map_faststr.go:203 +0x0
+  ase/minio-712.Disk.GetFSInfo()
+      /work/disk.go:11 +0x104
+  ase/minio-712.TestRaceGetFSInfo.func1()
+      /work/verified_test.go:30 +0xe4
+
+Previous write at 0x00c0000d4540 by goroutine 17:
+  runtime.mapassign_faststr()
+      /usr/local/go/src/runtime/map_faststr.go:203 +0x0
+  ase/minio-712.Disk.GetFSInfo()
+      /work/disk.go:13 +0x1d2
+  ase/minio-712.TestRaceGetFSInfo.func1()
+      /work/verified_test.go:30 +0xe4
+
+Goroutine 10 (running) created at:
+  ase/minio-712.TestRaceGetFSInfo()
+      /work/verified_test.go:25 +0x7c
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 17 (running) created at:
+  ase/minio-712.TestRaceGetFSInfo()
+      /work/verified_test.go:25 +0x7c
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c0000d4540 by goroutine 16:
+  runtime.mapassign_faststr()
+      /usr/local/go/src/runtime/map_faststr.go:203 +0x0
+  ase/minio-712.Disk.GetFSInfo()
+      /work/disk.go:12 +0x171
+  ase/minio-712.TestRaceGetFSInfo.func1()
+      /work/verified_test.go:30 +0xe4
+
+Previous write at 0x00c0000d4540 by goroutine 10:
+  runtime.mapassign_faststr()
+      /usr/local/go/src/runtime/map_faststr.go:203 +0x0
+  ase/minio-712.Disk.GetFSInfo()
+      /work/disk.go:12 +0x171
+  ase/minio-712.TestRaceGetFSInfo.func1()
+      /work/verified_test.go:30 +0xe4
+
+Goroutine 16 (running) created at:
+  ase/minio-712.TestRaceGetFSInfo()
+      /work/verified_test.go:25 +0x7c
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44

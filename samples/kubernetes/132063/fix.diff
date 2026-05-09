@@ -1,0 +1,325 @@
+diff --git a/staging/src/k8s.io/component-base/metrics/counter.go b/staging/src/k8s.io/component-base/metrics/counter.go
+index 8a7dd71541c23..e41d5383bee64 100644
+--- a/staging/src/k8s.io/component-base/metrics/counter.go
++++ b/staging/src/k8s.io/component-base/metrics/counter.go
+@@ -212,17 +212,19 @@ func (v *CounterVec) WithLabelValues(lvs ...string) CounterMetric {
+ 	if !v.IsCreated() {
+ 		return noop // return no-op counter
+ 	}
++
++	// Initialize label allow lists if not already initialized
++	v.initializeLabelAllowListsOnce.Do(func() {
++		allowListLock.RLock()
++		if allowList, ok := labelValueAllowLists[v.FQName()]; ok {
++			v.LabelValueAllowLists = allowList
++		}
++		allowListLock.RUnlock()
++	})
++
++	// Constrain label values to allowed values
+ 	if v.LabelValueAllowLists != nil {
+ 		v.LabelValueAllowLists.ConstrainToAllowedList(v.originalLabels, lvs)
+-	} else {
+-		v.initializeLabelAllowListsOnce.Do(func() {
+-			allowListLock.RLock()
+-			if allowList, ok := labelValueAllowLists[v.FQName()]; ok {
+-				v.LabelValueAllowLists = allowList
+-				allowList.ConstrainToAllowedList(v.originalLabels, lvs)
+-			}
+-			allowListLock.RUnlock()
+-		})
+ 	}
+ 
+ 	return v.CounterVec.WithLabelValues(lvs...)
+@@ -236,18 +238,19 @@ func (v *CounterVec) With(labels map[string]string) CounterMetric {
+ 	if !v.IsCreated() {
+ 		return noop // return no-op counter
+ 	}
++
++	v.initializeLabelAllowListsOnce.Do(func() {
++		allowListLock.RLock()
++		if allowList, ok := labelValueAllowLists[v.FQName()]; ok {
++			v.LabelValueAllowLists = allowList
++		}
++		allowListLock.RUnlock()
++	})
++
+ 	if v.LabelValueAllowLists != nil {
+ 		v.LabelValueAllowLists.ConstrainLabelMap(labels)
+-	} else {
+-		v.initializeLabelAllowListsOnce.Do(func() {
+-			allowListLock.RLock()
+-			if allowList, ok := labelValueAllowLists[v.FQName()]; ok {
+-				v.LabelValueAllowLists = allowList
+-				allowList.ConstrainLabelMap(labels)
+-			}
+-			allowListLock.RUnlock()
+-		})
+ 	}
++
+ 	return v.CounterVec.With(labels)
+ }
+ 
+diff --git a/staging/src/k8s.io/component-base/metrics/gauge.go b/staging/src/k8s.io/component-base/metrics/gauge.go
+index 0621560d0cfc1..0d6c8b7fbfd18 100644
+--- a/staging/src/k8s.io/component-base/metrics/gauge.go
++++ b/staging/src/k8s.io/component-base/metrics/gauge.go
+@@ -143,20 +143,22 @@ func (v *GaugeVec) WithLabelValuesChecked(lvs ...string) (GaugeMetric, error) {
+ 		}
+ 		return noop, errNotRegistered // return no-op gauge
+ 	}
++
++	// Initialize label allow lists if not already initialized
++	v.initializeLabelAllowListsOnce.Do(func() {
++		allowListLock.RLock()
++		if allowList, ok := labelValueAllowLists[v.FQName()]; ok {
++			v.LabelValueAllowLists = allowList
++		}
++		allowListLock.RUnlock()
++	})
++
++	// Constrain label values to allowed values
+ 	if v.LabelValueAllowLists != nil {
+ 		v.LabelValueAllowLists.ConstrainToAllowedList(v.originalLabels, lvs)
+-	} else {
+-		v.initializeLabelAllowListsOnce.Do(func() {
+-			allowListLock.RLock()
+-			if allowList, ok := labelValueAllowLists[v.FQName()]; ok {
+-				v.LabelValueAllowLists = allowList
+-				allowList.ConstrainToAllowedList(v.originalLabels, lvs)
+-			}
+-			allowListLock.RUnlock()
+-		})
+ 	}
+-	elt, err := v.GaugeVec.GetMetricWithLabelValues(lvs...)
+-	return elt, err
++
++	return v.GetMetricWithLabelValues(lvs...)
+ }
+ 
+ // Default Prometheus Vec behavior is that member extraction results in creation of a new element
+@@ -189,20 +191,22 @@ func (v *GaugeVec) WithChecked(labels map[string]string) (GaugeMetric, error) {
+ 		}
+ 		return noop, errNotRegistered // return no-op gauge
+ 	}
++
++	// Initialize label allow lists if not already initialized
++	v.initializeLabelAllowListsOnce.Do(func() {
++		allowListLock.RLock()
++		if allowList, ok := labelValueAllowLists[v.FQName()]; ok {
++			v.LabelValueAllowLists = allowList
++		}
++		allowListLock.RUnlock()
++	})
++
++	// Constrain label map to allowed values
+ 	if v.LabelValueAllowLists != nil {
+ 		v.LabelValueAllowLists.ConstrainLabelMap(labels)
+-	} else {
+-		v.initializeLabelAllowListsOnce.Do(func() {
+-			allowListLock.RLock()
+-			if allowList, ok := labelValueAllowLists[v.FQName()]; ok {
+-				v.LabelValueAllowLists = allowList
+-				allowList.ConstrainLabelMap(labels)
+-			}
+-			allowListLock.RUnlock()
+-		})
+ 	}
+-	elt, err := v.GaugeVec.GetMetricWith(labels)
+-	return elt, err
++
++	return v.GetMetricWith(labels)
+ }
+ 
+ // With returns the GaugeMetric for the given Labels map (the label names
+diff --git a/staging/src/k8s.io/component-base/metrics/histogram.go b/staging/src/k8s.io/component-base/metrics/histogram.go
+index 3065486ab41d1..b410951b67832 100644
+--- a/staging/src/k8s.io/component-base/metrics/histogram.go
++++ b/staging/src/k8s.io/component-base/metrics/histogram.go
+@@ -181,17 +181,19 @@ func (v *HistogramVec) WithLabelValues(lvs ...string) ObserverMetric {
+ 	if !v.IsCreated() {
+ 		return noop
+ 	}
++
++	// Initialize label allow lists if not already initialized
++	v.initializeLabelAllowListsOnce.Do(func() {
++		allowListLock.RLock()
++		if allowList, ok := labelValueAllowLists[v.FQName()]; ok {
++			v.LabelValueAllowLists = allowList
++		}
++		allowListLock.RUnlock()
++	})
++
++	// Constrain label values to allowed values
+ 	if v.LabelValueAllowLists != nil {
+ 		v.LabelValueAllowLists.ConstrainToAllowedList(v.originalLabels, lvs)
+-	} else {
+-		v.initializeLabelAllowListsOnce.Do(func() {
+-			allowListLock.RLock()
+-			if allowList, ok := labelValueAllowLists[v.FQName()]; ok {
+-				v.LabelValueAllowLists = allowList
+-				allowList.ConstrainToAllowedList(v.originalLabels, lvs)
+-			}
+-			allowListLock.RUnlock()
+-		})
+ 	}
+ 	return v.HistogramVec.WithLabelValues(lvs...)
+ }
+@@ -204,18 +206,21 @@ func (v *HistogramVec) With(labels map[string]string) ObserverMetric {
+ 	if !v.IsCreated() {
+ 		return noop
+ 	}
++
++	// Initialize label allow lists if not already initialized
++	v.initializeLabelAllowListsOnce.Do(func() {
++		allowListLock.RLock()
++		if allowList, ok := labelValueAllowLists[v.FQName()]; ok {
++			v.LabelValueAllowLists = allowList
++		}
++		allowListLock.RUnlock()
++	})
++
++	// Constrain label map to allowed values
+ 	if v.LabelValueAllowLists != nil {
+ 		v.LabelValueAllowLists.ConstrainLabelMap(labels)
+-	} else {
+-		v.initializeLabelAllowListsOnce.Do(func() {
+-			allowListLock.RLock()
+-			if allowList, ok := labelValueAllowLists[v.FQName()]; ok {
+-				v.LabelValueAllowLists = allowList
+-				allowList.ConstrainLabelMap(labels)
+-			}
+-			allowListLock.RUnlock()
+-		})
+ 	}
++
+ 	return v.HistogramVec.With(labels)
+ }
+ 
+diff --git a/staging/src/k8s.io/component-base/metrics/summary.go b/staging/src/k8s.io/component-base/metrics/summary.go
+index f1af1217589a9..3654e4ea09965 100644
+--- a/staging/src/k8s.io/component-base/metrics/summary.go
++++ b/staging/src/k8s.io/component-base/metrics/summary.go
+@@ -154,17 +154,19 @@ func (v *SummaryVec) WithLabelValues(lvs ...string) ObserverMetric {
+ 	if !v.IsCreated() {
+ 		return noop
+ 	}
++
++	// Initialize label allow lists if not already initialized
++	v.initializeLabelAllowListsOnce.Do(func() {
++		allowListLock.RLock()
++		if allowList, ok := labelValueAllowLists[v.FQName()]; ok {
++			v.LabelValueAllowLists = allowList
++		}
++		allowListLock.RUnlock()
++	})
++
++	// Constrain label values to allowed values
+ 	if v.LabelValueAllowLists != nil {
+ 		v.LabelValueAllowLists.ConstrainToAllowedList(v.originalLabels, lvs)
+-	} else {
+-		v.initializeLabelAllowListsOnce.Do(func() {
+-			allowListLock.RLock()
+-			if allowList, ok := labelValueAllowLists[v.FQName()]; ok {
+-				v.LabelValueAllowLists = allowList
+-				allowList.ConstrainToAllowedList(v.originalLabels, lvs)
+-			}
+-			allowListLock.RUnlock()
+-		})
+ 	}
+ 	return v.SummaryVec.WithLabelValues(lvs...)
+ }
+@@ -177,17 +179,17 @@ func (v *SummaryVec) With(labels map[string]string) ObserverMetric {
+ 	if !v.IsCreated() {
+ 		return noop
+ 	}
++
++	v.initializeLabelAllowListsOnce.Do(func() {
++		allowListLock.RLock()
++		if allowList, ok := labelValueAllowLists[v.FQName()]; ok {
++			v.LabelValueAllowLists = allowList
++		}
++		allowListLock.RUnlock()
++	})
++
+ 	if v.LabelValueAllowLists != nil {
+ 		v.LabelValueAllowLists.ConstrainLabelMap(labels)
+-	} else {
+-		v.initializeLabelAllowListsOnce.Do(func() {
+-			allowListLock.RLock()
+-			if allowList, ok := labelValueAllowLists[v.FQName()]; ok {
+-				v.LabelValueAllowLists = allowList
+-				allowList.ConstrainLabelMap(labels)
+-			}
+-			allowListLock.RUnlock()
+-		})
+ 	}
+ 	return v.SummaryVec.With(labels)
+ }
+diff --git a/staging/src/k8s.io/component-base/metrics/timing_histogram.go b/staging/src/k8s.io/component-base/metrics/timing_histogram.go
+index 4fc757473951c..5399f8d1b72cc 100644
+--- a/staging/src/k8s.io/component-base/metrics/timing_histogram.go
++++ b/staging/src/k8s.io/component-base/metrics/timing_histogram.go
+@@ -169,17 +169,19 @@ func (v *TimingHistogramVec) WithLabelValuesChecked(lvs ...string) (GaugeMetric,
+ 		}
+ 		return noop, errNotRegistered
+ 	}
++
++	// Initialize label allow lists if not already initialized
++	v.initializeLabelAllowListsOnce.Do(func() {
++		allowListLock.RLock()
++		if allowList, ok := labelValueAllowLists[v.FQName()]; ok {
++			v.LabelValueAllowLists = allowList
++		}
++		allowListLock.RUnlock()
++	})
++
++	// Constrain label values to allowed values
+ 	if v.LabelValueAllowLists != nil {
+ 		v.LabelValueAllowLists.ConstrainToAllowedList(v.originalLabels, lvs)
+-	} else {
+-		v.initializeLabelAllowListsOnce.Do(func() {
+-			allowListLock.RLock()
+-			if allowList, ok := labelValueAllowLists[v.FQName()]; ok {
+-				v.LabelValueAllowLists = allowList
+-				allowList.ConstrainToAllowedList(v.originalLabels, lvs)
+-			}
+-			allowListLock.RUnlock()
+-		})
+ 	}
+ 	ops, err := v.TimingHistogramVec.GetMetricWithLabelValues(lvs...)
+ 	if err != nil {
+@@ -217,19 +219,24 @@ func (v *TimingHistogramVec) WithChecked(labels map[string]string) (GaugeMetric,
+ 		}
+ 		return noop, errNotRegistered
+ 	}
++
++	// Initialize label allow lists if not already initialized
++	v.initializeLabelAllowListsOnce.Do(func() {
++		allowListLock.RLock()
++		if allowList, ok := labelValueAllowLists[v.FQName()]; ok {
++			v.LabelValueAllowLists = allowList
++		}
++		allowListLock.RUnlock()
++	})
++
++	// Constrain label map to allowed values
+ 	if v.LabelValueAllowLists != nil {
+ 		v.LabelValueAllowLists.ConstrainLabelMap(labels)
+-	} else {
+-		v.initializeLabelAllowListsOnce.Do(func() {
+-			allowListLock.RLock()
+-			if allowList, ok := labelValueAllowLists[v.FQName()]; ok {
+-				v.LabelValueAllowLists = allowList
+-				allowList.ConstrainLabelMap(labels)
+-			}
+-			allowListLock.RUnlock()
+-		})
+ 	}
+ 	ops, err := v.TimingHistogramVec.GetMetricWith(labels)
++	if err != nil {
++		return noop, err
++	}
+ 	return ops.(GaugeMetric), err
+ }
+ 

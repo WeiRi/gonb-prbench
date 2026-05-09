@@ -1,0 +1,30 @@
+WARNING: DATA RACE
+Read at 0x00c000296168 by goroutine 250:
+  ase/grpc-go-3090.NewCCResolverWrapper.func1()
+      /work/resolver_conn_wrapper.go:16 +0x45
+
+Previous write at 0x00c000296168 by goroutine 116:
+  ase/grpc-go-3090.NewCCResolverWrapper()
+      /work/resolver_conn_wrapper.go:18 +0x14f
+  ase/grpc-go-3090.TestRace_PR3090_ResolverWrapperBuild.func1()
+      /work/verified_test.go:37 +0xc4
+
+Goroutine 250 (running) created at:
+  ase/grpc-go-3090.NewCCResolverWrapper()
+      /work/resolver_conn_wrapper.go:14 +0x11c
+  ase/grpc-go-3090.TestRace_PR3090_ResolverWrapperBuild.func1()
+      /work/verified_test.go:37 +0xc4
+
+Goroutine 116 (finished) created at:
+  ase/grpc-go-3090.TestRace_PR3090_ResolverWrapperBuild()
+      /work/verified_test.go:35 +0x89
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+    testing.go:1398: race detected during execution of test
+--- FAIL: TestRace_PR3090_ResolverWrapperBuild (0.00s)
+FAIL
+FAIL	ase/grpc-go-3090	0.021s
+FAIL

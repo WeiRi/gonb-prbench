@@ -1,0 +1,20 @@
+diff --git a/clientv3/watch.go b/clientv3/watch.go
+index e49dc82b541a..81406c2f00a1 100644
+--- a/clientv3/watch.go
++++ b/clientv3/watch.go
+@@ -573,7 +573,6 @@ func (w *watchGrpcStream) serveSubstream(ws *watcherStream, resumec chan struct{
+ 		if !resuming {
+ 			ws.closing = true
+ 		}
+-		ws.initReq.rev = nextRev
+ 		close(ws.donec)
+ 		if !resuming {
+ 			w.closingc <- ws
+@@ -619,6 +618,7 @@ func (w *watchGrpcStream) serveSubstream(ws *watcherStream, resumec chan struct{
+ 			if len(wr.Events) > 0 {
+ 				nextRev = wr.Events[len(wr.Events)-1].Kv.ModRevision + 1
+ 			}
++			ws.initReq.rev = nextRev
+ 		case <-ws.initReq.ctx.Done():
+ 			return
+ 		case <-resumec:

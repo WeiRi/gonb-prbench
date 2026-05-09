@@ -1,0 +1,165 @@
+diff --git a/etcdserver/apply.go b/etcdserver/apply.go
+index b8ceb73931c7..ee8e295ae727 100644
+--- a/etcdserver/apply.go
++++ b/etcdserver/apply.go
+@@ -508,7 +508,7 @@ func (a *applierV3backend) LeaseGrant(lc *pb.LeaseGrantRequest) (*pb.LeaseGrantR
+ 	resp := &pb.LeaseGrantResponse{}
+ 	if err == nil {
+ 		resp.ID = int64(l.ID)
+-		resp.TTL = l.TTL
++		resp.TTL = l.TTL()
+ 		resp.Header = &pb.ResponseHeader{Revision: a.s.KV().Rev()}
+ 	}
+ 
+diff --git a/etcdserver/v3_server.go b/etcdserver/v3_server.go
+index 49eaeeb88f38..6abe7dfaaff2 100644
+--- a/etcdserver/v3_server.go
++++ b/etcdserver/v3_server.go
+@@ -338,7 +338,7 @@ func (s *EtcdServer) LeaseTimeToLive(ctx context.Context, r *pb.LeaseTimeToLiveR
+ 			return nil, lease.ErrLeaseNotFound
+ 		}
+ 		// TODO: fill out ResponseHeader
+-		resp := &pb.LeaseTimeToLiveResponse{Header: &pb.ResponseHeader{}, ID: r.ID, TTL: int64(le.Remaining().Seconds()), GrantedTTL: le.TTL}
++		resp := &pb.LeaseTimeToLiveResponse{Header: &pb.ResponseHeader{}, ID: r.ID, TTL: int64(le.Remaining().Seconds()), GrantedTTL: le.TTL()}
+ 		if r.Keys {
+ 			ks := le.Keys()
+ 			kbs := make([][]byte, len(ks))
+diff --git a/lease/leasehttp/http.go b/lease/leasehttp/http.go
+index c82b1dafe61d..e31171a1f227 100644
+--- a/lease/leasehttp/http.go
++++ b/lease/leasehttp/http.go
+@@ -96,7 +96,7 @@ func (h *leaseHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+ 				Header:     &pb.ResponseHeader{},
+ 				ID:         lreq.LeaseTimeToLiveRequest.ID,
+ 				TTL:        int64(l.Remaining().Seconds()),
+-				GrantedTTL: l.TTL,
++				GrantedTTL: l.TTL(),
+ 			},
+ 		}
+ 		if lreq.LeaseTimeToLiveRequest.Keys {
+diff --git a/lease/lessor.go b/lease/lessor.go
+index 52c2c67d2547..3b9ae75f7816 100644
+--- a/lease/lessor.go
++++ b/lease/lessor.go
+@@ -196,7 +196,7 @@ func (le *lessor) Grant(id LeaseID, ttl int64) (*Lease, error) {
+ 	// with longer TTL to reduce renew load.
+ 	l := &Lease{
+ 		ID:      id,
+-		TTL:     ttl,
++		ttl:     ttl,
+ 		itemSet: make(map[LeaseItem]struct{}),
+ 		revokec: make(chan struct{}),
+ 	}
+@@ -208,8 +208,8 @@ func (le *lessor) Grant(id LeaseID, ttl int64) (*Lease, error) {
+ 		return nil, ErrLeaseExists
+ 	}
+ 
+-	if l.TTL < le.minLeaseTTL {
+-		l.TTL = le.minLeaseTTL
++	if l.ttl < le.minLeaseTTL {
++		l.ttl = le.minLeaseTTL
+ 	}
+ 
+ 	if le.isPrimary() {
+@@ -311,7 +311,7 @@ func (le *lessor) Renew(id LeaseID) (int64, error) {
+ 	}
+ 
+ 	l.refresh(0)
+-	return l.TTL, nil
++	return l.ttl, nil
+ }
+ 
+ func (le *lessor) Lookup(id LeaseID) *Lease {
+@@ -470,7 +470,7 @@ func (le *lessor) initAndRecover() {
+ 		}
+ 		le.leaseMap[ID] = &Lease{
+ 			ID:  ID,
+-			TTL: lpb.TTL,
++			ttl: lpb.TTL,
+ 			// itemSet will be filled in when recover key-value pairs
+ 			// set expiry to forever, refresh when promoted
+ 			itemSet: make(map[LeaseItem]struct{}),
+@@ -485,7 +485,7 @@ func (le *lessor) initAndRecover() {
+ 
+ type Lease struct {
+ 	ID  LeaseID
+-	TTL int64 // time to live in seconds
++	ttl int64 // time to live in seconds
+ 
+ 	itemSet map[LeaseItem]struct{}
+ 	// expiry time in unixnano
+@@ -493,14 +493,14 @@ type Lease struct {
+ 	revokec chan struct{}
+ }
+ 
+-func (l Lease) expired() bool {
++func (l *Lease) expired() bool {
+ 	return l.Remaining() <= 0
+ }
+ 
+-func (l Lease) persistTo(b backend.Backend) {
++func (l *Lease) persistTo(b backend.Backend) {
+ 	key := int64ToBytes(int64(l.ID))
+ 
+-	lpb := leasepb.Lease{ID: int64(l.ID), TTL: int64(l.TTL)}
++	lpb := leasepb.Lease{ID: int64(l.ID), TTL: int64(l.ttl)}
+ 	val, err := lpb.Marshal()
+ 	if err != nil {
+ 		panic("failed to marshal lease proto item")
+@@ -511,9 +511,14 @@ func (l Lease) persistTo(b backend.Backend) {
+ 	b.BatchTx().Unlock()
+ }
+ 
++// TTL returns the TTL of the Lease.
++func (l *Lease) TTL() int64 {
++	return l.ttl
++}
++
+ // refresh refreshes the expiry of the lease.
+ func (l *Lease) refresh(extend time.Duration) {
+-	l.expiry = time.Now().Add(extend + time.Second*time.Duration(l.TTL))
++	l.expiry = time.Now().Add(extend + time.Second*time.Duration(l.ttl))
+ }
+ 
+ // forever sets the expiry of lease to be forever.
+diff --git a/lease/lessor_test.go b/lease/lessor_test.go
+index 3f15a0d34788..4cc28a9db212 100644
+--- a/lease/lessor_test.go
++++ b/lease/lessor_test.go
+@@ -140,13 +140,15 @@ func TestLessorRenew(t *testing.T) {
+ 	}
+ 
+ 	// manually change the ttl field
+-	l.TTL = 10
++	le.mu.Lock()
++	l.ttl = 10
++	le.mu.Unlock()
+ 	ttl, err := le.Renew(l.ID)
+ 	if err != nil {
+ 		t.Fatalf("failed to renew lease (%v)", err)
+ 	}
+-	if ttl != l.TTL {
+-		t.Errorf("ttl = %d, want %d", ttl, l.TTL)
++	if ttl != l.ttl {
++		t.Errorf("ttl = %d, want %d", ttl, l.ttl)
+ 	}
+ 
+ 	l = le.Lookup(l.ID)
+@@ -211,13 +213,13 @@ func TestLessorRecover(t *testing.T) {
+ 	// Create a new lessor with the same backend
+ 	nle := newLessor(be, minLeaseTTL)
+ 	nl1 := nle.Lookup(l1.ID)
+-	if nl1 == nil || nl1.TTL != l1.TTL {
+-		t.Errorf("nl1 = %v, want nl1.TTL= %d", nl1.TTL, l1.TTL)
++	if nl1 == nil || nl1.ttl != l1.ttl {
++		t.Errorf("nl1 = %v, want nl1.ttl= %d", nl1.ttl, l1.ttl)
+ 	}
+ 
+ 	nl2 := nle.Lookup(l2.ID)
+-	if nl2 == nil || nl2.TTL != l2.TTL {
+-		t.Errorf("nl2 = %v, want nl2.TTL= %d", nl2.TTL, l2.TTL)
++	if nl2 == nil || nl2.ttl != l2.ttl {
++		t.Errorf("nl2 = %v, want nl2.ttl= %d", nl2.ttl, l2.ttl)
+ 	}
+ }
+ 

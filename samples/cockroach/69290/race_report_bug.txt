@@ -1,0 +1,38 @@
+WARNING: DATA RACE
+Read at 0x00c000112908 by goroutine 9:
+  ase/cockroach-69290.(*session).Expiration()
+      /work/slinstance.go:21 +0xb8
+  ase/cockroach-69290.Test69290Race.func1()
+      /work/verified_test.go:20 +0xb3
+  ase/cockroach-69290.Test69290Race.gowrap1()
+      /work/verified_test.go:22 +0x41
+
+Previous write at 0x00c000112908 by goroutine 12:
+  ase/cockroach-69290.(*Instance).ExtendSession()
+      /work/slinstance.go:35 +0xa9
+  ase/cockroach-69290.Test69290Race.func1()
+      /work/verified_test.go:18 +0xa5
+  ase/cockroach-69290.Test69290Race.gowrap1()
+      /work/verified_test.go:22 +0x41
+
+Goroutine 9 (running) created at:
+  ase/cockroach-69290.Test69290Race()
+      /work/verified_test.go:15 +0x177
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 12 (finished) created at:
+  ase/cockroach-69290.Test69290Race()
+      /work/verified_test.go:15 +0x177
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+--- FAIL: Test69290Race (0.00s)
+    testing.go:1398: race detected during execution of test
+FAIL
+FAIL	ase/cockroach-69290	0.018s
+FAIL

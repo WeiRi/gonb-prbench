@@ -1,0 +1,15 @@
+# WHITE_BOX_UPSTREAM_NOT_REPRODUCIBLE
+# Sample: prometheus-4066
+# Reason: race_detector_timing_window_missed_in_container_300s
+# Detail: docker re-run on upstream failed; v3 worker attempted with --memory=12g --cpus=6 --timeout=900s
+# Stderr: 
+# 
+# This sample's race trace was originally captured during dataset construction
+# (see marker.real_frame_hits + marker.bug_races). The current dataset<sid>/
+# verified_test.go references upstream types and cannot trigger the race in standalone
+# docker without the full upstream source tree. The marker remains ab_class=A based on
+# the original docker validation.
+# 
+# Mitigation: in the public artifact's REPRO_GUIDE.md, note that ~10% of A samples
+# (24 / 263) require an upstream checkout. The remaining ~90% (239 / 263) reproduce
+# standalone via samples/<sid>/run.sh.

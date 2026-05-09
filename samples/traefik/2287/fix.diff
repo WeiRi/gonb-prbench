@@ -1,0 +1,47 @@
+diff --git a/api/handler.go b/api/handler.go
+index f9510c072b..2ecb103e19 100644
+--- a/api/handler.go
++++ b/api/handler.go
+@@ -19,9 +19,9 @@ type Handler struct {
+ 	Dashboard             bool   `description:"Activate dashboard" export:"true"`
+ 	Debug                 bool   `export:"true"`
+ 	CurrentConfigurations *safe.Safe
+-	Statistics            *types.Statistics `description:"Enable more detailed statistics" export:"true"`
+-	Stats                 *thoas_stats.Stats
+-	StatsRecorder         *middlewares.StatsRecorder
++	Statistics            *types.Statistics          `description:"Enable more detailed statistics" export:"true"`
++	Stats                 *thoas_stats.Stats         `json:"-"`
++	StatsRecorder         *middlewares.StatsRecorder `json:"-"`
+ }
+ 
+ var (
+diff --git a/healthcheck/healthcheck.go b/healthcheck/healthcheck.go
+index b3c6ace092..e6825c4b14 100644
+--- a/healthcheck/healthcheck.go
++++ b/healthcheck/healthcheck.go
+@@ -48,6 +48,7 @@ type BackendHealthCheck struct {
+ 
+ //HealthCheck struct
+ type HealthCheck struct {
++	mutex    sync.Mutex
+ 	Backends map[string]*BackendHealthCheck
+ 	cancel   context.CancelFunc
+ }
+@@ -75,14 +76,16 @@ func NewBackendHealthCheck(options Options) *BackendHealthCheck {
+ 
+ //SetBackendsConfiguration set backends configuration
+ func (hc *HealthCheck) SetBackendsConfiguration(parentCtx context.Context, backends map[string]*BackendHealthCheck) {
++	hc.mutex.Lock()
+ 	hc.Backends = backends
+ 	if hc.cancel != nil {
+ 		hc.cancel()
+ 	}
+ 	ctx, cancel := context.WithCancel(parentCtx)
+ 	hc.cancel = cancel
++	hc.mutex.Unlock()
+ 
+-	for backendID, backend := range hc.Backends {
++	for backendID, backend := range backends {
+ 		currentBackendID := backendID
+ 		currentBackend := backend
+ 		safe.Go(func() {

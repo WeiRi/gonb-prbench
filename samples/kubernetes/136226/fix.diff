@@ -1,0 +1,13 @@
+diff --git a/pkg/kubelet/kubelet_pods.go b/pkg/kubelet/kubelet_pods.go
+index adb00dac7936a..99c079e44abf4 100644
+--- a/pkg/kubelet/kubelet_pods.go
++++ b/pkg/kubelet/kubelet_pods.go
+@@ -2151,7 +2151,7 @@ func (kl *Kubelet) convertStatusToAPIStatus(pod *v1.Pod, podStatus *kubecontaine
+ }
+ 
+ func getEffectiveAllocatedResources(allocatedPod *v1.Pod) *v1.ResourceRequirements {
+-	allocatedResources := allocatedPod.Spec.Resources
++	allocatedResources := allocatedPod.Spec.Resources.DeepCopy()
+ 	if allocatedResources == nil {
+ 		allocatedResources = &v1.ResourceRequirements{}
+ 	}

@@ -1,0 +1,202 @@
+WARNING: DATA RACE
+Write at 0x00c000025fb8 by goroutine 24:
+  k8s.io/client-go/tools/clientcmd.TestRace_92139.func1()
+      /work/staging/src/k8s.io/client-go/tools/clientcmd/race_92139_capture_test.go:63 +0xc6
+
+Previous read at 0x00c000025fb8 by goroutine 13:
+  k8s.io/client-go/tools/clientcmd.(*DeferredLoadingClientConfig).createClientConfig()
+      /work/staging/src/k8s.io/client-go/tools/clientcmd/merged_client_builder.go:67 +0x104
+  k8s.io/client-go/tools/clientcmd.TestRace_92139.func1()
+      /work/staging/src/k8s.io/client-go/tools/clientcmd/race_92139_capture_test.go:64 +0x9e
+
+Goroutine 24 (running) created at:
+  k8s.io/client-go/tools/clientcmd.TestRace_92139()
+      /work/staging/src/k8s.io/client-go/tools/clientcmd/race_92139_capture_test.go:57 +0x185
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1595 +0x261
+  testing.(*T).Run.func1()
+      /usr/local/go/src/testing/testing.go:1648 +0x44
+
+Goroutine 13 (running) created at:
+  k8s.io/client-go/tools/clientcmd.TestRace_92139()
+      /work/staging/src/k8s.io/client-go/tools/clientcmd/race_92139_capture_test.go:57 +0x185
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1595 +0x261
+  testing.(*T).Run.func1()
+      /usr/local/go/src/testing/testing.go:1648 +0x44
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c000025fb8 by goroutine 31:
+  k8s.io/client-go/tools/clientcmd.TestRace_92139.func1()
+      /work/staging/src/k8s.io/client-go/tools/clientcmd/race_92139_capture_test.go:63 +0xc6
+
+Previous write at 0x00c000025fb8 by goroutine 13:
+  k8s.io/client-go/tools/clientcmd.(*DeferredLoadingClientConfig).createClientConfig()
+      /work/staging/src/k8s.io/client-go/tools/clientcmd/merged_client_builder.go:80 +0x6fb
+  k8s.io/client-go/tools/clientcmd.TestRace_92139.func1()
+      /work/staging/src/k8s.io/client-go/tools/clientcmd/race_92139_capture_test.go:64 +0x9e
+
+Goroutine 31 (running) created at:
+  k8s.io/client-go/tools/clientcmd.TestRace_92139()
+      /work/staging/src/k8s.io/client-go/tools/clientcmd/race_92139_capture_test.go:57 +0x185
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1595 +0x261
+  testing.(*T).Run.func1()
+      /usr/local/go/src/testing/testing.go:1648 +0x44
+
+Goroutine 13 (running) created at:
+  k8s.io/client-go/tools/clientcmd.TestRace_92139()
+      /work/staging/src/k8s.io/client-go/tools/clientcmd/race_92139_capture_test.go:57 +0x185
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1595 +0x261
+  testing.(*T).Run.func1()
+      /usr/local/go/src/testing/testing.go:1648 +0x44
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c000025fb8 by goroutine 18:
+  k8s.io/client-go/tools/clientcmd.TestRace_92139.func1()
+      /work/staging/src/k8s.io/client-go/tools/clientcmd/race_92139_capture_test.go:63 +0xc6
+
+Previous write at 0x00c000025fb8 by goroutine 13:
+  k8s.io/client-go/tools/clientcmd.TestRace_92139.func1()
+      /work/staging/src/k8s.io/client-go/tools/clientcmd/race_92139_capture_test.go:63 +0xc6
+
+Goroutine 18 (running) created at:
+  k8s.io/client-go/tools/clientcmd.TestRace_92139()
+      /work/staging/src/k8s.io/client-go/tools/clientcmd/race_92139_capture_test.go:57 +0x185
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1595 +0x261
+  testing.(*T).Run.func1()
+      /usr/local/go/src/testing/testing.go:1648 +0x44
+
+Goroutine 13 (running) created at:
+  k8s.io/client-go/tools/clientcmd.TestRace_92139()
+      /work/staging/src/k8s.io/client-go/tools/clientcmd/race_92139_capture_test.go:57 +0x185
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1595 +0x261
+  testing.(*T).Run.func1()
+      /usr/local/go/src/testing/testing.go:1648 +0x44
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c000025fb8 by goroutine 23:
+  k8s.io/client-go/tools/clientcmd.TestRace_92139.func1()
+      /work/staging/src/k8s.io/client-go/tools/clientcmd/race_92139_capture_test.go:63 +0xc6
+
+Previous read at 0x00c000025fb8 by goroutine 24:
+  k8s.io/client-go/tools/clientcmd.(*DeferredLoadingClientConfig).createClientConfig()
+      /work/staging/src/k8s.io/client-go/tools/clientcmd/merged_client_builder.go:63 +0x64
+  k8s.io/client-go/tools/clientcmd.TestRace_92139.func1()
+      /work/staging/src/k8s.io/client-go/tools/clientcmd/race_92139_capture_test.go:64 +0x9e
+
+Goroutine 23 (running) created at:
+  k8s.io/client-go/tools/clientcmd.TestRace_92139()
+      /work/staging/src/k8s.io/client-go/tools/clientcmd/race_92139_capture_test.go:57 +0x185
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1595 +0x261
+  testing.(*T).Run.func1()
+      /usr/local/go/src/testing/testing.go:1648 +0x44
+
+Goroutine 24 (running) created at:
+  k8s.io/client-go/tools/clientcmd.TestRace_92139()
+      /work/staging/src/k8s.io/client-go/tools/clientcmd/race_92139_capture_test.go:57 +0x185
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1595 +0x261
+  testing.(*T).Run.func1()
+      /usr/local/go/src/testing/testing.go:1648 +0x44
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c000025fb8 by goroutine 23:
+  k8s.io/client-go/tools/clientcmd.(*DeferredLoadingClientConfig).createClientConfig()
+      /work/staging/src/k8s.io/client-go/tools/clientcmd/merged_client_builder.go:63 +0x64
+  k8s.io/client-go/tools/clientcmd.TestRace_92139.func1()
+      /work/staging/src/k8s.io/client-go/tools/clientcmd/race_92139_capture_test.go:64 +0x9e
+
+Previous write at 0x00c000025fb8 by goroutine 13:
+  k8s.io/client-go/tools/clientcmd.(*DeferredLoadingClientConfig).createClientConfig()
+      /work/staging/src/k8s.io/client-go/tools/clientcmd/merged_client_builder.go:80 +0x6fb
+  k8s.io/client-go/tools/clientcmd.TestRace_92139.func1()
+      /work/staging/src/k8s.io/client-go/tools/clientcmd/race_92139_capture_test.go:64 +0x9e
+
+Goroutine 23 (running) created at:
+  k8s.io/client-go/tools/clientcmd.TestRace_92139()
+      /work/staging/src/k8s.io/client-go/tools/clientcmd/race_92139_capture_test.go:57 +0x185
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1595 +0x261
+  testing.(*T).Run.func1()
+      /usr/local/go/src/testing/testing.go:1648 +0x44
+
+Goroutine 13 (running) created at:
+  k8s.io/client-go/tools/clientcmd.TestRace_92139()
+      /work/staging/src/k8s.io/client-go/tools/clientcmd/race_92139_capture_test.go:57 +0x185
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1595 +0x261
+  testing.(*T).Run.func1()
+      /usr/local/go/src/testing/testing.go:1648 +0x44
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c000025fb8 by goroutine 25:
+  k8s.io/client-go/tools/clientcmd.(*DeferredLoadingClientConfig).createClientConfig()
+      /work/staging/src/k8s.io/client-go/tools/clientcmd/merged_client_builder.go:84 +0x74d
+  k8s.io/client-go/tools/clientcmd.TestRace_92139.func1()
+      /work/staging/src/k8s.io/client-go/tools/clientcmd/race_92139_capture_test.go:64 +0x9e
+
+Previous write at 0x00c000025fb8 by goroutine 19:
+  k8s.io/client-go/tools/clientcmd.TestRace_92139.func1()
+      /work/staging/src/k8s.io/client-go/tools/clientcmd/race_92139_capture_test.go:63 +0xc6
+
+Goroutine 25 (running) created at:
+  k8s.io/client-go/tools/clientcmd.TestRace_92139()
+      /work/staging/src/k8s.io/client-go/tools/clientcmd/race_92139_capture_test.go:57 +0x185
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1595 +0x261
+  testing.(*T).Run.func1()
+      /usr/local/go/src/testing/testing.go:1648 +0x44
+
+Goroutine 19 (running) created at:
+  k8s.io/client-go/tools/clientcmd.TestRace_92139()
+      /work/staging/src/k8s.io/client-go/tools/clientcmd/race_92139_capture_test.go:57 +0x185
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1595 +0x261
+  testing.(*T).Run.func1()
+      /usr/local/go/src/testing/testing.go:1648 +0x44
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c000025fb8 by goroutine 29:
+  k8s.io/client-go/tools/clientcmd.(*DeferredLoadingClientConfig).createClientConfig()
+      /work/staging/src/k8s.io/client-go/tools/clientcmd/merged_client_builder.go:84 +0x74d
+  k8s.io/client-go/tools/clientcmd.TestRace_92139.func1()
+      /work/staging/src/k8s.io/client-go/tools/clientcmd/race_92139_capture_test.go:64 +0x9e
+
+Previous write at 0x00c000025fb8 by goroutine 19:
+  k8s.io/client-go/tools/clientcmd.(*DeferredLoadingClientConfig).createClientConfig()
+      /work/staging/src/k8s.io/client-go/tools/clientcmd/merged_client_builder.go:80 +0x6fb
+  k8s.io/client-go/tools/clientcmd.TestRace_92139.func1()
+      /work/staging/src/k8s.io/client-go/tools/clientcmd/race_92139_capture_test.go:64 +0x9e
+
+Goroutine 29 (running) created at:
+  k8s.io/client-go/tools/clientcmd.TestRace_92139()
+      /work/staging/src/k8s.io/client-go/tools/clientcmd/race_92139_capture_test.go:57 +0x185
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1595 +0x261
+  testing.(*T).Run.func1()
+      /usr/local/go/src/testing/testing.go:1648 +0x44
+
+Goroutine 19 (running) created at:
+  k8s.io/client-go/tools/clientcmd.TestRace_92139()
+      /work/staging/src/k8s.io/client-go/tools/clientcmd/race_92139_capture_test.go:57 +0x185
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1595 +0x261
+  testing.(*T).Run.func1()
+      /usr/local/go/src/testing/testing.go:1648 +0x44
+==================
+--- FAIL: TestRace_92139 (0.48s)
+    testing.go:1465: race detected during execution of test
+FAIL
+FAIL	k8s.io/client-go/tools/clientcmd	0.519s
+FAIL

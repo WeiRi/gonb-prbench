@@ -1,0 +1,72 @@
+diff --git a/daemon/graphdriver/quota/projectquota.go b/daemon/graphdriver/quota/projectquota.go
+index fbd53085c9536..d720ac78db60f 100644
+--- a/daemon/graphdriver/quota/projectquota.go
++++ b/daemon/graphdriver/quota/projectquota.go
+@@ -153,9 +153,11 @@ func NewControl(basePath string) (*Control, error) {
+ // SetQuota - assign a unique project id to directory and set the quota limits
+ // for that project id
+ func (q *Control) SetQuota(targetPath string, quota Quota) error {
+-
++	q.RLock()
+ 	projectID, ok := q.quotas[targetPath]
++	q.RUnlock()
+ 	if !ok {
++		q.Lock()
+ 		projectID = q.nextProjectID
+ 
+ 		//
+@@ -163,11 +165,12 @@ func (q *Control) SetQuota(targetPath string, quota Quota) error {
+ 		//
+ 		err := setProjectID(targetPath, projectID)
+ 		if err != nil {
++			q.Unlock()
+ 			return err
+ 		}
+-
+ 		q.quotas[targetPath] = projectID
+ 		q.nextProjectID++
++		q.Unlock()
+ 	}
+ 
+ 	//
+@@ -204,8 +207,9 @@ func setProjectQuota(backingFsBlockDev string, projectID uint32, quota Quota) er
+ 
+ // GetQuota - get the quota limits of a directory that was configured with SetQuota
+ func (q *Control) GetQuota(targetPath string, quota *Quota) error {
+-
++	q.RLock()
+ 	projectID, ok := q.quotas[targetPath]
++	q.RUnlock()
+ 	if !ok {
+ 		return errors.Errorf("quota not found for path: %s", targetPath)
+ 	}
+@@ -276,6 +280,8 @@ func setProjectID(targetPath string, projectID uint32) error {
+ // findNextProjectID - find the next project id to be used for containers
+ // by scanning driver home directory to find used project ids
+ func (q *Control) findNextProjectID(home string) error {
++	q.Lock()
++	defer q.Unlock()
+ 	files, err := ioutil.ReadDir(home)
+ 	if err != nil {
+ 		return errors.Errorf("read directory failed: %s", home)
+diff --git a/daemon/graphdriver/quota/types.go b/daemon/graphdriver/quota/types.go
+index 90f71520a7291..036c3249a158a 100644
+--- a/daemon/graphdriver/quota/types.go
++++ b/daemon/graphdriver/quota/types.go
+@@ -2,6 +2,8 @@
+ 
+ package quota // import "github.com/docker/docker/daemon/graphdriver/quota"
+ 
++import "sync"
++
+ // Quota limit params - currently we only control blocks hard limit
+ type Quota struct {
+ 	Size uint64
+@@ -11,6 +13,7 @@ type Quota struct {
+ // who wants to apply project quotas to container dirs
+ type Control struct {
+ 	backingFsBlockDev string
++	sync.RWMutex      // protect nextProjectID and quotas map
+ 	nextProjectID     uint32
+ 	quotas            map[string]uint32
+ }

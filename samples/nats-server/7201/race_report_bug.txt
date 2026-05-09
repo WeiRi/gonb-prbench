@@ -1,0 +1,98 @@
+WARNING: DATA RACE
+Write at 0x00c0000b2038 by goroutine 8:
+  ase/nats-server-7201.(*consumer).updatePauseUntil()
+      /work/jetstream_api.go:22 +0x44
+  ase/nats-server-7201.TestRacePauseUntilRead.func1()
+      /work/verified_test.go:32 +0xae
+  ase/nats-server-7201.TestRacePauseUntilRead.gowrap1()
+      /work/verified_test.go:34 +0x41
+
+Previous read at 0x00c0000b2038 by goroutine 18:
+  ase/nats-server-7201.(*consumer).jsConsumerCreateRequest()
+      /work/jetstream_api.go:28 +0xe5
+  ase/nats-server-7201.TestRacePauseUntilRead.func2()
+      /work/verified_test.go:42 +0xdd
+
+Goroutine 8 (running) created at:
+  ase/nats-server-7201.TestRacePauseUntilRead()
+      /work/verified_test.go:28 +0x17e
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 18 (finished) created at:
+  ase/nats-server-7201.TestRacePauseUntilRead()
+      /work/verified_test.go:38 +0x2bc
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c0000122d0 by goroutine 15:
+  ase/nats-server-7201.(*consumer).jsConsumerCreateRequest()
+      /work/jetstream_api.go:29 +0x110
+  ase/nats-server-7201.TestRacePauseUntilRead.func2()
+      /work/verified_test.go:42 +0xdd
+
+Previous write at 0x00c0000122d0 by goroutine 8:
+  ase/nats-server-7201.TestRacePauseUntilRead.func1()
+      /work/verified_test.go:31 +0x11e
+  ase/nats-server-7201.TestRacePauseUntilRead.gowrap1()
+      /work/verified_test.go:34 +0x41
+
+Goroutine 15 (running) created at:
+  ase/nats-server-7201.TestRacePauseUntilRead()
+      /work/verified_test.go:38 +0x2bc
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 8 (running) created at:
+  ase/nats-server-7201.TestRacePauseUntilRead()
+      /work/verified_test.go:28 +0x17e
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c0000b2038 by goroutine 8:
+  ase/nats-server-7201.(*consumer).updatePauseUntil()
+      /work/jetstream_api.go:22 +0x44
+  ase/nats-server-7201.TestRacePauseUntilRead.func1()
+      /work/verified_test.go:32 +0xae
+  ase/nats-server-7201.TestRacePauseUntilRead.gowrap1()
+      /work/verified_test.go:34 +0x41
+
+Previous read at 0x00c0000b2038 by goroutine 15:
+  ase/nats-server-7201.(*consumer).jsConsumerCreateRequest()
+      /work/jetstream_api.go:29 +0xfb
+  ase/nats-server-7201.TestRacePauseUntilRead.func2()
+      /work/verified_test.go:42 +0xdd
+
+Goroutine 8 (running) created at:
+  ase/nats-server-7201.TestRacePauseUntilRead()
+      /work/verified_test.go:28 +0x17e
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 15 (finished) created at:
+  ase/nats-server-7201.TestRacePauseUntilRead()
+      /work/verified_test.go:38 +0x2bc
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+    testing.go:1398: race detected during execution of test
+--- FAIL: TestRacePauseUntilRead (0.04s)
+FAIL
+FAIL	ase/nats-server-7201	0.060s
+FAIL

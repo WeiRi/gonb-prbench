@@ -1,0 +1,60 @@
+WARNING: DATA RACE
+Write at 0x0000006fc428 by goroutine 9:
+  ase/grpc-go-1897.TestRace_PR1897_MinConnectTimeout.func2()
+      /work/verified_test.go:80 +0x91
+
+Previous read at 0x0000006fc428 by goroutine 8:
+  ase/grpc-go-1897.resetTransport()
+      /work/clientconn.go:20 +0x96
+  ase/grpc-go-1897.TestRace_PR1897_MinConnectTimeout.func1()
+      /work/verified_test.go:73 +0xa9
+
+Goroutine 9 (running) created at:
+  ase/grpc-go-1897.TestRace_PR1897_MinConnectTimeout()
+      /work/verified_test.go:77 +0x18d
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 8 (running) created at:
+  ase/grpc-go-1897.TestRace_PR1897_MinConnectTimeout()
+      /work/verified_test.go:71 +0x110
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Write at 0x0000006fc428 by goroutine 9:
+  ase/grpc-go-1897.TestRace_PR1897_MinConnectTimeout.func2()
+      /work/verified_test.go:82 +0xb2
+
+Previous read at 0x0000006fc428 by goroutine 8:
+  ase/grpc-go-1897.resetTransport()
+      /work/clientconn.go:20 +0x96
+  ase/grpc-go-1897.TestRace_PR1897_MinConnectTimeout.func1()
+      /work/verified_test.go:73 +0xa9
+
+Goroutine 9 (running) created at:
+  ase/grpc-go-1897.TestRace_PR1897_MinConnectTimeout()
+      /work/verified_test.go:77 +0x18d
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 8 (running) created at:
+  ase/grpc-go-1897.TestRace_PR1897_MinConnectTimeout()
+      /work/verified_test.go:71 +0x110
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+    testing.go:1398: race detected during execution of test
+--- FAIL: TestRace_PR1897_MinConnectTimeout (0.05s)
+FAIL
+FAIL	ase/grpc-go-1897	0.067s
+FAIL

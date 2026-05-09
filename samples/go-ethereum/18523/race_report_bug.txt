@@ -1,0 +1,38 @@
+WARNING: DATA RACE
+Write at 0x00c0000d8510 by goroutine 8:
+  runtime.mapassign_fast64()
+      /usr/local/go/src/runtime/map_fast64.go:93 +0x0
+  ase/go-ethereum-18523.(*Pss).Register()
+      /work/pss.go:29 +0x167
+  ase/go-ethereum-18523.TestRace_18523_topicHandlerCaps.func1()
+      /work/verified_test.go:18 +0xd8
+
+Previous read at 0x00c0000d8510 by goroutine 9:
+  runtime.mapaccess2_fast64()
+      /usr/local/go/src/runtime/map_fast64.go:53 +0x0
+  ase/go-ethereum-18523.(*Pss).HandlePssMsg()
+      /work/pss.go:39 +0xec
+  ase/go-ethereum-18523.TestRace_18523_topicHandlerCaps.func2()
+      /work/verified_test.go:24 +0xbd
+
+Goroutine 8 (running) created at:
+  ase/go-ethereum-18523.TestRace_18523_topicHandlerCaps()
+      /work/verified_test.go:15 +0x15c
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 9 (finished) created at:
+  ase/go-ethereum-18523.TestRace_18523_topicHandlerCaps()
+      /work/verified_test.go:21 +0x204
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+--- FAIL: TestRace_18523_topicHandlerCaps (0.00s)
+    testing.go:1398: race detected during execution of test
+FAIL
+FAIL	ase/go-ethereum-18523	0.016s
+FAIL

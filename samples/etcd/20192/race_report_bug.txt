@@ -1,0 +1,64 @@
+WARNING: DATA RACE
+Write at 0x00c00001c330 by goroutine 34:
+  ase/etcd-20192.(*Client).SetLogger()
+      /work/client.go:16 +0x124
+  ase/etcd-20192.TestRace_20192.func1()
+      /work/verified_test.go:30 +0x11f
+
+Previous read at 0x00c00001c330 by goroutine 17:
+  ase/etcd-20192.(*Client).GetLogger()
+      /work/client.go:21 +0xd0
+  ase/etcd-20192.TestRace_20192.func2()
+      /work/verified_test.go:38 +0xc8
+
+Goroutine 34 (running) created at:
+  ase/etcd-20192.TestRace_20192()
+      /work/verified_test.go:25 +0x31c
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 17 (finished) created at:
+  ase/etcd-20192.TestRace_20192()
+      /work/verified_test.go:33 +0x1d1
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c00001c330 by goroutine 30:
+  ase/etcd-20192.(*Client).SetLogger()
+      /work/client.go:16 +0x124
+  ase/etcd-20192.TestRace_20192.func1()
+      /work/verified_test.go:30 +0x11f
+
+Previous write at 0x00c00001c330 by goroutine 40:
+  ase/etcd-20192.(*Client).SetLogger()
+      /work/client.go:16 +0x124
+  ase/etcd-20192.TestRace_20192.func1()
+      /work/verified_test.go:30 +0x11f
+
+Goroutine 30 (running) created at:
+  ase/etcd-20192.TestRace_20192()
+      /work/verified_test.go:25 +0x31c
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 40 (running) created at:
+  ase/etcd-20192.TestRace_20192()
+      /work/verified_test.go:25 +0x31c
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+    testing.go:1398: race detected during execution of test
+--- FAIL: TestRace_20192 (0.04s)
+FAIL
+FAIL	ase/etcd-20192	0.054s
+FAIL

@@ -1,0 +1,103 @@
+diff --git a/staging/src/k8s.io/apimachinery/pkg/util/wait/wait.go b/staging/src/k8s.io/apimachinery/pkg/util/wait/wait.go
+index 4cb0c122c0cfa..d759d912be156 100644
+--- a/staging/src/k8s.io/apimachinery/pkg/util/wait/wait.go
++++ b/staging/src/k8s.io/apimachinery/pkg/util/wait/wait.go
+@@ -286,8 +286,9 @@ func contextForChannel(parentCh <-chan struct{}) (context.Context, context.Cance
+ }
+ 
+ // BackoffManager manages backoff with a particular scheme based on its underlying implementation. It provides
+-// an interface to return a timer for backoff, and caller shall backoff until Timer.C returns. If the second Backoff()
+-// is called before the timer from the first Backoff() call finishes, the first timer will NOT be drained.
++// an interface to return a timer for backoff, and caller shall backoff until Timer.C() drains. If the second Backoff()
++// is called before the timer from the first Backoff() call finishes, the first timer will NOT be drained and result in
++// undetermined behavior.
+ // The BackoffManager is supposed to be called in a single-threaded environment.
+ type BackoffManager interface {
+ 	Backoff() clock.Timer
+@@ -317,7 +318,7 @@ func NewExponentialBackoffManager(initBackoff, maxBackoff, resetDuration time.Du
+ 			Steps: math.MaxInt32,
+ 			Cap:   maxBackoff,
+ 		},
+-		backoffTimer:         c.NewTimer(0),
++		backoffTimer:         nil,
+ 		initialBackoff:       initBackoff,
+ 		lastBackoffStart:     c.Now(),
+ 		backoffResetDuration: resetDuration,
+@@ -334,9 +335,14 @@ func (b *exponentialBackoffManagerImpl) getNextBackoff() time.Duration {
+ 	return b.backoff.Step()
+ }
+ 
+-// Backoff implements BackoffManager.Backoff, it returns a timer so caller can block on the timer for backoff.
++// Backoff implements BackoffManager.Backoff, it returns a timer so caller can block on the timer for exponential backoff.
++// The returned timer must be drained before calling Backoff() the second time
+ func (b *exponentialBackoffManagerImpl) Backoff() clock.Timer {
+-	b.backoffTimer.Reset(b.getNextBackoff())
++	if b.backoffTimer == nil {
++		b.backoffTimer = b.clock.NewTimer(b.getNextBackoff())
++	} else {
++		b.backoffTimer.Reset(b.getNextBackoff())
++	}
+ 	return b.backoffTimer
+ }
+ 
+@@ -354,7 +360,7 @@ func NewJitteredBackoffManager(duration time.Duration, jitter float64, c clock.C
+ 		clock:        c,
+ 		duration:     duration,
+ 		jitter:       jitter,
+-		backoffTimer: c.NewTimer(0),
++		backoffTimer: nil,
+ 	}
+ }
+ 
+@@ -366,8 +372,15 @@ func (j *jitteredBackoffManagerImpl) getNextBackoff() time.Duration {
+ 	return jitteredPeriod
+ }
+ 
++// Backoff implements BackoffManager.Backoff, it returns a timer so caller can block on the timer for jittered backoff.
++// The returned timer must be drained before calling Backoff() the second time
+ func (j *jitteredBackoffManagerImpl) Backoff() clock.Timer {
+-	j.backoffTimer.Reset(j.getNextBackoff())
++	backoff := j.getNextBackoff()
++	if j.backoffTimer == nil {
++		j.backoffTimer = j.clock.NewTimer(backoff)
++	} else {
++		j.backoffTimer.Reset(backoff)
++	}
+ 	return j.backoffTimer
+ }
+ 
+diff --git a/staging/src/k8s.io/apimachinery/pkg/util/wait/wait_test.go b/staging/src/k8s.io/apimachinery/pkg/util/wait/wait_test.go
+index 2e07df8cbdbd8..d73735b7d069d 100644
+--- a/staging/src/k8s.io/apimachinery/pkg/util/wait/wait_test.go
++++ b/staging/src/k8s.io/apimachinery/pkg/util/wait/wait_test.go
+@@ -731,3 +731,30 @@ func TestJitteredBackoffManagerGetNextBackoff(t *testing.T) {
+ 		t.Errorf("backoff should be 1, but got %d", backoff)
+ 	}
+ }
++
++func TestJitterBackoffManagerWithRealClock(t *testing.T) {
++	backoffMgr := NewJitteredBackoffManager(1*time.Millisecond, 0, &clock.RealClock{})
++	for i := 0; i < 5; i++ {
++		start := time.Now()
++		<-backoffMgr.Backoff().C()
++		passed := time.Now().Sub(start)
++		if passed < 1*time.Millisecond {
++			t.Errorf("backoff should be at least 1ms, but got %s", passed.String())
++		}
++	}
++}
++
++func TestExponentialBackoffManagerWithRealClock(t *testing.T) {
++	// backoff at least 1ms, 2ms, 4ms, 8ms, 10ms, 10ms, 10ms
++	durationFactors := []time.Duration{1, 2, 4, 8, 10, 10, 10}
++	backoffMgr := NewExponentialBackoffManager(1*time.Millisecond, 10*time.Millisecond, 1*time.Hour, 2.0, 0.0, &clock.RealClock{})
++
++	for i := range durationFactors {
++		start := time.Now()
++		<-backoffMgr.Backoff().C()
++		passed := time.Now().Sub(start)
++		if passed < durationFactors[i]*time.Millisecond {
++			t.Errorf("backoff should be at least %d ms, but got %s", durationFactors[i], passed.String())
++		}
++	}
++}

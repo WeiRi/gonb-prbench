@@ -1,0 +1,92 @@
+WARNING: DATA RACE
+Write at 0x00c00012c8d8 by goroutine 9:
+  ase/dns-780.(*Server).ShutdownContext()
+      /work/server.go:40 +0x98
+  ase/dns-780.TestRace_dns780_started_vs_shutdown.func2()
+      /work/verified_test.go:24 +0x99
+
+Previous read at 0x00c00012c8d8 by goroutine 8:
+  ase/dns-780.(*Server).ReadTCP()
+      /work/server.go:27 +0x37
+  ase/dns-780.TestRace_dns780_started_vs_shutdown.func1()
+      /work/verified_test.go:18 +0x99
+
+Goroutine 9 (running) created at:
+  ase/dns-780.TestRace_dns780_started_vs_shutdown()
+      /work/verified_test.go:21 +0x20c
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 8 (finished) created at:
+  ase/dns-780.TestRace_dns780_started_vs_shutdown()
+      /work/verified_test.go:15 +0x164
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c00012c8e0 by goroutine 9:
+  ase/dns-780.(*Server).ShutdownContext()
+      /work/server.go:41 +0xd2
+  ase/dns-780.TestRace_dns780_started_vs_shutdown.func2()
+      /work/verified_test.go:24 +0x99
+
+Previous write at 0x00c00012c8e0 by goroutine 8:
+  ase/dns-780.(*Server).ReadTCP()
+      /work/server.go:28 +0x7b
+  ase/dns-780.TestRace_dns780_started_vs_shutdown.func1()
+      /work/verified_test.go:18 +0x99
+
+Goroutine 9 (running) created at:
+  ase/dns-780.TestRace_dns780_started_vs_shutdown()
+      /work/verified_test.go:21 +0x20c
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 8 (finished) created at:
+  ase/dns-780.TestRace_dns780_started_vs_shutdown()
+      /work/verified_test.go:15 +0x164
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c00012c8d8 by goroutine 9:
+  ase/dns-780.TestRace_dns780_started_vs_shutdown.func2()
+      /work/verified_test.go:26 +0xb6
+
+Previous read at 0x00c00012c8d8 by goroutine 8:
+  ase/dns-780.(*Server).ReadTCP()
+      /work/server.go:27 +0x37
+  ase/dns-780.TestRace_dns780_started_vs_shutdown.func1()
+      /work/verified_test.go:18 +0x99
+
+Goroutine 9 (running) created at:
+  ase/dns-780.TestRace_dns780_started_vs_shutdown()
+      /work/verified_test.go:21 +0x20c
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 8 (finished) created at:
+  ase/dns-780.TestRace_dns780_started_vs_shutdown()
+      /work/verified_test.go:15 +0x164
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+--- FAIL: TestRace_dns780_started_vs_shutdown (0.00s)
+    testing.go:1398: race detected during execution of test
+FAIL
+FAIL	ase/dns-780	0.017s
+FAIL

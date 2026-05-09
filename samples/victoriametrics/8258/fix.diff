@@ -1,0 +1,25 @@
+diff --git a/app/vmalert/notifier/alertmanager.go b/app/vmalert/notifier/alertmanager.go
+index d05eb2bcf5ca6..edc7f1863c556 100644
+--- a/app/vmalert/notifier/alertmanager.go
++++ b/app/vmalert/notifier/alertmanager.go
+@@ -70,7 +70,7 @@ func (am *AlertManager) Send(ctx context.Context, alerts []Alert, headers map[st
+ 
+ func (am *AlertManager) send(ctx context.Context, alerts []Alert, headers map[string]string) error {
+ 	b := &bytes.Buffer{}
+-	alertsToSend := alerts[:0]
++	alertsToSend := make([]Alert, 0, len(alerts))
+ 	lblss := make([][]prompbmarshal.Label, 0, len(alerts))
+ 	for _, a := range alerts {
+ 		lbls := a.applyRelabelingIfNeeded(am.relabelConfigs)
+diff --git a/docs/changelog/CHANGELOG.md b/docs/changelog/CHANGELOG.md
+index a000c4033b978..8eed5faf2d483 100644
+--- a/docs/changelog/CHANGELOG.md
++++ b/docs/changelog/CHANGELOG.md
+@@ -19,6 +19,7 @@ See also [LTS releases](https://docs.victoriametrics.com/lts-releases/).
+ ## tip
+ 
+ * SECURITY: upgrade Go builder from Go1.23.5 to Go1.23.6. See the list of issues addressed in [Go1.23.6](https://github.com/golang/go/issues?q=milestone%3AGo1.23.6+label%3ACherryPickApproved).
++* BUGFIX: [vmalert](https://docs.victoriametrics.com/vmalert/): fix polluted alert messages when multiple Alertmanager instances are configured with `alert_relabel_configs`. See [this issue](https://github.com/VictoriaMetrics/VictoriaMetrics/issues/8040), and thanks to @evkuzin for [the pull request](https://github.com/VictoriaMetrics/VictoriaMetrics/pull/8258).
+ 
+ ## [v1.111.0](https://github.com/VictoriaMetrics/VictoriaMetrics/releases/tag/v1.111.0)
+ 

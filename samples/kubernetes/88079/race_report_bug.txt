@@ -1,0 +1,36 @@
+WARNING: DATA RACE
+Read at 0x00c000218370 by goroutine 35:
+  ase/kubernetes-88079.(*Dialer).CloseAll()
+      /work/connrotation.go:64 +0x16f
+  ase/kubernetes-88079.TestRace_88079.func3()
+      /work/verified_test.go:41 +0xa4
+
+Previous write at 0x00c000218370 by goroutine 16:
+  ase/kubernetes-88079.(*Dialer).DialContext()
+      /work/connrotation.go:49 +0x244
+  ase/kubernetes-88079.(*Dialer).Dial()
+      /work/connrotation.go:36 +0xf8
+  ase/kubernetes-88079.TestRace_88079.func2()
+      /work/verified_test.go:33 +0xc7
+
+Goroutine 35 (running) created at:
+  ase/kubernetes-88079.TestRace_88079()
+      /work/verified_test.go:38 +0x12a
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 16 (running) created at:
+  ase/kubernetes-88079.TestRace_88079()
+      /work/verified_test.go:30 +0x21c
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+    testing.go:1398: race detected during execution of test
+--- FAIL: TestRace_88079 (0.16s)
+FAIL
+FAIL	ase/kubernetes-88079	0.181s
+FAIL

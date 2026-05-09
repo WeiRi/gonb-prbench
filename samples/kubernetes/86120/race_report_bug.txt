@@ -1,0 +1,60 @@
+WARNING: DATA RACE
+Read at 0x00c000014254 by goroutine 9:
+  ase/kubernetes-86120.TestRace_86120.func1()
+      /work/verified_test.go:23 +0xa6
+
+Previous write at 0x00c000014254 by goroutine 13:
+  ase/kubernetes-86120.(*FakeWatcher).Reset()
+      /work/watch.go:24 +0x3e
+  ase/kubernetes-86120.TestRace_86120.func1()
+      /work/verified_test.go:25 +0xba
+
+Goroutine 9 (running) created at:
+  ase/kubernetes-86120.TestRace_86120()
+      /work/verified_test.go:17 +0x84
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 13 (finished) created at:
+  ase/kubernetes-86120.TestRace_86120()
+      /work/verified_test.go:17 +0x84
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c000014254 by goroutine 10:
+  ase/kubernetes-86120.(*FakeWatcher).Stop()
+      /work/watch.go:18 +0x3e
+  ase/kubernetes-86120.TestRace_86120.func1()
+      /work/verified_test.go:24 +0xb0
+
+Previous read at 0x00c000014254 by goroutine 9:
+  ase/kubernetes-86120.TestRace_86120.func1()
+      /work/verified_test.go:23 +0xa6
+
+Goroutine 10 (running) created at:
+  ase/kubernetes-86120.TestRace_86120()
+      /work/verified_test.go:17 +0x84
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 9 (running) created at:
+  ase/kubernetes-86120.TestRace_86120()
+      /work/verified_test.go:17 +0x84
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+    testing.go:1398: race detected during execution of test
+--- FAIL: TestRace_86120 (0.06s)
+FAIL
+FAIL	ase/kubernetes-86120	0.074s
+FAIL

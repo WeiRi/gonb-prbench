@@ -1,0 +1,102 @@
+WARNING: DATA RACE
+Write at 0x00c000114010 by goroutine 34:
+  ase/grpc-go-8519.(*Stream).SetTrailer()
+      /work/handler_server.go:27 +0x492
+  ase/grpc-go-8519.TestRace_HandlerServer_TrailerCopy_8519.func1.1()
+      /work/verified_test.go:25 +0xc9
+
+Previous read at 0x00c000114010 by goroutine 37:
+  ase/grpc-go-8519.(*serverHandlerTransport).writeStatus()
+      /work/handler_server.go:38 +0xe4
+  ase/grpc-go-8519.TestRace_HandlerServer_TrailerCopy_8519.func1.2()
+      /work/verified_test.go:31 +0xd8
+
+Goroutine 34 (running) created at:
+  ase/grpc-go-8519.TestRace_HandlerServer_TrailerCopy_8519.func1()
+      /work/verified_test.go:22 +0x364
+
+Goroutine 37 (finished) created at:
+  ase/grpc-go-8519.TestRace_HandlerServer_TrailerCopy_8519.func1()
+      /work/verified_test.go:28 +0x451
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c0002099b0 by goroutine 30:
+  runtime.mapiterinit()
+      /usr/local/go/src/runtime/map.go:816 +0x0
+  ase/grpc-go-8519.(*serverHandlerTransport).writeStatus()
+      /work/handler_server.go:38 +0x124
+  ase/grpc-go-8519.TestRace_HandlerServer_TrailerCopy_8519.func1.2()
+      /work/verified_test.go:31 +0xd8
+
+Previous write at 0x00c0002099b0 by goroutine 27:
+  runtime.mapassign_faststr()
+      /usr/local/go/src/runtime/map_faststr.go:203 +0x0
+  ase/grpc-go-8519.MD.Join()
+      /work/handler_server.go:10 +0x194
+  ase/grpc-go-8519.(*Stream).SetTrailer()
+      /work/handler_server.go:27 +0x49
+  ase/grpc-go-8519.TestRace_HandlerServer_TrailerCopy_8519.func1.1()
+      /work/verified_test.go:25 +0xc9
+
+Goroutine 30 (running) created at:
+  ase/grpc-go-8519.TestRace_HandlerServer_TrailerCopy_8519.func1()
+      /work/verified_test.go:28 +0x451
+
+Goroutine 27 (running) created at:
+  ase/grpc-go-8519.TestRace_HandlerServer_TrailerCopy_8519.func1()
+      /work/verified_test.go:22 +0x364
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c0005068c8 by goroutine 30:
+  ase/grpc-go-8519.(*serverHandlerTransport).writeStatus()
+      /work/handler_server.go:38 +0x193
+  ase/grpc-go-8519.TestRace_HandlerServer_TrailerCopy_8519.func1.2()
+      /work/verified_test.go:31 +0xd8
+
+Previous write at 0x00c0005068c8 by goroutine 27:
+  ase/grpc-go-8519.MD.Join()
+      /work/handler_server.go:10 +0x233
+  ase/grpc-go-8519.(*Stream).SetTrailer()
+      /work/handler_server.go:27 +0x49
+  ase/grpc-go-8519.TestRace_HandlerServer_TrailerCopy_8519.func1.1()
+      /work/verified_test.go:25 +0xc9
+
+Goroutine 30 (running) created at:
+  ase/grpc-go-8519.TestRace_HandlerServer_TrailerCopy_8519.func1()
+      /work/verified_test.go:28 +0x451
+
+Goroutine 27 (running) created at:
+  ase/grpc-go-8519.TestRace_HandlerServer_TrailerCopy_8519.func1()
+      /work/verified_test.go:22 +0x364
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c0009804c0 by goroutine 169:
+  ase/grpc-go-8519.(*serverHandlerTransport).writeStatus()
+      /work/handler_server.go:38 +0x193
+  ase/grpc-go-8519.TestRace_HandlerServer_TrailerCopy_8519.func1.2()
+      /work/verified_test.go:31 +0xd8
+
+Previous write at 0x00c0009804c0 by goroutine 168:
+  ase/grpc-go-8519.MD.Join()
+      /work/handler_server.go:13 +0x439
+  ase/grpc-go-8519.(*Stream).SetTrailer()
+      /work/handler_server.go:27 +0x49
+  ase/grpc-go-8519.TestRace_HandlerServer_TrailerCopy_8519.func1.1()
+      /work/verified_test.go:25 +0xc9
+
+Goroutine 169 (running) created at:
+  ase/grpc-go-8519.TestRace_HandlerServer_TrailerCopy_8519.func1()
+      /work/verified_test.go:28 +0x451
+
+Goroutine 168 (running) created at:
+  ase/grpc-go-8519.TestRace_HandlerServer_TrailerCopy_8519.func1()
+      /work/verified_test.go:22 +0x364
+==================
+    testing.go:1398: race detected during execution of test
+--- FAIL: TestRace_HandlerServer_TrailerCopy_8519 (0.15s)
+FAIL
+FAIL	ase/grpc-go-8519	0.177s
+FAIL

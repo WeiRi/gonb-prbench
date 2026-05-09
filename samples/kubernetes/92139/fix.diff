@@ -1,0 +1,45 @@
+diff --git a/staging/src/k8s.io/client-go/tools/clientcmd/merged_client_builder.go b/staging/src/k8s.io/client-go/tools/clientcmd/merged_client_builder.go
+index bcff046cf4e47..be97bf2b1e106 100644
+--- a/staging/src/k8s.io/client-go/tools/clientcmd/merged_client_builder.go
++++ b/staging/src/k8s.io/client-go/tools/clientcmd/merged_client_builder.go
+@@ -60,27 +60,22 @@ func NewInteractiveDeferredLoadingClientConfig(loader ClientConfigLoader, overri
+ }
+ 
+ func (config *DeferredLoadingClientConfig) createClientConfig() (ClientConfig, error) {
+-	if config.clientConfig == nil {
+-		config.loadingLock.Lock()
+-		defer config.loadingLock.Unlock()
+-
+-		if config.clientConfig == nil {
+-			mergedConfig, err := config.loader.Load()
+-			if err != nil {
+-				return nil, err
+-			}
+-
+-			var mergedClientConfig ClientConfig
+-			if config.fallbackReader != nil {
+-				mergedClientConfig = NewInteractiveClientConfig(*mergedConfig, config.overrides.CurrentContext, config.overrides, config.fallbackReader, config.loader)
+-			} else {
+-				mergedClientConfig = NewNonInteractiveClientConfig(*mergedConfig, config.overrides.CurrentContext, config.overrides, config.loader)
+-			}
++	config.loadingLock.Lock()
++	defer config.loadingLock.Unlock()
+ 
+-			config.clientConfig = mergedClientConfig
+-		}
++	if config.clientConfig != nil {
++		return config.clientConfig, nil
++	}
++	mergedConfig, err := config.loader.Load()
++	if err != nil {
++		return nil, err
+ 	}
+ 
++	if config.fallbackReader != nil {
++		config.clientConfig = NewInteractiveClientConfig(*mergedConfig, config.overrides.CurrentContext, config.overrides, config.fallbackReader, config.loader)
++	} else {
++		config.clientConfig = NewNonInteractiveClientConfig(*mergedConfig, config.overrides.CurrentContext, config.overrides, config.loader)
++	}
+ 	return config.clientConfig, nil
+ }
+ 

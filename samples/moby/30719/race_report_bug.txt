@@ -1,0 +1,244 @@
+WARNING: DATA RACE
+Read at 0x00c000208008 by goroutine 38:
+  ase/moby-30719.(*RefCounter).Decrement()
+      /work/counter.go:47 +0x124
+  ase/moby-30719.TestRace_30719.func2()
+      /work/verified_test.go:30 +0x165
+
+Previous write at 0x00c000208008 by goroutine 13:
+  ase/moby-30719.(*RefCounter).Increment()
+      /work/counter.go:35 +0x148
+  ase/moby-30719.TestRace_30719.func1()
+      /work/verified_test.go:22 +0xa5
+
+Goroutine 38 (running) created at:
+  ase/moby-30719.TestRace_30719()
+      /work/verified_test.go:27 +0x211
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 13 (running) created at:
+  ase/moby-30719.TestRace_30719()
+      /work/verified_test.go:19 +0x145
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c000208008 by goroutine 61:
+  ase/moby-30719.(*RefCounter).Decrement()
+      /work/counter.go:47 +0x124
+  ase/moby-30719.TestRace_30719.func2()
+      /work/verified_test.go:30 +0x165
+
+Previous write at 0x00c000208008 by goroutine 65:
+  ase/moby-30719.(*RefCounter).Decrement()
+      /work/counter.go:47 +0x144
+  ase/moby-30719.TestRace_30719.func2()
+      /work/verified_test.go:30 +0x165
+
+Goroutine 61 (running) created at:
+  ase/moby-30719.TestRace_30719()
+      /work/verified_test.go:27 +0x211
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 65 (running) created at:
+  ase/moby-30719.TestRace_30719()
+      /work/verified_test.go:27 +0x211
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c000208008 by goroutine 53:
+  ase/moby-30719.(*RefCounter).Decrement()
+      /work/counter.go:47 +0x144
+  ase/moby-30719.TestRace_30719.func2()
+      /work/verified_test.go:30 +0x165
+
+Previous write at 0x00c000208008 by goroutine 65:
+  ase/moby-30719.(*RefCounter).Decrement()
+      /work/counter.go:47 +0x144
+  ase/moby-30719.TestRace_30719.func2()
+      /work/verified_test.go:30 +0x165
+
+Goroutine 53 (running) created at:
+  ase/moby-30719.TestRace_30719()
+      /work/verified_test.go:27 +0x211
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 65 (running) created at:
+  ase/moby-30719.TestRace_30719()
+      /work/verified_test.go:27 +0x211
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c000208008 by goroutine 13:
+  ase/moby-30719.(*RefCounter).Increment()
+      /work/counter.go:35 +0x130
+  ase/moby-30719.TestRace_30719.func1()
+      /work/verified_test.go:22 +0xa5
+
+Previous write at 0x00c000208008 by goroutine 64:
+  ase/moby-30719.(*RefCounter).Decrement()
+      /work/counter.go:47 +0x144
+  ase/moby-30719.TestRace_30719.func2()
+      /work/verified_test.go:30 +0x165
+
+Goroutine 13 (running) created at:
+  ase/moby-30719.TestRace_30719()
+      /work/verified_test.go:19 +0x145
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 64 (running) created at:
+  ase/moby-30719.TestRace_30719()
+      /work/verified_test.go:27 +0x211
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c000208008 by goroutine 47:
+  ase/moby-30719.(*RefCounter).Decrement()
+      /work/counter.go:48 +0x164
+  ase/moby-30719.TestRace_30719.func2()
+      /work/verified_test.go:30 +0x165
+
+Previous write at 0x00c000208008 by goroutine 39:
+  ase/moby-30719.(*RefCounter).Decrement()
+      /work/counter.go:47 +0x144
+  ase/moby-30719.TestRace_30719.func2()
+      /work/verified_test.go:30 +0x165
+
+Goroutine 47 (running) created at:
+  ase/moby-30719.TestRace_30719()
+      /work/verified_test.go:27 +0x211
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 39 (running) created at:
+  ase/moby-30719.TestRace_30719()
+      /work/verified_test.go:27 +0x211
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c000208008 by goroutine 38:
+  ase/moby-30719.(*RefCounter).Decrement()
+      /work/counter.go:47 +0x144
+  ase/moby-30719.TestRace_30719.func2()
+      /work/verified_test.go:30 +0x165
+
+Previous write at 0x00c000208008 by goroutine 23:
+  ase/moby-30719.(*RefCounter).Increment()
+      /work/counter.go:35 +0x148
+  ase/moby-30719.TestRace_30719.func1()
+      /work/verified_test.go:22 +0xa5
+
+Goroutine 38 (running) created at:
+  ase/moby-30719.TestRace_30719()
+      /work/verified_test.go:27 +0x211
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 23 (finished) created at:
+  ase/moby-30719.TestRace_30719()
+      /work/verified_test.go:19 +0x145
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c000208008 by goroutine 50:
+  ase/moby-30719.(*RefCounter).Decrement()
+      /work/counter.go:47 +0x144
+  ase/moby-30719.TestRace_30719.func2()
+      /work/verified_test.go:30 +0x165
+
+Previous read at 0x00c000208008 by goroutine 13:
+  ase/moby-30719.(*RefCounter).Increment()
+      /work/counter.go:36 +0x164
+  ase/moby-30719.TestRace_30719.func1()
+      /work/verified_test.go:22 +0xa5
+
+Goroutine 50 (running) created at:
+  ase/moby-30719.TestRace_30719()
+      /work/verified_test.go:27 +0x211
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 13 (running) created at:
+  ase/moby-30719.TestRace_30719()
+      /work/verified_test.go:19 +0x145
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c000208008 by goroutine 50:
+  ase/moby-30719.(*RefCounter).Decrement()
+      /work/counter.go:48 +0x164
+  ase/moby-30719.TestRace_30719.func2()
+      /work/verified_test.go:30 +0x165
+
+Previous write at 0x00c000208008 by goroutine 33:
+  ase/moby-30719.(*RefCounter).Increment()
+      /work/counter.go:35 +0x148
+  ase/moby-30719.TestRace_30719.func1()
+      /work/verified_test.go:22 +0xa5
+
+Goroutine 50 (running) created at:
+  ase/moby-30719.TestRace_30719()
+      /work/verified_test.go:27 +0x211
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 33 (running) created at:
+  ase/moby-30719.TestRace_30719()
+      /work/verified_test.go:19 +0x145
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+    testing.go:1398: race detected during execution of test
+--- FAIL: TestRace_30719 (0.01s)
+FAIL
+FAIL	ase/moby-30719	0.034s
+FAIL

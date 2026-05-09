@@ -1,0 +1,64 @@
+WARNING: DATA RACE
+Read at 0x00c0000d6530 by goroutine 10:
+  ase/rclone-140.(*Pacer).endCall()
+      /work/pacer.go:49 +0xc8
+  ase/rclone-140.TestRace_140_PacerFields.func3()
+      /work/verified_test.go:29 +0xc9
+
+Previous write at 0x00c0000d6530 by goroutine 8:
+  ase/rclone-140.(*Pacer).SetMinSleep()
+      /work/pacer.go:24 +0xe7
+  ase/rclone-140.TestRace_140_PacerFields.func1()
+      /work/verified_test.go:17 +0x99
+
+Goroutine 10 (running) created at:
+  ase/rclone-140.TestRace_140_PacerFields()
+      /work/verified_test.go:26 +0x35c
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 8 (finished) created at:
+  ase/rclone-140.TestRace_140_PacerFields()
+      /work/verified_test.go:14 +0x204
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c0000d6538 by goroutine 9:
+  ase/rclone-140.(*Pacer).SetRetries()
+      /work/pacer.go:43 +0xac
+  ase/rclone-140.TestRace_140_PacerFields.func2()
+      /work/verified_test.go:23 +0xa4
+
+Previous read at 0x00c0000d6538 by goroutine 11:
+  ase/rclone-140.(*Pacer).Call()
+      /work/pacer.go:62 +0xa7
+  ase/rclone-140.TestRace_140_PacerFields.func4()
+      /work/verified_test.go:35 +0x9f
+
+Goroutine 9 (running) created at:
+  ase/rclone-140.TestRace_140_PacerFields()
+      /work/verified_test.go:20 +0x2ac
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 11 (finished) created at:
+  ase/rclone-140.TestRace_140_PacerFields()
+      /work/verified_test.go:32 +0x404
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+--- FAIL: TestRace_140_PacerFields (0.00s)
+    testing.go:1398: race detected during execution of test
+FAIL
+FAIL	ase/rclone-140	0.015s
+FAIL

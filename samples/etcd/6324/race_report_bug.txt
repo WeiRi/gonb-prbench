@@ -1,0 +1,174 @@
+WARNING: DATA RACE
+Write at 0x00c000196540 by goroutine 8:
+  runtime.mapassign_fast64()
+      /usr/local/go/src/runtime/map_fast64.go:93 +0x0
+  ase/etcd-6324.(*serverWatchStream).addDedicatedWatcher()
+      /work/watch.go:15 +0x84
+  ase/etcd-6324.TestRace_etcd_6324.func1()
+      /work/verified_test.go:40 +0xa4
+
+Previous read at 0x00c000196540 by goroutine 9:
+  runtime.mapiterinit()
+      /usr/local/go/src/runtime/map.go:816 +0x0
+  ase/etcd-6324.(*serverWatchStream).close()
+      /work/watch.go:21 +0xe4
+  ase/etcd-6324.TestRace_etcd_6324.func2()
+      /work/verified_test.go:45 +0x95
+
+Goroutine 8 (running) created at:
+  ase/etcd-6324.TestRace_etcd_6324()
+      /work/verified_test.go:37 +0x1cc
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 9 (finished) created at:
+  ase/etcd-6324.TestRace_etcd_6324()
+      /work/verified_test.go:43 +0x2a
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c0001965a0 by goroutine 17:
+  runtime.mapiternext()
+      /usr/local/go/src/runtime/map.go:862 +0x0
+  runtime.mapiterinit()
+      /usr/local/go/src/runtime/map.go:859 +0x22e
+
+Previous write at 0x00c0001965a0 by goroutine 16:
+  runtime.mapassign_fast64()
+      /usr/local/go/src/runtime/map_fast64.go:93 +0x0
+  ase/etcd-6324.(*serverWatchStream).addDedicatedWatcher()
+      /work/watch.go:15 +0x84
+  ase/etcd-6324.TestRace_etcd_6324.func1()
+      /work/verified_test.go:40 +0xa4
+
+Goroutine 17 (running) created at:
+  ase/etcd-6324.TestRace_etcd_6324()
+      /work/verified_test.go:43 +0x2a
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 16 (running) created at:
+  ase/etcd-6324.TestRace_etcd_6324()
+      /work/verified_test.go:37 +0x1cc
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c0001965a0 by goroutine 17:
+  runtime.mapiternext()
+      /usr/local/go/src/runtime/map.go:862 +0x0
+  ase/etcd-6324.(*serverWatchStream).close()
+      /work/watch.go:21 +0x15d
+  ase/etcd-6324.TestRace_etcd_6324.func2()
+      /work/verified_test.go:45 +0x95
+
+Previous write at 0x00c0001965a0 by goroutine 16:
+  runtime.mapassign_fast64()
+      /usr/local/go/src/runtime/map_fast64.go:93 +0x0
+  ase/etcd-6324.(*serverWatchStream).addDedicatedWatcher()
+      /work/watch.go:15 +0x84
+  ase/etcd-6324.TestRace_etcd_6324.func1()
+      /work/verified_test.go:40 +0xa4
+
+Goroutine 17 (running) created at:
+  ase/etcd-6324.TestRace_etcd_6324()
+      /work/verified_test.go:43 +0x2a
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 16 (running) created at:
+  ase/etcd-6324.TestRace_etcd_6324()
+      /work/verified_test.go:37 +0x1cc
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c0001f92b0 by goroutine 17:
+  ase/etcd-6324.(*serverWatchStream).close()
+      /work/watch.go:21 +0x153
+  ase/etcd-6324.TestRace_etcd_6324.func2()
+      /work/verified_test.go:45 +0x95
+
+Previous write at 0x00c0001f92b0 by goroutine 16:
+  ase/etcd-6324.(*serverWatchStream).addDedicatedWatcher()
+      /work/watch.go:15 +0x90
+  ase/etcd-6324.TestRace_etcd_6324.func1()
+      /work/verified_test.go:40 +0xa4
+
+Goroutine 17 (running) created at:
+  ase/etcd-6324.TestRace_etcd_6324()
+      /work/verified_test.go:43 +0x2a
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 16 (running) created at:
+  ase/etcd-6324.TestRace_etcd_6324()
+      /work/verified_test.go:37 +0x1cc
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+fatal error: concurrent map iteration and map write
+
+goroutine 33 [running]:
+ase/etcd-6324.(*serverWatchStream).close(...)
+	/work/watch.go:21
+ase/etcd-6324.TestRace_etcd_6324.func2()
+	/work/verified_test.go:45 +0x15e
+created by ase/etcd-6324.TestRace_etcd_6324 in goroutine 35
+	/work/verified_test.go:43 +0x2b
+
+goroutine 1 [chan receive]:
+testing.(*T).Run(0xc0001c84e0, {0x5e806f, 0x12}, 0x5f1720)
+	/usr/local/go/src/testing/testing.go:1750 +0x851
+testing.runTests.func1(0xc0001c84e0)
+	/usr/local/go/src/testing/testing.go:2161 +0x86
+testing.tRunner(0xc0001c84e0, 0xc0001afb10)
+	/usr/local/go/src/testing/testing.go:1689 +0x21f
+testing.runTests(0xc0001940a8, {0x717120, 0x1, 0x1}, {0xc0001afbb8?, 0xc0001afc00?, 0x7208a0?})
+	/usr/local/go/src/testing/testing.go:2159 +0x8bf
+testing.(*M).Run(0xc00019a0a0)
+	/usr/local/go/src/testing/testing.go:2027 +0xf18
+main.main()
+	_testmain.go:47 +0x2be
+
+goroutine 35 [semacquire]:
+sync.runtime_Semacquire(0xc000177d38?)
+	/usr/local/go/src/runtime/sema.go:62 +0x25
+sync.(*WaitGroup).Wait(0xc000177d30)
+	/usr/local/go/src/sync/waitgroup.go:116 +0xa5
+ase/etcd-6324.TestRace_etcd_6324(0xc0001c8680?)
+	/work/verified_test.go:47 +0x35
+testing.tRunner(0xc0001c8680, 0x5f1720)
+	/usr/local/go/src/testing/testing.go:1689 +0x21f
+created by testing.(*T).Run in goroutine 1
+	/usr/local/go/src/testing/testing.go:1742 +0x826
+
+goroutine 32 [runnable]:
+ase/etcd-6324.(*serverWatchStream).addDedicatedWatcher(0xc000110080, 0x7b)
+	/work/watch.go:15 +0x85
+ase/etcd-6324.TestRace_etcd_6324.func1()
+	/work/verified_test.go:40 +0xa5
+created by ase/etcd-6324.TestRace_etcd_6324 in goroutine 35
+	/work/verified_test.go:37 +0x1cd
+FAIL	ase/etcd-6324	0.044s
+FAIL

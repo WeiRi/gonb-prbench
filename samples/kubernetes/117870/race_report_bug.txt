@@ -1,0 +1,60 @@
+WARNING: DATA RACE
+Write at 0x00c000012140 by goroutine 60:
+  ase/kubernetes-117870.(*sharedIndexInformer).SetTransform()
+      /work/shared_informer.go:19 +0x44
+  ase/kubernetes-117870.TestRace_117870.func2()
+      /work/verified_test.go:34 +0xa4
+
+Previous read at 0x00c000012140 by goroutine 54:
+  ase/kubernetes-117870.TestRace_117870.func1()
+      /work/verified_test.go:21 +0xa4
+
+Goroutine 60 (running) created at:
+  ase/kubernetes-117870.TestRace_117870()
+      /work/verified_test.go:31 +0x18b
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 54 (finished) created at:
+  ase/kubernetes-117870.TestRace_117870()
+      /work/verified_test.go:18 +0xa4
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c000012148 by goroutine 60:
+  ase/kubernetes-117870.(*sharedIndexInformer).SetWatchErrorHandler()
+      /work/shared_informer.go:25 +0x44
+  ase/kubernetes-117870.TestRace_117870.func2()
+      /work/verified_test.go:37 +0xb5
+
+Previous read at 0x00c000012148 by goroutine 53:
+  ase/kubernetes-117870.TestRace_117870.func1()
+      /work/verified_test.go:22 +0xb5
+
+Goroutine 60 (running) created at:
+  ase/kubernetes-117870.TestRace_117870()
+      /work/verified_test.go:31 +0x18b
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 53 (finished) created at:
+  ase/kubernetes-117870.TestRace_117870()
+      /work/verified_test.go:18 +0xa4
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+    testing.go:1398: race detected during execution of test
+--- FAIL: TestRace_117870 (0.03s)
+FAIL
+FAIL	ase/kubernetes-117870	0.046s
+FAIL

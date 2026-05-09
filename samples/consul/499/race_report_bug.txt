@@ -1,0 +1,30 @@
+WARNING: DATA RACE
+Read at 0x00c00011c010 by goroutine 69:
+  ase/consul-499.(*ConnPool).reap()
+      /work/verified_test.go:48 +0x52
+  ase/consul-499.TestRace.func1()
+      /work/verified_test.go:72 +0x6c
+
+Previous write at 0x00c00011c010 by goroutine 70:
+  ase/consul-499.(*ConnPool).Shutdown()
+      /work/verified_test.go:41 +0x87
+  ase/consul-499.TestRace.func2()
+      /work/verified_test.go:79 +0x6c
+
+Goroutine 69 (running) created at:
+  ase/consul-499.TestRace()
+      /work/verified_test.go:70 +0x21d
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1203 +0x202
+
+Goroutine 70 (finished) created at:
+  ase/consul-499.TestRace()
+      /work/verified_test.go:77 +0x7a
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1203 +0x202
+==================
+--- FAIL: TestRace (1.45s)
+    testing.go:1102: race detected during execution of test
+FAIL
+FAIL	ase/consul-499	1.463s
+FAIL

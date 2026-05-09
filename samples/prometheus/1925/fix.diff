@@ -1,0 +1,32 @@
+diff --git a/Makefile b/Makefile
+index 2484b780743..ce2af7d3ee9 100644
+--- a/Makefile
++++ b/Makefile
+@@ -38,7 +38,7 @@ check_license:
+ 
+ test:
+ 	@echo ">> running tests"
+-	@$(GO) test -short $(pkgs)
++	@$(GO) test -race -short $(pkgs)
+ 
+ format:
+ 	@echo ">> formatting code"
+diff --git a/promql/lex_test.go b/promql/lex_test.go
+index 824b4e00cb7..cc12a3ca3ef 100644
+--- a/promql/lex_test.go
++++ b/promql/lex_test.go
+@@ -438,8 +438,12 @@ var tests = []struct {
+ // for the parser to avoid duplicated effort.
+ func TestLexer(t *testing.T) {
+ 	for i, test := range tests {
+-		l := lex(test.input)
+-		l.seriesDesc = test.seriesDesc
++		l := &lexer{
++			input:      test.input,
++			items:      make(chan item),
++			seriesDesc: test.seriesDesc,
++		}
++		go l.run()
+ 
+ 		out := []item{}
+ 		for it := range l.items {

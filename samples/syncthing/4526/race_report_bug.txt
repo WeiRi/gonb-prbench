@@ -1,0 +1,30 @@
+WARNING: DATA RACE
+Read at 0x00c00020c000 by goroutine 55:
+  ase/syncthing-4526.DialParallel.func1()
+      /work/service.go:29 +0x45
+
+Previous write at 0x00c00020c000 by goroutine 8:
+  ase/syncthing-4526.DialParallel()
+      /work/service.go:26 +0xf9
+  ase/syncthing-4526.TestRace_4526.func1()
+      /work/verified_test.go:18 +0xce
+
+Goroutine 55 (running) created at:
+  ase/syncthing-4526.DialParallel()
+      /work/service.go:28 +0x9e
+  ase/syncthing-4526.TestRace_4526.func1()
+      /work/verified_test.go:18 +0xce
+
+Goroutine 8 (running) created at:
+  ase/syncthing-4526.TestRace_4526()
+      /work/verified_test.go:16 +0x14d
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+    testing.go:1398: race detected during execution of test
+--- FAIL: TestRace_4526 (0.01s)
+FAIL
+FAIL	ase/syncthing-4526	0.034s
+FAIL

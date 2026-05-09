@@ -1,0 +1,30 @@
+WARNING: DATA RACE
+Write at 0x00c0001c0040 by goroutine 11:
+  ase/consul-1158.(*LockCommand).startChild()
+      /work/verified_test.go:29 +0x44
+  ase/consul-1158.TestRace.func1()
+      /work/verified_test.go:64 +0x6c
+
+Previous write at 0x00c0001c0040 by goroutine 8:
+  ase/consul-1158.(*LockCommand).startChild()
+      /work/verified_test.go:29 +0x44
+  ase/consul-1158.TestRace.func1()
+      /work/verified_test.go:64 +0x6c
+
+Goroutine 11 (running) created at:
+  ase/consul-1158.TestRace()
+      /work/verified_test.go:62 +0x78
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1203 +0x202
+
+Goroutine 8 (finished) created at:
+  ase/consul-1158.TestRace()
+      /work/verified_test.go:62 +0x78
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1203 +0x202
+==================
+--- FAIL: TestRace (1.40s)
+    testing.go:1102: race detected during execution of test
+FAIL
+FAIL	ase/consul-1158	1.420s
+FAIL

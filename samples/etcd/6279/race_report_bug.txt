@@ -1,0 +1,36 @@
+WARNING: DATA RACE
+Read at 0x00c000012148 by goroutine 9:
+  ase/etcd-6279.(*store).Hash()
+      /work/kvstore.go:34 +0xb0
+  ase/etcd-6279.TestRace_PR6279_ForceCommitOutsideLock.func2()
+      /work/verified_test.go:27 +0xa8
+
+Previous write at 0x00c000012148 by goroutine 8:
+  ase/etcd-6279.(*store).Compact()
+      /work/kvstore.go:27 +0x44
+  ase/etcd-6279.TestRace_PR6279_ForceCommitOutsideLock.func1()
+      /work/verified_test.go:21 +0xa9
+  ase/etcd-6279.TestRace_PR6279_ForceCommitOutsideLock.gowrap1()
+      /work/verified_test.go:23 +0x41
+
+Goroutine 9 (running) created at:
+  ase/etcd-6279.TestRace_PR6279_ForceCommitOutsideLock()
+      /work/verified_test.go:24 +0x11d
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 8 (running) created at:
+  ase/etcd-6279.TestRace_PR6279_ForceCommitOutsideLock()
+      /work/verified_test.go:18 +0x267
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+    testing.go:1398: race detected during execution of test
+--- FAIL: TestRace_PR6279_ForceCommitOutsideLock (0.05s)
+FAIL
+FAIL	ase/etcd-6279	0.065s
+FAIL

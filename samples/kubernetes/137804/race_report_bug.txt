@@ -1,0 +1,104 @@
+==================
+WARNING: DATA RACE
+Write at 0x00c0002e4158 by goroutine 53:
+  k8s.io/kubernetes/pkg/scheduler/backend/cache.(*podGroupStateData).addPod()
+      /k8s/pkg/scheduler/backend/cache/podgroupstate.go:94 +0x5b
+  k8s.io/kubernetes/pkg/scheduler/backend/cache.TestPodGroupState_RaceOnEmptyAndForgetPod_137804.func3()
+      /k8s/pkg/scheduler/backend/cache/137804_handcrafted_race_test.go:90 +0x25a
+
+Previous write at 0x00c0002e4158 by goroutine 52:
+  k8s.io/kubernetes/pkg/scheduler/backend/cache.(*podGroupStateData).assumePod()
+      /k8s/pkg/scheduler/backend/cache/podgroupstate.go:134 +0xf7
+  k8s.io/kubernetes/pkg/scheduler/backend/cache.TestPodGroupState_RaceOnEmptyAndForgetPod_137804.func2()
+      /k8s/pkg/scheduler/backend/cache/137804_handcrafted_race_test.go:74 +0xde
+
+Goroutine 53 (running) created at:
+  k8s.io/kubernetes/pkg/scheduler/backend/cache.TestPodGroupState_RaceOnEmptyAndForgetPod_137804()
+      /k8s/pkg/scheduler/backend/cache/137804_handcrafted_race_test.go:86 +0x619
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:2036 +0x21c
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:2101 +0x38
+
+Goroutine 52 (running) created at:
+  k8s.io/kubernetes/pkg/scheduler/backend/cache.TestPodGroupState_RaceOnEmptyAndForgetPod_137804()
+      /k8s/pkg/scheduler/backend/cache/137804_handcrafted_race_test.go:69 +0x55c
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:2036 +0x21c
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:2101 +0x38
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c00037a6f0 by goroutine 53:
+  runtime.mapassign_faststr()
+      /usr/local/go/src/internal/runtime/maps/runtime_faststr.go:263 +0x0
+  k8s.io/kubernetes/pkg/scheduler/backend/cache.(*podGroupStateData).addPod()
+      /k8s/pkg/scheduler/backend/cache/podgroupstate.go:95 +0xc4
+  k8s.io/kubernetes/pkg/scheduler/backend/cache.TestPodGroupState_RaceOnEmptyAndForgetPod_137804.func3()
+      /k8s/pkg/scheduler/backend/cache/137804_handcrafted_race_test.go:90 +0x25a
+
+Previous read at 0x00c00037a6f0 by goroutine 51:
+  k8s.io/kubernetes/pkg/scheduler/backend/cache.(*podGroupStateData).empty()
+      /k8s/pkg/scheduler/backend/cache/podgroupstate.go:182 +0xcc
+  k8s.io/kubernetes/pkg/scheduler/backend/cache.(*podGroupState).empty()
+      /k8s/pkg/scheduler/backend/cache/podgroupstate.go:235 +0xa3
+  k8s.io/kubernetes/pkg/scheduler/backend/cache.TestPodGroupState_RaceOnEmptyAndForgetPod_137804.func1()
+      /k8s/pkg/scheduler/backend/cache/137804_handcrafted_race_test.go:57 +0xae
+
+Goroutine 53 (running) created at:
+  k8s.io/kubernetes/pkg/scheduler/backend/cache.TestPodGroupState_RaceOnEmptyAndForgetPod_137804()
+      /k8s/pkg/scheduler/backend/cache/137804_handcrafted_race_test.go:86 +0x619
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:2036 +0x21c
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:2101 +0x38
+
+Goroutine 51 (finished) created at:
+  k8s.io/kubernetes/pkg/scheduler/backend/cache.TestPodGroupState_RaceOnEmptyAndForgetPod_137804()
+      /k8s/pkg/scheduler/backend/cache/137804_handcrafted_race_test.go:54 +0x466
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:2036 +0x21c
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:2101 +0x38
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c00037a720 by goroutine 53:
+  runtime.mapassign_faststr()
+      /usr/local/go/src/internal/runtime/maps/runtime_faststr.go:263 +0x0
+  k8s.io/apimachinery/pkg/util/sets.Set[go.shape.string].Insert()
+      /k8s/staging/src/k8s.io/apimachinery/pkg/util/sets/set.go:51 +0x296
+  k8s.io/kubernetes/pkg/scheduler/backend/cache.(*podGroupStateData).addPod()
+      /k8s/pkg/scheduler/backend/cache/podgroupstate.go:99 +0x1ae
+  k8s.io/kubernetes/pkg/scheduler/backend/cache.TestPodGroupState_RaceOnEmptyAndForgetPod_137804.func3()
+      /k8s/pkg/scheduler/backend/cache/137804_handcrafted_race_test.go:90 +0x25a
+
+Previous write at 0x00c00037a720 by goroutine 52:
+  runtime.mapassign_faststr()
+      /usr/local/go/src/internal/runtime/maps/runtime_faststr.go:263 +0x0
+  k8s.io/apimachinery/pkg/util/sets.Set[go.shape.string].Insert()
+      /k8s/staging/src/k8s.io/apimachinery/pkg/util/sets/set.go:51 +0x277
+  k8s.io/kubernetes/pkg/scheduler/backend/cache.(*podGroupStateData).forgetPod()
+      /k8s/pkg/scheduler/backend/cache/podgroupstate.go:164 +0x19d
+  k8s.io/kubernetes/pkg/scheduler/backend/cache.(*podGroupState).forgetPod()
+      /k8s/pkg/scheduler/backend/cache/podgroupstate.go:241 +0xcf
+  k8s.io/kubernetes/pkg/scheduler/backend/cache.TestPodGroupState_RaceOnEmptyAndForgetPod_137804.func2()
+      /k8s/pkg/scheduler/backend/cache/137804_handcrafted_race_test.go:72 +0x9e
+
+Goroutine 53 (running) created at:
+  k8s.io/kubernetes/pkg/scheduler/backend/cache.TestPodGroupState_RaceOnEmptyAndForgetPod_137804()
+      /k8s/pkg/scheduler/backend/cache/137804_handcrafted_race_test.go:86 +0x619
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:2036 +0x21c
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:2101 +0x38
+
+Goroutine 52 (running) created at:
+  k8s.io/kubernetes/pkg/scheduler/backend/cache.TestPodGroupState_RaceOnEmptyAndForgetPod_137804()
+      /k8s/pkg/scheduler/backend/cache/137804_handcrafted_race_test.go:69 +0x55c
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:2036 +0x21c
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:2101 +0x38
+==================

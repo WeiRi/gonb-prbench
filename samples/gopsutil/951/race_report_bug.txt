@@ -1,0 +1,250 @@
+WARNING: DATA RACE
+Read at 0x00000071efc0 by goroutine 9:
+  ase/gopsutil-951.VirtualizationWithContext()
+      /work/common_linux.go:18 +0xac
+  ase/gopsutil-951.TestRaceVirtualizationCacheConcurrent.func1()
+      /work/verified_test.go:19 +0x73
+  ase/gopsutil-951.TestRaceVirtualizationCacheConcurrent.gowrap1()
+      /work/verified_test.go:22 +0x41
+
+Previous write at 0x00000071efc0 by goroutine 8:
+  ase/gopsutil-951.VirtualizationWithContext()
+      /work/common_linux.go:19 +0xcc
+  ase/gopsutil-951.TestRaceVirtualizationCacheConcurrent.func1()
+      /work/verified_test.go:19 +0x73
+  ase/gopsutil-951.TestRaceVirtualizationCacheConcurrent.gowrap1()
+      /work/verified_test.go:22 +0x41
+
+Goroutine 9 (running) created at:
+  ase/gopsutil-951.TestRaceVirtualizationCacheConcurrent()
+      /work/verified_test.go:15 +0x57
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 8 (running) created at:
+  ase/gopsutil-951.TestRaceVirtualizationCacheConcurrent()
+      /work/verified_test.go:15 +0x57
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c00018a088 by goroutine 9:
+  ase/gopsutil-951.VirtualizationWithContext()
+      /work/common_linux.go:21 +0x135
+  ase/gopsutil-951.TestRaceVirtualizationCacheConcurrent.func1()
+      /work/verified_test.go:19 +0x73
+  ase/gopsutil-951.TestRaceVirtualizationCacheConcurrent.gowrap1()
+      /work/verified_test.go:22 +0x41
+
+Previous write at 0x00c00018a088 by goroutine 8:
+  ase/gopsutil-951.VirtualizationWithContext()
+      /work/common_linux.go:21 +0x135
+  ase/gopsutil-951.TestRaceVirtualizationCacheConcurrent.func1()
+      /work/verified_test.go:19 +0x73
+  ase/gopsutil-951.TestRaceVirtualizationCacheConcurrent.gowrap1()
+      /work/verified_test.go:22 +0x41
+
+Goroutine 9 (running) created at:
+  ase/gopsutil-951.TestRaceVirtualizationCacheConcurrent()
+      /work/verified_test.go:15 +0x57
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 8 (running) created at:
+  ase/gopsutil-951.TestRaceVirtualizationCacheConcurrent()
+      /work/verified_test.go:15 +0x57
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00000071f260 by goroutine 9:
+  ase/gopsutil-951.VirtualizationWithContext()
+      /work/common_linux.go:22 +0x16c
+  ase/gopsutil-951.TestRaceVirtualizationCacheConcurrent.func1()
+      /work/verified_test.go:19 +0x73
+  ase/gopsutil-951.TestRaceVirtualizationCacheConcurrent.gowrap1()
+      /work/verified_test.go:22 +0x41
+
+Previous write at 0x00000071f260 by goroutine 8:
+  ase/gopsutil-951.VirtualizationWithContext()
+      /work/common_linux.go:22 +0x16c
+  ase/gopsutil-951.TestRaceVirtualizationCacheConcurrent.func1()
+      /work/verified_test.go:19 +0x73
+  ase/gopsutil-951.TestRaceVirtualizationCacheConcurrent.gowrap1()
+      /work/verified_test.go:22 +0x41
+
+Goroutine 9 (running) created at:
+  ase/gopsutil-951.TestRaceVirtualizationCacheConcurrent()
+      /work/verified_test.go:15 +0x57
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 8 (running) created at:
+  ase/gopsutil-951.TestRaceVirtualizationCacheConcurrent()
+      /work/verified_test.go:15 +0x57
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00000071f270 by goroutine 9:
+  ase/gopsutil-951.VirtualizationWithContext()
+      /work/common_linux.go:23 +0x1aa
+  ase/gopsutil-951.TestRaceVirtualizationCacheConcurrent.func1()
+      /work/verified_test.go:19 +0x73
+  ase/gopsutil-951.TestRaceVirtualizationCacheConcurrent.gowrap1()
+      /work/verified_test.go:22 +0x41
+
+Previous write at 0x00000071f270 by goroutine 8:
+  ase/gopsutil-951.VirtualizationWithContext()
+      /work/common_linux.go:23 +0x1aa
+  ase/gopsutil-951.TestRaceVirtualizationCacheConcurrent.func1()
+      /work/verified_test.go:19 +0x73
+  ase/gopsutil-951.TestRaceVirtualizationCacheConcurrent.gowrap1()
+      /work/verified_test.go:22 +0x41
+
+Goroutine 9 (running) created at:
+  ase/gopsutil-951.TestRaceVirtualizationCacheConcurrent()
+      /work/verified_test.go:15 +0x57
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 8 (running) created at:
+  ase/gopsutil-951.TestRaceVirtualizationCacheConcurrent()
+      /work/verified_test.go:15 +0x57
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c000188000 by goroutine 18:
+  runtime.mapassign_faststr()
+      /usr/local/go/src/runtime/map_faststr.go:203 +0x0
+  ase/gopsutil-951.VirtualizationWithContext()
+      /work/common_linux.go:21 +0x129
+  ase/gopsutil-951.TestRaceVirtualizationCacheConcurrent.func1()
+      /work/verified_test.go:19 +0x73
+  ase/gopsutil-951.TestRaceVirtualizationCacheConcurrent.gowrap1()
+      /work/verified_test.go:22 +0x41
+
+Previous write at 0x00c000188000 by goroutine 8:
+  runtime.mapassign_faststr()
+      /usr/local/go/src/runtime/map_faststr.go:203 +0x0
+  ase/gopsutil-951.VirtualizationWithContext()
+      /work/common_linux.go:21 +0x129
+  ase/gopsutil-951.TestRaceVirtualizationCacheConcurrent.func1()
+      /work/verified_test.go:19 +0x73
+  ase/gopsutil-951.TestRaceVirtualizationCacheConcurrent.gowrap1()
+      /work/verified_test.go:22 +0x41
+
+Goroutine 18 (running) created at:
+  ase/gopsutil-951.TestRaceVirtualizationCacheConcurrent()
+      /work/verified_test.go:15 +0x57
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 8 (running) created at:
+  ase/gopsutil-951.TestRaceVirtualizationCacheConcurrent()
+      /work/verified_test.go:15 +0x57
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c000188000 by goroutine 18:
+  runtime.mapaccess1_faststr()
+      /usr/local/go/src/runtime/map_faststr.go:13 +0x0
+  ase/gopsutil-951.VirtualizationWithContext()
+      /work/common_linux.go:24 +0x6d
+  ase/gopsutil-951.TestRaceVirtualizationCacheConcurrent.func1()
+      /work/verified_test.go:19 +0x73
+  ase/gopsutil-951.TestRaceVirtualizationCacheConcurrent.gowrap1()
+      /work/verified_test.go:22 +0x41
+
+Previous write at 0x00c000188000 by goroutine 9:
+  runtime.mapassign_faststr()
+      /usr/local/go/src/runtime/map_faststr.go:203 +0x0
+  ase/gopsutil-951.VirtualizationWithContext()
+      /work/common_linux.go:21 +0x129
+  ase/gopsutil-951.TestRaceVirtualizationCacheConcurrent.func1()
+      /work/verified_test.go:19 +0x73
+  ase/gopsutil-951.TestRaceVirtualizationCacheConcurrent.gowrap1()
+      /work/verified_test.go:22 +0x41
+
+Goroutine 18 (running) created at:
+  ase/gopsutil-951.TestRaceVirtualizationCacheConcurrent()
+      /work/verified_test.go:15 +0x57
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 9 (running) created at:
+  ase/gopsutil-951.TestRaceVirtualizationCacheConcurrent()
+      /work/verified_test.go:15 +0x57
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+fatal error: concurrent map writes
+
+goroutine 24 [running]:
+ase/gopsutil-951.VirtualizationWithContext(...)
+	/work/common_linux.go:21
+ase/gopsutil-951.TestRaceVirtualizationCacheConcurrent.func1(0x0?)
+	/work/verified_test.go:19 +0x12a
+created by ase/gopsutil-951.TestRaceVirtualizationCacheConcurrent in goroutine 6
+	/work/verified_test.go:15 +0x58
+
+goroutine 1 [chan receive]:
+testing.(*T).Run(0xc0000fa340, {0x5ecd0b, 0x25}, 0x5f11a8)
+	/usr/local/go/src/testing/testing.go:1750 +0x851
+testing.runTests.func1(0xc0000fa340)
+	/usr/local/go/src/testing/testing.go:2161 +0x86
+testing.tRunner(0xc0000fa340, 0xc0000e5b10)
+	/usr/local/go/src/testing/testing.go:1689 +0x21f
+testing.runTests(0xc0000120c0, {0x716120, 0x1, 0x1}, {0xc0000e5bb8?, 0xc0000e5c00?, 0x71f8c0?})
+	/usr/local/go/src/testing/testing.go:2159 +0x8bf
+testing.(*M).Run(0xc0000d80a0)
+	/usr/local/go/src/testing/testing.go:2027 +0xf18
+main.main()
+	_testmain.go:47 +0x2be
+
+goroutine 6 [runnable]:
+ase/gopsutil-951.TestRaceVirtualizationCacheConcurrent(0xc0000fa4e0?)
+	/work/verified_test.go:15 +0x85
+testing.tRunner(0xc0000fa4e0, 0x5f11a8)
+	/usr/local/go/src/testing/testing.go:1689 +0x21f
+created by testing.(*T).Run in goroutine 1
+	/usr/local/go/src/testing/testing.go:1742 +0x826
+
+goroutine 7 [chan send]:
+ase/gopsutil-951.TestRaceVirtualizationCacheConcurrent.func1(0x5f11a8?)
+	/work/verified_test.go:21 +0x1e9
+created by ase/gopsutil-951.TestRaceVirtualizationCacheConcurrent in goroutine 6
+	/work/verified_test.go:15 +0x58
+
+goroutine 8 [chan send]:

@@ -1,0 +1,90 @@
+diff --git a/pkg/kubelet/cm/devicemanager/plugin/v1beta1/handler.go b/pkg/kubelet/cm/devicemanager/plugin/v1beta1/handler.go
+index cea6317257e12..d109719ab914a 100644
+--- a/pkg/kubelet/cm/devicemanager/plugin/v1beta1/handler.go
++++ b/pkg/kubelet/cm/devicemanager/plugin/v1beta1/handler.go
+@@ -44,10 +44,9 @@ func (s *server) RegisterPlugin(pluginName string, endpoint string, versions []s
+ 
+ func (s *server) DeRegisterPlugin(pluginName string) {
+ 	klog.V(2).InfoS("Deregistering plugin", "plugin", pluginName)
+-	s.mutex.Lock()
+-	defer s.mutex.Unlock()
+-	if _, exists := s.clients[pluginName]; exists {
+-		s.disconnectClient(pluginName)
++	client := s.getClient(pluginName)
++	if client != nil {
++		s.disconnectClient(pluginName, client)
+ 	}
+ }
+ 
+@@ -82,8 +81,7 @@ func (s *server) connectClient(name string, socketPath string) error {
+ 	return nil
+ }
+ 
+-func (s *server) disconnectClient(name string) error {
+-	c := s.clients[name]
++func (s *server) disconnectClient(name string, c Client) error {
+ 	s.deregisterClient(name)
+ 	return c.Disconnect()
+ }
+@@ -107,14 +105,18 @@ func (s *server) deregisterClient(name string) {
+ func (s *server) runClient(name string, c Client) {
+ 	c.Run()
+ 
+-	s.mutex.Lock()
+-	if _, exists := s.clients[name]; !exists {
+-		s.mutex.Unlock()
++	c = s.getClient(name)
++	if c == nil {
+ 		return
+ 	}
+-	s.mutex.Unlock()
+ 
+-	if err := s.disconnectClient(name); err != nil {
++	if err := s.disconnectClient(name, c); err != nil {
+ 		klog.V(2).InfoS("Unable to disconnect client", "resource", name, "client", c, "err", err)
+ 	}
+ }
++
++func (s *server) getClient(name string) Client {
++	s.mutex.Lock()
++	defer s.mutex.Unlock()
++	return s.clients[name]
++}
+diff --git a/pkg/kubelet/cm/devicemanager/plugin/v1beta1/server.go b/pkg/kubelet/cm/devicemanager/plugin/v1beta1/server.go
+index b848858d09f68..970eacca62085 100644
+--- a/pkg/kubelet/cm/devicemanager/plugin/v1beta1/server.go
++++ b/pkg/kubelet/cm/devicemanager/plugin/v1beta1/server.go
+@@ -114,11 +114,11 @@ func (s *server) Start() error {
+ }
+ 
+ func (s *server) Stop() error {
+-	for _, r := range s.clientResources() {
+-		if err := s.disconnectClient(r); err != nil {
++	s.visitClients(func(r string, c Client) {
++		if err := s.disconnectClient(r, c); err != nil {
+ 			klog.InfoS("Error disconnecting device plugin client", "resourceName", r, "err", err)
+ 		}
+-	}
++	})
+ 
+ 	s.mutex.Lock()
+ 	defer s.mutex.Unlock()
+@@ -177,12 +177,12 @@ func (s *server) isVersionCompatibleWithPlugin(versions ...string) bool {
+ 	return false
+ }
+ 
+-func (s *server) clientResources() []string {
++func (s *server) visitClients(visit func(r string, c Client)) {
+ 	s.mutex.Lock()
+-	defer s.mutex.Unlock()
+-	var resources []string
+-	for r := range s.clients {
+-		resources = append(resources, r)
++	for r, c := range s.clients {
++		s.mutex.Unlock()
++		visit(r, c)
++		s.mutex.Lock()
+ 	}
+-	return resources
++	s.mutex.Unlock()
+ }

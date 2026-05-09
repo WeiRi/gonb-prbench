@@ -1,0 +1,12 @@
+diff --git a/proxy/grpcproxy/cache/store.go b/proxy/grpcproxy/cache/store.go
+index 11d8864dde48..7eb6e4273456 100644
+--- a/proxy/grpcproxy/cache/store.go
++++ b/proxy/grpcproxy/cache/store.go
+@@ -157,5 +157,7 @@ func (c *cache) Compact(revision int64) {
+ }
+ 
+ func (c *cache) Size() int {
++	c.mu.RLock()
++	defer c.mu.RUnlock()
+ 	return c.lru.Len()
+ }

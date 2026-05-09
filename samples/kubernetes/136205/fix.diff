@@ -1,0 +1,28 @@
+diff --git a/pkg/kubelet/status/status_manager.go b/pkg/kubelet/status/status_manager.go
+index f4334b59ce9ca..c7d611ab5364e 100644
+--- a/pkg/kubelet/status/status_manager.go
++++ b/pkg/kubelet/status/status_manager.go
+@@ -823,7 +823,7 @@ func (m *manager) updateStatusInternal(logger klog.Logger, pod *v1.Pod, status v
+ 
+ 	// ensure that the start time does not change across updates.
+ 	if oldStatus.StartTime != nil && !oldStatus.StartTime.IsZero() {
+-		status.StartTime = oldStatus.StartTime
++		status.StartTime = oldStatus.StartTime.DeepCopy()
+ 	} else if status.StartTime.IsZero() {
+ 		// if the status has no start time, we need to set an initial time
+ 		now := metav1.Now()
+diff --git a/pkg/kubelet/status/status_manager_test.go b/pkg/kubelet/status/status_manager_test.go
+index 0b3c7da275dc1..0ce640ad61d30 100644
+--- a/pkg/kubelet/status/status_manager_test.go
++++ b/pkg/kubelet/status/status_manager_test.go
+@@ -180,8 +180,8 @@ func TestNewStatusPreservesPodStartTime(t *testing.T) {
+ 	syncer.SetPodStatus(logger, pod, getRandomPodStatus())
+ 
+ 	status := expectPodStatus(t, syncer, pod)
+-	if !status.StartTime.Time.Equal(startTime.Time) {
+-		t.Errorf("Unexpected start time, expected %v, actual %v", startTime, status.StartTime)
++	if !status.StartTime.Time.Equal(startTime.Rfc3339Copy().Time) {
++		t.Errorf("Unexpected start time, expected %v, actual %v", startTime.Rfc3339Copy(), status.StartTime)
+ 	}
+ }
+ 

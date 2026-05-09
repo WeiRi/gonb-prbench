@@ -1,0 +1,28 @@
+diff --git a/pkg/server/apiinternal/api_internal.go b/pkg/server/apiinternal/api_internal.go
+index 45f48b6b3efe..1a5dbac512bc 100644
+--- a/pkg/server/apiinternal/api_internal.go
++++ b/pkg/server/apiinternal/api_internal.go
+@@ -37,7 +37,12 @@ const (
+ 	POST httpMethod = http.MethodPost
+ )
+ 
+-var decoder = schema.NewDecoder()
++var decoder = func() *schema.Decoder {
++	d := schema.NewDecoder()
++	d.SetAliasTag("json")
++	d.IgnoreUnknownKeys(true)
++	return d
++}()
+ 
+ // route defines a REST endpoint with its handler and HTTP method.
+ type route struct {
+@@ -94,9 +99,6 @@ func NewAPIInternalServer(
+ 	r.registerAdminRoutes()
+ 	r.registerTimeSeriesRoutes()
+ 
+-	decoder.SetAliasTag("json")
+-	decoder.IgnoreUnknownKeys(true)
+-
+ 	return r, nil
+ }
+ 

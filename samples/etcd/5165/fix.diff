@@ -1,0 +1,13 @@
+diff --git a/raft/node.go b/raft/node.go
+index 727dec016356..144b8ca477c8 100644
+--- a/raft/node.go
++++ b/raft/node.go
+@@ -325,7 +325,7 @@ func (n *node) run(r *raft) {
+ 				// block incoming proposal when local node is
+ 				// removed
+ 				if cc.NodeID == r.id {
+-					n.propc = nil
++					propc = nil
+ 				}
+ 				r.removeNode(cc.NodeID)
+ 			case pb.ConfChangeUpdateNode:

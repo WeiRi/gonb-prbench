@@ -1,0 +1,30 @@
+WARNING: DATA RACE
+Read at 0x00c000096008 by goroutine 27:
+  ase/etcd-7361.(*TCPProxy).runMonitorOnce.func1()
+      /work/userspace.go:25 +0x2e
+
+Previous write at 0x00c000096008 by goroutine 9:
+  ase/etcd-7361.(*TCPProxy).runMonitorOnce()
+      /work/userspace.go:22 +0xb8
+  ase/etcd-7361.TestRace_TCPProxy__LoopVarCapture.func1()
+      /work/verified_test.go:67 +0x99
+
+Goroutine 27 (running) created at:
+  ase/etcd-7361.(*TCPProxy).runMonitorOnce()
+      /work/userspace.go:24 +0x184
+  ase/etcd-7361.TestRace_TCPProxy__LoopVarCapture.func1()
+      /work/verified_test.go:67 +0x99
+
+Goroutine 9 (running) created at:
+  ase/etcd-7361.TestRace_TCPProxy__LoopVarCapture()
+      /work/verified_test.go:64 +0x264
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+    testing.go:1398: race detected during execution of test
+--- FAIL: TestRace_TCPProxy__LoopVarCapture (0.67s)
+FAIL
+FAIL	ase/etcd-7361	0.693s
+FAIL

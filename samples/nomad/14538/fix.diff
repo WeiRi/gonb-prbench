@@ -1,0 +1,124 @@
+diff --git a/client/allochealth/tracker_test.go b/client/allochealth/tracker_test.go
+index 4403073c154..49dc04ffa6b 100644
+--- a/client/allochealth/tracker_test.go
++++ b/client/allochealth/tracker_test.go
+@@ -14,6 +14,7 @@ import (
+ 	regmock "github.com/hashicorp/nomad/client/serviceregistration/mock"
+ 	"github.com/hashicorp/nomad/client/state"
+ 	cstructs "github.com/hashicorp/nomad/client/structs"
++	"github.com/hashicorp/nomad/helper"
+ 	"github.com/hashicorp/nomad/helper/testlog"
+ 	"github.com/hashicorp/nomad/nomad/mock"
+ 	"github.com/hashicorp/nomad/nomad/structs"
+@@ -530,8 +531,11 @@ func TestTracker_Checks_Healthy_Before_TaskHealth(t *testing.T) {
+ 	case h := <-tracker.HealthyCh():
+ 		require.Fail(t, "unexpected health event", h)
+ 	}
+-	require.False(t, tracker.tasksHealthy)
+-	require.False(t, tracker.checksHealthy)
++
++	helper.WithLock(&tracker.lock, func() {
++		require.False(t, tracker.tasksHealthy)
++		require.False(t, tracker.checksHealthy)
++	})
+ 
+ 	// now set task to healthy
+ 	runningAlloc := alloc.Copy()
+@@ -723,7 +727,8 @@ func TestTracker_NomadChecks_OnUpdate(t *testing.T) {
+ 		},
+ 	}
+ 
+-	for _, tc := range cases {
++	for i := range cases {
++		tc := cases[i]
+ 		t.Run(tc.name, func(t *testing.T) {
+ 			alloc := mock.Alloc()
+ 			alloc.Job.TaskGroups[0].Migrate.MinHealthyTime = 1 // let's speed things up
+diff --git a/client/logmon/logging/rotator.go b/client/logmon/logging/rotator.go
+index 69b8bbd5af1..7762f081854 100644
+--- a/client/logmon/logging/rotator.go
++++ b/client/logmon/logging/rotator.go
+@@ -38,10 +38,13 @@ type FileRotator struct {
+ 	MaxFiles int   // MaxFiles is the maximum number of rotated files allowed in a path
+ 	FileSize int64 // FileSize is the size a rotated file is allowed to grow
+ 
+-	path             string // path is the path on the file system where the rotated set of files are opened
+-	baseFileName     string // baseFileName is the base file name of the rotated files
+-	logFileIdx       int    // logFileIdx is the current index of the rotated files
+-	oldestLogFileIdx int    // oldestLogFileIdx is the index of the oldest log file in a path
++	path         string // path is the path on the file system where the rotated set of files are opened
++	baseFileName string // baseFileName is the base file name of the rotated files
++	logFileIdx   int    // logFileIdx is the current index of the rotated files
++
++	oldestLogFileIdx int // oldestLogFileIdx is the index of the oldest log file in a path
++	closed           bool
++	fileLock         sync.Mutex
+ 
+ 	currentFile *os.File // currentFile is the file that is currently getting written
+ 	currentWr   int64    // currentWr is the number of bytes written to the current file
+@@ -52,9 +55,6 @@ type FileRotator struct {
+ 	logger      hclog.Logger
+ 	purgeCh     chan struct{}
+ 	doneCh      chan struct{}
+-
+-	closed     bool
+-	closedLock sync.Mutex
+ }
+ 
+ // NewFileRotator returns a new file rotator
+@@ -176,8 +176,8 @@ func (f *FileRotator) nextFile() error {
+ 		break
+ 	}
+ 	// Purge old files if we have more files than MaxFiles
+-	f.closedLock.Lock()
+-	defer f.closedLock.Unlock()
++	f.fileLock.Lock()
++	defer f.fileLock.Unlock()
+ 	if f.logFileIdx-f.oldestLogFileIdx >= f.MaxFiles && !f.closed {
+ 		select {
+ 		case f.purgeCh <- struct{}{}:
+@@ -250,8 +250,8 @@ func (f *FileRotator) flushPeriodically() {
+ 
+ // Close flushes and closes the rotator. It never returns an error.
+ func (f *FileRotator) Close() error {
+-	f.closedLock.Lock()
+-	defer f.closedLock.Unlock()
++	f.fileLock.Lock()
++	defer f.fileLock.Unlock()
+ 
+ 	// Stop the ticker and flush for one last time
+ 	f.flushTicker.Stop()
+@@ -310,7 +310,10 @@ func (f *FileRotator) purgeOldFiles() {
+ 					f.logger.Error("error removing file", "filename", fname, "error", err)
+ 				}
+ 			}
++
++			f.fileLock.Lock()
+ 			f.oldestLogFileIdx = fIndexes[0]
++			f.fileLock.Unlock()
+ 		case <-f.doneCh:
+ 			return
+ 		}
+diff --git a/helper/funcs.go b/helper/funcs.go
+index 44cd4bab0cc..ad640fd177f 100644
+--- a/helper/funcs.go
++++ b/helper/funcs.go
+@@ -8,6 +8,7 @@ import (
+ 	"reflect"
+ 	"regexp"
+ 	"strings"
++	"sync"
+ 	"time"
+ 
+ 	multierror "github.com/hashicorp/go-multierror"
+@@ -709,3 +710,10 @@ OUTER:
+ 	}
+ 	return true
+ }
++
++// WithLock executes a function while holding a lock.
++func WithLock(lock sync.Locker, f func()) {
++	lock.Lock()
++	defer lock.Unlock()
++	f()
++}

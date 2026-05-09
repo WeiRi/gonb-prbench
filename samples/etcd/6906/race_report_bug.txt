@@ -1,0 +1,64 @@
+WARNING: DATA RACE
+Write at 0x00c00011e540 by goroutine 12:
+  runtime.mapassign_fast64()
+      /usr/local/go/src/runtime/map_fast64.go:93 +0x0
+  ase/etcd-6906.TestRace_6906.func1()
+      /work/verified_test.go:29 +0xfe
+
+Previous read at 0x00c00011e540 by goroutine 21:
+  ase/etcd-6906.(*watchBroadcasts).empty()
+      /work/watch_broadcasts.go:21 +0xcc
+  ase/etcd-6906.TestRace_6906.func2()
+      /work/verified_test.go:42 +0xae
+
+Goroutine 12 (running) created at:
+  ase/etcd-6906.TestRace_6906()
+      /work/verified_test.go:24 +0x204
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 21 (finished) created at:
+  ase/etcd-6906.TestRace_6906()
+      /work/verified_test.go:39 +0x2d1
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c00011e540 by goroutine 12:
+  runtime.mapdelete_fast64()
+      /usr/local/go/src/runtime/map_fast64.go:273 +0x0
+  ase/etcd-6906.TestRace_6906.func1()
+      /work/verified_test.go:32 +0x138
+
+Previous read at 0x00c00011e540 by goroutine 21:
+  ase/etcd-6906.(*watchBroadcasts).empty()
+      /work/watch_broadcasts.go:21 +0xcc
+  ase/etcd-6906.TestRace_6906.func2()
+      /work/verified_test.go:42 +0xae
+
+Goroutine 12 (running) created at:
+  ase/etcd-6906.TestRace_6906()
+      /work/verified_test.go:24 +0x204
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 21 (finished) created at:
+  ase/etcd-6906.TestRace_6906()
+      /work/verified_test.go:39 +0x2d1
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+    testing.go:1398: race detected during execution of test
+--- FAIL: TestRace_6906 (0.01s)
+FAIL
+FAIL	ase/etcd-6906	0.025s
+FAIL

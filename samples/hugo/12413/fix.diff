@@ -1,0 +1,48 @@
+diff --git a/hugolib/page__per_output.go b/hugolib/page__per_output.go
+index 4ff67c074bf..2adb5cbb7d7 100644
+--- a/hugolib/page__per_output.go
++++ b/hugolib/page__per_output.go
+@@ -175,7 +175,7 @@ func (pco *pageContentOutput) RenderShortcodes(ctx context.Context) (template.HT
+ 		// This content will be parsed and rendered by Goldmark.
+ 		// Wrap it in a special Hugo markup to assign the correct Page from
+ 		// the stack.
+-		c = hugocontext.Wrap(c, pco.po.p.pid)
++		return template.HTML(hugocontext.Wrap(c, pco.po.p.pid)), nil
+ 	}
+ 
+ 	return helpers.BytesToHTML(c), nil
+diff --git a/markup/goldmark/hugocontext/hugocontext.go b/markup/goldmark/hugocontext/hugocontext.go
+index ed62bb8c6ee..b9c548dac5e 100644
+--- a/markup/goldmark/hugocontext/hugocontext.go
++++ b/markup/goldmark/hugocontext/hugocontext.go
+@@ -34,7 +34,7 @@ func New() goldmark.Extender {
+ 
+ // Wrap wraps the given byte slice in a Hugo context that used to determine the correct Page
+ // in .RenderShortcodes.
+-func Wrap(b []byte, pid uint64) []byte {
++func Wrap(b []byte, pid uint64) string {
+ 	buf := bufferpool.GetBuffer()
+ 	defer bufferpool.PutBuffer(buf)
+ 	buf.Write(prefix)
+@@ -45,7 +45,7 @@ func Wrap(b []byte, pid uint64) []byte {
+ 	buf.Write(b)
+ 	buf.Write(prefix)
+ 	buf.Write(closingDelimAndNewline)
+-	return buf.Bytes()
++	return buf.String()
+ }
+ 
+ var kindHugoContext = ast.NewNodeKind("HugoContext")
+diff --git a/markup/goldmark/hugocontext/hugocontext_test.go b/markup/goldmark/hugocontext/hugocontext_test.go
+index da96cc3392b..4a6eb80f597 100644
+--- a/markup/goldmark/hugocontext/hugocontext_test.go
++++ b/markup/goldmark/hugocontext/hugocontext_test.go
+@@ -24,7 +24,7 @@ func TestWrap(t *testing.T) {
+ 
+ 	b := []byte("test")
+ 
+-	c.Assert(string(Wrap(b, 42)), qt.Equals, "{{__hugo_ctx pid=42}}\ntest{{__hugo_ctx/}}\n")
++	c.Assert(Wrap(b, 42), qt.Equals, "{{__hugo_ctx pid=42}}\ntest{{__hugo_ctx/}}\n")
+ }
+ 
+ func BenchmarkWrap(b *testing.B) {

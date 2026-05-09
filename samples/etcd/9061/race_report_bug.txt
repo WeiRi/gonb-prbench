@@ -1,0 +1,58 @@
+WARNING: DATA RACE
+Write at 0x00c0000d4550 by goroutine 9:
+  ase/etcd-9061.TestRace_PR9061_WaitSession.func2()
+      /work/verified_test.go:32 +0xc9
+
+Previous write at 0x00c0000d4550 by goroutine 11:
+  ase/etcd-9061.TestRace_PR9061_WaitSession.func2()
+      /work/verified_test.go:32 +0xc9
+
+Goroutine 9 (running) created at:
+  ase/etcd-9061.TestRace_PR9061_WaitSession()
+      /work/verified_test.go:29 +0xfd
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 11 (finished) created at:
+  ase/etcd-9061.TestRace_PR9061_WaitSession()
+      /work/verified_test.go:29 +0xfd
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c0000d4550 by goroutine 9:
+  ase/etcd-9061.TestRace_PR9061_WaitSession.func2()
+      /work/verified_test.go:32 +0xc9
+
+Previous read at 0x00c0000d4550 by goroutine 14:
+  ase/etcd-9061.(*leasingKV).waitSession()
+      /work/kv.go:20 +0x10d
+  ase/etcd-9061.TestRace_PR9061_WaitSession.func1()
+      /work/verified_test.go:25 +0x105
+
+Goroutine 9 (running) created at:
+  ase/etcd-9061.TestRace_PR9061_WaitSession()
+      /work/verified_test.go:29 +0xfd
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 14 (running) created at:
+  ase/etcd-9061.TestRace_PR9061_WaitSession()
+      /work/verified_test.go:21 +0x1c4
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+    testing.go:1398: race detected during execution of test
+--- FAIL: TestRace_PR9061_WaitSession (0.09s)
+FAIL
+FAIL	ase/etcd-9061	0.115s
+FAIL

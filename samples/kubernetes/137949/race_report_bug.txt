@@ -1,0 +1,26 @@
+WARNING: DATA RACE
+Read at 0x00c00001428f by goroutine 22:
+  ase/kubernetes-137949.(*remoteImageService).ListImages()
+      /work/remote_image.go:13 +0xa4
+  ase/kubernetes-137949.TestRace_137949_UseStreamingBoolRace.func1.1()
+      /work/verified_test.go:30 +0x9b
+
+Previous write at 0x00c00001428f by goroutine 25:
+  ase/kubernetes-137949.(*remoteImageService).streamImagesFallback()
+      /work/remote_image.go:18 +0xa4
+  ase/kubernetes-137949.TestRace_137949_UseStreamingBoolRace.func1.2()
+      /work/verified_test.go:38 +0x9b
+
+Goroutine 22 (running) created at:
+  ase/kubernetes-137949.TestRace_137949_UseStreamingBoolRace.func1()
+      /work/verified_test.go:27 +0x17c
+
+Goroutine 25 (finished) created at:
+  ase/kubernetes-137949.TestRace_137949_UseStreamingBoolRace.func1()
+      /work/verified_test.go:35 +0x224
+==================
+    testing.go:1398: race detected during execution of test
+--- FAIL: TestRace_137949_UseStreamingBoolRace (0.00s)
+FAIL
+FAIL	ase/kubernetes-137949	0.021s
+FAIL

@@ -1,0 +1,158 @@
+WARNING: DATA RACE
+Read at 0x00c00029a020 by goroutine 9:
+  github.com/miekg/dns.TestRaceExchangeSharedResponseError.func2()
+      /work/race_459_capture_test.go:40 +0xb3
+  github.com/miekg/dns.TestRaceExchangeSharedResponseError.gowrap3()
+      /work/race_459_capture_test.go:46 +0x41
+
+Previous write at 0x00c00029a020 by goroutine 84:
+  github.com/miekg/dns.TestRaceExchangeSharedResponseError.func2()
+      /work/race_459_capture_test.go:40 +0xca
+  github.com/miekg/dns.TestRaceExchangeSharedResponseError.gowrap3()
+      /work/race_459_capture_test.go:46 +0x41
+
+Goroutine 9 (running) created at:
+  github.com/miekg/dns.TestRaceExchangeSharedResponseError()
+      /work/race_459_capture_test.go:35 +0x284
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 84 (running) created at:
+  github.com/miekg/dns.TestRaceExchangeSharedResponseError()
+      /work/race_459_capture_test.go:35 +0x284
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c00029a020 by goroutine 9:
+  github.com/miekg/dns.TestRaceExchangeSharedResponseError.func2()
+      /work/race_459_capture_test.go:40 +0xca
+  github.com/miekg/dns.TestRaceExchangeSharedResponseError.gowrap3()
+      /work/race_459_capture_test.go:46 +0x41
+
+Previous write at 0x00c00029a020 by goroutine 13:
+  github.com/miekg/dns.TestRaceExchangeSharedResponseError.func2()
+      /work/race_459_capture_test.go:40 +0xca
+  github.com/miekg/dns.TestRaceExchangeSharedResponseError.gowrap3()
+      /work/race_459_capture_test.go:46 +0x41
+
+Goroutine 9 (running) created at:
+  github.com/miekg/dns.TestRaceExchangeSharedResponseError()
+      /work/race_459_capture_test.go:35 +0x284
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 13 (running) created at:
+  github.com/miekg/dns.TestRaceExchangeSharedResponseError()
+      /work/race_459_capture_test.go:35 +0x284
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c00029a011 by goroutine 63:
+  github.com/miekg/dns.TestRaceExchangeSharedResponseError.func2()
+      /work/race_459_capture_test.go:41 +0xeb
+  github.com/miekg/dns.TestRaceExchangeSharedResponseError.gowrap3()
+      /work/race_459_capture_test.go:46 +0x41
+
+Previous write at 0x00c00029a011 by goroutine 9:
+  github.com/miekg/dns.TestRaceExchangeSharedResponseError.func2()
+      /work/race_459_capture_test.go:41 +0x104
+  github.com/miekg/dns.TestRaceExchangeSharedResponseError.gowrap3()
+      /work/race_459_capture_test.go:46 +0x41
+
+Goroutine 63 (running) created at:
+  github.com/miekg/dns.TestRaceExchangeSharedResponseError()
+      /work/race_459_capture_test.go:35 +0x284
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 9 (running) created at:
+  github.com/miekg/dns.TestRaceExchangeSharedResponseError()
+      /work/race_459_capture_test.go:35 +0x284
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c00029a011 by goroutine 30:
+  github.com/miekg/dns.(*MsgHdr).String()
+      /work/msg.go:641 +0x284
+  github.com/miekg/dns.(*Msg).String()
+      /work/msg.go:853 +0x4d
+  github.com/miekg/dns.TestRaceExchangeSharedResponseError.func2()
+      /work/race_459_capture_test.go:42 +0x119
+  github.com/miekg/dns.TestRaceExchangeSharedResponseError.gowrap3()
+      /work/race_459_capture_test.go:46 +0x41
+
+Previous write at 0x00c00029a011 by goroutine 17:
+  github.com/miekg/dns.TestRaceExchangeSharedResponseError.func2()
+      /work/race_459_capture_test.go:41 +0x104
+  github.com/miekg/dns.TestRaceExchangeSharedResponseError.gowrap3()
+      /work/race_459_capture_test.go:46 +0x41
+
+Goroutine 30 (running) created at:
+  github.com/miekg/dns.TestRaceExchangeSharedResponseError()
+      /work/race_459_capture_test.go:35 +0x284
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 17 (running) created at:
+  github.com/miekg/dns.TestRaceExchangeSharedResponseError()
+      /work/race_459_capture_test.go:35 +0x284
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c00029a011 by goroutine 63:
+  github.com/miekg/dns.TestRaceExchangeSharedResponseError.func2()
+      /work/race_459_capture_test.go:41 +0x104
+  github.com/miekg/dns.TestRaceExchangeSharedResponseError.gowrap3()
+      /work/race_459_capture_test.go:46 +0x41
+
+Previous write at 0x00c00029a011 by goroutine 19:
+  github.com/miekg/dns.TestRaceExchangeSharedResponseError.func2()
+      /work/race_459_capture_test.go:41 +0x104
+  github.com/miekg/dns.TestRaceExchangeSharedResponseError.gowrap3()
+      /work/race_459_capture_test.go:46 +0x41
+
+Goroutine 63 (running) created at:
+  github.com/miekg/dns.TestRaceExchangeSharedResponseError()
+      /work/race_459_capture_test.go:35 +0x284
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 19 (running) created at:
+  github.com/miekg/dns.TestRaceExchangeSharedResponseError()
+      /work/race_459_capture_test.go:35 +0x284
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+--- FAIL: TestRaceExchangeSharedResponseError (0.03s)
+    testing.go:1398: race detected during execution of test
+FAIL
+FAIL	github.com/miekg/dns	0.050s
+FAIL

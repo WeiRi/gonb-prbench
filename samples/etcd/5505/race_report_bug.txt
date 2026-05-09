@@ -1,0 +1,42 @@
+WARNING: DATA RACE
+Read at 0x00c0000ce010 by goroutine 41:
+  runtime.chansend()
+      /usr/local/go/src/runtime/chan.go:160 +0x0
+  ase/etcd-5505.(*serverWatchStream).recvLoop()
+      /work/watch.go:26 +0x131
+  ase/etcd-5505.TestRace_PR5505_CtrlChanClose.func1.1()
+      /work/verified_test.go:25 +0x48
+
+Previous write at 0x00c0000ce010 by goroutine 8:
+  runtime.closechan()
+      /usr/local/go/src/runtime/chan.go:357 +0x0
+  ase/etcd-5505.(*serverWatchStream).close.func1()
+      /work/watch.go:48 +0x45
+  sync.(*Once).doSlow()
+      /usr/local/go/src/sync/once.go:74 +0xf0
+  sync.(*Once).Do()
+      /usr/local/go/src/sync/once.go:65 +0x44
+  ase/etcd-5505.(*serverWatchStream).close()
+      /work/watch.go:47 +0x64
+  ase/etcd-5505.TestRace_PR5505_CtrlChanClose.func1.2()
+      /work/verified_test.go:31 +0x44
+  ase/etcd-5505.TestRace_PR5505_CtrlChanClose.func1()
+      /work/verified_test.go:32 +0x264
+
+Goroutine 41 (running) created at:
+  ase/etcd-5505.TestRace_PR5505_CtrlChanClose.func1()
+      /work/verified_test.go:23 +0x1e4
+
+Goroutine 8 (running) created at:
+  ase/etcd-5505.TestRace_PR5505_CtrlChanClose()
+      /work/verified_test.go:19 +0x64
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+    testing.go:1398: race detected during execution of test
+--- FAIL: TestRace_PR5505_CtrlChanClose (0.00s)
+FAIL
+FAIL	ase/etcd-5505	0.017s
+FAIL

@@ -1,0 +1,58 @@
+WARNING: DATA RACE
+Read at 0x000000716c80 by goroutine 13:
+  ase/kubernetes-133781.IsKnownSystemPriorityClass()
+      /work/helpers.go:28 +0x136
+  ase/kubernetes-133781.TestRace_133781.func2()
+      /work/verified_test.go:29 +0xb9
+
+Previous write at 0x000000716c80 by goroutine 8:
+  ase/kubernetes-133781.TestRace_133781.func1()
+      /work/verified_test.go:21 +0x12f
+
+Goroutine 13 (running) created at:
+  ase/kubernetes-133781.TestRace_133781()
+      /work/verified_test.go:26 +0x6f
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 8 (finished) created at:
+  ase/kubernetes-133781.TestRace_133781()
+      /work/verified_test.go:16 +0x11b
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Write at 0x000000716cc0 by goroutine 12:
+  ase/kubernetes-133781.TestRace_133781.func1()
+      /work/verified_test.go:21 +0x12f
+
+Previous write at 0x000000716cc0 by goroutine 8:
+  ase/kubernetes-133781.TestRace_133781.func1()
+      /work/verified_test.go:21 +0x12f
+
+Goroutine 12 (running) created at:
+  ase/kubernetes-133781.TestRace_133781()
+      /work/verified_test.go:16 +0x11b
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 8 (finished) created at:
+  ase/kubernetes-133781.TestRace_133781()
+      /work/verified_test.go:16 +0x11b
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+    testing.go:1398: race detected during execution of test
+--- FAIL: TestRace_133781 (0.00s)
+FAIL
+FAIL	ase/kubernetes-133781	0.021s
+FAIL

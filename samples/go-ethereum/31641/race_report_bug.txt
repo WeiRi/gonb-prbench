@@ -1,0 +1,166 @@
+WARNING: DATA RACE
+Write at 0x00c0000b6038 by goroutine 9:
+  ase/go-ethereum-31641.(*LegacyPool).Clear()
+      /work/legacypool.go:66 +0x157
+  ase/go-ethereum-31641.TestRace_31641_legacypool_Add_vs_Clear.func2()
+      /work/verified_test.go:27 +0xb1
+
+Previous read at 0x00c0000b6038 by goroutine 8:
+  ase/go-ethereum-31641.(*LegacyPool).Add()
+      /work/legacypool.go:55 +0xb2
+  ase/go-ethereum-31641.TestRace_31641_legacypool_Add_vs_Clear.func1()
+      /work/verified_test.go:21 +0xe4
+
+Goroutine 9 (running) created at:
+  ase/go-ethereum-31641.TestRace_31641_legacypool_Add_vs_Clear()
+      /work/verified_test.go:24 +0x450
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 8 (running) created at:
+  ase/go-ethereum-31641.TestRace_31641_legacypool_Add_vs_Clear()
+      /work/verified_test.go:18 +0x3a7
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c000201d30 by goroutine 8:
+  ase/go-ethereum-31641.(*lookup).Get()
+      /work/legacypool.go:31 +0x9d
+  ase/go-ethereum-31641.(*LegacyPool).Add()
+      /work/legacypool.go:55 +0xd3
+  ase/go-ethereum-31641.TestRace_31641_legacypool_Add_vs_Clear.func1()
+      /work/verified_test.go:21 +0xe4
+
+Previous write at 0x00c000201d30 by goroutine 9:
+  ase/go-ethereum-31641.newLookup()
+      /work/legacypool.go:25 +0xd6
+  ase/go-ethereum-31641.(*LegacyPool).Clear()
+      /work/legacypool.go:66 +0x92
+  ase/go-ethereum-31641.TestRace_31641_legacypool_Add_vs_Clear.func2()
+      /work/verified_test.go:27 +0xb1
+
+Goroutine 8 (running) created at:
+  ase/go-ethereum-31641.TestRace_31641_legacypool_Add_vs_Clear()
+      /work/verified_test.go:18 +0x3a7
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 9 (running) created at:
+  ase/go-ethereum-31641.TestRace_31641_legacypool_Add_vs_Clear()
+      /work/verified_test.go:24 +0x450
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c0000b6038 by goroutine 8:
+  ase/go-ethereum-31641.(*LegacyPool).Add()
+      /work/legacypool.go:58 +0xe6
+  ase/go-ethereum-31641.TestRace_31641_legacypool_Add_vs_Clear.func1()
+      /work/verified_test.go:21 +0xe4
+
+Previous write at 0x00c0000b6038 by goroutine 9:
+  ase/go-ethereum-31641.(*LegacyPool).Clear()
+      /work/legacypool.go:66 +0x157
+  ase/go-ethereum-31641.TestRace_31641_legacypool_Add_vs_Clear.func2()
+      /work/verified_test.go:27 +0xb1
+
+Goroutine 8 (running) created at:
+  ase/go-ethereum-31641.TestRace_31641_legacypool_Add_vs_Clear()
+      /work/verified_test.go:18 +0x3a7
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 9 (running) created at:
+  ase/go-ethereum-31641.TestRace_31641_legacypool_Add_vs_Clear()
+      /work/verified_test.go:24 +0x450
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c00020bdf0 by goroutine 8:
+  ase/go-ethereum-31641.(*lookup).Add()
+      /work/legacypool.go:37 +0xa4
+  ase/go-ethereum-31641.(*LegacyPool).Add()
+      /work/legacypool.go:58 +0xf9
+  ase/go-ethereum-31641.TestRace_31641_legacypool_Add_vs_Clear.func1()
+      /work/verified_test.go:21 +0xe4
+
+Previous write at 0x00c00020bdf0 by goroutine 9:
+  ase/go-ethereum-31641.newLookup()
+      /work/legacypool.go:25 +0xd6
+  ase/go-ethereum-31641.(*LegacyPool).Clear()
+      /work/legacypool.go:66 +0x92
+  ase/go-ethereum-31641.TestRace_31641_legacypool_Add_vs_Clear.func2()
+      /work/verified_test.go:27 +0xb1
+
+Goroutine 8 (running) created at:
+  ase/go-ethereum-31641.TestRace_31641_legacypool_Add_vs_Clear()
+      /work/verified_test.go:18 +0x3a7
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 9 (running) created at:
+  ase/go-ethereum-31641.TestRace_31641_legacypool_Add_vs_Clear()
+      /work/verified_test.go:24 +0x450
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c00020bde8 by goroutine 8:
+  ase/go-ethereum-31641.(*lookup).Add()
+      /work/legacypool.go:38 +0x124
+  ase/go-ethereum-31641.(*LegacyPool).Add()
+      /work/legacypool.go:58 +0xf9
+  ase/go-ethereum-31641.TestRace_31641_legacypool_Add_vs_Clear.func1()
+      /work/verified_test.go:21 +0xe4
+
+Previous write at 0x00c00020bde8 by goroutine 9:
+  ase/go-ethereum-31641.newLookup()
+      /work/legacypool.go:25 +0xd6
+  ase/go-ethereum-31641.(*LegacyPool).Clear()
+      /work/legacypool.go:66 +0x92
+  ase/go-ethereum-31641.TestRace_31641_legacypool_Add_vs_Clear.func2()
+      /work/verified_test.go:27 +0xb1
+
+Goroutine 8 (running) created at:
+  ase/go-ethereum-31641.TestRace_31641_legacypool_Add_vs_Clear()
+      /work/verified_test.go:18 +0x3a7
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 9 (running) created at:
+  ase/go-ethereum-31641.TestRace_31641_legacypool_Add_vs_Clear()
+      /work/verified_test.go:24 +0x450
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+--- FAIL: TestRace_31641_legacypool_Add_vs_Clear (0.00s)
+    testing.go:1398: race detected during execution of test
+FAIL
+FAIL	ase/go-ethereum-31641	0.020s
+FAIL

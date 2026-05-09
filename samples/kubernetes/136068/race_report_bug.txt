@@ -1,0 +1,32 @@
+WARNING: DATA RACE
+Write at 0x00c0003c7db0 by goroutine 111:
+  k8s.io/client-go/tools/leaderelection.(*LeaderElector).setObservedRecord()
+      /work/staging/src/k8s.io/client-go/tools/leaderelection/leaderelection.go:533 +0x171
+  k8s.io/client-go/tools/leaderelection.TestRace_136068.func2()
+      /work/staging/src/k8s.io/client-go/tools/leaderelection/race_136068_capture_test.go:43 +0x14f
+
+Previous read at 0x00c0003c7db0 by goroutine 40:
+  k8s.io/client-go/tools/leaderelection.TestRace_136068.func1()
+      /work/staging/src/k8s.io/client-go/tools/leaderelection/race_136068_capture_test.go:28 +0xa6
+
+Goroutine 111 (running) created at:
+  k8s.io/client-go/tools/leaderelection.TestRace_136068()
+      /work/staging/src/k8s.io/client-go/tools/leaderelection/race_136068_capture_test.go:36 +0x311
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1934 +0x21c
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1997 +0x44
+
+Goroutine 40 (finished) created at:
+  k8s.io/client-go/tools/leaderelection.TestRace_136068()
+      /work/staging/src/k8s.io/client-go/tools/leaderelection/race_136068_capture_test.go:25 +0x22f
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1934 +0x21c
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1997 +0x44
+==================
+--- FAIL: TestRace_136068 (0.02s)
+    testing.go:1617: race detected during execution of test
+FAIL
+FAIL	k8s.io/client-go/tools/leaderelection	0.103s
+FAIL

@@ -1,0 +1,26 @@
+WARNING: DATA RACE
+Read at 0x00c0001ac648 by goroutine 68:
+  ase/consul-3163.TestShutdownAgentRace.func3()
+      /work/verified_test.go:65 +0x72
+
+Previous write at 0x00c0001ac648 by goroutine 8:
+  ase/consul-3163.TestShutdownAgentRace.func1()
+      /work/verified_test.go:41 +0xc7
+
+Goroutine 68 (running) created at:
+  ase/consul-3163.TestShutdownAgentRace()
+      /work/verified_test.go:63 +0x125
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1203 +0x202
+
+Goroutine 8 (finished) created at:
+  ase/consul-3163.TestShutdownAgentRace()
+      /work/verified_test.go:34 +0x78
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1203 +0x202
+==================
+--- FAIL: TestShutdownAgentRace (0.96s)
+    testing.go:1102: race detected during execution of test
+FAIL
+FAIL	ase/consul-3163	0.977s
+FAIL

@@ -1,0 +1,250 @@
+WARNING: DATA RACE
+Write at 0x00c0005fe2a0 by goroutine 57:
+  runtime.mapassign_faststr()
+      /usr/local/go/src/runtime/map_faststr.go:203 +0x0
+  knative.dev/serving/pkg/autoscaler/statforwarder.TestForwarderCancelRace.func2()
+      /work/pkg/autoscaler/statforwarder/race_9297_capture_v2_test.go:41 +0x3ac
+
+Previous read at 0x00c0005fe2a0 by goroutine 56:
+  runtime.mapiterinit()
+      /usr/local/go/src/runtime/map.go:816 +0x0
+  knative.dev/serving/pkg/autoscaler/statforwarder.(*Forwarder).Cancel()
+      /work/pkg/autoscaler/statforwarder/forwarder.go:347 +0xe4
+  knative.dev/serving/pkg/autoscaler/statforwarder.TestForwarderCancelRace.func1()
+      /work/pkg/autoscaler/statforwarder/race_9297_capture_v2_test.go:36 +0x95
+
+Goroutine 57 (running) created at:
+  knative.dev/serving/pkg/autoscaler/statforwarder.TestForwarderCancelRace()
+      /work/pkg/autoscaler/statforwarder/race_9297_capture_v2_test.go:38 +0x36
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 56 (finished) created at:
+  knative.dev/serving/pkg/autoscaler/statforwarder.TestForwarderCancelRace()
+      /work/pkg/autoscaler/statforwarder/race_9297_capture_v2_test.go:34 +0x535
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c0005fe2d0 by goroutine 60:
+  runtime.mapiternext()
+      /usr/local/go/src/runtime/map.go:862 +0x0
+  runtime.mapiterinit()
+      /usr/local/go/src/runtime/map.go:859 +0x22e
+
+Previous write at 0x00c0005fe2d0 by goroutine 61:
+  runtime.mapdelete_faststr()
+      /usr/local/go/src/runtime/map_faststr.go:301 +0x0
+  knative.dev/serving/pkg/autoscaler/statforwarder.TestForwarderCancelRace.func2()
+      /work/pkg/autoscaler/statforwarder/race_9297_capture_v2_test.go:42 +0x1f2
+
+Goroutine 60 (running) created at:
+  knative.dev/serving/pkg/autoscaler/statforwarder.TestForwarderCancelRace()
+      /work/pkg/autoscaler/statforwarder/race_9297_capture_v2_test.go:34 +0x535
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 61 (running) created at:
+  knative.dev/serving/pkg/autoscaler/statforwarder.TestForwarderCancelRace()
+      /work/pkg/autoscaler/statforwarder/race_9297_capture_v2_test.go:38 +0x36
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c0005fe2d0 by goroutine 60:
+  runtime.mapiternext()
+      /usr/local/go/src/runtime/map.go:862 +0x0
+  knative.dev/serving/pkg/autoscaler/statforwarder.(*Forwarder).Cancel()
+      /work/pkg/autoscaler/statforwarder/forwarder.go:347 +0x104
+  knative.dev/serving/pkg/autoscaler/statforwarder.TestForwarderCancelRace.func1()
+      /work/pkg/autoscaler/statforwarder/race_9297_capture_v2_test.go:36 +0x95
+
+Previous write at 0x00c0005fe2d0 by goroutine 61:
+  runtime.mapassign_faststr()
+      /usr/local/go/src/runtime/map_faststr.go:203 +0x0
+  knative.dev/serving/pkg/autoscaler/statforwarder.TestForwarderCancelRace.func2()
+      /work/pkg/autoscaler/statforwarder/race_9297_capture_v2_test.go:41 +0x3ac
+
+Goroutine 60 (running) created at:
+  knative.dev/serving/pkg/autoscaler/statforwarder.TestForwarderCancelRace()
+      /work/pkg/autoscaler/statforwarder/race_9297_capture_v2_test.go:34 +0x535
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 61 (running) created at:
+  knative.dev/serving/pkg/autoscaler/statforwarder.TestForwarderCancelRace()
+      /work/pkg/autoscaler/statforwarder/race_9297_capture_v2_test.go:38 +0x36
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c000704a70 by goroutine 60:
+  knative.dev/serving/pkg/autoscaler/statforwarder.(*Forwarder).Cancel()
+      /work/pkg/autoscaler/statforwarder/forwarder.go:347 +0x165
+  knative.dev/serving/pkg/autoscaler/statforwarder.TestForwarderCancelRace.func1()
+      /work/pkg/autoscaler/statforwarder/race_9297_capture_v2_test.go:36 +0x95
+
+Previous write at 0x00c000704a70 by goroutine 61:
+  knative.dev/serving/pkg/autoscaler/statforwarder.TestForwarderCancelRace.func2()
+      /work/pkg/autoscaler/statforwarder/race_9297_capture_v2_test.go:41 +0x3bb
+
+Goroutine 60 (running) created at:
+  knative.dev/serving/pkg/autoscaler/statforwarder.TestForwarderCancelRace()
+      /work/pkg/autoscaler/statforwarder/race_9297_capture_v2_test.go:34 +0x535
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 61 (running) created at:
+  knative.dev/serving/pkg/autoscaler/statforwarder.TestForwarderCancelRace()
+      /work/pkg/autoscaler/statforwarder/race_9297_capture_v2_test.go:38 +0x36
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c0006fe3b0 by goroutine 60:
+  knative.dev/serving/pkg/autoscaler/statforwarder.(*Forwarder).Cancel()
+      /work/pkg/autoscaler/statforwarder/forwarder.go:348 +0x18b
+  knative.dev/serving/pkg/autoscaler/statforwarder.TestForwarderCancelRace.func1()
+      /work/pkg/autoscaler/statforwarder/race_9297_capture_v2_test.go:36 +0x95
+
+Previous write at 0x00c0006fe3b0 by goroutine 61:
+  knative.dev/serving/pkg/autoscaler/statforwarder.TestForwarderCancelRace.func2()
+      /work/pkg/autoscaler/statforwarder/race_9297_capture_v2_test.go:41 +0x32c
+
+Goroutine 60 (running) created at:
+  knative.dev/serving/pkg/autoscaler/statforwarder.TestForwarderCancelRace()
+      /work/pkg/autoscaler/statforwarder/race_9297_capture_v2_test.go:34 +0x535
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 61 (running) created at:
+  knative.dev/serving/pkg/autoscaler/statforwarder.TestForwarderCancelRace()
+      /work/pkg/autoscaler/statforwarder/race_9297_capture_v2_test.go:38 +0x36
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c0005fe2d0 by goroutine 61:
+  runtime.mapdelete_faststr()
+      /usr/local/go/src/runtime/map_faststr.go:301 +0x0
+  knative.dev/serving/pkg/autoscaler/statforwarder.TestForwarderCancelRace.func2()
+      /work/pkg/autoscaler/statforwarder/race_9297_capture_v2_test.go:42 +0x1f2
+
+Previous read at 0x00c0005fe2d0 by goroutine 60:
+  runtime.mapiternext()
+      /usr/local/go/src/runtime/map.go:862 +0x0
+  knative.dev/serving/pkg/autoscaler/statforwarder.(*Forwarder).Cancel()
+      /work/pkg/autoscaler/statforwarder/forwarder.go:347 +0x104
+  knative.dev/serving/pkg/autoscaler/statforwarder.TestForwarderCancelRace.func1()
+      /work/pkg/autoscaler/statforwarder/race_9297_capture_v2_test.go:36 +0x95
+
+Goroutine 61 (running) created at:
+  knative.dev/serving/pkg/autoscaler/statforwarder.TestForwarderCancelRace()
+      /work/pkg/autoscaler/statforwarder/race_9297_capture_v2_test.go:38 +0x36
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 60 (finished) created at:
+  knative.dev/serving/pkg/autoscaler/statforwarder.TestForwarderCancelRace()
+      /work/pkg/autoscaler/statforwarder/race_9297_capture_v2_test.go:34 +0x535
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c0005fe360 by goroutine 68:
+  runtime.mapiterinit()
+      /usr/local/go/src/runtime/map.go:816 +0x0
+  knative.dev/serving/pkg/autoscaler/statforwarder.(*Forwarder).Cancel()
+      /work/pkg/autoscaler/statforwarder/forwarder.go:347 +0xe4
+  knative.dev/serving/pkg/autoscaler/statforwarder.TestForwarderCancelRace.func1()
+      /work/pkg/autoscaler/statforwarder/race_9297_capture_v2_test.go:36 +0x95
+
+Previous write at 0x00c0005fe360 by goroutine 69:
+  runtime.mapdelete_faststr()
+      /usr/local/go/src/runtime/map_faststr.go:301 +0x0
+  knative.dev/serving/pkg/autoscaler/statforwarder.TestForwarderCancelRace.func2()
+      /work/pkg/autoscaler/statforwarder/race_9297_capture_v2_test.go:42 +0x1f2
+
+Goroutine 68 (running) created at:
+  knative.dev/serving/pkg/autoscaler/statforwarder.TestForwarderCancelRace()
+      /work/pkg/autoscaler/statforwarder/race_9297_capture_v2_test.go:34 +0x535
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 69 (running) created at:
+  knative.dev/serving/pkg/autoscaler/statforwarder.TestForwarderCancelRace()
+      /work/pkg/autoscaler/statforwarder/race_9297_capture_v2_test.go:38 +0x36
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c0005fe6c0 by goroutine 123:
+  runtime.mapassign_faststr()
+      /usr/local/go/src/runtime/map_faststr.go:203 +0x0
+  knative.dev/serving/pkg/autoscaler/statforwarder.TestForwarderCancelRace.func2()
+      /work/pkg/autoscaler/statforwarder/race_9297_capture_v2_test.go:41 +0x3ac
+
+Previous read at 0x00c0005fe6c0 by goroutine 122:
+  runtime.mapiternext()
+      /usr/local/go/src/runtime/map.go:862 +0x0
+  runtime.mapiterinit()
+      /usr/local/go/src/runtime/map.go:859 +0x22e
+
+Goroutine 123 (running) created at:
+  knative.dev/serving/pkg/autoscaler/statforwarder.TestForwarderCancelRace()
+      /work/pkg/autoscaler/statforwarder/race_9297_capture_v2_test.go:38 +0x36
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 122 (running) created at:
+  knative.dev/serving/pkg/autoscaler/statforwarder.TestForwarderCancelRace()
+      /work/pkg/autoscaler/statforwarder/race_9297_capture_v2_test.go:34 +0x535
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+fatal error: concurrent map iteration and map write
+
+goroutine 93 [running]:
+knative.dev/serving/pkg/autoscaler/statforwarder.(*Forwarder).Cancel(...)
+	/work/pkg/autoscaler/statforwarder/forwarder.go:347
+knative.dev/serving/pkg/autoscaler/statforwarder.TestForwarderCancelRace.func1()
+	/work/pkg/autoscaler/statforwarder/race_9297_capture_v2_test.go:36 +0x105

@@ -1,0 +1,41 @@
+WARNING: DATA RACE
+Read at 0x00c000188370 by goroutine 39:
+  runtime.chansend()
+      /usr/local/go/src/runtime/chan.go:160 +0x0
+  ase/etcd-503.TestRace_503.func1.1()
+      /work/verified_test.go:30 +0xbe
+
+Previous write at 0x00c000188370 by goroutine 8:
+  runtime.closechan()
+      /usr/local/go/src/runtime/chan.go:357 +0x0
+  ase/etcd-503.TestRace_503.func1()
+      /work/verified_test.go:38 +0xce
+
+Goroutine 39 (running) created at:
+  ase/etcd-503.TestRace_503.func1()
+      /work/verified_test.go:25 +0xac
+
+Goroutine 8 (running) created at:
+  ase/etcd-503.TestRace_503()
+      /work/verified_test.go:15 +0x6f
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+panic: send on closed channel
+
+goroutine 53 [running]:
+ase/etcd-503.TestRace_503.func1.1()
+	/work/verified_test.go:30 +0xbf
+created by ase/etcd-503.TestRace_503.func1 in goroutine 22
+	/work/verified_test.go:25 +0xad
+panic: send on closed channel
+
+goroutine 50 [running]:
+ase/etcd-503.TestRace_503.func1.1()
+	/work/verified_test.go:30 +0xbf
+created by ase/etcd-503.TestRace_503.func1 in goroutine 25
+	/work/verified_test.go:25 +0xad
+FAIL	ase/etcd-503	0.031s
+FAIL

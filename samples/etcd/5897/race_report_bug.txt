@@ -1,0 +1,244 @@
+WARNING: DATA RACE
+Read at 0x00c000124570 by goroutine 11:
+  runtime.mapaccess1_fast64()
+      /usr/local/go/src/runtime/map_fast64.go:13 +0x0
+  ase/etcd-5897.(*serverWatchStream).sendLoop()
+      /work/watch.go:29 +0x110
+  ase/etcd-5897.TestRace_PR5897_ProgressPrevKVUnlocked.func2()
+      /work/verified_test.go:27 +0xb8
+  ase/etcd-5897.TestRace_PR5897_ProgressPrevKVUnlocked.gowrap2()
+      /work/verified_test.go:29 +0x41
+
+Previous write at 0x00c000124570 by goroutine 8:
+  runtime.mapassign_fast64()
+      /usr/local/go/src/runtime/map_fast64.go:93 +0x0
+  ase/etcd-5897.(*serverWatchStream).recvLoop()
+      /work/watch.go:23 +0x12b
+  ase/etcd-5897.TestRace_PR5897_ProgressPrevKVUnlocked.func1()
+      /work/verified_test.go:21 +0xcb
+  ase/etcd-5897.TestRace_PR5897_ProgressPrevKVUnlocked.gowrap1()
+      /work/verified_test.go:23 +0x41
+
+Goroutine 11 (running) created at:
+  ase/etcd-5897.TestRace_PR5897_ProgressPrevKVUnlocked()
+      /work/verified_test.go:24 +0x15e
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 8 (finished) created at:
+  ase/etcd-5897.TestRace_PR5897_ProgressPrevKVUnlocked()
+      /work/verified_test.go:18 +0x2a4
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c000124540 by goroutine 12:
+  runtime.mapassign_fast64()
+      /usr/local/go/src/runtime/map_fast64.go:93 +0x0
+  ase/etcd-5897.(*serverWatchStream).recvLoop()
+      /work/watch.go:22 +0xf0
+  ase/etcd-5897.TestRace_PR5897_ProgressPrevKVUnlocked.func1()
+      /work/verified_test.go:21 +0xcb
+  ase/etcd-5897.TestRace_PR5897_ProgressPrevKVUnlocked.gowrap1()
+      /work/verified_test.go:23 +0x41
+
+Previous write at 0x00c000124540 by goroutine 8:
+  runtime.mapassign_fast64()
+      /usr/local/go/src/runtime/map_fast64.go:93 +0x0
+  ase/etcd-5897.(*serverWatchStream).recvLoop()
+      /work/watch.go:22 +0xf0
+  ase/etcd-5897.TestRace_PR5897_ProgressPrevKVUnlocked.func1()
+      /work/verified_test.go:21 +0xcb
+  ase/etcd-5897.TestRace_PR5897_ProgressPrevKVUnlocked.gowrap1()
+      /work/verified_test.go:23 +0x41
+
+Goroutine 12 (running) created at:
+  ase/etcd-5897.TestRace_PR5897_ProgressPrevKVUnlocked()
+      /work/verified_test.go:18 +0x2a4
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 8 (finished) created at:
+  ase/etcd-5897.TestRace_PR5897_ProgressPrevKVUnlocked()
+      /work/verified_test.go:18 +0x2a4
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c000124540 by goroutine 12:
+  runtime.mapassign_fast64()
+      /usr/local/go/src/runtime/map_fast64.go:93 +0x0
+  ase/etcd-5897.(*serverWatchStream).recvLoop()
+      /work/watch.go:22 +0xf0
+  ase/etcd-5897.TestRace_PR5897_ProgressPrevKVUnlocked.func1()
+      /work/verified_test.go:21 +0xcb
+  ase/etcd-5897.TestRace_PR5897_ProgressPrevKVUnlocked.gowrap1()
+      /work/verified_test.go:23 +0x41
+
+Previous read at 0x00c000124540 by goroutine 11:
+  runtime.mapaccess1_fast64()
+      /usr/local/go/src/runtime/map_fast64.go:13 +0x0
+  ase/etcd-5897.(*serverWatchStream).sendLoop()
+      /work/watch.go:28 +0xe4
+  ase/etcd-5897.TestRace_PR5897_ProgressPrevKVUnlocked.func2()
+      /work/verified_test.go:27 +0xb8
+  ase/etcd-5897.TestRace_PR5897_ProgressPrevKVUnlocked.gowrap2()
+      /work/verified_test.go:29 +0x41
+
+Goroutine 12 (running) created at:
+  ase/etcd-5897.TestRace_PR5897_ProgressPrevKVUnlocked()
+      /work/verified_test.go:18 +0x2a4
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 11 (running) created at:
+  ase/etcd-5897.TestRace_PR5897_ProgressPrevKVUnlocked()
+      /work/verified_test.go:24 +0x15e
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+fatal error: concurrent map writes
+==================
+WARNING: DATA RACE
+Write at 0x00c000124570 by goroutine 18:
+  runtime.mapassign_fast64()
+      /usr/local/go/src/runtime/map_fast64.go:93 +0x0
+  ase/etcd-5897.(*serverWatchStream).recvLoop()
+      /work/watch.go:23 +0x12b
+  ase/etcd-5897.TestRace_PR5897_ProgressPrevKVUnlocked.func1()
+      /work/verified_test.go:21 +0xcb
+  ase/etcd-5897.TestRace_PR5897_ProgressPrevKVUnlocked.gowrap1()
+      /work/verified_test.go:23 +0x41
+
+Previous write at 0x00c000124570 by goroutine 12:
+  runtime.mapassign_fast64()
+      /usr/local/go/src/runtime/map_fast64.go:93 +0x0
+  ase/etcd-5897.(*serverWatchStream).recvLoop()
+      /work/watch.go:23 +0x12b
+  ase/etcd-5897.TestRace_PR5897_ProgressPrevKVUnlocked.func1()
+      /work/verified_test.go:21 +0xcb
+  ase/etcd-5897.TestRace_PR5897_ProgressPrevKVUnlocked.gowrap1()
+      /work/verified_test.go:23 +0x41
+
+Goroutine 18 (running) created at:
+  ase/etcd-5897.TestRace_PR5897_ProgressPrevKVUnlocked()
+      /work/verified_test.go:18 +0x2a4
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 12 (running) created at:
+  ase/etcd-5897.TestRace_PR5897_ProgressPrevKVUnlocked()
+      /work/verified_test.go:18 +0x2a4
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+
+goroutine 26 [running]:
+ase/etcd-5897.(*serverWatchStream).recvLoop(...)
+	/work/watch.go:22
+ase/etcd-5897.TestRace_PR5897_ProgressPrevKVUnlocked.func1(0x2)
+	/work/verified_test.go:21 +0xf1
+created by ase/etcd-5897.TestRace_PR5897_ProgressPrevKVUnlocked in goroutine 21
+	/work/verified_test.go:18 +0x2a5
+
+goroutine 1 [chan receive]:
+testing.(*T).Run(0xc000154340, {0x5ed69e, 0x26}, 0x5f17f8)
+	/usr/local/go/src/testing/testing.go:1750 +0x851
+testing.runTests.func1(0xc000154340)
+	/usr/local/go/src/testing/testing.go:2161 +0x86
+testing.tRunner(0xc000154340, 0xc00013bb10)
+	/usr/local/go/src/testing/testing.go:1689 +0x21f
+testing.runTests(0xc0001220a8, {0x717120, 0x1, 0x1}, {0xc00013bbb8?, 0xc00013bc00?, 0x7208a0?})
+	/usr/local/go/src/testing/testing.go:2159 +0x8bf
+testing.(*M).Run(0xc0001280a0)
+	/usr/local/go/src/testing/testing.go:2027 +0xf18
+main.main()
+	_testmain.go:47 +0x2be
+
+goroutine 21 [semacquire]:
+sync.runtime_Semacquire(0xc00012e178?)
+	/usr/local/go/src/runtime/sema.go:62 +0x25
+sync.(*WaitGroup).Wait(0xc00012e170)
+	/usr/local/go/src/sync/waitgroup.go:116 +0xa5
+ase/etcd-5897.TestRace_PR5897_ProgressPrevKVUnlocked(0xc0001544e0?)
+	/work/verified_test.go:31 +0x3ba
+testing.tRunner(0xc0001544e0, 0x5f17f8)
+	/usr/local/go/src/testing/testing.go:1689 +0x21f
+created by testing.(*T).Run in goroutine 1
+	/usr/local/go/src/testing/testing.go:1742 +0x826
+
+goroutine 23 [runnable]:
+ase/etcd-5897.TestRace_PR5897_ProgressPrevKVUnlocked.func2(0x0)
+	/work/verified_test.go:24 +0x146
+created by ase/etcd-5897.TestRace_PR5897_ProgressPrevKVUnlocked in goroutine 21
+	/work/verified_test.go:24 +0x15f
+
+goroutine 24 [runnable]:
+ase/etcd-5897.TestRace_PR5897_ProgressPrevKVUnlocked.func1(0x1)
+	/work/verified_test.go:18 +0x16e
+created by ase/etcd-5897.TestRace_PR5897_ProgressPrevKVUnlocked in goroutine 21
+	/work/verified_test.go:18 +0x2a5
+
+goroutine 27 [runnable]:
+ase/etcd-5897.TestRace_PR5897_ProgressPrevKVUnlocked.func2(0x2)
+	/work/verified_test.go:24 +0x146
+created by ase/etcd-5897.TestRace_PR5897_ProgressPrevKVUnlocked in goroutine 21
+	/work/verified_test.go:24 +0x15f
+
+goroutine 28 [runnable]:
+ase/etcd-5897.TestRace_PR5897_ProgressPrevKVUnlocked.func1(0x3)
+	/work/verified_test.go:18 +0x16e
+created by ase/etcd-5897.TestRace_PR5897_ProgressPrevKVUnlocked in goroutine 21
+	/work/verified_test.go:18 +0x2a5
+
+goroutine 29 [runnable]:
+ase/etcd-5897.TestRace_PR5897_ProgressPrevKVUnlocked.func2(0x3)
+	/work/verified_test.go:24 +0x146
+created by ase/etcd-5897.TestRace_PR5897_ProgressPrevKVUnlocked in goroutine 21
+	/work/verified_test.go:24 +0x15f
+
+goroutine 30 [runnable]:
+ase/etcd-5897.TestRace_PR5897_ProgressPrevKVUnlocked.func1(0x4)
+	/work/verified_test.go:18 +0x16e
+created by ase/etcd-5897.TestRace_PR5897_ProgressPrevKVUnlocked in goroutine 21
+	/work/verified_test.go:18 +0x2a5
+
+goroutine 31 [runnable]:
+ase/etcd-5897.TestRace_PR5897_ProgressPrevKVUnlocked.func2(0x4)
+	/work/verified_test.go:24 +0x146
+created by ase/etcd-5897.TestRace_PR5897_ProgressPrevKVUnlocked in goroutine 21
+	/work/verified_test.go:24 +0x15f
+
+goroutine 32 [runnable]:
+ase/etcd-5897.(*serverWatchStream).recvLoop(...)
+	/work/watch.go:22
+ase/etcd-5897.TestRace_PR5897_ProgressPrevKVUnlocked.func1(0x5)
+	/work/verified_test.go:21 +0xf1
+created by ase/etcd-5897.TestRace_PR5897_ProgressPrevKVUnlocked in goroutine 21
+	/work/verified_test.go:18 +0x2a5
+
+goroutine 33 [runnable]:
+ase/etcd-5897.TestRace_PR5897_ProgressPrevKVUnlocked.func2(0x5)
+	/work/verified_test.go:24 +0x146
+created by ase/etcd-5897.TestRace_PR5897_ProgressPrevKVUnlocked in goroutine 21
+	/work/verified_test.go:24 +0x15f
+FAIL	ase/etcd-5897	0.020s
+FAIL

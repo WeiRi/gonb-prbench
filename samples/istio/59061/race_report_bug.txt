@@ -1,0 +1,64 @@
+WARNING: DATA RACE
+Write at 0x00c000014238 by goroutine 13:
+  ase/istio-59061.(*T_59061).write()
+      /work/verified_test.go:6 +0x9b
+  ase/istio-59061.TestRace_59061.func1()
+      /work/verified_test.go:13 +0x8b
+
+Previous write at 0x00c000014238 by goroutine 8:
+  ase/istio-59061.(*T_59061).write()
+      /work/verified_test.go:6 +0x9b
+  ase/istio-59061.TestRace_59061.func1()
+      /work/verified_test.go:13 +0x8b
+
+Goroutine 13 (running) created at:
+  ase/istio-59061.TestRace_59061()
+      /work/verified_test.go:12 +0x84
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1934 +0x21c
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1997 +0x44
+
+Goroutine 8 (finished) created at:
+  ase/istio-59061.TestRace_59061()
+      /work/verified_test.go:12 +0x84
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1934 +0x21c
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1997 +0x44
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c000014238 by goroutine 56:
+  ase/istio-59061.(*T_59061).write()
+      /work/verified_test.go:6 +0x9b
+  ase/istio-59061.TestRace_59061.func1()
+      /work/verified_test.go:13 +0x8b
+
+Previous read at 0x00c000014238 by goroutine 58:
+  ase/istio-59061.(*T_59061).read()
+      /work/verified_test.go:7 +0x9b
+  ase/istio-59061.TestRace_59061.func2()
+      /work/verified_test.go:16 +0x8b
+
+Goroutine 56 (running) created at:
+  ase/istio-59061.TestRace_59061()
+      /work/verified_test.go:12 +0x84
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1934 +0x21c
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1997 +0x44
+
+Goroutine 58 (finished) created at:
+  ase/istio-59061.TestRace_59061()
+      /work/verified_test.go:15 +0x14a
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1934 +0x21c
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1997 +0x44
+==================
+--- FAIL: TestRace_59061 (0.00s)
+    testing.go:1617: race detected during execution of test
+FAIL
+FAIL	ase/istio-59061	0.021s
+FAIL

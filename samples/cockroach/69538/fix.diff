@@ -1,0 +1,53 @@
+diff --git a/pkg/util/metric/registry.go b/pkg/util/metric/registry.go
+index 627362d4a5d8..85c9034bf1ca 100644
+--- a/pkg/util/metric/registry.go
++++ b/pkg/util/metric/registry.go
+@@ -139,6 +139,8 @@ func (r *Registry) addMetricValue(
+ // WriteMetricsMetadata writes metadata from all tracked metrics to the
+ // parameter map.
+ func (r *Registry) WriteMetricsMetadata(dest map[string]Metadata) {
++	r.Lock()
++	defer r.Unlock()
+ 	for _, v := range r.tracked {
+ 		dest[v.GetName()] = v.GetMetadata()
+ 	}
+@@ -157,6 +159,8 @@ func (r *Registry) Each(f func(name string, val interface{})) {
+ 
+ // MarshalJSON marshals to JSON.
+ func (r *Registry) MarshalJSON() ([]byte, error) {
++	r.Lock()
++	defer r.Unlock()
+ 	m := make(map[string]interface{})
+ 	for _, metric := range r.tracked {
+ 		metric.Inspect(func(v interface{}) {
+diff --git a/pkg/util/metric/registry_test.go b/pkg/util/metric/registry_test.go
+index 824479acda31..0416898f0a05 100644
+--- a/pkg/util/metric/registry_test.go
++++ b/pkg/util/metric/registry_test.go
+@@ -16,6 +16,8 @@ import (
+ )
+ 
+ func (r *Registry) findMetricByName(name string) Iterable {
++	r.Lock()
++	defer r.Unlock()
+ 	for _, metric := range r.tracked {
+ 		if metric.GetName() == name {
+ 			return metric
+@@ -28,8 +30,6 @@ func (r *Registry) findMetricByName(name string) Iterable {
+ // Counter with this name is not present (including if a non-Counter Iterable is
+ // registered with the name), nil is returned.
+ func (r *Registry) getCounter(name string) *Counter {
+-	r.Lock()
+-	defer r.Unlock()
+ 	iterable := r.findMetricByName(name)
+ 	if iterable == nil {
+ 		return nil
+@@ -47,8 +47,6 @@ func (r *Registry) getCounter(name string) *Counter {
+ // with this name is not present (including if a non-Gauge Iterable is
+ // registered with the name), nil is returned.
+ func (r *Registry) getGauge(name string) *Gauge {
+-	r.Lock()
+-	defer r.Unlock()
+ 	iterable := r.findMetricByName(name)
+ 	if iterable == nil {
+ 		return nil

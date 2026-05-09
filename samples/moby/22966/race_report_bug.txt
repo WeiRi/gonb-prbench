@@ -1,0 +1,200 @@
+WARNING: DATA RACE
+Read at 0x00c00019c120 by goroutine 10:
+  ase/moby-22966.(*Discovery).Register()
+      /work/memory.go:19 +0x1b1
+  ase/moby-22966.TestRace_22966.func1()
+      /work/verified_test.go:21 +0x109
+  ase/moby-22966.TestRace_22966.gowrap1()
+      /work/verified_test.go:23 +0x41
+
+Previous write at 0x00c00019c120 by goroutine 8:
+  ase/moby-22966.(*Discovery).Register()
+      /work/memory.go:19 +0x268
+  ase/moby-22966.TestRace_22966.func1()
+      /work/verified_test.go:21 +0x109
+  ase/moby-22966.TestRace_22966.gowrap1()
+      /work/verified_test.go:23 +0x41
+
+Goroutine 10 (running) created at:
+  ase/moby-22966.TestRace_22966()
+      /work/verified_test.go:18 +0xb9
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 8 (finished) created at:
+  ase/moby-22966.TestRace_22966()
+      /work/verified_test.go:18 +0xb9
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c0000cc210 by goroutine 10:
+  runtime.growslice()
+      /usr/local/go/src/runtime/slice.go:155 +0x0
+  ase/moby-22966.(*Discovery).Register()
+      /work/memory.go:19 +0x1e9
+  ase/moby-22966.TestRace_22966.func1()
+      /work/verified_test.go:21 +0x109
+  ase/moby-22966.TestRace_22966.gowrap1()
+      /work/verified_test.go:23 +0x41
+
+Previous write at 0x00c0000cc210 by goroutine 8:
+  ase/moby-22966.(*Discovery).Register()
+      /work/memory.go:19 +0x212
+  ase/moby-22966.TestRace_22966.func1()
+      /work/verified_test.go:21 +0x109
+  ase/moby-22966.TestRace_22966.gowrap1()
+      /work/verified_test.go:23 +0x41
+
+Goroutine 10 (running) created at:
+  ase/moby-22966.TestRace_22966()
+      /work/verified_test.go:18 +0xb9
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 8 (finished) created at:
+  ase/moby-22966.TestRace_22966()
+      /work/verified_test.go:18 +0xb9
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c00019c120 by goroutine 14:
+  ase/moby-22966.(*Discovery).Register()
+      /work/memory.go:19 +0x268
+  ase/moby-22966.TestRace_22966.func1()
+      /work/verified_test.go:21 +0x109
+  ase/moby-22966.TestRace_22966.gowrap1()
+      /work/verified_test.go:23 +0x41
+
+Previous write at 0x00c00019c120 by goroutine 10:
+  ase/moby-22966.(*Discovery).Register()
+      /work/memory.go:19 +0x268
+  ase/moby-22966.TestRace_22966.func1()
+      /work/verified_test.go:21 +0x109
+  ase/moby-22966.TestRace_22966.gowrap1()
+      /work/verified_test.go:23 +0x41
+
+Goroutine 14 (running) created at:
+  ase/moby-22966.TestRace_22966()
+      /work/verified_test.go:18 +0xb9
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 10 (running) created at:
+  ase/moby-22966.TestRace_22966()
+      /work/verified_test.go:18 +0xb9
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c0000ce708 by goroutine 10:
+  ase/moby-22966.(*Discovery).Register()
+      /work/memory.go:19 +0x212
+  ase/moby-22966.TestRace_22966.func1()
+      /work/verified_test.go:21 +0x109
+  ase/moby-22966.TestRace_22966.gowrap1()
+      /work/verified_test.go:23 +0x41
+
+Previous write at 0x00c0000ce708 by goroutine 19:
+  ase/moby-22966.(*Discovery).Register()
+      /work/memory.go:19 +0x212
+  ase/moby-22966.TestRace_22966.func1()
+      /work/verified_test.go:21 +0x109
+  ase/moby-22966.TestRace_22966.gowrap1()
+      /work/verified_test.go:23 +0x41
+
+Goroutine 10 (running) created at:
+  ase/moby-22966.TestRace_22966()
+      /work/verified_test.go:18 +0xb9
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 19 (running) created at:
+  ase/moby-22966.TestRace_22966()
+      /work/verified_test.go:18 +0xb9
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c00019c120 by goroutine 63:
+  ase/moby-22966.(*Discovery).Watch()
+      /work/memory.go:25 +0xb7
+  ase/moby-22966.TestRace_22966.func2()
+      /work/verified_test.go:29 +0xb2
+
+Previous write at 0x00c00019c120 by goroutine 18:
+  ase/moby-22966.(*Discovery).Register()
+      /work/memory.go:19 +0x268
+  ase/moby-22966.TestRace_22966.func1()
+      /work/verified_test.go:21 +0x109
+  ase/moby-22966.TestRace_22966.gowrap1()
+      /work/verified_test.go:23 +0x41
+
+Goroutine 63 (running) created at:
+  ase/moby-22966.TestRace_22966()
+      /work/verified_test.go:26 +0x1f1
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 18 (running) created at:
+  ase/moby-22966.TestRace_22966()
+      /work/verified_test.go:18 +0xb9
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c00001e020 by goroutine 63:
+  ase/moby-22966.(*Discovery).Watch()
+      /work/memory.go:26 +0x104
+  ase/moby-22966.TestRace_22966.func2()
+      /work/verified_test.go:29 +0xb2
+
+Previous write at 0x00c00001e020 by goroutine 8:
+  ase/moby-22966.(*Discovery).Register()
+      /work/memory.go:19 +0x164
+  ase/moby-22966.TestRace_22966.func1()
+      /work/verified_test.go:21 +0x109
+  ase/moby-22966.TestRace_22966.gowrap1()
+      /work/verified_test.go:23 +0x41
+
+Goroutine 63 (running) created at:
+  ase/moby-22966.TestRace_22966()
+      /work/verified_test.go:26 +0x1f1
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 8 (finished) created at:
+  ase/moby-22966.TestRace_22966()
+      /work/verified_test.go:18 +0xb9
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44

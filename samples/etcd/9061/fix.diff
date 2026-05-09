@@ -1,0 +1,17 @@
+diff --git a/clientv3/leasing/kv.go b/clientv3/leasing/kv.go
+index d44182b1036e..5a5e2312b726 100644
+--- a/clientv3/leasing/kv.go
++++ b/clientv3/leasing/kv.go
+@@ -445,8 +445,11 @@ func (lkv *leasingKV) revokeLeaseKvs(ctx context.Context, kvs []*mvccpb.KeyValue
+ }
+ 
+ func (lkv *leasingKV) waitSession(ctx context.Context) error {
++	lkv.leases.mu.RLock()
++	sessionc := lkv.sessionc
++	lkv.leases.mu.RUnlock()
+ 	select {
+-	case <-lkv.sessionc:
++	case <-sessionc:
+ 		return nil
+ 	case <-lkv.ctx.Done():
+ 		return lkv.ctx.Err()

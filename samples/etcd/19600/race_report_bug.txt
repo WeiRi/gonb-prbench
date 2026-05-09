@@ -1,0 +1,163 @@
+=== RUN   TestCancelCloseRace
+==================
+WARNING: DATA RACE
+Read at 0x0000007803e8 by goroutine 10:
+  ase/etcd-19600.(*watchableStore).newWatcher()
+      /work/watchable_store.go:44 +0x152
+  ase/etcd-19600.TestCancelCloseRace.func1()
+      /work/verified_test.go:24 +0xc1
+
+Previous write at 0x0000007803e8 by goroutine 12:
+  ase/etcd-19600.(*watchableStore).cancelWatcher()
+      /work/watchable_store.go:69 +0x1bc
+  ase/etcd-19600.TestCancelCloseRace.func1.(*watchableStore).newWatcher.1()
+      /work/watchable_store.go:45 +0x38
+  ase/etcd-19600.TestCancelCloseRace.func1()
+      /work/verified_test.go:25 +0x1d2
+
+Goroutine 10 (running) created at:
+  ase/etcd-19600.TestCancelCloseRace()
+      /work/verified_test.go:21 +0x13d
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 12 (finished) created at:
+  ase/etcd-19600.TestCancelCloseRace()
+      /work/verified_test.go:21 +0x13d
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Read at 0x0000007803e8 by goroutine 11:
+  ase/etcd-19600.(*watchableStore).newWatcher()
+      /work/watchable_store.go:44 +0x152
+  ase/etcd-19600.TestCancelCloseRace.func1()
+      /work/verified_test.go:24 +0xc1
+
+Previous write at 0x0000007803e8 by goroutine 53:
+  ase/etcd-19600.(*watchableStore).newWatcher()
+      /work/watchable_store.go:44 +0x16a
+  ase/etcd-19600.TestCancelCloseRace.func1()
+      /work/verified_test.go:24 +0xc1
+
+Goroutine 11 (running) created at:
+  ase/etcd-19600.TestCancelCloseRace()
+      /work/verified_test.go:21 +0x13d
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 53 (finished) created at:
+  ase/etcd-19600.TestCancelCloseRace()
+      /work/verified_test.go:21 +0x13d
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Write at 0x0000007803e8 by goroutine 11:
+  ase/etcd-19600.(*watchableStore).newWatcher()
+      /work/watchable_store.go:44 +0x16a
+  ase/etcd-19600.TestCancelCloseRace.func1()
+      /work/verified_test.go:24 +0xc1
+
+Previous write at 0x0000007803e8 by goroutine 10:
+  ase/etcd-19600.(*watchableStore).cancelWatcher()
+      /work/watchable_store.go:69 +0x1bc
+  ase/etcd-19600.TestCancelCloseRace.func1.(*watchableStore).newWatcher.1()
+      /work/watchable_store.go:45 +0x38
+  ase/etcd-19600.TestCancelCloseRace.func1()
+      /work/verified_test.go:25 +0x1d2
+
+Goroutine 11 (running) created at:
+  ase/etcd-19600.TestCancelCloseRace()
+      /work/verified_test.go:21 +0x13d
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 10 (running) created at:
+  ase/etcd-19600.TestCancelCloseRace()
+      /work/verified_test.go:21 +0x13d
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Read at 0x0000007803e8 by goroutine 11:
+  ase/etcd-19600.(*watchableStore).cancelWatcher()
+      /work/watchable_store.go:69 +0x1a4
+  ase/etcd-19600.TestCancelCloseRace.func1.(*watchableStore).newWatcher.1()
+      /work/watchable_store.go:45 +0x38
+  ase/etcd-19600.TestCancelCloseRace.func1()
+      /work/verified_test.go:25 +0x1d2
+
+Previous write at 0x0000007803e8 by goroutine 35:
+  ase/etcd-19600.(*watchableStore).newWatcher()
+      /work/watchable_store.go:44 +0x16a
+  ase/etcd-19600.TestCancelCloseRace.func1()
+      /work/verified_test.go:24 +0xc1
+
+Goroutine 11 (running) created at:
+  ase/etcd-19600.TestCancelCloseRace()
+      /work/verified_test.go:21 +0x13d
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 35 (running) created at:
+  ase/etcd-19600.TestCancelCloseRace()
+      /work/verified_test.go:21 +0x13d
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Write at 0x0000007803e8 by goroutine 33:
+  ase/etcd-19600.(*watchableStore).newWatcher()
+      /work/watchable_store.go:44 +0x16a
+  ase/etcd-19600.TestCancelCloseRace.func1()
+      /work/verified_test.go:24 +0xc1
+
+Previous write at 0x0000007803e8 by goroutine 11:
+  ase/etcd-19600.(*watchableStore).newWatcher()
+      /work/watchable_store.go:44 +0x16a
+  ase/etcd-19600.TestCancelCloseRace.func1()
+      /work/verified_test.go:24 +0xc1
+
+Goroutine 33 (running) created at:
+  ase/etcd-19600.TestCancelCloseRace()
+      /work/verified_test.go:21 +0x13d
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 11 (running) created at:
+  ase/etcd-19600.TestCancelCloseRace()
+      /work/verified_test.go:21 +0x13d
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+    verified_test.go:35: final watcherGauge = -452 (expected 0)
+    testing.go:1398: race detected during execution of test
+--- FAIL: TestCancelCloseRace (0.91s)
+FAIL
+FAIL	ase/etcd-19600	0.940s
+FAIL

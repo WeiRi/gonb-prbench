@@ -1,0 +1,13 @@
+diff --git a/p2p/enode/iter.go b/p2p/enode/iter.go
+index 112b76d06a0e..664964f53406 100644
+--- a/p2p/enode/iter.go
++++ b/p2p/enode/iter.go
+@@ -88,6 +88,8 @@ func (it *sliceIter) Next() bool {
+ }
+ 
+ func (it *sliceIter) Node() *Node {
++	it.mu.Lock()
++	defer it.mu.Unlock()
+ 	if len(it.nodes) == 0 {
+ 		return nil
+ 	}

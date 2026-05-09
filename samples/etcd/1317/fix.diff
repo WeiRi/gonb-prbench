@@ -1,0 +1,50 @@
+diff --git a/etcdserver/cluster_store.go b/etcdserver/cluster_store.go
+index 7d44621ccf8f..68a5fef11af2 100644
+--- a/etcdserver/cluster_store.go
++++ b/etcdserver/cluster_store.go
+@@ -149,12 +149,7 @@ func send(c *http.Client, cls ClusterStore, m raftpb.Message, ss *stats.ServerSt
+ 			ss.SendAppendReq(len(data))
+ 		}
+ 		to := strconv.FormatUint(m.To, 16)
+-		fs, ok := ls.Followers[to]
+-		if !ok {
+-			fs = &stats.FollowerStats{}
+-			fs.Latency.Minimum = 1 << 63
+-			ls.Followers[to] = fs
+-		}
++		fs := ls.Follower(to)
+ 
+ 		start := time.Now()
+ 		sent := httpPost(c, u, data)
+diff --git a/etcdserver/stats/leader.go b/etcdserver/stats/leader.go
+index 79b28cc65469..e84aa468d164 100644
+--- a/etcdserver/stats/leader.go
++++ b/etcdserver/stats/leader.go
+@@ -11,6 +11,8 @@ type LeaderStats struct {
+ 	// TODO(jonboulle): clarify that these are IDs, not names
+ 	Leader    string                    `json:"leader"`
+ 	Followers map[string]*FollowerStats `json:"followers"`
++
++	sync.Mutex
+ }
+ 
+ // NewLeaderStats generates a new LeaderStats with the given id as leader
+@@ -21,6 +23,18 @@ func NewLeaderStats(id string) *LeaderStats {
+ 	}
+ }
+ 
++func (ls *LeaderStats) Follower(name string) *FollowerStats {
++	ls.Lock()
++	defer ls.Unlock()
++	fs, ok := ls.Followers[name]
++	if !ok {
++		fs = &FollowerStats{}
++		fs.Latency.Minimum = 1 << 63
++		ls.Followers[name] = fs
++	}
++	return fs
++}
++
+ // FollowerStats encapsulates various statistics about a follower in an etcd cluster
+ type FollowerStats struct {
+ 	Latency struct {

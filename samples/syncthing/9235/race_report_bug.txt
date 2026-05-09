@@ -1,0 +1,250 @@
+WARNING: DATA RACE
+Write at 0x00c0000d4540 by goroutine 9:
+  runtime.mapassign_faststr()
+      /usr/local/go/src/runtime/map_faststr.go:203 +0x0
+  ase/syncthing-9235.(*model).addFolder()
+      /work/model.go:39 +0x66
+  ase/syncthing-9235.TestEnsureIndexHandlerRace.func2()
+      /work/verified_test.go:40 +0xa5
+
+Previous read at 0x00c0000d4540 by goroutine 8:
+  runtime.mapiterinit()
+      /usr/local/go/src/runtime/map.go:816 +0x0
+  ase/syncthing-9235.(*model).ensureIndexHandler()
+      /work/model.go:31 +0x106
+  ase/syncthing-9235.TestEnsureIndexHandlerRace.func1()
+      /work/verified_test.go:34 +0x99
+
+Goroutine 9 (running) created at:
+  ase/syncthing-9235.TestEnsureIndexHandlerRace()
+      /work/verified_test.go:37 +0x4e4
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 8 (finished) created at:
+  ase/syncthing-9235.TestEnsureIndexHandlerRace()
+      /work/verified_test.go:31 +0x432
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c0000d4570 by goroutine 9:
+  runtime.mapassign_faststr()
+      /usr/local/go/src/runtime/map_faststr.go:203 +0x0
+  ase/syncthing-9235.(*model).addFolder()
+      /work/model.go:40 +0xd7
+  ase/syncthing-9235.TestEnsureIndexHandlerRace.func2()
+      /work/verified_test.go:40 +0xa5
+
+Previous read at 0x00c0000d4570 by goroutine 8:
+  runtime.mapaccess1_faststr()
+      /usr/local/go/src/runtime/map_faststr.go:13 +0x0
+  ase/syncthing-9235.(*model).ensureIndexHandler()
+      /work/model.go:32 +0x1b7
+  ase/syncthing-9235.TestEnsureIndexHandlerRace.func1()
+      /work/verified_test.go:34 +0x99
+
+Goroutine 9 (running) created at:
+  ase/syncthing-9235.TestEnsureIndexHandlerRace()
+      /work/verified_test.go:37 +0x4e4
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 8 (finished) created at:
+  ase/syncthing-9235.TestEnsureIndexHandlerRace()
+      /work/verified_test.go:31 +0x432
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c000216000 by goroutine 11:
+  runtime.mapiternext()
+      /usr/local/go/src/runtime/map.go:862 +0x0
+  runtime.mapiterinit()
+      /usr/local/go/src/runtime/map.go:859 +0x22e
+  ase/syncthing-9235.TestEnsureIndexHandlerRace.func1()
+      /work/verified_test.go:34 +0x99
+
+Previous write at 0x00c000216000 by goroutine 12:
+  runtime.mapassign_faststr()
+      /usr/local/go/src/runtime/map_faststr.go:203 +0x0
+  ase/syncthing-9235.(*model).addFolder()
+      /work/model.go:39 +0x66
+  ase/syncthing-9235.TestEnsureIndexHandlerRace.func2()
+      /work/verified_test.go:40 +0xa5
+
+Goroutine 11 (running) created at:
+  ase/syncthing-9235.TestEnsureIndexHandlerRace()
+      /work/verified_test.go:31 +0x432
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 12 (running) created at:
+  ase/syncthing-9235.TestEnsureIndexHandlerRace()
+      /work/verified_test.go:37 +0x4e4
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c00021c098 by goroutine 11:
+  ase/syncthing-9235.(*model).ensureIndexHandler()
+      /work/model.go:32 +0x1bc
+  ase/syncthing-9235.TestEnsureIndexHandlerRace.func1()
+      /work/verified_test.go:34 +0x99
+
+Previous write at 0x00c00021c098 by goroutine 12:
+  ase/syncthing-9235.(*model).addFolder()
+      /work/model.go:40 +0xe4
+  ase/syncthing-9235.TestEnsureIndexHandlerRace.func2()
+      /work/verified_test.go:40 +0xa5
+
+Goroutine 11 (running) created at:
+  ase/syncthing-9235.TestEnsureIndexHandlerRace()
+      /work/verified_test.go:31 +0x432
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 12 (running) created at:
+  ase/syncthing-9235.TestEnsureIndexHandlerRace()
+      /work/verified_test.go:37 +0x4e4
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c000216000 by goroutine 12:
+  runtime.mapdelete_faststr()
+      /usr/local/go/src/runtime/map_faststr.go:301 +0x0
+  ase/syncthing-9235.(*model).removeFolder()
+      /work/model.go:46 +0x66
+  ase/syncthing-9235.TestEnsureIndexHandlerRace.func2()
+      /work/verified_test.go:41 +0xbb
+
+Previous read at 0x00c000216000 by goroutine 11:
+  runtime.mapiternext()
+      /usr/local/go/src/runtime/map.go:862 +0x0
+  ase/syncthing-9235.(*model).ensureIndexHandler()
+      /work/model.go:31 +0x1c9
+  ase/syncthing-9235.TestEnsureIndexHandlerRace.func1()
+      /work/verified_test.go:34 +0x99
+
+Goroutine 12 (running) created at:
+  ase/syncthing-9235.TestEnsureIndexHandlerRace()
+      /work/verified_test.go:37 +0x4e4
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 11 (running) created at:
+  ase/syncthing-9235.TestEnsureIndexHandlerRace()
+      /work/verified_test.go:31 +0x432
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c000216030 by goroutine 12:
+  runtime.mapdelete_faststr()
+      /usr/local/go/src/runtime/map_faststr.go:301 +0x0
+  ase/syncthing-9235.(*model).removeFolder()
+      /work/model.go:47 +0x96
+  ase/syncthing-9235.TestEnsureIndexHandlerRace.func2()
+      /work/verified_test.go:41 +0xbb
+
+Previous read at 0x00c000216030 by goroutine 11:
+  runtime.mapaccess1_faststr()
+      /usr/local/go/src/runtime/map_faststr.go:13 +0x0
+  ase/syncthing-9235.(*model).ensureIndexHandler()
+      /work/model.go:32 +0x1b7
+  ase/syncthing-9235.TestEnsureIndexHandlerRace.func1()
+      /work/verified_test.go:34 +0x99
+
+Goroutine 12 (running) created at:
+  ase/syncthing-9235.TestEnsureIndexHandlerRace()
+      /work/verified_test.go:37 +0x4e4
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 11 (running) created at:
+  ase/syncthing-9235.TestEnsureIndexHandlerRace()
+      /work/verified_test.go:31 +0x432
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c000216000 by goroutine 11:
+  runtime.mapiterinit()
+      /usr/local/go/src/runtime/map.go:816 +0x0
+  ase/syncthing-9235.(*model).ensureIndexHandler()
+      /work/model.go:31 +0x106
+  ase/syncthing-9235.TestEnsureIndexHandlerRace.func1()
+      /work/verified_test.go:34 +0x99
+
+Previous write at 0x00c000216000 by goroutine 12:
+  runtime.mapdelete_faststr()
+      /usr/local/go/src/runtime/map_faststr.go:301 +0x0
+  ase/syncthing-9235.(*model).removeFolder()
+      /work/model.go:46 +0x66
+  ase/syncthing-9235.TestEnsureIndexHandlerRace.func2()
+      /work/verified_test.go:41 +0xbb
+
+Goroutine 11 (running) created at:
+  ase/syncthing-9235.TestEnsureIndexHandlerRace()
+      /work/verified_test.go:31 +0x432
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 12 (running) created at:
+  ase/syncthing-9235.TestEnsureIndexHandlerRace()
+      /work/verified_test.go:37 +0x4e4
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c000216000 by goroutine 11:
+  runtime.mapiternext()
+      /usr/local/go/src/runtime/map.go:862 +0x0
+  runtime.mapiterinit()
+      /usr/local/go/src/runtime/map.go:859 +0x22e
+  ase/syncthing-9235.TestEnsureIndexHandlerRace.func1()
+      /work/verified_test.go:34 +0x99
+
+Previous write at 0x00c000216000 by goroutine 12:
+  runtime.mapdelete_faststr()
+      /usr/local/go/src/runtime/map_faststr.go:301 +0x0
+  ase/syncthing-9235.(*model).removeFolder()
+      /work/model.go:46 +0x66
+  ase/syncthing-9235.TestEnsureIndexHandlerRace.func2()
+      /work/verified_test.go:41 +0xbb

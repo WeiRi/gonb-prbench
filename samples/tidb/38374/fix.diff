@@ -1,0 +1,60 @@
+diff --git a/br/pkg/restore/BUILD.bazel b/br/pkg/restore/BUILD.bazel
+index 34db2d3f37a08..e06e39e5925bd 100644
+--- a/br/pkg/restore/BUILD.bazel
++++ b/br/pkg/restore/BUILD.bazel
+@@ -111,6 +111,8 @@ go_test(
+     ],
+     embed = [":restore"],
+     flaky = True,
++    race = "on",
++    shard_count = 20,
+     deps = [
+         "//br/pkg/backup",
+         "//br/pkg/conn",
+diff --git a/domain/domain_sysvars.go b/domain/domain_sysvars.go
+index 6e504856eb3ee..19c02a9572934 100644
+--- a/domain/domain_sysvars.go
++++ b/domain/domain_sysvars.go
+@@ -31,7 +31,8 @@ import (
+ // which is overwritten here.
+ func (do *Domain) initDomainSysVars() {
+ 	variable.SetStatsCacheCapacity.Store(do.setStatsCacheCapacity)
+-	variable.SetPDClientDynamicOption = do.setPDClientDynamicOption
++	pdClientDynamicOptionFunc := do.setPDClientDynamicOption
++	variable.SetPDClientDynamicOption.Store(&pdClientDynamicOptionFunc)
+ }
+ 
+ // setStatsCacheCapacity sets statsCache cap
+diff --git a/sessionctx/variable/sysvar.go b/sessionctx/variable/sysvar.go
+index 9221a99862393..e8d8145d13d66 100644
+--- a/sessionctx/variable/sysvar.go
++++ b/sessionctx/variable/sysvar.go
+@@ -496,13 +496,13 @@ var defaultSysVars = []*SysVar{
+ 			return strconv.FormatFloat(MaxTSOBatchWaitInterval.Load(), 'f', -1, 64), nil
+ 		},
+ 		SetGlobal: func(s *SessionVars, val string) error {
+-			SetPDClientDynamicOption(TiDBTSOClientBatchMaxWaitTime, val)
++			(*SetPDClientDynamicOption.Load())(TiDBTSOClientBatchMaxWaitTime, val)
+ 			return nil
+ 		}},
+ 	{Scope: ScopeGlobal, Name: TiDBEnableTSOFollowerProxy, Value: BoolToOnOff(DefTiDBEnableTSOFollowerProxy), Type: TypeBool, GetGlobal: func(sv *SessionVars) (string, error) {
+ 		return BoolToOnOff(EnableTSOFollowerProxy.Load()), nil
+ 	}, SetGlobal: func(s *SessionVars, val string) error {
+-		SetPDClientDynamicOption(TiDBEnableTSOFollowerProxy, val)
++		(*SetPDClientDynamicOption.Load())(TiDBEnableTSOFollowerProxy, val)
+ 		return nil
+ 	}},
+ 	{Scope: ScopeGlobal, Name: TiDBEnableLocalTxn, Value: BoolToOnOff(DefTiDBEnableLocalTxn), Hidden: true, Type: TypeBool, GetGlobal: func(sv *SessionVars) (string, error) {
+diff --git a/sessionctx/variable/tidb_vars.go b/sessionctx/variable/tidb_vars.go
+index 51181a48bebb3..8180c7da664ab 100644
+--- a/sessionctx/variable/tidb_vars.go
++++ b/sessionctx/variable/tidb_vars.go
+@@ -1117,7 +1117,7 @@ var (
+ 	// SetStatsCacheCapacity is the func registered by domain to set statsCache memory quota.
+ 	SetStatsCacheCapacity atomic.Value
+ 	// SetPDClientDynamicOption is the func registered by domain
+-	SetPDClientDynamicOption func(string, string) = nil
++	SetPDClientDynamicOption atomic.Pointer[func(string, string)]
+ 	// SwitchConcurrentDDL is the func registered by DDL to switch concurrent DDL.
+ 	SwitchConcurrentDDL func(bool) error = nil
+ 	// SwitchMDL is the func registered by DDL to switch MDL.

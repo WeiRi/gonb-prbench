@@ -1,0 +1,36 @@
+WARNING: DATA RACE
+Write at 0x00c000200d40 by goroutine 9:
+  ase/go-ethereum-1503.(*Manager).expire()
+      /work/account_manager.go:40 +0x174
+  ase/go-ethereum-1503.TestRace_1503_account_manager_Sign_vs_expire.func2()
+      /work/verified_test.go:27 +0xc7
+
+Previous read at 0x00c000200d40 by goroutine 8:
+  runtime.slicecopy()
+      /usr/local/go/src/runtime/slice.go:325 +0x0
+  ase/go-ethereum-1503.(*Manager).Sign()
+      /work/account_manager.go:57 +0x108
+  ase/go-ethereum-1503.TestRace_1503_account_manager_Sign_vs_expire.func1()
+      /work/verified_test.go:21 +0x193
+
+Goroutine 9 (running) created at:
+  ase/go-ethereum-1503.TestRace_1503_account_manager_Sign_vs_expire()
+      /work/verified_test.go:24 +0x284
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 8 (running) created at:
+  ase/go-ethereum-1503.TestRace_1503_account_manager_Sign_vs_expire()
+      /work/verified_test.go:17 +0x1b9
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+--- FAIL: TestRace_1503_account_manager_Sign_vs_expire (0.00s)
+    testing.go:1398: race detected during execution of test
+FAIL
+FAIL	ase/go-ethereum-1503	0.019s
+FAIL

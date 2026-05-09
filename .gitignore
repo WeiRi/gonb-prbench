@@ -1,0 +1,3 @@
+# Generation artifacts (kept locally for provenance, not part of the public release)
+/_gen_cache/
+/_GENERATION_REPORT.md

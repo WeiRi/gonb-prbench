@@ -1,0 +1,15 @@
+diff --git a/server/server.go b/server/server.go
+index c965d5b5a34..dd2867d62da 100644
+--- a/server/server.go
++++ b/server/server.go
+@@ -1383,8 +1383,9 @@ func (s *Server) configureAccounts(reloading bool) (map[string]struct{}, error)
+ 
+ 	// Add any required exports from system account.
+ 	if s.sys != nil {
++		sysAcc := s.sys.account
+ 		s.mu.Unlock()
+-		s.addSystemAccountExports(s.sys.account)
++		s.addSystemAccountExports(sysAcc)
+ 		s.mu.Lock()
+ 	}
+ 

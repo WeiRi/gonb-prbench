@@ -1,0 +1,40 @@
+diff --git a/etcdserver/raft.go b/etcdserver/raft.go
+index 139891e4d166..f6d2da30d6c0 100644
+--- a/etcdserver/raft.go
++++ b/etcdserver/raft.go
+@@ -109,9 +109,6 @@ type raftNode struct {
+ }
+ 
+ func (r *raftNode) run() {
+-	r.stopped = make(chan struct{})
+-	r.done = make(chan struct{})
+-
+ 	var syncC <-chan time.Time
+ 
+ 	defer r.stop()
+diff --git a/etcdserver/raft_test.go b/etcdserver/raft_test.go
+index d102771a00f5..989db37bf390 100644
+--- a/etcdserver/raft_test.go
++++ b/etcdserver/raft_test.go
+@@ -152,6 +152,8 @@ func TestStopRaftWhenWaitingForApplyDone(t *testing.T) {
+ 		storage:     &storageRecorder{},
+ 		raftStorage: raft.NewMemoryStorage(),
+ 		transport:   &nopTransporter{},
++		stopped:     make(chan struct{}),
++		done:        make(chan struct{}),
+ 	}
+ 	r.s = &EtcdServer{r: r}
+ 	go r.run()
+diff --git a/etcdserver/server.go b/etcdserver/server.go
+index 5a207530a6d5..149f65724e86 100644
+--- a/etcdserver/server.go
++++ b/etcdserver/server.go
+@@ -416,6 +416,8 @@ func (s *EtcdServer) run() {
+ 	// TODO: get rid of the raft initialization in etcd server
+ 	s.r.s = s
+ 	s.r.applyc = make(chan apply)
++	s.r.stopped = make(chan struct{})
++	s.r.done = make(chan struct{})
+ 	go s.r.run()
+ 	defer func() {
+ 		s.r.stopped <- struct{}{}

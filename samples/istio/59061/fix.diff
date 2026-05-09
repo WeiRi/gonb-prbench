@@ -1,0 +1,12 @@
+diff --git a/pkg/kube/multicluster/cluster.go b/pkg/kube/multicluster/cluster.go
+index 814ed5fa702..83080cbf6e1 100644
+--- a/pkg/kube/multicluster/cluster.go
++++ b/pkg/kube/multicluster/cluster.go
+@@ -96,7 +96,6 @@ func (c *Cluster) Run(mesh mesh.Watcher, handlers []handler, action ACTION, swap
+ 	// Ensure previous cluster is cleaned up when this method exits (success, failure, or timeout)
+ 	defer swap.Complete()
+ 
+-	c.Action = action
+ 	c.reportStatus(SyncStatusSyncing)
+ 	if features.RemoteClusterTimeout > 0 {
+ 		time.AfterFunc(features.RemoteClusterTimeout, func() {

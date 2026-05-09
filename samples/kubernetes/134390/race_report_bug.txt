@@ -1,0 +1,64 @@
+WARNING: DATA RACE
+Write at 0x00c00008a058 by goroutine 8:
+  ase/kubernetes-134390.(*Counter).ClearState()
+      /work/metric.go:24 +0x5d
+  ase/kubernetes-134390.TestRace_134390.func1()
+      /work/verified_test.go:27 +0xa4
+
+Previous read at 0x00c00008a058 by goroutine 9:
+  ase/kubernetes-134390.(*Counter).IsHidden()
+      /work/metric.go:31 +0xce
+  ase/kubernetes-134390.TestRace_134390.func1()
+      /work/verified_test.go:28 +0xc6
+
+Goroutine 8 (running) created at:
+  ase/kubernetes-134390.TestRace_134390()
+      /work/verified_test.go:22 +0x113
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 9 (finished) created at:
+  ase/kubernetes-134390.TestRace_134390()
+      /work/verified_test.go:22 +0x113
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c00008a059 by goroutine 25:
+  ase/kubernetes-134390.(*Counter).IsDeprecated()
+      /work/metric.go:35 +0xd9
+  ase/kubernetes-134390.TestRace_134390.func1()
+      /work/verified_test.go:29 +0xcf
+
+Previous write at 0x00c00008a059 by goroutine 8:
+  ase/kubernetes-134390.(*Counter).ClearState()
+      /work/metric.go:25 +0x95
+  ase/kubernetes-134390.TestRace_134390.func1()
+      /work/verified_test.go:27 +0xa4
+
+Goroutine 25 (running) created at:
+  ase/kubernetes-134390.TestRace_134390()
+      /work/verified_test.go:22 +0x113
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 8 (running) created at:
+  ase/kubernetes-134390.TestRace_134390()
+      /work/verified_test.go:22 +0x113
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+    testing.go:1398: race detected during execution of test
+--- FAIL: TestRace_134390 (0.02s)
+FAIL
+FAIL	ase/kubernetes-134390	0.034s
+FAIL

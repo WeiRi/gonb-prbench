@@ -1,0 +1,30 @@
+WARNING: DATA RACE
+Write at 0x00c000012140 by goroutine 12:
+  ase/moby-39645.TestRace_39645.func1()
+      /work/verified_test.go:22 +0xcc
+
+Previous read at 0x00c000012140 by goroutine 15:
+  ase/moby-39645.TestRace_39645.func2()
+      /work/verified_test.go:29 +0xa4
+
+Goroutine 12 (running) created at:
+  ase/moby-39645.TestRace_39645()
+      /work/verified_test.go:18 +0x17c
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 15 (finished) created at:
+  ase/moby-39645.TestRace_39645()
+      /work/verified_test.go:26 +0xb1
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+    testing.go:1398: race detected during execution of test
+--- FAIL: TestRace_39645 (0.02s)
+FAIL
+FAIL	ase/moby-39645	0.039s
+FAIL

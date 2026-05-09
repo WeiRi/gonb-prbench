@@ -1,0 +1,57 @@
+WARNING: DATA RACE
+Read at 0x00c0001b2130 by goroutine 9:
+  runtime.chansend()
+      /usr/local/go/src/runtime/chan.go:160 +0x0
+  ase/serving-3068.(*impl).Go()
+      /work/pool.go:50 +0x64
+  ase/serving-3068.TestRace_serving3068.func1()
+      /work/verified_test.go:38 +0x1c1
+
+Previous write at 0x00c0001b2130 by goroutine 10:
+  runtime.closechan()
+      /usr/local/go/src/runtime/chan.go:357 +0x0
+  ase/serving-3068.(*impl).Wait.func1()
+      /work/pool.go:55 +0x45
+  sync.(*Once).doSlow()
+      /usr/local/go/src/sync/once.go:74 +0xf0
+  sync.(*Once).Do()
+      /usr/local/go/src/sync/once.go:65 +0x44
+  ase/serving-3068.(*impl).Wait()
+      /work/pool.go:54 +0x67
+  ase/serving-3068.TestRace_serving3068.func2()
+      /work/verified_test.go:43 +0x39
+
+Goroutine 9 (running) created at:
+  ase/serving-3068.TestRace_serving3068()
+      /work/verified_test.go:23 +0x2dd
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 10 (finished) created at:
+  ase/serving-3068.TestRace_serving3068()
+      /work/verified_test.go:42 +0x34a
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+    verified_test.go:47: iter 0: panic stack:
+        goroutine 21 [running]:
+        ase/serving-3068.TestRace_serving3068.func1.1()
+        	/work/verified_test.go:29 +0x85
+        panic({0x5c3300?, 0x6200f0?})
+        	/usr/local/go/src/runtime/panic.go:770 +0x132
+        ase/serving-3068.(*impl).Go(0xc0001e2880, 0x5f2928)
+        	/work/pool.go:50 +0x65
+        ase/serving-3068.TestRace_serving3068.func1()
+        	/work/verified_test.go:38 +0x1c2
+        created by ase/serving-3068.TestRace_serving3068 in goroutine 19
+        	/work/verified_test.go:23 +0x2de
+    verified_test.go:48: send on closed channel reproduced (pool.Go)
+    testing.go:1398: race detected during execution of test
+--- FAIL: TestRace_serving3068 (0.00s)
+FAIL
+FAIL	ase/serving-3068	0.017s
+FAIL

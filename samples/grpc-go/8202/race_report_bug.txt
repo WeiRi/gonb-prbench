@@ -1,0 +1,64 @@
+WARNING: DATA RACE
+Write at 0x00c000012140 by goroutine 9:
+  ase/grpc-go-8202.(*Resolver).Close()
+      /work/delegatingresolver.go:43 +0x8d
+  ase/grpc-go-8202.TestRace_PR8202_DelegatingResolverChildMu.func2()
+      /work/verified_test.go:37 +0x85
+
+Previous read at 0x00c000012140 by goroutine 8:
+  ase/grpc-go-8202.(*Resolver).updateProxyResolverState()
+      /work/delegatingresolver.go:26 +0x92
+  ase/grpc-go-8202.TestRace_PR8202_DelegatingResolverChildMu.func1()
+      /work/verified_test.go:32 +0x8a
+
+Goroutine 9 (running) created at:
+  ase/grpc-go-8202.TestRace_PR8202_DelegatingResolverChildMu()
+      /work/verified_test.go:35 +0x2a
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 8 (finished) created at:
+  ase/grpc-go-8202.TestRace_PR8202_DelegatingResolverChildMu()
+      /work/verified_test.go:30 +0x24c
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c000012148 by goroutine 9:
+  ase/grpc-go-8202.(*Resolver).Close()
+      /work/delegatingresolver.go:44 +0xc4
+  ase/grpc-go-8202.TestRace_PR8202_DelegatingResolverChildMu.func2()
+      /work/verified_test.go:37 +0x85
+
+Previous read at 0x00c000012148 by goroutine 8:
+  ase/grpc-go-8202.(*Resolver).ResolveNow()
+      /work/delegatingresolver.go:33 +0xc4
+  ase/grpc-go-8202.TestRace_PR8202_DelegatingResolverChildMu.func1()
+      /work/verified_test.go:33 +0xb7
+
+Goroutine 9 (running) created at:
+  ase/grpc-go-8202.TestRace_PR8202_DelegatingResolverChildMu()
+      /work/verified_test.go:35 +0x2a
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 8 (finished) created at:
+  ase/grpc-go-8202.TestRace_PR8202_DelegatingResolverChildMu()
+      /work/verified_test.go:30 +0x24c
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+    testing.go:1398: race detected during execution of test
+--- FAIL: TestRace_PR8202_DelegatingResolverChildMu (0.00s)
+FAIL
+FAIL	ase/grpc-go-8202	0.018s
+FAIL

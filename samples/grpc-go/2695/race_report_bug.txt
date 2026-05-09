@@ -1,0 +1,51 @@
+WARNING: DATA RACE
+Write at 0x00c0000be190 by goroutine 15:
+  runtime.closechan()
+      /usr/local/go/src/runtime/chan.go:357 +0x0
+  ase/grpc-go-2695.(*serverHandlerTransport).WriteStatus()
+      /work/handler_server.go:31 +0x47
+  ase/grpc-go-2695.TestRace_grpcgo2695.func3()
+      /work/verified_test.go:49 +0x35
+
+Previous read at 0x00c0000be190 by goroutine 12:
+  runtime.chansend()
+      /usr/local/go/src/runtime/chan.go:160 +0x0
+  ase/grpc-go-2695.(*serverHandlerTransport).do()
+      /work/handler_server.go:22 +0x286
+  ase/grpc-go-2695.TestRace_grpcgo2695.func2()
+      /work/verified_test.go:43 +0x1f5
+
+Goroutine 15 (running) created at:
+  ase/grpc-go-2695.TestRace_grpcgo2695()
+      /work/verified_test.go:48 +0x30d
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 12 (running) created at:
+  ase/grpc-go-2695.TestRace_grpcgo2695()
+      /work/verified_test.go:28 +0x444
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+    verified_test.go:55: iter 0: caught panic stack:
+        goroutine 8 [running]:
+        ase/grpc-go-2695.TestRace_grpcgo2695.func2.1()
+        	/work/verified_test.go:34 +0x85
+        panic({0x5c5260?, 0x6222f0?})
+        	/usr/local/go/src/runtime/panic.go:770 +0x132
+        ase/grpc-go-2695.(*serverHandlerTransport).do(...)
+        	/work/handler_server.go:21
+        ase/grpc-go-2695.TestRace_grpcgo2695.func2()
+        	/work/verified_test.go:43 +0x2cd
+        created by ase/grpc-go-2695.TestRace_grpcgo2695 in goroutine 6
+        	/work/verified_test.go:28 +0x445
+    verified_test.go:56: send on closed channel reproduced
+    testing.go:1398: race detected during execution of test
+--- FAIL: TestRace_grpcgo2695 (0.00s)
+FAIL
+FAIL	ase/grpc-go-2695	0.017s
+FAIL

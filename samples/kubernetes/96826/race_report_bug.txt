@@ -1,0 +1,250 @@
+WARNING: DATA RACE
+Write at 0x00c000122540 by goroutine 20:
+  runtime.mapassign_faststr()
+      /usr/local/go/src/runtime/map_faststr.go:203 +0x0
+  ase/kubernetes-96826.(*VolumePluginMgr).AddPlugin()
+      /work/plugins.go:19 +0x74
+  ase/kubernetes-96826.TestRace_96826.func1()
+      /work/verified_test.go:21 +0xb0
+
+Previous read at 0x00c000122540 by goroutine 23:
+  runtime.mapaccess2_faststr()
+      /usr/local/go/src/runtime/map_faststr.go:108 +0x0
+  ase/kubernetes-96826.(*VolumePluginMgr).GetPlugin()
+      /work/plugins.go:25 +0xcf
+  ase/kubernetes-96826.TestRace_96826.func2()
+      /work/verified_test.go:27 +0xa6
+
+Goroutine 20 (running) created at:
+  ase/kubernetes-96826.TestRace_96826()
+      /work/verified_test.go:18 +0x1bc
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 23 (running) created at:
+  ase/kubernetes-96826.TestRace_96826()
+      /work/verified_test.go:24 +0xf2
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c0000c4088 by goroutine 23:
+  ase/kubernetes-96826.(*VolumePluginMgr).GetPlugin()
+      /work/plugins.go:25 +0xd4
+  ase/kubernetes-96826.TestRace_96826.func2()
+      /work/verified_test.go:27 +0xa6
+
+Previous write at 0x00c0000c4088 by goroutine 8:
+  ase/kubernetes-96826.(*VolumePluginMgr).AddPlugin()
+      /work/plugins.go:19 +0x84
+  ase/kubernetes-96826.TestRace_96826.func1()
+      /work/verified_test.go:21 +0xb0
+
+Goroutine 23 (running) created at:
+  ase/kubernetes-96826.TestRace_96826()
+      /work/verified_test.go:24 +0xf2
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 8 (running) created at:
+  ase/kubernetes-96826.TestRace_96826()
+      /work/verified_test.go:18 +0x1bc
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+fatal error: concurrent map read and map write
+
+goroutine 77 [running]:
+ase/kubernetes-96826.(*VolumePluginMgr).GetPlugin(...)
+	/work/plugins.go:25
+ase/kubernetes-96826.TestRace_96826.func2()
+	/work/verified_test.go:27 +0xd0
+created by ase/kubernetes-96826.TestRace_96826 in goroutine 21
+	/work/verified_test.go:24 +0xf3
+
+goroutine 1 [chan receive]:
+testing.(*T).Run(0xc000154340, {0x5e705e, 0xe}, 0x5f16e8)
+	/usr/local/go/src/testing/testing.go:1750 +0x851
+testing.runTests.func1(0xc000154340)
+	/usr/local/go/src/testing/testing.go:2161 +0x86
+testing.tRunner(0xc000154340, 0xc00013bb10)
+	/usr/local/go/src/testing/testing.go:1689 +0x21f
+testing.runTests(0xc0001200a8, {0x717120, 0x1, 0x1}, {0xc00013bbb8?, 0xc00013bc00?, 0x7208a0?})
+	/usr/local/go/src/testing/testing.go:2159 +0x8bf
+testing.(*M).Run(0xc0001260a0)
+	/usr/local/go/src/testing/testing.go:2027 +0xf18
+main.main()
+	_testmain.go:47 +0x2be
+
+goroutine 21 [runnable]:
+ase/kubernetes-96826.TestRace_96826(0xc0001544e0?)
+	/work/verified_test.go:18 +0x11b
+testing.tRunner(0xc0001544e0, 0x5f16e8)
+	/usr/local/go/src/testing/testing.go:1689 +0x21f
+created by testing.(*T).Run in goroutine 1
+	/usr/local/go/src/testing/testing.go:1742 +0x826
+
+goroutine 24 [sync.Mutex.Lock]:
+sync.runtime_SemacquireMutex(0x0?, 0x0?, 0x0?)
+	/usr/local/go/src/runtime/sema.go:77 +0x25
+sync.(*Mutex).lockSlow(0xc000110300)
+	/usr/local/go/src/sync/mutex.go:171 +0x213
+sync.(*Mutex).Lock(0xc000110300)
+	/usr/local/go/src/sync/mutex.go:90 +0x55
+ase/kubernetes-96826.(*VolumePluginMgr).AddPlugin(0xc000110300, {0x5e4fa8, 0x4}, {0x0, 0x0})
+	/work/plugins.go:18 +0x45
+ase/kubernetes-96826.TestRace_96826.func1()
+	/work/verified_test.go:21 +0xb1
+created by ase/kubernetes-96826.TestRace_96826 in goroutine 21
+	/work/verified_test.go:18 +0x1bd
+
+goroutine 26 [sync.Mutex.Lock]:
+sync.runtime_SemacquireMutex(0x0?, 0x0?, 0x0?)
+	/usr/local/go/src/runtime/sema.go:77 +0x25
+sync.(*Mutex).lockSlow(0xc000110300)
+	/usr/local/go/src/sync/mutex.go:171 +0x213
+sync.(*Mutex).Lock(0xc000110300)
+	/usr/local/go/src/sync/mutex.go:90 +0x55
+ase/kubernetes-96826.(*VolumePluginMgr).AddPlugin(0xc000110300, {0x5e4fa8, 0x4}, {0x0, 0x0})
+	/work/plugins.go:18 +0x45
+ase/kubernetes-96826.TestRace_96826.func1()
+	/work/verified_test.go:21 +0xb1
+created by ase/kubernetes-96826.TestRace_96826 in goroutine 21
+	/work/verified_test.go:18 +0x1bd
+
+goroutine 28 [sync.Mutex.Lock]:
+sync.runtime_SemacquireMutex(0x4ab4b9?, 0x91?, 0x4accc9?)
+	/usr/local/go/src/runtime/sema.go:77 +0x25
+sync.(*Mutex).lockSlow(0xc000110300)
+	/usr/local/go/src/sync/mutex.go:171 +0x213
+sync.(*Mutex).Lock(0xc000110300)
+	/usr/local/go/src/sync/mutex.go:90 +0x55
+ase/kubernetes-96826.(*VolumePluginMgr).AddPlugin(0xc000110300, {0x5e4fa8, 0x4}, {0x0, 0x0})
+	/work/plugins.go:18 +0x45
+ase/kubernetes-96826.TestRace_96826.func1()
+	/work/verified_test.go:21 +0xb1
+created by ase/kubernetes-96826.TestRace_96826 in goroutine 21
+	/work/verified_test.go:18 +0x1bd
+
+goroutine 30 [sync.Mutex.Lock]:
+sync.runtime_SemacquireMutex(0x0?, 0x0?, 0x0?)
+	/usr/local/go/src/runtime/sema.go:77 +0x25
+sync.(*Mutex).lockSlow(0xc000110300)
+	/usr/local/go/src/sync/mutex.go:171 +0x213
+sync.(*Mutex).Lock(0xc000110300)
+	/usr/local/go/src/sync/mutex.go:90 +0x55
+ase/kubernetes-96826.(*VolumePluginMgr).AddPlugin(0xc000110300, {0x5e4fa8, 0x4}, {0x0, 0x0})
+	/work/plugins.go:18 +0x45
+ase/kubernetes-96826.TestRace_96826.func1()
+	/work/verified_test.go:21 +0xb1
+created by ase/kubernetes-96826.TestRace_96826 in goroutine 21
+	/work/verified_test.go:18 +0x1bd
+
+goroutine 32 [sync.Mutex.Lock]:
+sync.runtime_SemacquireMutex(0x0?, 0x0?, 0x0?)
+	/usr/local/go/src/runtime/sema.go:77 +0x25
+sync.(*Mutex).lockSlow(0xc000110300)
+	/usr/local/go/src/sync/mutex.go:171 +0x213
+sync.(*Mutex).Lock(0xc000110300)
+	/usr/local/go/src/sync/mutex.go:90 +0x55
+ase/kubernetes-96826.(*VolumePluginMgr).AddPlugin(0xc000110300, {0x5e4fa8, 0x4}, {0x0, 0x0})
+	/work/plugins.go:18 +0x45
+ase/kubernetes-96826.TestRace_96826.func1()
+	/work/verified_test.go:21 +0xb1
+created by ase/kubernetes-96826.TestRace_96826 in goroutine 21
+	/work/verified_test.go:18 +0x1bd
+
+goroutine 34 [sync.Mutex.Lock]:
+sync.runtime_SemacquireMutex(0x4ab4b9?, 0x91?, 0x4accc9?)
+	/usr/local/go/src/runtime/sema.go:77 +0x25
+sync.(*Mutex).lockSlow(0xc000110300)
+	/usr/local/go/src/sync/mutex.go:171 +0x213
+sync.(*Mutex).Lock(0xc000110300)
+	/usr/local/go/src/sync/mutex.go:90 +0x55
+ase/kubernetes-96826.(*VolumePluginMgr).AddPlugin(0xc000110300, {0x5e4fa8, 0x4}, {0x0, 0x0})
+	/work/plugins.go:18 +0x45
+ase/kubernetes-96826.TestRace_96826.func1()
+	/work/verified_test.go:21 +0xb1
+created by ase/kubernetes-96826.TestRace_96826 in goroutine 21
+	/work/verified_test.go:18 +0x1bd
+
+goroutine 36 [sync.Mutex.Lock]:
+sync.runtime_SemacquireMutex(0x0?, 0x0?, 0x0?)
+	/usr/local/go/src/runtime/sema.go:77 +0x25
+sync.(*Mutex).lockSlow(0xc000110300)
+	/usr/local/go/src/sync/mutex.go:171 +0x213
+sync.(*Mutex).Lock(0xc000110300)
+	/usr/local/go/src/sync/mutex.go:90 +0x55
+ase/kubernetes-96826.(*VolumePluginMgr).AddPlugin(0xc000110300, {0x5e4fa8, 0x4}, {0x0, 0x0})
+	/work/plugins.go:18 +0x45
+ase/kubernetes-96826.TestRace_96826.func1()
+	/work/verified_test.go:21 +0xb1
+created by ase/kubernetes-96826.TestRace_96826 in goroutine 21
+	/work/verified_test.go:18 +0x1bd
+
+goroutine 38 [sync.Mutex.Lock]:
+sync.runtime_SemacquireMutex(0x0?, 0x0?, 0x0?)
+	/usr/local/go/src/runtime/sema.go:77 +0x25
+sync.(*Mutex).lockSlow(0xc000110300)
+	/usr/local/go/src/sync/mutex.go:171 +0x213
+sync.(*Mutex).Lock(0xc000110300)
+	/usr/local/go/src/sync/mutex.go:90 +0x55
+ase/kubernetes-96826.(*VolumePluginMgr).AddPlugin(0xc000110300, {0x5e4fa8, 0x4}, {0x0, 0x0})
+	/work/plugins.go:18 +0x45
+ase/kubernetes-96826.TestRace_96826.func1()
+	/work/verified_test.go:21 +0xb1
+created by ase/kubernetes-96826.TestRace_96826 in goroutine 21
+	/work/verified_test.go:18 +0x1bd
+
+goroutine 40 [sync.Mutex.Lock]:
+sync.runtime_SemacquireMutex(0x0?, 0x0?, 0x0?)
+	/usr/local/go/src/runtime/sema.go:77 +0x25
+sync.(*Mutex).lockSlow(0xc000110300)
+	/usr/local/go/src/sync/mutex.go:171 +0x213
+sync.(*Mutex).Lock(0xc000110300)
+	/usr/local/go/src/sync/mutex.go:90 +0x55
+ase/kubernetes-96826.(*VolumePluginMgr).AddPlugin(0xc000110300, {0x5e4fa8, 0x4}, {0x0, 0x0})
+	/work/plugins.go:18 +0x45
+ase/kubernetes-96826.TestRace_96826.func1()
+	/work/verified_test.go:21 +0xb1
+created by ase/kubernetes-96826.TestRace_96826 in goroutine 21
+	/work/verified_test.go:18 +0x1bd
+
+goroutine 42 [sync.Mutex.Lock]:
+sync.runtime_SemacquireMutex(0x0?, 0x0?, 0x0?)
+	/usr/local/go/src/runtime/sema.go:77 +0x25
+sync.(*Mutex).lockSlow(0xc000110300)
+	/usr/local/go/src/sync/mutex.go:171 +0x213
+sync.(*Mutex).Lock(0xc000110300)
+	/usr/local/go/src/sync/mutex.go:90 +0x55
+ase/kubernetes-96826.(*VolumePluginMgr).AddPlugin(0xc000110300, {0x5e4fa8, 0x4}, {0x0, 0x0})
+	/work/plugins.go:18 +0x45
+ase/kubernetes-96826.TestRace_96826.func1()
+	/work/verified_test.go:21 +0xb1
+created by ase/kubernetes-96826.TestRace_96826 in goroutine 21
+	/work/verified_test.go:18 +0x1bd
+
+goroutine 44 [sync.Mutex.Lock]:
+sync.runtime_SemacquireMutex(0x4ab4b9?, 0x91?, 0x4accc9?)
+	/usr/local/go/src/runtime/sema.go:77 +0x25
+sync.(*Mutex).lockSlow(0xc000110300)
+	/usr/local/go/src/sync/mutex.go:171 +0x213
+sync.(*Mutex).Lock(0xc000110300)
+	/usr/local/go/src/sync/mutex.go:90 +0x55
+ase/kubernetes-96826.(*VolumePluginMgr).AddPlugin(0xc000110300, {0x5e4fa8, 0x4}, {0x0, 0x0})
+	/work/plugins.go:18 +0x45
+ase/kubernetes-96826.TestRace_96826.func1()
+	/work/verified_test.go:21 +0xb1
+created by ase/kubernetes-96826.TestRace_96826 in goroutine 21
+	/work/verified_test.go:18 +0x1bd
+
+goroutine 46 [sync.Mutex.Lock]:

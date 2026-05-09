@@ -1,0 +1,173 @@
+diff --git a/nomad/config.go b/nomad/config.go
+index 615f014be8b..783744b72dc 100644
+--- a/nomad/config.go
++++ b/nomad/config.go
+@@ -32,11 +32,6 @@ func DefaultRPCAddr() *net.TCPAddr {
+ 
+ // Config is used to parameterize the server
+ type Config struct {
+-	// Bootstrapped indicates if Server has bootstrapped or not.
+-	// Its value must be 0 (not bootstrapped) or 1 (bootstrapped).
+-	// All operations on Bootstrapped must be handled via `atomic.*Int32()` calls
+-	Bootstrapped int32
+-
+ 	// BootstrapExpect mode is used to automatically bring up a
+ 	// collection of Nomad servers. This can be used to automatically
+ 	// bring up a collection of nodes.
+diff --git a/nomad/serf.go b/nomad/serf.go
+index 6e5a0a2d16e..9a6d31a87c4 100644
+--- a/nomad/serf.go
++++ b/nomad/serf.go
+@@ -2,7 +2,6 @@ package nomad
+ 
+ import (
+ 	"strings"
+-	"sync/atomic"
+ 	"time"
+ 
+ 	log "github.com/hashicorp/go-hclog"
+@@ -83,7 +82,7 @@ func (s *Server) nodeJoin(me serf.MemberEvent) {
+ 		s.peerLock.Unlock()
+ 
+ 		// If we still expecting to bootstrap, may need to handle this
+-		if s.config.BootstrapExpect != 0 && atomic.LoadInt32(&s.config.Bootstrapped) == 0 {
++		if s.config.BootstrapExpect != 0 && !s.bootstrapped.Load() {
+ 			s.maybeBootstrap()
+ 		}
+ 	}
+@@ -117,7 +116,7 @@ func (s *Server) maybeBootstrap() {
+ 	// Bootstrap can only be done if there are no committed logs,
+ 	// remove our expectations of bootstrapping
+ 	if index != 0 {
+-		atomic.StoreInt32(&s.config.Bootstrapped, 1)
++		s.bootstrapped.Store(true)
+ 		return
+ 	}
+ 
+@@ -188,7 +187,7 @@ func (s *Server) maybeBootstrap() {
+ 		if len(peers) > 0 {
+ 			s.logger.Info("disabling bootstrap mode because existing Raft peers being reported by peer",
+ 				"peer_name", server.Name, "peer_address", server.Addr)
+-			atomic.StoreInt32(&s.config.Bootstrapped, 1)
++			s.bootstrapped.Store(true)
+ 			return
+ 		}
+ 	}
+@@ -230,7 +229,7 @@ func (s *Server) maybeBootstrap() {
+ 	}
+ 
+ 	// Bootstrapping complete, or failed for some reason, don't enter this again
+-	atomic.StoreInt32(&s.config.Bootstrapped, 1)
++	s.bootstrapped.Store(true)
+ }
+ 
+ // nodeFailed is used to handle fail events on the serf cluster
+diff --git a/nomad/serf_test.go b/nomad/serf_test.go
+index 273c2ebac58..f5d2f0dcb1a 100644
+--- a/nomad/serf_test.go
++++ b/nomad/serf_test.go
+@@ -4,7 +4,6 @@ import (
+ 	"fmt"
+ 	"path"
+ 	"strings"
+-	"sync/atomic"
+ 	"testing"
+ 	"time"
+ 
+@@ -413,7 +412,7 @@ func TestNomad_NonBootstraping_ShouldntBootstap(t *testing.T) {
+ 	s1.maybeBootstrap()
+ 	time.Sleep(100 * time.Millisecond)
+ 
+-	bootstrapped := atomic.LoadInt32(&s1.config.Bootstrapped)
++	bootstrapped := s1.bootstrapped.Load()
+ 	require.Zero(t, bootstrapped, "expecting non-bootstrapped servers")
+ 
+ 	p, _ := s1.numPeers()
+diff --git a/nomad/server.go b/nomad/server.go
+index ec4ca4c8ea6..9a541bb8936 100644
+--- a/nomad/server.go
++++ b/nomad/server.go
+@@ -175,13 +175,16 @@ type Server struct {
+ 	// and automatic clustering within regions.
+ 	serf *serf.Serf
+ 
++	// bootstrapped indicates if Server has bootstrapped or not.
++	bootstrapped *atomic.Bool
++
+ 	// reconcileCh is used to pass events from the serf handler
+ 	// into the leader manager. Mostly used to handle when servers
+ 	// join/leave from the region.
+ 	reconcileCh chan serf.Member
+ 
+ 	// used to track when the server is ready to serve consistent reads, updated atomically
+-	readyForConsistentReads int32
++	readyForConsistentReads *atomic.Bool
+ 
+ 	// eventCh is used to receive events from the serf cluster
+ 	eventCh chan serf.Event
+@@ -341,24 +344,26 @@ func NewServer(config *Config, consulCatalog consul.CatalogAPI, consulConfigEntr
+ 
+ 	// Create the server
+ 	s := &Server{
+-		config:           config,
+-		consulCatalog:    consulCatalog,
+-		connPool:         pool.NewPool(logger, serverRPCCache, serverMaxStreams, tlsWrap),
+-		logger:           logger,
+-		tlsWrap:          tlsWrap,
+-		rpcServer:        rpc.NewServer(),
+-		streamingRpcs:    structs.NewStreamingRpcRegistry(),
+-		nodeConns:        make(map[string][]*nodeConnState),
+-		peers:            make(map[string][]*serverParts),
+-		localPeers:       make(map[raft.ServerAddress]*serverParts),
+-		reassertLeaderCh: make(chan chan error),
+-		reconcileCh:      make(chan serf.Member, 32),
+-		eventCh:          make(chan serf.Event, 256),
+-		evalBroker:       evalBroker,
+-		blockedEvals:     NewBlockedEvals(evalBroker, logger),
+-		rpcTLS:           incomingTLS,
+-		aclCache:         aclCache,
+-		workersEventCh:   make(chan interface{}, 1),
++		config:                  config,
++		consulCatalog:           consulCatalog,
++		connPool:                pool.NewPool(logger, serverRPCCache, serverMaxStreams, tlsWrap),
++		logger:                  logger,
++		tlsWrap:                 tlsWrap,
++		rpcServer:               rpc.NewServer(),
++		streamingRpcs:           structs.NewStreamingRpcRegistry(),
++		nodeConns:               make(map[string][]*nodeConnState),
++		peers:                   make(map[string][]*serverParts),
++		localPeers:              make(map[raft.ServerAddress]*serverParts),
++		bootstrapped:            &atomic.Bool{},
++		reassertLeaderCh:        make(chan chan error),
++		reconcileCh:             make(chan serf.Member, 32),
++		readyForConsistentReads: &atomic.Bool{},
++		eventCh:                 make(chan serf.Event, 256),
++		evalBroker:              evalBroker,
++		blockedEvals:            NewBlockedEvals(evalBroker, logger),
++		rpcTLS:                  incomingTLS,
++		aclCache:                aclCache,
++		workersEventCh:          make(chan interface{}, 1),
+ 	}
+ 
+ 	s.shutdownCtx, s.shutdownCancel = context.WithCancel(context.Background())
+@@ -1894,17 +1899,17 @@ func (s *Server) getLeaderAcl() string {
+ 
+ // Atomically sets a readiness state flag when leadership is obtained, to indicate that server is past its barrier write
+ func (s *Server) setConsistentReadReady() {
+-	atomic.StoreInt32(&s.readyForConsistentReads, 1)
++	s.readyForConsistentReads.Store(true)
+ }
+ 
+ // Atomically reset readiness state flag on leadership revoke
+ func (s *Server) resetConsistentReadReady() {
+-	atomic.StoreInt32(&s.readyForConsistentReads, 0)
++	s.readyForConsistentReads.Store(false)
+ }
+ 
+ // Returns true if this server is ready to serve consistent reads
+ func (s *Server) isReadyForConsistentReads() bool {
+-	return atomic.LoadInt32(&s.readyForConsistentReads) == 1
++	return s.readyForConsistentReads.Load()
+ }
+ 
+ // Regions returns the known regions in the cluster.

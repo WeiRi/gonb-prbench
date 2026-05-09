@@ -1,0 +1,64 @@
+WARNING: DATA RACE
+Read at 0x00c00009a080 by goroutine 9:
+  ase/dns-1281.(*Client).Dial()
+      /work/client.go:22 +0xdc
+  ase/dns-1281.TestRace_dns1281_Client_Dialer.func2()
+      /work/verified_test.go:25 +0xed
+
+Previous write at 0x00c00009a080 by goroutine 8:
+  ase/dns-1281.(*Client).ExchangeContext()
+      /work/client.go:33 +0x13c
+  ase/dns-1281.TestRace_dns1281_Client_Dialer.func1()
+      /work/verified_test.go:19 +0x11d
+
+Goroutine 9 (running) created at:
+  ase/dns-1281.TestRace_dns1281_Client_Dialer()
+      /work/verified_test.go:22 +0x1e4
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 8 (finished) created at:
+  ase/dns-1281.TestRace_dns1281_Client_Dialer()
+      /work/verified_test.go:16 +0x13c
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c00009a080 by goroutine 9:
+  ase/dns-1281.(*Client).Dial()
+      /work/client.go:25 +0xec
+  ase/dns-1281.TestRace_dns1281_Client_Dialer.func2()
+      /work/verified_test.go:25 +0xed
+
+Previous write at 0x00c00009a080 by goroutine 8:
+  ase/dns-1281.(*Client).ExchangeContext()
+      /work/client.go:33 +0x13c
+  ase/dns-1281.TestRace_dns1281_Client_Dialer.func1()
+      /work/verified_test.go:19 +0x11d
+
+Goroutine 9 (running) created at:
+  ase/dns-1281.TestRace_dns1281_Client_Dialer()
+      /work/verified_test.go:22 +0x1e4
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 8 (finished) created at:
+  ase/dns-1281.TestRace_dns1281_Client_Dialer()
+      /work/verified_test.go:16 +0x13c
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+--- FAIL: TestRace_dns1281_Client_Dialer (0.00s)
+    testing.go:1398: race detected during execution of test
+FAIL
+FAIL	ase/dns-1281	0.017s
+FAIL

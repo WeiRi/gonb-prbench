@@ -1,0 +1,72 @@
+WARNING: DATA RACE
+Write at 0x00c000012148 by goroutine 11:
+  ase/cockroach-144073.(*descriptorVersionState).SetLease()
+      /work/descriptor_state.go:49 +0x99
+  ase/cockroach-144073.Test144073Race.func1()
+      /work/verified_test.go:23 +0xd6
+  ase/cockroach-144073.Test144073Race.gowrap1()
+      /work/verified_test.go:25 +0x41
+
+Previous read at 0x00c000012148 by goroutine 10:
+  ase/cockroach-144073.(*descriptorState).removeInactiveVersions()
+      /work/descriptor_state.go:36 +0x1e5
+  ase/cockroach-144073.Test144073Race.func1()
+      /work/verified_test.go:21 +0xa4
+  ase/cockroach-144073.Test144073Race.gowrap1()
+      /work/verified_test.go:25 +0x41
+
+Goroutine 11 (running) created at:
+  ase/cockroach-144073.Test144073Race()
+      /work/verified_test.go:18 +0x20d
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 10 (finished) created at:
+  ase/cockroach-144073.Test144073Race()
+      /work/verified_test.go:18 +0x20d
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c000012148 by goroutine 13:
+  ase/cockroach-144073.(*descriptorVersionState).SetLease()
+      /work/descriptor_state.go:49 +0x99
+  ase/cockroach-144073.Test144073Race.func1()
+      /work/verified_test.go:23 +0xd6
+  ase/cockroach-144073.Test144073Race.gowrap1()
+      /work/verified_test.go:25 +0x41
+
+Previous write at 0x00c000012148 by goroutine 18:
+  ase/cockroach-144073.(*descriptorState).removeInactiveVersions()
+      /work/descriptor_state.go:37 +0x224
+  ase/cockroach-144073.Test144073Race.func1()
+      /work/verified_test.go:21 +0xa4
+  ase/cockroach-144073.Test144073Race.gowrap1()
+      /work/verified_test.go:25 +0x41
+
+Goroutine 13 (running) created at:
+  ase/cockroach-144073.Test144073Race()
+      /work/verified_test.go:18 +0x20d
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 18 (finished) created at:
+  ase/cockroach-144073.Test144073Race()
+      /work/verified_test.go:18 +0x20d
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+--- FAIL: Test144073Race (0.00s)
+    testing.go:1398: race detected during execution of test
+FAIL
+FAIL	ase/cockroach-144073	0.017s
+FAIL

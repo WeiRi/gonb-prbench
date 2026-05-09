@@ -1,0 +1,40 @@
+diff --git a/proxy/grpcproxy/watch_broadcasts.go b/proxy/grpcproxy/watch_broadcasts.go
+index 3ca6fa2db34e..81e857113e9a 100644
+--- a/proxy/grpcproxy/watch_broadcasts.go
++++ b/proxy/grpcproxy/watch_broadcasts.go
+@@ -96,7 +96,8 @@ func (wbs *watchBroadcasts) add(w *watcher) {
+ 	wbs.bcasts[wb] = struct{}{}
+ }
+ 
+-func (wbs *watchBroadcasts) delete(w *watcher) {
++// delete removes a watcher and returns the number of remaining watchers.
++func (wbs *watchBroadcasts) delete(w *watcher) int {
+ 	wbs.mu.Lock()
+ 	defer wbs.mu.Unlock()
+ 
+@@ -110,10 +111,9 @@ func (wbs *watchBroadcasts) delete(w *watcher) {
+ 		delete(wbs.bcasts, wb)
+ 		wb.stop()
+ 	}
++	return len(wbs.bcasts)
+ }
+ 
+-func (wbs *watchBroadcasts) empty() bool { return len(wbs.bcasts) == 0 }
+-
+ func (wbs *watchBroadcasts) stop() {
+ 	wbs.mu.Lock()
+ 	for wb := range wbs.bcasts {
+diff --git a/proxy/grpcproxy/watch_ranges.go b/proxy/grpcproxy/watch_ranges.go
+index 27464453ae8e..31c6b5925eae 100644
+--- a/proxy/grpcproxy/watch_ranges.go
++++ b/proxy/grpcproxy/watch_ranges.go
+@@ -53,8 +53,7 @@ func (wrs *watchRanges) delete(w *watcher) {
+ 	if !ok {
+ 		panic("deleting missing range")
+ 	}
+-	wbs.delete(w)
+-	if wbs.empty() {
++	if wbs.delete(w) == 0 {
+ 		wbs.stop()
+ 		delete(wrs.bcasts, w.wr)
+ 	}

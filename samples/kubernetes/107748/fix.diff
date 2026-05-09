@@ -1,0 +1,78 @@
+diff --git a/pkg/proxy/ipvs/graceful_termination.go b/pkg/proxy/ipvs/graceful_termination.go
+index f39cc79388408..26e3c0f02a888 100644
+--- a/pkg/proxy/ipvs/graceful_termination.go
++++ b/pkg/proxy/ipvs/graceful_termination.go
+@@ -81,6 +81,8 @@ func (q *graceTerminateRSList) remove(rs *listItem) bool {
+ }
+ 
+ func (q *graceTerminateRSList) flushList(handler func(rsToDelete *listItem) (bool, error)) bool {
++	q.lock.Lock()
++	defer q.lock.Unlock()
+ 	success := true
+ 	for name, rs := range q.list {
+ 		deleted, err := handler(rs)
+@@ -90,7 +92,7 @@ func (q *graceTerminateRSList) flushList(handler func(rsToDelete *listItem) (boo
+ 		}
+ 		if deleted {
+ 			klog.InfoS("Removed real server from graceful delete real server list", "realServer", name)
+-			q.remove(rs)
++			delete(q.list, rs.String())
+ 		}
+ 	}
+ 	return success
+diff --git a/pkg/proxy/ipvs/graceful_termination_test.go b/pkg/proxy/ipvs/graceful_termination_test.go
+index b48e1342824c5..4a3431e22fb6c 100644
+--- a/pkg/proxy/ipvs/graceful_termination_test.go
++++ b/pkg/proxy/ipvs/graceful_termination_test.go
+@@ -17,12 +17,13 @@ limitations under the License.
+ package ipvs
+ 
+ import (
++	"fmt"
++	netutils "k8s.io/utils/net"
+ 	"reflect"
+ 	"testing"
+ 
+ 	utilipvs "k8s.io/kubernetes/pkg/util/ipvs"
+ 	utilipvstest "k8s.io/kubernetes/pkg/util/ipvs/testing"
+-	netutils "k8s.io/utils/net"
+ )
+ 
+ func Test_GracefulDeleteRS(t *testing.T) {
+@@ -400,3 +401,36 @@ func Test_GracefulDeleteRS(t *testing.T) {
+ 		})
+ 	}
+ }
++
++func Test_RaceTerminateRSList(t *testing.T) {
++	ipvs := &utilipvstest.FakeIPVS{}
++	gracefulTerminationManager := NewGracefulTerminationManager(ipvs)
++
++	go func() {
++		for i := 1; i <= 10; i++ {
++			for j := 1; i <= 100; j++ {
++				gracefulTerminationManager.rsList.add(makeListItem(i, j))
++			}
++		}
++	}()
++
++	if !gracefulTerminationManager.rsList.flushList(gracefulTerminationManager.deleteRsFunc) {
++		t.Error("failed to flush entries")
++	}
++}
++
++func makeListItem(i, j int) *listItem {
++	vs := fmt.Sprintf("%d.%d.%d.%d", 1, 1, i, i)
++	rs := fmt.Sprintf("%d.%d.%d.%d", 1, 1, i, j)
++	return &listItem{
++		VirtualServer: &utilipvs.VirtualServer{
++			Address:  netutils.ParseIPSloppy(vs),
++			Protocol: "tcp",
++			Port:     uint16(80),
++		},
++		RealServer: &utilipvs.RealServer{
++			Address: netutils.ParseIPSloppy(rs),
++			Port:    uint16(80),
++		},
++	}
++}

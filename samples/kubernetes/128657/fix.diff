@@ -1,0 +1,199 @@
+diff --git a/pkg/kubelet/cm/container_manager_linux.go b/pkg/kubelet/cm/container_manager_linux.go
+index 9d335791f4cb7..efbd90c1d5f24 100644
+--- a/pkg/kubelet/cm/container_manager_linux.go
++++ b/pkg/kubelet/cm/container_manager_linux.go
+@@ -575,13 +575,13 @@ func (cm *containerManagerImpl) Start(ctx context.Context, node *v1.Node,
+ 	}
+ 
+ 	// Initialize CPU manager
+-	err := cm.cpuManager.Start(cpumanager.ActivePodsFunc(activePods), sourcesReady, podStatusProvider, runtimeService, containerMap)
++	err := cm.cpuManager.Start(cpumanager.ActivePodsFunc(activePods), sourcesReady, podStatusProvider, runtimeService, containerMap.Clone())
+ 	if err != nil {
+ 		return fmt.Errorf("start cpu manager error: %w", err)
+ 	}
+ 
+ 	// Initialize memory manager
+-	err = cm.memoryManager.Start(memorymanager.ActivePodsFunc(activePods), sourcesReady, podStatusProvider, runtimeService, containerMap)
++	err = cm.memoryManager.Start(memorymanager.ActivePodsFunc(activePods), sourcesReady, podStatusProvider, runtimeService, containerMap.Clone())
+ 	if err != nil {
+ 		return fmt.Errorf("start memory manager error: %w", err)
+ 	}
+@@ -643,7 +643,7 @@ func (cm *containerManagerImpl) Start(ctx context.Context, node *v1.Node,
+ 	}
+ 
+ 	// Starts device manager.
+-	if err := cm.deviceManager.Start(devicemanager.ActivePodsFunc(activePods), sourcesReady, containerMap, containerRunningSet); err != nil {
++	if err := cm.deviceManager.Start(devicemanager.ActivePodsFunc(activePods), sourcesReady, containerMap.Clone(), containerRunningSet); err != nil {
+ 		return err
+ 	}
+ 
+diff --git a/pkg/kubelet/cm/container_manager_windows.go b/pkg/kubelet/cm/container_manager_windows.go
+index 5cbbc30021828..3c36daeffb546 100644
+--- a/pkg/kubelet/cm/container_manager_windows.go
++++ b/pkg/kubelet/cm/container_manager_windows.go
+@@ -25,10 +25,11 @@ package cm
+ import (
+ 	"context"
+ 	"fmt"
++	"sync"
++
+ 	utilfeature "k8s.io/apiserver/pkg/util/feature"
+ 	kubefeatures "k8s.io/kubernetes/pkg/features"
+ 	"k8s.io/kubernetes/pkg/kubelet/cm/memorymanager"
+-	"sync"
+ 
+ 	"k8s.io/klog/v2"
+ 	"k8s.io/mount-utils"
+@@ -96,14 +97,14 @@ func (cm *containerManagerImpl) Start(ctx context.Context, node *v1.Node,
+ 
+ 	// Initialize CPU manager
+ 	if utilfeature.DefaultFeatureGate.Enabled(kubefeatures.WindowsCPUAndMemoryAffinity) {
+-		err := cm.cpuManager.Start(cpumanager.ActivePodsFunc(activePods), sourcesReady, podStatusProvider, runtimeService, containerMap)
++		err := cm.cpuManager.Start(cpumanager.ActivePodsFunc(activePods), sourcesReady, podStatusProvider, runtimeService, containerMap.Clone())
+ 		if err != nil {
+ 			return fmt.Errorf("start cpu manager error: %v", err)
+ 		}
+ 	}
+ 
+ 	// Starts device manager.
+-	if err := cm.deviceManager.Start(devicemanager.ActivePodsFunc(activePods), sourcesReady, containerMap, containerRunningSet); err != nil {
++	if err := cm.deviceManager.Start(devicemanager.ActivePodsFunc(activePods), sourcesReady, containerMap.Clone(), containerRunningSet); err != nil {
+ 		return err
+ 	}
+ 
+diff --git a/pkg/kubelet/cm/containermap/container_map.go b/pkg/kubelet/cm/containermap/container_map.go
+index 7dc4689af623b..1d3fce813b9ff 100644
+--- a/pkg/kubelet/cm/containermap/container_map.go
++++ b/pkg/kubelet/cm/containermap/container_map.go
+@@ -20,23 +20,35 @@ import (
+ 	"fmt"
+ )
+ 
+-// ContainerMap maps (containerID)->(*v1.Pod, *v1.Container)
+-type ContainerMap map[string]struct {
++// cmItem (ContainerMap ITEM) is a pair podUID, containerName
++type cmItem struct {
+ 	podUID        string
+ 	containerName string
+ }
+ 
++// ContainerMap maps (containerID)->(podUID, containerName)
++type ContainerMap map[string]cmItem
++
+ // NewContainerMap creates a new ContainerMap struct
+ func NewContainerMap() ContainerMap {
+ 	return make(ContainerMap)
+ }
+ 
++// Clone creates a deep copy of the ContainerMap
++func (cm ContainerMap) Clone() ContainerMap {
++	ret := make(ContainerMap, len(cm))
++	for key, val := range cm {
++		ret[key] = val
++	}
++	return ret
++}
++
+ // Add adds a mapping of (containerID)->(podUID, containerName) to the ContainerMap
+ func (cm ContainerMap) Add(podUID, containerName, containerID string) {
+-	cm[containerID] = struct {
+-		podUID        string
+-		containerName string
+-	}{podUID, containerName}
++	cm[containerID] = cmItem{
++		podUID:        podUID,
++		containerName: containerName,
++	}
+ }
+ 
+ // RemoveByContainerID removes a mapping of (containerID)->(podUID, containerName) from the ContainerMap
+diff --git a/pkg/kubelet/cm/containermap/container_map_test.go b/pkg/kubelet/cm/containermap/container_map_test.go
+index 9dd5cbb24a4a9..737bfa209898f 100644
+--- a/pkg/kubelet/cm/containermap/container_map_test.go
++++ b/pkg/kubelet/cm/containermap/container_map_test.go
+@@ -20,6 +20,65 @@ import (
+ 	"testing"
+ )
+ 
++func TestContainerMapCloneEqual(t *testing.T) {
++	cm := NewContainerMap()
++	// add random fake data
++	cm.Add("fakePodUID-1", "fakeContainerName-a1", "fakeContainerID-A")
++	cm.Add("fakePodUID-2", "fakeContainerName-b2", "fakeContainerID-B")
++	cm.Add("fakePodUID-2", "fakeContainerName-c2", "fakeContainerID-C")
++	cm.Add("fakePodUID-3", "fakeContainerName-d3", "fakeContainerID-D")
++	cm.Add("fakePodUID-3", "fakeContainerName-e3", "fakeContainerID-E")
++	cm.Add("fakePodUID-3", "fakeContainerName-f3", "fakeContainerID-F")
++
++	cloned := cm.Clone()
++	if !areEqual(cm, cloned) {
++		t.Fatalf("clone %+#v different from original %+#v", cloned, cm)
++	}
++}
++
++func TestContainerMapCloneUnshared(t *testing.T) {
++	cm := NewContainerMap()
++	// add random fake data
++	cm.Add("fakePodUID-1", "fakeContainerName-a1", "fakeContainerID-A")
++	cm.Add("fakePodUID-2", "fakeContainerName-b2", "fakeContainerID-B")
++	cm.Add("fakePodUID-2", "fakeContainerName-c2", "fakeContainerID-C")
++	cm.Add("fakePodUID-3", "fakeContainerName-d3", "fakeContainerID-D")
++	cm.Add("fakePodUID-3", "fakeContainerName-e3", "fakeContainerID-E")
++	cm.Add("fakePodUID-3", "fakeContainerName-f3", "fakeContainerID-F")
++
++	// early sanity check, random ID, no special meaning
++	podUID, containerName, err := cm.GetContainerRef("fakeContainerID-C")
++	if err != nil {
++		t.Fatalf("unexpected error: %v", err)
++	}
++	if podUID != "fakePodUID-2" || containerName != "fakeContainerName-c2" {
++		t.Fatalf("unexpected data: uid=%q name=%q", podUID, containerName)
++	}
++	if cID, err := cm.GetContainerID(podUID, containerName); err != nil || cID != "fakeContainerID-C" {
++		t.Fatalf("unexpected data: cid=%q err=%v", cID, err)
++	}
++
++	cloned := cm.Clone()
++	cloned.RemoveByContainerRef("fakePodUID-2", "fakeContainerName-c2")
++	// check is actually gone
++	if cID, err := cloned.GetContainerID("fakePodUID-2", "fakeContainerName-c2"); err == nil || cID != "" {
++		t.Fatalf("unexpected data found: cid=%q", cID)
++	}
++
++	// check the original copy didn't change
++	// early sanity check, random ID, no special meaning
++	podUIDRedo, containerNameRedo, err2 := cm.GetContainerRef("fakeContainerID-C")
++	if err != nil {
++		t.Fatalf("unexpected error: %v", err2)
++	}
++	if podUIDRedo != "fakePodUID-2" || containerNameRedo != "fakeContainerName-c2" {
++		t.Fatalf("unexpected data: uid=%q name=%q", podUIDRedo, containerNameRedo)
++	}
++	if cID, err := cm.GetContainerID(podUIDRedo, containerNameRedo); err != nil || cID != "fakeContainerID-C" {
++		t.Fatalf("unexpected data: cid=%q", cID)
++	}
++}
++
+ func TestContainerMap(t *testing.T) {
+ 	testCases := []struct {
+ 		podUID         string
+@@ -84,3 +143,19 @@ func TestContainerMap(t *testing.T) {
+ 		}
+ 	}
+ }
++
++func areEqual(cm1, cm2 ContainerMap) bool {
++	if len(cm1) != len(cm2) {
++		return false
++	}
++	for key1, item1 := range cm1 {
++		item2, ok := cm2[key1]
++		if !ok {
++			return false
++		}
++		if item1 != item2 {
++			return false
++		}
++	}
++	return true
++}

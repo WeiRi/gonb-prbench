@@ -1,0 +1,14 @@
+diff --git a/miner/worker.go b/miner/worker.go
+index ff48ecabc3dd..ee7506d70f32 100644
+--- a/miner/worker.go
++++ b/miner/worker.go
+@@ -316,7 +316,9 @@ func (self *worker) wait() {
+ 			for _, log := range work.state.Logs() {
+ 				log.BlockHash = block.Hash()
+ 			}
++			self.currentMu.Lock()
+ 			stat, err := self.chain.WriteBlockWithState(block, work.receipts, work.state)
++			self.currentMu.Unlock()
+ 			if err != nil {
+ 				log.Error("Failed writing block to chain", "err", err)
+ 				continue

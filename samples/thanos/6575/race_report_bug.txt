@@ -1,0 +1,250 @@
+WARNING: DATA RACE
+Read at 0x00c000048ee8 by goroutine 117:
+  github.com/thanos-io/thanos/pkg/store.(*bucketIndexReader).ExpandedPostings.func1()
+      /workspace/pkg/store/bucket.go:2208 +0x64
+  sort.insertionSort_func()
+      /usr/local/go/src/sort/zsortfunc.go:12 +0xc1
+  sort.pdqsort_func()
+      /usr/local/go/src/sort/zsortfunc.go:73 +0x39e
+  sort.Slice()
+      /usr/local/go/src/sort/slice.go:29 +0xaa
+  github.com/thanos-io/thanos/pkg/store.(*bucketIndexReader).ExpandedPostings()
+      /workspace/pkg/store/bucket.go:2207 +0x13c
+  github.com/thanos-io/thanos/pkg/store.TestRace_6575.func2()
+      /workspace/pkg/store/race_6575_test.go:80 +0x114
+  github.com/thanos-io/thanos/pkg/store.TestRace_6575.gowrap1()
+      /workspace/pkg/store/race_6575_test.go:82 +0x41
+
+Previous write at 0x00c000048ee8 by goroutine 106:
+  internal/reflectlite.Swapper.func3()
+      /usr/local/go/src/internal/reflectlite/swapper.go:42 +0xae
+  sort.insertionSort_func()
+      /usr/local/go/src/sort/zsortfunc.go:13 +0x83
+  sort.pdqsort_func()
+      /usr/local/go/src/sort/zsortfunc.go:73 +0x39e
+  sort.Slice()
+      /usr/local/go/src/sort/slice.go:29 +0xaa
+  github.com/thanos-io/thanos/pkg/store.(*bucketIndexReader).ExpandedPostings()
+      /workspace/pkg/store/bucket.go:2207 +0x13c
+  github.com/thanos-io/thanos/pkg/store.TestRace_6575.func2()
+      /workspace/pkg/store/race_6575_test.go:80 +0x114
+  github.com/thanos-io/thanos/pkg/store.TestRace_6575.gowrap1()
+      /workspace/pkg/store/race_6575_test.go:82 +0x41
+
+Goroutine 117 (running) created at:
+  github.com/thanos-io/thanos/pkg/store.TestRace_6575()
+      /workspace/pkg/store/race_6575_test.go:75 +0xa5d
+  github.com/thanos-io/thanos/pkg/block.Upload()
+      /workspace/pkg/block/block.go:98 +0x851
+  github.com/thanos-io/thanos/pkg/store.uploadTestBlock()
+      /workspace/pkg/store/bucket_test.go:1112 +0x6e5
+  github.com/thanos-io/thanos/pkg/store.uploadTestBlock()
+      /workspace/pkg/store/bucket_test.go:1106 +0x6be
+  github.com/thanos-io/thanos/pkg/store.createBlockFromHead()
+      /workspace/pkg/store/bucket_test.go:1148 +0x1a4
+  github.com/thanos-io/thanos/pkg/store.uploadTestBlock()
+      /workspace/pkg/store/bucket_test.go:1104 +0x347
+  github.com/thanos-io/thanos/pkg/store.TestRace_6575()
+      /workspace/pkg/store/race_6575_test.go:45 +0x22b
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1934 +0x21c
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1997 +0x44
+
+Goroutine 106 (running) created at:
+  github.com/thanos-io/thanos/pkg/store.TestRace_6575()
+      /workspace/pkg/store/race_6575_test.go:75 +0xa5d
+  github.com/thanos-io/thanos/pkg/block.Upload()
+      /workspace/pkg/block/block.go:98 +0x851
+  github.com/thanos-io/thanos/pkg/store.uploadTestBlock()
+      /workspace/pkg/store/bucket_test.go:1112 +0x6e5
+  github.com/thanos-io/thanos/pkg/store.uploadTestBlock()
+      /workspace/pkg/store/bucket_test.go:1106 +0x6be
+  github.com/thanos-io/thanos/pkg/store.createBlockFromHead()
+      /workspace/pkg/store/bucket_test.go:1148 +0x1a4
+  github.com/thanos-io/thanos/pkg/store.uploadTestBlock()
+      /workspace/pkg/store/bucket_test.go:1104 +0x347
+  github.com/thanos-io/thanos/pkg/store.TestRace_6575()
+      /workspace/pkg/store/race_6575_test.go:45 +0x22b
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1934 +0x21c
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1997 +0x44
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c000048ee0 by goroutine 112:
+  github.com/thanos-io/thanos/pkg/store.(*bucketIndexReader).ExpandedPostings.func1()
+      /workspace/pkg/store/bucket.go:2208 +0xb4
+  sort.insertionSort_func()
+      /usr/local/go/src/sort/zsortfunc.go:12 +0xc1
+  sort.pdqsort_func()
+      /usr/local/go/src/sort/zsortfunc.go:73 +0x39e
+  sort.Slice()
+      /usr/local/go/src/sort/slice.go:29 +0xaa
+  github.com/thanos-io/thanos/pkg/store.(*bucketIndexReader).ExpandedPostings()
+      /workspace/pkg/store/bucket.go:2207 +0x13c
+  github.com/thanos-io/thanos/pkg/store.TestRace_6575.func2()
+      /workspace/pkg/store/race_6575_test.go:80 +0x114
+  github.com/thanos-io/thanos/pkg/store.TestRace_6575.gowrap1()
+      /workspace/pkg/store/race_6575_test.go:82 +0x41
+
+Previous write at 0x00c000048ee0 by goroutine 106:
+  internal/reflectlite.Swapper.func3()
+      /usr/local/go/src/internal/reflectlite/swapper.go:42 +0xf5
+  sort.insertionSort_func()
+      /usr/local/go/src/sort/zsortfunc.go:13 +0x83
+  sort.pdqsort_func()
+      /usr/local/go/src/sort/zsortfunc.go:73 +0x39e
+  sort.Slice()
+      /usr/local/go/src/sort/slice.go:29 +0xaa
+  github.com/thanos-io/thanos/pkg/store.(*bucketIndexReader).ExpandedPostings()
+      /workspace/pkg/store/bucket.go:2207 +0x13c
+  github.com/thanos-io/thanos/pkg/store.TestRace_6575.func2()
+      /workspace/pkg/store/race_6575_test.go:80 +0x114
+  github.com/thanos-io/thanos/pkg/store.TestRace_6575.gowrap1()
+      /workspace/pkg/store/race_6575_test.go:82 +0x41
+
+Goroutine 112 (running) created at:
+  github.com/thanos-io/thanos/pkg/store.TestRace_6575()
+      /workspace/pkg/store/race_6575_test.go:75 +0xa5d
+  github.com/thanos-io/thanos/pkg/block.Upload()
+      /workspace/pkg/block/block.go:98 +0x851
+  github.com/thanos-io/thanos/pkg/store.uploadTestBlock()
+      /workspace/pkg/store/bucket_test.go:1112 +0x6e5
+  github.com/thanos-io/thanos/pkg/store.uploadTestBlock()
+      /workspace/pkg/store/bucket_test.go:1106 +0x6be
+  github.com/thanos-io/thanos/pkg/store.createBlockFromHead()
+      /workspace/pkg/store/bucket_test.go:1148 +0x1a4
+  github.com/thanos-io/thanos/pkg/store.uploadTestBlock()
+      /workspace/pkg/store/bucket_test.go:1104 +0x347
+  github.com/thanos-io/thanos/pkg/store.TestRace_6575()
+      /workspace/pkg/store/race_6575_test.go:45 +0x22b
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1934 +0x21c
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1997 +0x44
+
+Goroutine 106 (running) created at:
+  github.com/thanos-io/thanos/pkg/store.TestRace_6575()
+      /workspace/pkg/store/race_6575_test.go:75 +0xa5d
+  github.com/thanos-io/thanos/pkg/block.Upload()
+      /workspace/pkg/block/block.go:98 +0x851
+  github.com/thanos-io/thanos/pkg/store.uploadTestBlock()
+      /workspace/pkg/store/bucket_test.go:1112 +0x6e5
+  github.com/thanos-io/thanos/pkg/store.uploadTestBlock()
+      /workspace/pkg/store/bucket_test.go:1106 +0x6be
+  github.com/thanos-io/thanos/pkg/store.createBlockFromHead()
+      /workspace/pkg/store/bucket_test.go:1148 +0x1a4
+  github.com/thanos-io/thanos/pkg/store.uploadTestBlock()
+      /workspace/pkg/store/bucket_test.go:1104 +0x347
+  github.com/thanos-io/thanos/pkg/store.TestRace_6575()
+      /workspace/pkg/store/race_6575_test.go:45 +0x22b
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1934 +0x21c
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1997 +0x44
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c00002e018 by goroutine 117:
+  github.com/thanos-io/thanos/pkg/store.(*bucketIndexReader).fetchPostings()
+      /workspace/pkg/store/bucket.go:2699 +0xa44
+  github.com/thanos-io/thanos/pkg/store.(*bucketIndexReader).ExpandedPostings()
+      /workspace/pkg/store/bucket.go:2263 +0xbb3
+  github.com/thanos-io/thanos/pkg/store.TestRace_6575.func2()
+      /workspace/pkg/store/race_6575_test.go:80 +0x114
+  github.com/thanos-io/thanos/pkg/store.TestRace_6575.gowrap1()
+      /workspace/pkg/store/race_6575_test.go:82 +0x41
+
+Previous write at 0x00c00002e018 by goroutine 106:
+  github.com/thanos-io/thanos/pkg/store.(*bucketIndexReader).fetchPostings()
+      /workspace/pkg/store/bucket.go:2699 +0xa65
+  github.com/thanos-io/thanos/pkg/store.(*bucketIndexReader).ExpandedPostings()
+      /workspace/pkg/store/bucket.go:2263 +0xbb3
+  github.com/thanos-io/thanos/pkg/store.TestRace_6575.func2()
+      /workspace/pkg/store/race_6575_test.go:80 +0x114
+  github.com/thanos-io/thanos/pkg/store.TestRace_6575.gowrap1()
+      /workspace/pkg/store/race_6575_test.go:82 +0x41
+
+Goroutine 117 (running) created at:
+  github.com/thanos-io/thanos/pkg/store.TestRace_6575()
+      /workspace/pkg/store/race_6575_test.go:75 +0xa5d
+  github.com/thanos-io/thanos/pkg/block.Upload()
+      /workspace/pkg/block/block.go:98 +0x851
+  github.com/thanos-io/thanos/pkg/store.uploadTestBlock()
+      /workspace/pkg/store/bucket_test.go:1112 +0x6e5
+  github.com/thanos-io/thanos/pkg/store.uploadTestBlock()
+      /workspace/pkg/store/bucket_test.go:1106 +0x6be
+  github.com/thanos-io/thanos/pkg/store.createBlockFromHead()
+      /workspace/pkg/store/bucket_test.go:1148 +0x1a4
+  github.com/thanos-io/thanos/pkg/store.uploadTestBlock()
+      /workspace/pkg/store/bucket_test.go:1104 +0x347
+  github.com/thanos-io/thanos/pkg/store.TestRace_6575()
+      /workspace/pkg/store/race_6575_test.go:45 +0x22b
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1934 +0x21c
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1997 +0x44
+
+Goroutine 106 (running) created at:
+  github.com/thanos-io/thanos/pkg/store.TestRace_6575()
+      /workspace/pkg/store/race_6575_test.go:75 +0xa5d
+  github.com/thanos-io/thanos/pkg/block.Upload()
+      /workspace/pkg/block/block.go:98 +0x851
+  github.com/thanos-io/thanos/pkg/store.uploadTestBlock()
+      /workspace/pkg/store/bucket_test.go:1112 +0x6e5
+  github.com/thanos-io/thanos/pkg/store.uploadTestBlock()
+      /workspace/pkg/store/bucket_test.go:1106 +0x6be
+  github.com/thanos-io/thanos/pkg/store.createBlockFromHead()
+      /workspace/pkg/store/bucket_test.go:1148 +0x1a4
+  github.com/thanos-io/thanos/pkg/store.uploadTestBlock()
+      /workspace/pkg/store/bucket_test.go:1104 +0x347
+  github.com/thanos-io/thanos/pkg/store.TestRace_6575()
+      /workspace/pkg/store/race_6575_test.go:45 +0x22b
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1934 +0x21c
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1997 +0x44
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c00002e100 by goroutine 102:
+  github.com/thanos-io/thanos/pkg/store.(*bucketIndexReader).fetchPostings()
+      /workspace/pkg/store/bucket.go:2720 +0x143e
+  github.com/thanos-io/thanos/pkg/store.(*bucketIndexReader).ExpandedPostings()
+      /workspace/pkg/store/bucket.go:2263 +0xbb3
+  github.com/thanos-io/thanos/pkg/store.TestRace_6575.func2()
+      /workspace/pkg/store/race_6575_test.go:80 +0x114
+  github.com/thanos-io/thanos/pkg/store.TestRace_6575.gowrap1()
+      /workspace/pkg/store/race_6575_test.go:82 +0x41
+
+Previous write at 0x00c00002e100 by goroutine 106:
+  github.com/thanos-io/thanos/pkg/store.(*bucketIndexReader).fetchPostings()
+      /workspace/pkg/store/bucket.go:2720 +0x1464
+  github.com/thanos-io/thanos/pkg/store.(*bucketIndexReader).ExpandedPostings()
+      /workspace/pkg/store/bucket.go:2263 +0xbb3
+  github.com/thanos-io/thanos/pkg/store.TestRace_6575.func2()
+      /workspace/pkg/store/race_6575_test.go:80 +0x114
+  github.com/thanos-io/thanos/pkg/store.TestRace_6575.gowrap1()
+      /workspace/pkg/store/race_6575_test.go:82 +0x41
+
+Goroutine 102 (running) created at:
+  github.com/thanos-io/thanos/pkg/store.TestRace_6575()
+      /workspace/pkg/store/race_6575_test.go:75 +0xa5d
+  github.com/thanos-io/thanos/pkg/block.Upload()
+      /workspace/pkg/block/block.go:98 +0x851
+  github.com/thanos-io/thanos/pkg/store.uploadTestBlock()
+      /workspace/pkg/store/bucket_test.go:1112 +0x6e5
+  github.com/thanos-io/thanos/pkg/store.uploadTestBlock()
+      /workspace/pkg/store/bucket_test.go:1106 +0x6be
+  github.com/thanos-io/thanos/pkg/store.createBlockFromHead()
+      /workspace/pkg/store/bucket_test.go:1148 +0x1a4
+  github.com/thanos-io/thanos/pkg/store.uploadTestBlock()
+      /workspace/pkg/store/bucket_test.go:1104 +0x347
+  github.com/thanos-io/thanos/pkg/store.TestRace_6575()
+      /workspace/pkg/store/race_6575_test.go:45 +0x22b
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1934 +0x21c
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1997 +0x44

@@ -1,0 +1,250 @@
+WARNING: DATA RACE
+Read at 0x00c0001ee018 by goroutine 11:
+  ase/prometheus-11296.(*bstream).writeBit()
+      /work/bstream.go:12 +0xc4
+  ase/prometheus-11296.(*xorAppender).Append()
+      /work/bstream.go:52 +0x5c
+  ase/prometheus-11296.TestRace_PR11296_BstreamRace.func1()
+      /work/verified_test.go:38 +0x128
+  ase/prometheus-11296.TestRace_PR11296_BstreamRace.gowrap1()
+      /work/verified_test.go:40 +0x41
+
+Previous write at 0x00c0001ee018 by goroutine 8:
+  ase/prometheus-11296.(*bstream).writeBit()
+      /work/bstream.go:17 +0x1e9
+  ase/prometheus-11296.(*xorAppender).Append()
+      /work/bstream.go:52 +0x5c
+  ase/prometheus-11296.TestRace_PR11296_BstreamRace.func1()
+      /work/verified_test.go:38 +0x128
+  ase/prometheus-11296.TestRace_PR11296_BstreamRace.gowrap1()
+      /work/verified_test.go:40 +0x41
+
+Goroutine 11 (running) created at:
+  ase/prometheus-11296.TestRace_PR11296_BstreamRace()
+      /work/verified_test.go:34 +0x1ac
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 8 (running) created at:
+  ase/prometheus-11296.TestRace_PR11296_BstreamRace()
+      /work/verified_test.go:34 +0x1ac
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c0001ee000 by goroutine 11:
+  ase/prometheus-11296.(*bstream).writeBit()
+      /work/bstream.go:16 +0x1b4
+  ase/prometheus-11296.(*xorAppender).Append()
+      /work/bstream.go:52 +0x5c
+  ase/prometheus-11296.TestRace_PR11296_BstreamRace.func1()
+      /work/verified_test.go:38 +0x128
+  ase/prometheus-11296.TestRace_PR11296_BstreamRace.gowrap1()
+      /work/verified_test.go:40 +0x41
+
+Previous write at 0x00c0001ee000 by goroutine 8:
+  ase/prometheus-11296.(*bstream).writeBit()
+      /work/bstream.go:13 +0x151
+  ase/prometheus-11296.(*xorAppender).Append()
+      /work/bstream.go:52 +0x5c
+  ase/prometheus-11296.TestRace_PR11296_BstreamRace.func1()
+      /work/verified_test.go:38 +0x128
+  ase/prometheus-11296.TestRace_PR11296_BstreamRace.gowrap1()
+      /work/verified_test.go:40 +0x41
+
+Goroutine 11 (running) created at:
+  ase/prometheus-11296.TestRace_PR11296_BstreamRace()
+      /work/verified_test.go:34 +0x1ac
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 8 (running) created at:
+  ase/prometheus-11296.TestRace_PR11296_BstreamRace()
+      /work/verified_test.go:34 +0x1ac
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c0001ee018 by goroutine 11:
+  ase/prometheus-11296.(*bstream).writeBit()
+      /work/bstream.go:17 +0x1cf
+  ase/prometheus-11296.(*xorAppender).Append()
+      /work/bstream.go:52 +0x5c
+  ase/prometheus-11296.TestRace_PR11296_BstreamRace.func1()
+      /work/verified_test.go:38 +0x128
+  ase/prometheus-11296.TestRace_PR11296_BstreamRace.gowrap1()
+      /work/verified_test.go:40 +0x41
+
+Previous write at 0x00c0001ee018 by goroutine 8:
+  ase/prometheus-11296.(*bstream).writeBit()
+      /work/bstream.go:17 +0x1e9
+  ase/prometheus-11296.(*xorAppender).Append()
+      /work/bstream.go:52 +0x5c
+  ase/prometheus-11296.TestRace_PR11296_BstreamRace.func1()
+      /work/verified_test.go:38 +0x128
+  ase/prometheus-11296.TestRace_PR11296_BstreamRace.gowrap1()
+      /work/verified_test.go:40 +0x41
+
+Goroutine 11 (running) created at:
+  ase/prometheus-11296.TestRace_PR11296_BstreamRace()
+      /work/verified_test.go:34 +0x1ac
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 8 (running) created at:
+  ase/prometheus-11296.TestRace_PR11296_BstreamRace()
+      /work/verified_test.go:34 +0x1ac
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c0001ee018 by goroutine 11:
+  ase/prometheus-11296.(*bstream).writeBit()
+      /work/bstream.go:17 +0x1e9
+  ase/prometheus-11296.(*xorAppender).Append()
+      /work/bstream.go:52 +0x5c
+  ase/prometheus-11296.TestRace_PR11296_BstreamRace.func1()
+      /work/verified_test.go:38 +0x128
+  ase/prometheus-11296.TestRace_PR11296_BstreamRace.gowrap1()
+      /work/verified_test.go:40 +0x41
+
+Previous write at 0x00c0001ee018 by goroutine 8:
+  ase/prometheus-11296.(*bstream).writeBit()
+      /work/bstream.go:17 +0x1e9
+  ase/prometheus-11296.(*xorAppender).Append()
+      /work/bstream.go:52 +0x5c
+  ase/prometheus-11296.TestRace_PR11296_BstreamRace.func1()
+      /work/verified_test.go:38 +0x128
+  ase/prometheus-11296.TestRace_PR11296_BstreamRace.gowrap1()
+      /work/verified_test.go:40 +0x41
+
+Goroutine 11 (running) created at:
+  ase/prometheus-11296.TestRace_PR11296_BstreamRace()
+      /work/verified_test.go:34 +0x1ac
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 8 (running) created at:
+  ase/prometheus-11296.TestRace_PR11296_BstreamRace()
+      /work/verified_test.go:34 +0x1ac
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c0001ee018 by goroutine 11:
+  ase/prometheus-11296.(*bstream).writeBit()
+      /work/bstream.go:17 +0x1cf
+  ase/prometheus-11296.(*xorAppender).Append()
+      /work/bstream.go:52 +0x5c
+  ase/prometheus-11296.TestRace_PR11296_BstreamRace.func1()
+      /work/verified_test.go:38 +0x128
+  ase/prometheus-11296.TestRace_PR11296_BstreamRace.gowrap1()
+      /work/verified_test.go:40 +0x41
+
+Previous write at 0x00c0001ee018 by goroutine 8:
+  ase/prometheus-11296.(*bstream).writeBit()
+      /work/bstream.go:14 +0x3d6
+  ase/prometheus-11296.(*xorAppender).Append()
+      /work/bstream.go:55 +0x2cf
+  ase/prometheus-11296.TestRace_PR11296_BstreamRace.func1()
+      /work/verified_test.go:38 +0x128
+  ase/prometheus-11296.TestRace_PR11296_BstreamRace.gowrap1()
+      /work/verified_test.go:40 +0x41
+
+Goroutine 11 (running) created at:
+  ase/prometheus-11296.TestRace_PR11296_BstreamRace()
+      /work/verified_test.go:34 +0x1ac
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 8 (running) created at:
+  ase/prometheus-11296.TestRace_PR11296_BstreamRace()
+      /work/verified_test.go:34 +0x1ac
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c0001ee018 by goroutine 11:
+  ase/prometheus-11296.(*bstream).writeBit()
+      /work/bstream.go:12 +0xc4
+  ase/prometheus-11296.(*xorAppender).Append()
+      /work/bstream.go:52 +0x5c
+  ase/prometheus-11296.TestRace_PR11296_BstreamRace.func1()
+      /work/verified_test.go:38 +0x128
+  ase/prometheus-11296.TestRace_PR11296_BstreamRace.gowrap1()
+      /work/verified_test.go:40 +0x41
+
+Previous write at 0x00c0001ee018 by goroutine 8:
+  ase/prometheus-11296.(*bstream).writeBit()
+      /work/bstream.go:17 +0x41e
+  ase/prometheus-11296.(*xorAppender).Append()
+      /work/bstream.go:55 +0x2cf
+  ase/prometheus-11296.TestRace_PR11296_BstreamRace.func1()
+      /work/verified_test.go:38 +0x128
+  ase/prometheus-11296.TestRace_PR11296_BstreamRace.gowrap1()
+      /work/verified_test.go:40 +0x41
+
+Goroutine 11 (running) created at:
+  ase/prometheus-11296.TestRace_PR11296_BstreamRace()
+      /work/verified_test.go:34 +0x1ac
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 8 (running) created at:
+  ase/prometheus-11296.TestRace_PR11296_BstreamRace()
+      /work/verified_test.go:34 +0x1ac
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c0001ee018 by goroutine 11:
+  ase/prometheus-11296.(*bstream).writeBit()
+      /work/bstream.go:17 +0x1cf
+  ase/prometheus-11296.(*xorAppender).Append()
+      /work/bstream.go:52 +0x5c
+  ase/prometheus-11296.TestRace_PR11296_BstreamRace.func1()
+      /work/verified_test.go:38 +0x128
+  ase/prometheus-11296.TestRace_PR11296_BstreamRace.gowrap1()
+      /work/verified_test.go:40 +0x41
+
+Previous write at 0x00c0001ee018 by goroutine 8:
+  ase/prometheus-11296.(*bstream).writeBit()
+      /work/bstream.go:17 +0x41e
+  ase/prometheus-11296.(*xorAppender).Append()
+      /work/bstream.go:55 +0x2cf
+  ase/prometheus-11296.TestRace_PR11296_BstreamRace.func1()
+      /work/verified_test.go:38 +0x128
+  ase/prometheus-11296.TestRace_PR11296_BstreamRace.gowrap1()
+      /work/verified_test.go:40 +0x41
+
+Goroutine 11 (running) created at:

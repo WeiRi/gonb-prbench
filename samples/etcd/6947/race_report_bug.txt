@@ -1,0 +1,38 @@
+WARNING: DATA RACE
+Write at 0x00c0000d4570 by goroutine 22:
+  runtime.mapassign_faststr()
+      /usr/local/go/src/runtime/map_faststr.go:203 +0x0
+  ase/etcd-6947.(*Cache).Add()
+      /work/store.go:27 +0x44b
+  ase/etcd-6947.TestRace_PR6947_SizeUnlocked.func1()
+      /work/verified_test.go:22 +0x17c
+  ase/etcd-6947.TestRace_PR6947_SizeUnlocked.gowrap1()
+      /work/verified_test.go:24 +0x41
+
+Previous read at 0x00c0000d4570 by goroutine 13:
+  ase/etcd-6947.(*Cache).Size()
+      /work/store.go:32 +0xda
+  ase/etcd-6947.TestRace_PR6947_SizeUnlocked.func2()
+      /work/verified_test.go:28 +0xab
+
+Goroutine 22 (running) created at:
+  ase/etcd-6947.TestRace_PR6947_SizeUnlocked()
+      /work/verified_test.go:19 +0x37c
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 13 (finished) created at:
+  ase/etcd-6947.TestRace_PR6947_SizeUnlocked()
+      /work/verified_test.go:25 +0x231
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+    testing.go:1398: race detected during execution of test
+--- FAIL: TestRace_PR6947_SizeUnlocked (0.06s)
+FAIL
+FAIL	ase/etcd-6947	0.080s
+FAIL

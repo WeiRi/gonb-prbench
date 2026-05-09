@@ -1,0 +1,200 @@
+WARNING: DATA RACE
+Read at 0x00c0002d4000 by goroutine 56:
+  github.com/minio/minio/internal/grid.TestRace_BufferLifecycle.func1.1()
+      /work/internal/grid/race_21203_capture_test.go:35 +0x44
+  github.com/minio/minio/internal/grid.TestRace_BufferLifecycle.func1.gowrap2()
+      /work/internal/grid/race_21203_capture_test.go:37 +0x61
+
+Previous write at 0x00c0002d4000 by goroutine 12:
+  github.com/minio/minio/internal/grid.TestRace_BufferLifecycle.func1()
+      /work/internal/grid/race_21203_capture_test.go:44 +0x3ed
+  github.com/minio/minio/internal/grid.TestRace_BufferLifecycle.gowrap1()
+      /work/internal/grid/race_21203_capture_test.go:54 +0x41
+
+Goroutine 56 (running) created at:
+  github.com/minio/minio/internal/grid.TestRace_BufferLifecycle.func1()
+      /work/internal/grid/race_21203_capture_test.go:33 +0x364
+  github.com/minio/minio/internal/grid.TestRace_BufferLifecycle.gowrap1()
+      /work/internal/grid/race_21203_capture_test.go:54 +0x41
+
+Goroutine 12 (running) created at:
+  github.com/minio/minio/internal/grid.TestRace_BufferLifecycle()
+      /work/internal/grid/race_21203_capture_test.go:24 +0x6d
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1792 +0x225
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1851 +0x44
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c0004a4001 by goroutine 33:
+  github.com/minio/minio/internal/grid.TestRace_BufferLifecycle.func1()
+      /work/internal/grid/race_21203_capture_test.go:29 +0x1cb
+  github.com/minio/minio/internal/grid.TestRace_BufferLifecycle.gowrap1()
+      /work/internal/grid/race_21203_capture_test.go:54 +0x41
+
+Previous read at 0x00c0004a4001 by goroutine 100:
+  github.com/minio/minio/internal/grid.TestRace_BufferLifecycle.func1.1()
+      /work/internal/grid/race_21203_capture_test.go:35 +0x5c
+  github.com/minio/minio/internal/grid.TestRace_BufferLifecycle.func1.gowrap2()
+      /work/internal/grid/race_21203_capture_test.go:37 +0x61
+
+Goroutine 33 (running) created at:
+  github.com/minio/minio/internal/grid.TestRace_BufferLifecycle()
+      /work/internal/grid/race_21203_capture_test.go:24 +0x6d
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1792 +0x225
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1851 +0x44
+
+Goroutine 100 (finished) created at:
+  github.com/minio/minio/internal/grid.TestRace_BufferLifecycle.func1()
+      /work/internal/grid/race_21203_capture_test.go:33 +0x364
+  github.com/minio/minio/internal/grid.TestRace_BufferLifecycle.gowrap1()
+      /work/internal/grid/race_21203_capture_test.go:54 +0x41
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c0004a9001 by goroutine 145:
+  github.com/minio/minio/internal/grid.TestRace_BufferLifecycle.func1.1()
+      /work/internal/grid/race_21203_capture_test.go:35 +0x5c
+  github.com/minio/minio/internal/grid.TestRace_BufferLifecycle.func1.gowrap2()
+      /work/internal/grid/race_21203_capture_test.go:37 +0x61
+
+Previous write at 0x00c0004a9001 by goroutine 31:
+  github.com/minio/minio/internal/grid.TestRace_BufferLifecycle.func1()
+      /work/internal/grid/race_21203_capture_test.go:44 +0x42c
+  github.com/minio/minio/internal/grid.TestRace_BufferLifecycle.gowrap1()
+      /work/internal/grid/race_21203_capture_test.go:54 +0x41
+
+Goroutine 145 (running) created at:
+  github.com/minio/minio/internal/grid.TestRace_BufferLifecycle.func1()
+      /work/internal/grid/race_21203_capture_test.go:33 +0x364
+  github.com/minio/minio/internal/grid.TestRace_BufferLifecycle.gowrap1()
+      /work/internal/grid/race_21203_capture_test.go:54 +0x41
+
+Goroutine 31 (running) created at:
+  github.com/minio/minio/internal/grid.TestRace_BufferLifecycle()
+      /work/internal/grid/race_21203_capture_test.go:24 +0x6d
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1792 +0x225
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1851 +0x44
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c000825002 by goroutine 207:
+  github.com/minio/minio/internal/grid.TestRace_BufferLifecycle.func1.1()
+      /work/internal/grid/race_21203_capture_test.go:35 +0x75
+  github.com/minio/minio/internal/grid.TestRace_BufferLifecycle.func1.gowrap2()
+      /work/internal/grid/race_21203_capture_test.go:37 +0x61
+
+Previous write at 0x00c000825002 by goroutine 37:
+  github.com/minio/minio/internal/grid.TestRace_BufferLifecycle.func1()
+      /work/internal/grid/race_21203_capture_test.go:29 +0x1ee
+  github.com/minio/minio/internal/grid.TestRace_BufferLifecycle.gowrap1()
+      /work/internal/grid/race_21203_capture_test.go:54 +0x41
+
+Goroutine 207 (running) created at:
+  github.com/minio/minio/internal/grid.TestRace_BufferLifecycle.func1()
+      /work/internal/grid/race_21203_capture_test.go:33 +0x364
+  github.com/minio/minio/internal/grid.TestRace_BufferLifecycle.gowrap1()
+      /work/internal/grid/race_21203_capture_test.go:54 +0x41
+
+Goroutine 37 (running) created at:
+  github.com/minio/minio/internal/grid.TestRace_BufferLifecycle()
+      /work/internal/grid/race_21203_capture_test.go:24 +0x6d
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1792 +0x225
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1851 +0x44
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c0007ab002 by goroutine 49:
+  github.com/minio/minio/internal/grid.TestRace_BufferLifecycle.func1()
+      /work/internal/grid/race_21203_capture_test.go:44 +0x459
+  github.com/minio/minio/internal/grid.TestRace_BufferLifecycle.gowrap1()
+      /work/internal/grid/race_21203_capture_test.go:54 +0x41
+
+Previous read at 0x00c0007ab002 by goroutine 232:
+  github.com/minio/minio/internal/grid.TestRace_BufferLifecycle.func1.1()
+      /work/internal/grid/race_21203_capture_test.go:35 +0x75
+  github.com/minio/minio/internal/grid.TestRace_BufferLifecycle.func1.gowrap2()
+      /work/internal/grid/race_21203_capture_test.go:37 +0x61
+
+Goroutine 49 (running) created at:
+  github.com/minio/minio/internal/grid.TestRace_BufferLifecycle()
+      /work/internal/grid/race_21203_capture_test.go:24 +0x6d
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1792 +0x225
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1851 +0x44
+
+Goroutine 232 (finished) created at:
+  github.com/minio/minio/internal/grid.TestRace_BufferLifecycle.func1()
+      /work/internal/grid/race_21203_capture_test.go:33 +0x364
+  github.com/minio/minio/internal/grid.TestRace_BufferLifecycle.gowrap1()
+      /work/internal/grid/race_21203_capture_test.go:54 +0x41
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c0007ab000 by goroutine 49:
+  github.com/minio/minio/internal/grid.TestRace_BufferLifecycle.func1()
+      /work/internal/grid/race_21203_capture_test.go:47 +0xca
+  github.com/minio/minio/internal/grid.TestRace_BufferLifecycle.gowrap1()
+      /work/internal/grid/race_21203_capture_test.go:54 +0x41
+
+Previous read at 0x00c0007ab000 by goroutine 243:
+  github.com/minio/minio/internal/grid.TestRace_BufferLifecycle.func1.1()
+      /work/internal/grid/race_21203_capture_test.go:35 +0x44
+  github.com/minio/minio/internal/grid.TestRace_BufferLifecycle.func1.gowrap2()
+      /work/internal/grid/race_21203_capture_test.go:37 +0x61
+
+Goroutine 49 (running) created at:
+  github.com/minio/minio/internal/grid.TestRace_BufferLifecycle()
+      /work/internal/grid/race_21203_capture_test.go:24 +0x6d
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1792 +0x225
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1851 +0x44
+
+Goroutine 243 (finished) created at:
+  github.com/minio/minio/internal/grid.TestRace_BufferLifecycle.func1()
+      /work/internal/grid/race_21203_capture_test.go:33 +0x364
+  github.com/minio/minio/internal/grid.TestRace_BufferLifecycle.gowrap1()
+      /work/internal/grid/race_21203_capture_test.go:54 +0x41
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c00061c000 by goroutine 325:
+  github.com/minio/minio/internal/grid.TestRace_BufferLifecycle.func1.1()
+      /work/internal/grid/race_21203_capture_test.go:35 +0x44
+  github.com/minio/minio/internal/grid.TestRace_BufferLifecycle.func1.gowrap2()
+      /work/internal/grid/race_21203_capture_test.go:37 +0x61
+
+Previous write at 0x00c00061c000 by goroutine 80:
+  github.com/minio/minio/internal/grid.TestRace_BufferLifecycle.func1()
+      /work/internal/grid/race_21203_capture_test.go:29 +0x1a6
+  github.com/minio/minio/internal/grid.TestRace_BufferLifecycle.gowrap1()
+      /work/internal/grid/race_21203_capture_test.go:54 +0x41
+
+Goroutine 325 (running) created at:
+  github.com/minio/minio/internal/grid.TestRace_BufferLifecycle.func1()
+      /work/internal/grid/race_21203_capture_test.go:33 +0x364
+  github.com/minio/minio/internal/grid.TestRace_BufferLifecycle.gowrap1()
+      /work/internal/grid/race_21203_capture_test.go:54 +0x41
+
+Goroutine 80 (running) created at:
+  github.com/minio/minio/internal/grid.TestRace_BufferLifecycle()
+      /work/internal/grid/race_21203_capture_test.go:24 +0x6d
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1792 +0x225
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1851 +0x44
+==================
+--- FAIL: TestRace_BufferLifecycle (8.63s)
+    testing.go:1490: race detected during execution of test
+FAIL
+FAIL	github.com/minio/minio/internal/grid	8.682s
+FAIL

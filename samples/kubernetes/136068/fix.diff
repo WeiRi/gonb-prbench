@@ -1,0 +1,150 @@
+diff --git a/staging/src/k8s.io/client-go/tools/leaderelection/leaderelection.go b/staging/src/k8s.io/client-go/tools/leaderelection/leaderelection.go
+index d52c4ed787864..88e05fb707231 100644
+--- a/staging/src/k8s.io/client-go/tools/leaderelection/leaderelection.go
++++ b/staging/src/k8s.io/client-go/tools/leaderelection/leaderelection.go
+@@ -199,8 +199,8 @@ type LeaderElector struct {
+ 	// clock is wrapper around time to allow for less flaky testing
+ 	clock clock.Clock
+ 
+-	// used to lock the observedRecord
+-	observedRecordLock sync.Mutex
++	// used to lock the observedRecord and the observedTime
++	observedRecordLock sync.RWMutex
+ 
+ 	metrics leaderMetricsAdapter
+ }
+@@ -372,7 +372,11 @@ func (le *LeaderElector) tryCoordinatedRenew(ctx context.Context) bool {
+ 		le.observedRawRecord = oldLeaderElectionRawRecord
+ 	}
+ 
+-	hasExpired := le.observedTime.Add(time.Second * time.Duration(oldLeaderElectionRecord.LeaseDurationSeconds)).Before(now.Time)
++	le.observedRecordLock.RLock()
++	obsTime := le.observedTime
++	le.observedRecordLock.RUnlock()
++
++	hasExpired := obsTime.Add(time.Second * time.Duration(oldLeaderElectionRecord.LeaseDurationSeconds)).Before(now.Time)
+ 	if hasExpired {
+ 		logger.Info("Lease has expired", "lock", le.config.Lock.Describe())
+ 		return false
+@@ -512,7 +516,12 @@ func (le *LeaderElector) Check(maxTolerableExpiredLease time.Duration) error {
+ 	// If we are more than timeout seconds after the lease duration that is past the timeout
+ 	// on the lease renew. Time to start reporting ourselves as unhealthy. We should have
+ 	// died but conditions like deadlock can prevent this. (See #70819)
+-	if le.clock.Since(le.observedTime) > le.config.LeaseDuration+maxTolerableExpiredLease {
++	le.observedRecordLock.RLock()
++	lastObservation := le.observedTime
++	leaseDuration := le.config.LeaseDuration
++	le.observedRecordLock.RUnlock()
++
++	if le.clock.Since(lastObservation) > leaseDuration+maxTolerableExpiredLease {
+ 		return fmt.Errorf("failed election to renew leadership on lease %s", le.config.Name)
+ 	}
+ 
+@@ -520,7 +529,11 @@ func (le *LeaderElector) Check(maxTolerableExpiredLease time.Duration) error {
+ }
+ 
+ func (le *LeaderElector) isLeaseValid(now time.Time) bool {
+-	return le.observedTime.Add(time.Second * time.Duration(le.getObservedRecord().LeaseDurationSeconds)).After(now)
++	// Lock to safely read both the time and the record
++	le.observedRecordLock.RLock()
++	defer le.observedRecordLock.RUnlock()
++
++	return le.observedTime.Add(time.Second * time.Duration(le.observedRecord.LeaseDurationSeconds)).After(now)
+ }
+ 
+ // setObservedRecord will set a new observedRecord and update observedTime to the current time.
+@@ -536,8 +549,8 @@ func (le *LeaderElector) setObservedRecord(observedRecord *rl.LeaderElectionReco
+ // getObservedRecord returns observersRecord.
+ // Protect critical sections with lock.
+ func (le *LeaderElector) getObservedRecord() rl.LeaderElectionRecord {
+-	le.observedRecordLock.Lock()
+-	defer le.observedRecordLock.Unlock()
++	le.observedRecordLock.RLock()
++	defer le.observedRecordLock.RUnlock()
+ 
+ 	return le.observedRecord
+ }
+diff --git a/staging/src/k8s.io/client-go/tools/leaderelection/leaderelection_test.go b/staging/src/k8s.io/client-go/tools/leaderelection/leaderelection_test.go
+index 6762a32d17cd5..773cd97289043 100644
+--- a/staging/src/k8s.io/client-go/tools/leaderelection/leaderelection_test.go
++++ b/staging/src/k8s.io/client-go/tools/leaderelection/leaderelection_test.go
+@@ -1190,3 +1190,79 @@ func TestFastPathLeaderElection(t *testing.T) {
+ 		})
+ 	}
+ }
++
++func TestCheckMethodRace(t *testing.T) {
++	objectType := "leases"
++	objectMeta := metav1.ObjectMeta{Namespace: "foo", Name: "bar"}
++	recorder := record.NewFakeRecorder(100)
++	resourceLockConfig := rl.ResourceLockConfig{
++		Identity:      "baz",
++		EventRecorder: recorder,
++	}
++
++	var lockMu sync.Mutex
++	var lockObj runtime.Object
++
++	c := &fake.Clientset{}
++
++	c.AddReactor("get", objectType, func(action fakeclient.Action) (bool, runtime.Object, error) {
++		lockMu.Lock()
++		defer lockMu.Unlock()
++		if lockObj != nil {
++			return true, lockObj, nil
++		}
++		return true, nil, errors.NewNotFound(action.(fakeclient.GetAction).GetResource().GroupResource(), action.(fakeclient.GetAction).GetName())
++	})
++
++	c.AddReactor("create", objectType, func(action fakeclient.Action) (bool, runtime.Object, error) {
++		lockMu.Lock()
++		defer lockMu.Unlock()
++		lockObj = action.(fakeclient.CreateAction).GetObject()
++		return true, lockObj, nil
++	})
++
++	c.AddReactor("update", objectType, func(action fakeclient.Action) (bool, runtime.Object, error) {
++		lockMu.Lock()
++		defer lockMu.Unlock()
++		lockObj = action.(fakeclient.UpdateAction).GetObject()
++		return true, lockObj, nil
++	})
++
++	lock := &rl.LeaseLock{
++		LeaseMeta:  objectMeta,
++		LockConfig: resourceLockConfig,
++		Client:     c.CoordinationV1(),
++	}
++
++	// aggressive timing to provoke the race
++	lec := LeaderElectionConfig{
++		Lock:          lock,
++		LeaseDuration: 2 * time.Second,
++		RenewDeadline: 1 * time.Second,
++		RetryPeriod:   5 * time.Millisecond,
++		Callbacks: LeaderCallbacks{
++			OnNewLeader:      func(identity string) {},
++			OnStartedLeading: func(context.Context) {},
++			OnStoppedLeading: func() {},
++		},
++	}
++
++	le, err := NewLeaderElector(lec)
++	if err != nil {
++		t.Fatalf("Failed to create leader elector: %v", err)
++	}
++
++	ctx, cancel := context.WithCancel(context.Background())
++	defer cancel()
++
++	go le.Run(ctx)
++
++	start := time.Now()
++	for time.Since(start) < 2*time.Second {
++		// If Check() does not lock observedRecordLock, this read will race with the
++		// write in le.Run()'s setObservedRecord.
++		_ = le.Check(time.Second)
++
++		time.Sleep(10 * time.Millisecond)
++	}
++}

@@ -1,0 +1,68 @@
+diff --git a/pkg/ddl/executor.go b/pkg/ddl/executor.go
+index 340e7830f91e7..9126cb51427df 100644
+--- a/pkg/ddl/executor.go
++++ b/pkg/ddl/executor.go
+@@ -6768,7 +6768,7 @@ func (e *executor) DoDDLJobWrapper(ctx sessionctx.Context, jobW *JobWrapper) (re
+ 	failpoint.InjectCall("waitJobSubmitted")
+ 
+ 	sessVars := ctx.GetSessionVars()
+-	sessVars.StmtCtx.IsDDLJobInQueue = true
++	sessVars.StmtCtx.IsDDLJobInQueue.Store(true)
+ 
+ 	ddlAction := job.Type
+ 	if result.merged {
+diff --git a/pkg/domain/infosync/info.go b/pkg/domain/infosync/info.go
+index cdf2aae896e0f..30b25d0aff8ef 100644
+--- a/pkg/domain/infosync/info.go
++++ b/pkg/domain/infosync/info.go
+@@ -627,7 +627,7 @@ func (is *InfoSyncer) ReportMinStartTS(store kv.Storage, session *concurrency.Se
+ 	logutil.BgLogger().Debug("ReportMinStartTS", zap.Uint64("initial minStartTS", minStartTS),
+ 		zap.Uint64("StartTSLowerLimit", startTSLowerLimit))
+ 	for _, info := range pl {
+-		if info.StmtCtx != nil && info.StmtCtx.IsDDLJobInQueue {
++		if info.StmtCtx != nil && info.StmtCtx.IsDDLJobInQueue.Load() {
+ 			// Ignore DDL sessions.
+ 			continue
+ 		}
+diff --git a/pkg/executor/ddl.go b/pkg/executor/ddl.go
+index 2554798fd6af3..424c2158ded11 100644
+--- a/pkg/executor/ddl.go
++++ b/pkg/executor/ddl.go
+@@ -153,7 +153,7 @@ func (e *DDLExec) Next(ctx context.Context, _ *chunk.Chunk) (err error) {
+ 	}
+ 
+ 	defer func() {
+-		e.Ctx().GetSessionVars().StmtCtx.IsDDLJobInQueue = false
++		e.Ctx().GetSessionVars().StmtCtx.IsDDLJobInQueue.Store(false)
+ 		e.Ctx().GetSessionVars().StmtCtx.DDLJobID = 0
+ 	}()
+ 
+@@ -231,8 +231,8 @@ func (e *DDLExec) Next(ctx context.Context, _ *chunk.Chunk) (err error) {
+ 	if err != nil {
+ 		// If the owner return ErrTableNotExists error when running this DDL, it may be caused by schema changed,
+ 		// otherwise, ErrTableNotExists can be returned before putting this DDL job to the job queue.
+-		if (e.Ctx().GetSessionVars().StmtCtx.IsDDLJobInQueue && infoschema.ErrTableNotExists.Equal(err)) ||
+-			!e.Ctx().GetSessionVars().StmtCtx.IsDDLJobInQueue {
++		isDDLJobInQueue := e.Ctx().GetSessionVars().StmtCtx.IsDDLJobInQueue.Load()
++		if (isDDLJobInQueue && infoschema.ErrTableNotExists.Equal(err)) || !isDDLJobInQueue {
+ 			return e.toErr(err)
+ 		}
+ 		return err
+diff --git a/pkg/sessionctx/stmtctx/stmtctx.go b/pkg/sessionctx/stmtctx/stmtctx.go
+index 6f669b708c3a9..165f17e394357 100644
+--- a/pkg/sessionctx/stmtctx/stmtctx.go
++++ b/pkg/sessionctx/stmtctx/stmtctx.go
+@@ -249,8 +249,11 @@ type StatementContext struct {
+ 	hint.StmtHints
+ 
+ 	// IsDDLJobInQueue is used to mark whether the DDL job is put into the queue.
+-	// If IsDDLJobInQueue is true, it means the DDL job is in the queue of storage, and it can be handled by the DDL worker.
+-	IsDDLJobInQueue        bool
++	// If IsDDLJobInQueue is true, it means the DDL job is in the queue of storage,
++	// and it can be handled by the DDL worker.
++	// we will use this field to skip connections which are doing DDL when reporting
++	// the min start TS to PD.
++	IsDDLJobInQueue        atomic.Bool
+ 	DDLJobID               int64
+ 	InInsertStmt           bool
+ 	InUpdateStmt           bool

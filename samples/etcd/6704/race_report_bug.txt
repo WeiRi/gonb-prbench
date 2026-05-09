@@ -1,0 +1,38 @@
+WARNING: DATA RACE
+Write at 0x00c000014258 by goroutine 8:
+  ase/etcd-6704.(*watcherGroup).broadcast()
+      /work/watcher_group.go:29 +0x44
+  ase/etcd-6704.TestRace_PR6704_GroupRevUnlocked.func1()
+      /work/verified_test.go:25 +0xa9
+  ase/etcd-6704.TestRace_PR6704_GroupRevUnlocked.gowrap1()
+      /work/verified_test.go:27 +0x41
+
+Previous read at 0x00c000014258 by goroutine 13:
+  ase/etcd-6704.(*watcherGroups).maybeJoinWatcherSingle()
+      /work/watcher_group.go:48 +0x12f
+  ase/etcd-6704.TestRace_PR6704_GroupRevUnlocked.func2()
+      /work/verified_test.go:31 +0x130
+  ase/etcd-6704.TestRace_PR6704_GroupRevUnlocked.gowrap2()
+      /work/verified_test.go:36 +0x41
+
+Goroutine 8 (running) created at:
+  ase/etcd-6704.TestRace_PR6704_GroupRevUnlocked()
+      /work/verified_test.go:22 +0x2f1
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 13 (finished) created at:
+  ase/etcd-6704.TestRace_PR6704_GroupRevUnlocked()
+      /work/verified_test.go:28 +0x1ab
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+    testing.go:1398: race detected during execution of test
+--- FAIL: TestRace_PR6704_GroupRevUnlocked (0.02s)
+FAIL
+FAIL	ase/etcd-6704	0.037s
+FAIL

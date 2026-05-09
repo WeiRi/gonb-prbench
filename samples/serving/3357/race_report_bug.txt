@@ -1,0 +1,200 @@
+WARNING: DATA RACE
+Read at 0x00c000014228 by goroutine 11:
+  ase/serving-3357.TestRace_3357.func1()
+      /work/verified_test.go:33 +0x9b
+
+Previous write at 0x00c000014228 by goroutine 8:
+  ase/serving-3357.(*raceLogger).Infof()
+      /work/verified_test.go:14 +0x3a
+  ase/serving-3357.NewBase.func1()
+      /work/reconciler.go:30 +0x8b
+
+Goroutine 11 (running) created at:
+  ase/serving-3357.TestRace_3357()
+      /work/verified_test.go:30 +0xe7
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 8 (running) created at:
+  ase/serving-3357.NewBase()
+      /work/reconciler.go:23 +0x13c
+  ase/serving-3357.TestRace_3357()
+      /work/verified_test.go:23 +0x9c
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c000014228 by goroutine 11:
+  ase/serving-3357.TestRace_3357.func1()
+      /work/verified_test.go:34 +0xa5
+
+Previous write at 0x00c000014228 by goroutine 8:
+  ase/serving-3357.(*raceLogger).Infof()
+      /work/verified_test.go:14 +0x3a
+  ase/serving-3357.NewBase.func1()
+      /work/reconciler.go:30 +0x8b
+
+Goroutine 11 (running) created at:
+  ase/serving-3357.TestRace_3357()
+      /work/verified_test.go:30 +0xe7
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 8 (running) created at:
+  ase/serving-3357.NewBase()
+      /work/reconciler.go:23 +0x13c
+  ase/serving-3357.TestRace_3357()
+      /work/verified_test.go:23 +0x9c
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c000014228 by goroutine 9:
+  ase/serving-3357.TestRace_3357.func1()
+      /work/verified_test.go:33 +0x9b
+
+Previous write at 0x00c000014228 by goroutine 11:
+  ase/serving-3357.TestRace_3357.func1()
+      /work/verified_test.go:34 +0xb7
+
+Goroutine 9 (running) created at:
+  ase/serving-3357.TestRace_3357()
+      /work/verified_test.go:30 +0xe7
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 11 (finished) created at:
+  ase/serving-3357.TestRace_3357()
+      /work/verified_test.go:30 +0xe7
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c000014228 by goroutine 9:
+  ase/serving-3357.TestRace_3357.func1()
+      /work/verified_test.go:34 +0xa5
+
+Previous write at 0x00c000014228 by goroutine 12:
+  ase/serving-3357.TestRace_3357.func1()
+      /work/verified_test.go:34 +0xb7
+
+Goroutine 9 (running) created at:
+  ase/serving-3357.TestRace_3357()
+      /work/verified_test.go:30 +0xe7
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 12 (running) created at:
+  ase/serving-3357.TestRace_3357()
+      /work/verified_test.go:30 +0xe7
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c000014228 by goroutine 8:
+  ase/serving-3357.(*raceLogger).Infof()
+      /work/verified_test.go:14 +0x28
+  ase/serving-3357.NewBase.func1()
+      /work/reconciler.go:30 +0x8b
+
+Previous write at 0x00c000014228 by goroutine 9:
+  ase/serving-3357.TestRace_3357.func1()
+      /work/verified_test.go:34 +0xb7
+
+Goroutine 8 (running) created at:
+  ase/serving-3357.NewBase()
+      /work/reconciler.go:23 +0x13c
+  ase/serving-3357.TestRace_3357()
+      /work/verified_test.go:23 +0x9c
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 9 (running) created at:
+  ase/serving-3357.TestRace_3357()
+      /work/verified_test.go:30 +0xe7
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c000014228 by goroutine 10:
+  ase/serving-3357.TestRace_3357.func1()
+      /work/verified_test.go:34 +0xb7
+
+Previous write at 0x00c000014228 by goroutine 8:
+  ase/serving-3357.(*raceLogger).Infof()
+      /work/verified_test.go:14 +0x3a
+  ase/serving-3357.NewBase.func1()
+      /work/reconciler.go:30 +0x8b
+
+Goroutine 10 (running) created at:
+  ase/serving-3357.TestRace_3357()
+      /work/verified_test.go:30 +0xe7
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 8 (running) created at:
+  ase/serving-3357.NewBase()
+      /work/reconciler.go:23 +0x13c
+  ase/serving-3357.TestRace_3357()
+      /work/verified_test.go:23 +0x9c
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c000196008 by goroutine 17:
+  ase/serving-3357.TestRace_3357.func1()
+      /work/verified_test.go:34 +0xb7
+
+Previous write at 0x00c000196008 by goroutine 16:
+  ase/serving-3357.TestRace_3357.func1()
+      /work/verified_test.go:34 +0xb7
+
+Goroutine 17 (running) created at:
+  ase/serving-3357.TestRace_3357()
+      /work/verified_test.go:30 +0xe7
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 16 (running) created at:
+  ase/serving-3357.TestRace_3357()
+      /work/verified_test.go:30 +0xe7
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+--- FAIL: TestRace_3357 (0.11s)
+    testing.go:1398: race detected during execution of test
+FAIL
