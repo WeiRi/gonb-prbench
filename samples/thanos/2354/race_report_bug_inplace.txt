@@ -1,0 +1,972 @@
+go: finding k8s.io/utils v0.0.0-20191114200735-6ca3b61696b6
+go: finding rsc.io/binaryregexp v0.2.0
+go: finding sigs.k8s.io/yaml v1.1.0
+==================
+WARNING: DATA RACE
+Read at 0x00c000a4f860 by goroutine 122:
+  runtime.mapaccess1()
+      /usr/local/go/src/runtime/map.go:394 +0x0
+  github.com/thanos-io/thanos/pkg/block.(*DeduplicateFilter).filterForResolution()
+      /ws/pkg/block/fetcher.go:518 +0x317
+  github.com/thanos-io/thanos/pkg/block.(*DeduplicateFilter).Filter.func1()
+      /ws/pkg/block/fetcher.go:487 +0x22f
+
+Previous write at 0x00c000a4f860 by goroutine 9:
+  runtime.mapdelete()
+      /usr/local/go/src/runtime/map.go:689 +0x0
+  github.com/thanos-io/thanos/pkg/block.(*DeduplicateFilter).filterForResolution()
+      /ws/pkg/block/fetcher.go:522 +0x41c
+  github.com/thanos-io/thanos/pkg/block.(*DeduplicateFilter).Filter.func1()
+      /ws/pkg/block/fetcher.go:487 +0x22f
+
+Goroutine 122 (running) created at:
+  github.com/thanos-io/thanos/pkg/block.(*DeduplicateFilter).Filter()
+      /ws/pkg/block/fetcher.go:485 +0x3c9
+  github.com/thanos-io/thanos/pkg/block.TestDeduplicateFilter_Filter.func1()
+      /ws/pkg/block/fetcher_test.go:868 +0x400
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:909 +0x199
+
+Goroutine 9 (finished) created at:
+  github.com/thanos-io/thanos/pkg/block.(*DeduplicateFilter).Filter()
+      /ws/pkg/block/fetcher.go:485 +0x3c9
+  github.com/thanos-io/thanos/pkg/block.TestDeduplicateFilter_Filter.func1()
+      /ws/pkg/block/fetcher_test.go:868 +0x400
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:909 +0x199
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c0000e7c80 by goroutine 122:
+  github.com/thanos-io/thanos/pkg/block.(*DeduplicateFilter).filterForResolution()
+      /ws/pkg/block/fetcher.go:519 +0x46c
+  github.com/thanos-io/thanos/pkg/block.(*DeduplicateFilter).Filter.func1()
+      /ws/pkg/block/fetcher.go:487 +0x22f
+
+Previous write at 0x00c0000e7c80 by goroutine 9:
+  github.com/thanos-io/thanos/pkg/block.(*DeduplicateFilter).filterForResolution()
+      /ws/pkg/block/fetcher.go:519 +0x4e3
+  github.com/thanos-io/thanos/pkg/block.(*DeduplicateFilter).Filter.func1()
+      /ws/pkg/block/fetcher.go:487 +0x22f
+
+Goroutine 122 (running) created at:
+  github.com/thanos-io/thanos/pkg/block.(*DeduplicateFilter).Filter()
+      /ws/pkg/block/fetcher.go:485 +0x3c9
+  github.com/thanos-io/thanos/pkg/block.TestDeduplicateFilter_Filter.func1()
+      /ws/pkg/block/fetcher_test.go:868 +0x400
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:909 +0x199
+
+Goroutine 9 (finished) created at:
+  github.com/thanos-io/thanos/pkg/block.(*DeduplicateFilter).Filter()
+      /ws/pkg/block/fetcher.go:485 +0x3c9
+  github.com/thanos-io/thanos/pkg/block.TestDeduplicateFilter_Filter.func1()
+      /ws/pkg/block/fetcher_test.go:868 +0x400
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:909 +0x199
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c000175190 by goroutine 122:
+  runtime.growslice()
+      /usr/local/go/src/runtime/slice.go:76 +0x0
+  github.com/thanos-io/thanos/pkg/block.(*DeduplicateFilter).filterForResolution()
+      /ws/pkg/block/fetcher.go:519 +0x552
+  github.com/thanos-io/thanos/pkg/block.(*DeduplicateFilter).Filter.func1()
+      /ws/pkg/block/fetcher.go:487 +0x22f
+
+Previous write at 0x00c000175190 by goroutine 9:
+  github.com/thanos-io/thanos/pkg/block.(*DeduplicateFilter).filterForResolution()
+      /ws/pkg/block/fetcher.go:519 +0x4c2
+  github.com/thanos-io/thanos/pkg/block.(*DeduplicateFilter).Filter.func1()
+      /ws/pkg/block/fetcher.go:487 +0x22f
+
+Goroutine 122 (running) created at:
+  github.com/thanos-io/thanos/pkg/block.(*DeduplicateFilter).Filter()
+      /ws/pkg/block/fetcher.go:485 +0x3c9
+  github.com/thanos-io/thanos/pkg/block.TestDeduplicateFilter_Filter.func1()
+      /ws/pkg/block/fetcher_test.go:868 +0x400
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:909 +0x199
+
+Goroutine 9 (finished) created at:
+  github.com/thanos-io/thanos/pkg/block.(*DeduplicateFilter).Filter()
+      /ws/pkg/block/fetcher.go:485 +0x3c9
+  github.com/thanos-io/thanos/pkg/block.TestDeduplicateFilter_Filter.func1()
+      /ws/pkg/block/fetcher_test.go:868 +0x400
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:909 +0x199
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c0000e7cd8 by goroutine 122:
+  github.com/thanos-io/thanos/pkg/extprom.(*TxGaugeVec).WithLabelValues()
+      /ws/pkg/extprom/tx_gauge.go:94 +0x47
+  github.com/thanos-io/thanos/pkg/block.(*DeduplicateFilter).filterForResolution()
+      /ws/pkg/block/fetcher.go:521 +0x3d1
+  github.com/thanos-io/thanos/pkg/block.(*DeduplicateFilter).Filter.func1()
+      /ws/pkg/block/fetcher.go:487 +0x22f
+
+Previous write at 0x00c0000e7cd8 by goroutine 9:
+  github.com/thanos-io/thanos/pkg/extprom.(*TxGaugeVec).WithLabelValues()
+      /ws/pkg/extprom/tx_gauge.go:49 +0x101
+  github.com/thanos-io/thanos/pkg/block.(*DeduplicateFilter).filterForResolution()
+      /ws/pkg/block/fetcher.go:521 +0x3d1
+  github.com/thanos-io/thanos/pkg/block.(*DeduplicateFilter).Filter.func1()
+      /ws/pkg/block/fetcher.go:487 +0x22f
+
+Goroutine 122 (running) created at:
+  github.com/thanos-io/thanos/pkg/block.(*DeduplicateFilter).Filter()
+      /ws/pkg/block/fetcher.go:485 +0x3c9
+  github.com/thanos-io/thanos/pkg/block.TestDeduplicateFilter_Filter.func1()
+      /ws/pkg/block/fetcher_test.go:868 +0x400
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:909 +0x199
+
+Goroutine 9 (finished) created at:
+  github.com/thanos-io/thanos/pkg/block.(*DeduplicateFilter).Filter()
+      /ws/pkg/block/fetcher.go:485 +0x3c9
+  github.com/thanos-io/thanos/pkg/block.TestDeduplicateFilter_Filter.func1()
+      /ws/pkg/block/fetcher_test.go:868 +0x400
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:909 +0x199
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c000170208 by goroutine 122:
+  github.com/prometheus/client_golang/prometheus.(*GaugeVec).WithLabelValues()
+      /go/pkg/mod/github.com/prometheus/client_golang@v1.5.0/prometheus/gauge.go:183 +0x3e
+  github.com/thanos-io/thanos/pkg/extprom.(*TxGaugeVec).WithLabelValues()
+      /ws/pkg/extprom/tx_gauge.go:97 +0x91
+  github.com/thanos-io/thanos/pkg/block.(*DeduplicateFilter).filterForResolution()
+      /ws/pkg/block/fetcher.go:521 +0x3d1
+  github.com/thanos-io/thanos/pkg/block.(*DeduplicateFilter).Filter.func1()
+      /ws/pkg/block/fetcher.go:487 +0x22f
+
+Previous write at 0x00c000170208 by goroutine 9:
+  github.com/prometheus/client_golang/prometheus.NewGaugeVec()
+      /go/pkg/mod/github.com/prometheus/client_golang@v1.5.0/prometheus/gauge.go:148 +0x361
+  github.com/prometheus/client_golang/prometheus/promauto.Factory.NewGaugeVec()
+      /go/pkg/mod/github.com/prometheus/client_golang@v1.5.0/prometheus/promauto/auto.go:304 +0x9d
+  github.com/thanos-io/thanos/pkg/extprom.NewTxGaugeVec.func1()
+      /ws/pkg/extprom/tx_gauge.go:31 +0x126
+  github.com/thanos-io/thanos/pkg/extprom.(*TxGaugeVec).WithLabelValues()
+      /ws/pkg/extprom/tx_gauge.go:49 +0xea
+  github.com/thanos-io/thanos/pkg/block.(*DeduplicateFilter).filterForResolution()
+      /ws/pkg/block/fetcher.go:521 +0x3d1
+  github.com/thanos-io/thanos/pkg/block.(*DeduplicateFilter).Filter.func1()
+      /ws/pkg/block/fetcher.go:487 +0x22f
+
+Goroutine 122 (running) created at:
+  github.com/thanos-io/thanos/pkg/block.(*DeduplicateFilter).Filter()
+      /ws/pkg/block/fetcher.go:485 +0x3c9
+  github.com/thanos-io/thanos/pkg/block.TestDeduplicateFilter_Filter.func1()
+      /ws/pkg/block/fetcher_test.go:868 +0x400
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:909 +0x199
+
+Goroutine 9 (finished) created at:
+  github.com/thanos-io/thanos/pkg/block.(*DeduplicateFilter).Filter()
+      /ws/pkg/block/fetcher.go:485 +0x3c9
+  github.com/thanos-io/thanos/pkg/block.TestDeduplicateFilter_Filter.func1()
+      /ws/pkg/block/fetcher_test.go:868 +0x400
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:909 +0x199
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c000781d10 by goroutine 122:
+  github.com/prometheus/client_golang/prometheus.(*metricVec).hashLabelValues()
+      /go/pkg/mod/github.com/prometheus/client_golang@v1.5.0/prometheus/vec.go:158 +0x52
+  github.com/prometheus/client_golang/prometheus.(*metricVec).getMetricWithLabelValues()
+      /go/pkg/mod/github.com/prometheus/client_golang@v1.5.0/prometheus/vec.go:140 +0x77
+  github.com/prometheus/client_golang/prometheus.(*GaugeVec).WithLabelValues()
+      /go/pkg/mod/github.com/prometheus/client_golang@v1.5.0/prometheus/gauge.go:183 +0x73
+  github.com/thanos-io/thanos/pkg/extprom.(*TxGaugeVec).WithLabelValues()
+      /ws/pkg/extprom/tx_gauge.go:97 +0x91
+  github.com/thanos-io/thanos/pkg/block.(*DeduplicateFilter).filterForResolution()
+      /ws/pkg/block/fetcher.go:521 +0x3d1
+  github.com/thanos-io/thanos/pkg/block.(*DeduplicateFilter).Filter.func1()
+      /ws/pkg/block/fetcher.go:487 +0x22f
+
+Previous write at 0x00c000781d10 by goroutine 9:
+  github.com/prometheus/client_golang/prometheus.NewGaugeVec()
+      /go/pkg/mod/github.com/prometheus/client_golang@v1.5.0/prometheus/vec.go:47 +0x198
+  github.com/prometheus/client_golang/prometheus/promauto.Factory.NewGaugeVec()
+      /go/pkg/mod/github.com/prometheus/client_golang@v1.5.0/prometheus/promauto/auto.go:304 +0x9d
+  github.com/thanos-io/thanos/pkg/extprom.NewTxGaugeVec.func1()
+      /ws/pkg/extprom/tx_gauge.go:31 +0x126
+  github.com/thanos-io/thanos/pkg/extprom.(*TxGaugeVec).WithLabelValues()
+      /ws/pkg/extprom/tx_gauge.go:49 +0xea
+  github.com/thanos-io/thanos/pkg/block.(*DeduplicateFilter).filterForResolution()
+      /ws/pkg/block/fetcher.go:521 +0x3d1
+  github.com/thanos-io/thanos/pkg/block.(*DeduplicateFilter).Filter.func1()
+      /ws/pkg/block/fetcher.go:487 +0x22f
+
+Goroutine 122 (running) created at:
+  github.com/thanos-io/thanos/pkg/block.(*DeduplicateFilter).Filter()
+      /ws/pkg/block/fetcher.go:485 +0x3c9
+  github.com/thanos-io/thanos/pkg/block.TestDeduplicateFilter_Filter.func1()
+      /ws/pkg/block/fetcher_test.go:868 +0x400
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:909 +0x199
+
+Goroutine 9 (finished) created at:
+  github.com/thanos-io/thanos/pkg/block.(*DeduplicateFilter).Filter()
+      /ws/pkg/block/fetcher.go:485 +0x3c9
+  github.com/thanos-io/thanos/pkg/block.TestDeduplicateFilter_Filter.func1()
+      /ws/pkg/block/fetcher_test.go:868 +0x400
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:909 +0x199
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c000781d60 by goroutine 122:
+  github.com/prometheus/client_golang/prometheus.(*metricVec).hashLabelValues()
+      /go/pkg/mod/github.com/prometheus/client_golang@v1.5.0/prometheus/vec.go:158 +0x74
+  github.com/prometheus/client_golang/prometheus.(*metricVec).getMetricWithLabelValues()
+      /go/pkg/mod/github.com/prometheus/client_golang@v1.5.0/prometheus/vec.go:140 +0x77
+  github.com/prometheus/client_golang/prometheus.(*GaugeVec).WithLabelValues()
+      /go/pkg/mod/github.com/prometheus/client_golang@v1.5.0/prometheus/gauge.go:183 +0x73
+  github.com/thanos-io/thanos/pkg/extprom.(*TxGaugeVec).WithLabelValues()
+      /ws/pkg/extprom/tx_gauge.go:97 +0x91
+  github.com/thanos-io/thanos/pkg/block.(*DeduplicateFilter).filterForResolution()
+      /ws/pkg/block/fetcher.go:521 +0x3d1
+  github.com/thanos-io/thanos/pkg/block.(*DeduplicateFilter).Filter.func1()
+      /ws/pkg/block/fetcher.go:487 +0x22f
+
+Previous write at 0x00c000781d60 by goroutine 9:
+  github.com/prometheus/client_golang/prometheus.NewGaugeVec()
+      /go/pkg/mod/github.com/prometheus/client_golang@v1.5.0/prometheus/vec.go:44 +0x1e7
+  github.com/prometheus/client_golang/prometheus/promauto.Factory.NewGaugeVec()
+      /go/pkg/mod/github.com/prometheus/client_golang@v1.5.0/prometheus/promauto/auto.go:304 +0x9d
+  github.com/thanos-io/thanos/pkg/extprom.NewTxGaugeVec.func1()
+      /ws/pkg/extprom/tx_gauge.go:31 +0x126
+  github.com/thanos-io/thanos/pkg/extprom.(*TxGaugeVec).WithLabelValues()
+      /ws/pkg/extprom/tx_gauge.go:49 +0xea
+  github.com/thanos-io/thanos/pkg/block.(*DeduplicateFilter).filterForResolution()
+      /ws/pkg/block/fetcher.go:521 +0x3d1
+  github.com/thanos-io/thanos/pkg/block.(*DeduplicateFilter).Filter.func1()
+      /ws/pkg/block/fetcher.go:487 +0x22f
+
+Goroutine 122 (running) created at:
+  github.com/thanos-io/thanos/pkg/block.(*DeduplicateFilter).Filter()
+      /ws/pkg/block/fetcher.go:485 +0x3c9
+  github.com/thanos-io/thanos/pkg/block.TestDeduplicateFilter_Filter.func1()
+      /ws/pkg/block/fetcher_test.go:868 +0x400
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:909 +0x199
+
+Goroutine 9 (finished) created at:
+  github.com/thanos-io/thanos/pkg/block.(*DeduplicateFilter).Filter()
+      /ws/pkg/block/fetcher.go:485 +0x3c9
+  github.com/thanos-io/thanos/pkg/block.TestDeduplicateFilter_Filter.func1()
+      /ws/pkg/block/fetcher_test.go:868 +0x400
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:909 +0x199
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c0001a55a8 by goroutine 122:
+  github.com/prometheus/client_golang/prometheus.(*metricVec).hashLabelValues()
+      /go/pkg/mod/github.com/prometheus/client_golang@v1.5.0/prometheus/vec.go:158 +0x97
+  github.com/prometheus/client_golang/prometheus.(*metricVec).getMetricWithLabelValues()
+      /go/pkg/mod/github.com/prometheus/client_golang@v1.5.0/prometheus/vec.go:140 +0x77
+  github.com/prometheus/client_golang/prometheus.(*GaugeVec).WithLabelValues()
+      /go/pkg/mod/github.com/prometheus/client_golang@v1.5.0/prometheus/gauge.go:183 +0x73
+  github.com/thanos-io/thanos/pkg/extprom.(*TxGaugeVec).WithLabelValues()
+      /ws/pkg/extprom/tx_gauge.go:97 +0x91
+  github.com/thanos-io/thanos/pkg/block.(*DeduplicateFilter).filterForResolution()
+      /ws/pkg/block/fetcher.go:521 +0x3d1
+  github.com/thanos-io/thanos/pkg/block.(*DeduplicateFilter).Filter.func1()
+      /ws/pkg/block/fetcher.go:487 +0x22f
+
+Previous write at 0x00c0001a55a8 by goroutine 9:
+  github.com/prometheus/client_golang/prometheus.NewDesc()
+      /go/pkg/mod/github.com/prometheus/client_golang@v1.5.0/prometheus/desc.go:82 +0x71
+  github.com/prometheus/client_golang/prometheus.NewGaugeVec()
+      /go/pkg/mod/github.com/prometheus/client_golang@v1.5.0/prometheus/gauge.go:141 +0xf7
+  github.com/prometheus/client_golang/prometheus/promauto.Factory.NewGaugeVec()
+      /go/pkg/mod/github.com/prometheus/client_golang@v1.5.0/prometheus/promauto/auto.go:304 +0x9d
+  github.com/thanos-io/thanos/pkg/extprom.NewTxGaugeVec.func1()
+      /ws/pkg/extprom/tx_gauge.go:31 +0x126
+  github.com/thanos-io/thanos/pkg/extprom.(*TxGaugeVec).WithLabelValues()
+      /ws/pkg/extprom/tx_gauge.go:49 +0xea
+  github.com/thanos-io/thanos/pkg/block.(*DeduplicateFilter).filterForResolution()
+      /ws/pkg/block/fetcher.go:521 +0x3d1
+  github.com/thanos-io/thanos/pkg/block.(*DeduplicateFilter).Filter.func1()
+      /ws/pkg/block/fetcher.go:487 +0x22f
+
+Goroutine 122 (running) created at:
+  github.com/thanos-io/thanos/pkg/block.(*DeduplicateFilter).Filter()
+      /ws/pkg/block/fetcher.go:485 +0x3c9
+  github.com/thanos-io/thanos/pkg/block.TestDeduplicateFilter_Filter.func1()
+      /ws/pkg/block/fetcher_test.go:868 +0x400
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:909 +0x199
+
+Goroutine 9 (finished) created at:
+  github.com/thanos-io/thanos/pkg/block.(*DeduplicateFilter).Filter()
+      /ws/pkg/block/fetcher.go:485 +0x3c9
+  github.com/thanos-io/thanos/pkg/block.TestDeduplicateFilter_Filter.func1()
+      /ws/pkg/block/fetcher_test.go:868 +0x400
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:909 +0x199
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c000781d18 by goroutine 122:
+  github.com/prometheus/client_golang/prometheus.(*metricVec).hashLabelValues()
+      /go/pkg/mod/github.com/prometheus/client_golang@v1.5.0/prometheus/vec.go:158 +0xc5
+  github.com/prometheus/client_golang/prometheus.(*metricVec).getMetricWithLabelValues()
+      /go/pkg/mod/github.com/prometheus/client_golang@v1.5.0/prometheus/vec.go:140 +0x77
+  github.com/prometheus/client_golang/prometheus.(*GaugeVec).WithLabelValues()
+      /go/pkg/mod/github.com/prometheus/client_golang@v1.5.0/prometheus/gauge.go:183 +0x73
+  github.com/thanos-io/thanos/pkg/extprom.(*TxGaugeVec).WithLabelValues()
+      /ws/pkg/extprom/tx_gauge.go:97 +0x91
+  github.com/thanos-io/thanos/pkg/block.(*DeduplicateFilter).filterForResolution()
+      /ws/pkg/block/fetcher.go:521 +0x3d1
+  github.com/thanos-io/thanos/pkg/block.(*DeduplicateFilter).Filter.func1()
+      /ws/pkg/block/fetcher.go:487 +0x22f
+
+Previous write at 0x00c000781d18 by goroutine 9:
+  github.com/prometheus/client_golang/prometheus.NewGaugeVec()
+      /go/pkg/mod/github.com/prometheus/client_golang@v1.5.0/prometheus/vec.go:47 +0x198
+  github.com/prometheus/client_golang/prometheus/promauto.Factory.NewGaugeVec()
+      /go/pkg/mod/github.com/prometheus/client_golang@v1.5.0/prometheus/promauto/auto.go:304 +0x9d
+  github.com/thanos-io/thanos/pkg/extprom.NewTxGaugeVec.func1()
+      /ws/pkg/extprom/tx_gauge.go:31 +0x126
+  github.com/thanos-io/thanos/pkg/extprom.(*TxGaugeVec).WithLabelValues()
+      /ws/pkg/extprom/tx_gauge.go:49 +0xea
+  github.com/thanos-io/thanos/pkg/block.(*DeduplicateFilter).filterForResolution()
+      /ws/pkg/block/fetcher.go:521 +0x3d1
+  github.com/thanos-io/thanos/pkg/block.(*DeduplicateFilter).Filter.func1()
+      /ws/pkg/block/fetcher.go:487 +0x22f
+
+Goroutine 122 (running) created at:
+  github.com/thanos-io/thanos/pkg/block.(*DeduplicateFilter).Filter()
+      /ws/pkg/block/fetcher.go:485 +0x3c9
+  github.com/thanos-io/thanos/pkg/block.TestDeduplicateFilter_Filter.func1()
+      /ws/pkg/block/fetcher_test.go:868 +0x400
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:909 +0x199
+
+Goroutine 9 (finished) created at:
+  github.com/thanos-io/thanos/pkg/block.(*DeduplicateFilter).Filter()
+      /ws/pkg/block/fetcher.go:485 +0x3c9
+  github.com/thanos-io/thanos/pkg/block.TestDeduplicateFilter_Filter.func1()
+      /ws/pkg/block/fetcher_test.go:868 +0x400
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:909 +0x199
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c000781d30 by goroutine 122:
+  github.com/prometheus/client_golang/prometheus.(*metricVec).hashLabelValues()
+      /go/pkg/mod/github.com/prometheus/client_golang@v1.5.0/prometheus/vec.go:172 +0x33d
+  github.com/prometheus/client_golang/prometheus.(*metricVec).getMetricWithLabelValues()
+      /go/pkg/mod/github.com/prometheus/client_golang@v1.5.0/prometheus/vec.go:140 +0x77
+  github.com/prometheus/client_golang/prometheus.(*GaugeVec).WithLabelValues()
+      /go/pkg/mod/github.com/prometheus/client_golang@v1.5.0/prometheus/gauge.go:183 +0x73
+  github.com/thanos-io/thanos/pkg/extprom.(*TxGaugeVec).WithLabelValues()
+      /ws/pkg/extprom/tx_gauge.go:97 +0x91
+  github.com/thanos-io/thanos/pkg/block.(*DeduplicateFilter).filterForResolution()
+      /ws/pkg/block/fetcher.go:521 +0x3d1
+  github.com/thanos-io/thanos/pkg/block.(*DeduplicateFilter).Filter.func1()
+      /ws/pkg/block/fetcher.go:487 +0x22f
+
+Previous write at 0x00c000781d30 by goroutine 9:
+  github.com/prometheus/client_golang/prometheus.NewGaugeVec()
+      /go/pkg/mod/github.com/prometheus/client_golang@v1.5.0/prometheus/vec.go:47 +0x198
+  github.com/prometheus/client_golang/prometheus/promauto.Factory.NewGaugeVec()
+      /go/pkg/mod/github.com/prometheus/client_golang@v1.5.0/prometheus/promauto/auto.go:304 +0x9d
+  github.com/thanos-io/thanos/pkg/extprom.NewTxGaugeVec.func1()
+      /ws/pkg/extprom/tx_gauge.go:31 +0x126
+  github.com/thanos-io/thanos/pkg/extprom.(*TxGaugeVec).WithLabelValues()
+      /ws/pkg/extprom/tx_gauge.go:49 +0xea
+  github.com/thanos-io/thanos/pkg/block.(*DeduplicateFilter).filterForResolution()
+      /ws/pkg/block/fetcher.go:521 +0x3d1
+  github.com/thanos-io/thanos/pkg/block.(*DeduplicateFilter).Filter.func1()
+      /ws/pkg/block/fetcher.go:487 +0x22f
+
+Goroutine 122 (running) created at:
+  github.com/thanos-io/thanos/pkg/block.(*DeduplicateFilter).Filter()
+      /ws/pkg/block/fetcher.go:485 +0x3c9
+  github.com/thanos-io/thanos/pkg/block.TestDeduplicateFilter_Filter.func1()
+      /ws/pkg/block/fetcher_test.go:868 +0x400
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:909 +0x199
+
+Goroutine 9 (finished) created at:
+  github.com/thanos-io/thanos/pkg/block.(*DeduplicateFilter).Filter()
+      /ws/pkg/block/fetcher.go:485 +0x3c9
+  github.com/thanos-io/thanos/pkg/block.TestDeduplicateFilter_Filter.func1()
+      /ws/pkg/block/fetcher_test.go:868 +0x400
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:909 +0x199
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c000781d38 by goroutine 122:
+  github.com/prometheus/client_golang/prometheus.(*metricVec).hashLabelValues()
+      /go/pkg/mod/github.com/prometheus/client_golang@v1.5.0/prometheus/vec.go:175 +0x17b
+  github.com/prometheus/client_golang/prometheus.(*metricVec).getMetricWithLabelValues()
+      /go/pkg/mod/github.com/prometheus/client_golang@v1.5.0/prometheus/vec.go:140 +0x77
+  github.com/prometheus/client_golang/prometheus.(*GaugeVec).WithLabelValues()
+      /go/pkg/mod/github.com/prometheus/client_golang@v1.5.0/prometheus/gauge.go:183 +0x73
+  github.com/thanos-io/thanos/pkg/extprom.(*TxGaugeVec).WithLabelValues()
+      /ws/pkg/extprom/tx_gauge.go:97 +0x91
+  github.com/thanos-io/thanos/pkg/block.(*DeduplicateFilter).filterForResolution()
+      /ws/pkg/block/fetcher.go:521 +0x3d1
+  github.com/thanos-io/thanos/pkg/block.(*DeduplicateFilter).Filter.func1()
+      /ws/pkg/block/fetcher.go:487 +0x22f
+
+Previous write at 0x00c000781d38 by goroutine 9:
+  github.com/prometheus/client_golang/prometheus.NewGaugeVec()
+      /go/pkg/mod/github.com/prometheus/client_golang@v1.5.0/prometheus/vec.go:47 +0x198
+  github.com/prometheus/client_golang/prometheus/promauto.Factory.NewGaugeVec()
+      /go/pkg/mod/github.com/prometheus/client_golang@v1.5.0/prometheus/promauto/auto.go:304 +0x9d
+  github.com/thanos-io/thanos/pkg/extprom.NewTxGaugeVec.func1()
+      /ws/pkg/extprom/tx_gauge.go:31 +0x126
+  github.com/thanos-io/thanos/pkg/extprom.(*TxGaugeVec).WithLabelValues()
+      /ws/pkg/extprom/tx_gauge.go:49 +0xea
+  github.com/thanos-io/thanos/pkg/block.(*DeduplicateFilter).filterForResolution()
+      /ws/pkg/block/fetcher.go:521 +0x3d1
+  github.com/thanos-io/thanos/pkg/block.(*DeduplicateFilter).Filter.func1()
+      /ws/pkg/block/fetcher.go:487 +0x22f
+
+Goroutine 122 (running) created at:
+  github.com/thanos-io/thanos/pkg/block.(*DeduplicateFilter).Filter()
+      /ws/pkg/block/fetcher.go:485 +0x3c9
+  github.com/thanos-io/thanos/pkg/block.TestDeduplicateFilter_Filter.func1()
+      /ws/pkg/block/fetcher_test.go:868 +0x400
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:909 +0x199
+
+Goroutine 9 (finished) created at:
+  github.com/thanos-io/thanos/pkg/block.(*DeduplicateFilter).Filter()
+      /ws/pkg/block/fetcher.go:485 +0x3c9
+  github.com/thanos-io/thanos/pkg/block.TestDeduplicateFilter_Filter.func1()
+      /ws/pkg/block/fetcher_test.go:868 +0x400
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:909 +0x199
+==================
+--- FAIL: TestDeduplicateFilter_Filter (0.02s)
+    --- FAIL: TestDeduplicateFilter_Filter/compacted_blocks_of_level_3_with_overlapping_sources_of_different_length_and_different_resolutions (0.00s)
+        testing.go:853: race detected during execution of test
+    testing.go:853: race detected during execution of test
+==================
+WARNING: DATA RACE
+Write at 0x00c00018e028 by goroutine 125:
+  github.com/thanos-io/thanos/pkg/block.(*MetaFetcher_2354).Fetch_BUG()
+      /ws/pkg/block/thanos-2354_race_test.go:36 +0x1fa
+  github.com/thanos-io/thanos/pkg/block.TestRace_2354_InPlace.func1()
+      /ws/pkg/block/thanos-2354_race_test.go:54 +0x75
+
+Previous write at 0x00c00018e028 by goroutine 124:
+  github.com/thanos-io/thanos/pkg/block.(*MetaFetcher_2354).Fetch_BUG()
+      /ws/pkg/block/thanos-2354_race_test.go:36 +0x1fa
+  github.com/thanos-io/thanos/pkg/block.TestRace_2354_InPlace.func1()
+      /ws/pkg/block/thanos-2354_race_test.go:54 +0x75
+
+Goroutine 125 (running) created at:
+  github.com/thanos-io/thanos/pkg/block.TestRace_2354_InPlace()
+      /ws/pkg/block/thanos-2354_race_test.go:51 +0x1b6
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:909 +0x199
+
+Goroutine 124 (running) created at:
+  github.com/thanos-io/thanos/pkg/block.TestRace_2354_InPlace()
+      /ws/pkg/block/thanos-2354_race_test.go:51 +0x1b6
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:909 +0x199
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c00058c600 by goroutine 76:
+  runtime.mapaccess1_faststr()
+      /usr/local/go/src/runtime/map_faststr.go:12 +0x0
+  github.com/thanos-io/thanos/pkg/block.TestRace_2354_InPlace.func2()
+      /ws/pkg/block/thanos-2354_race_test.go:25 +0xb7
+
+Previous write at 0x00c00058c600 by goroutine 151:
+  runtime.mapassign_faststr()
+      /usr/local/go/src/runtime/map_faststr.go:202 +0x0
+  github.com/thanos-io/thanos/pkg/block.(*MetaFetcher_2354).Fetch_BUG()
+      /ws/pkg/block/thanos-2354_race_test.go:33 +0x197
+  github.com/thanos-io/thanos/pkg/block.TestRace_2354_InPlace.func1()
+      /ws/pkg/block/thanos-2354_race_test.go:54 +0x75
+
+Goroutine 76 (running) created at:
+  github.com/thanos-io/thanos/pkg/block.TestRace_2354_InPlace()
+      /ws/pkg/block/thanos-2354_race_test.go:62 +0x211
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:909 +0x199
+
+Goroutine 151 (running) created at:
+  github.com/thanos-io/thanos/pkg/block.TestRace_2354_InPlace()
+      /ws/pkg/block/thanos-2354_race_test.go:51 +0x1b6
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:909 +0x199
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c0003fe090 by goroutine 173:
+  runtime.mapaccess1_faststr()
+      /usr/local/go/src/runtime/map_faststr.go:12 +0x0
+  github.com/thanos-io/thanos/pkg/block.TestRace_2354_InPlace.func2()
+      /ws/pkg/block/thanos-2354_race_test.go:25 +0xb7
+
+Previous write at 0x00c0003fe090 by goroutine 126:
+  runtime.mapassign_faststr()
+      /usr/local/go/src/runtime/map_faststr.go:202 +0x0
+  github.com/thanos-io/thanos/pkg/block.(*MetaFetcher_2354).Fetch_BUG()
+      /ws/pkg/block/thanos-2354_race_test.go:33 +0x197
+  github.com/thanos-io/thanos/pkg/block.TestRace_2354_InPlace.func1()
+      /ws/pkg/block/thanos-2354_race_test.go:54 +0x75
+
+Goroutine 173 (running) created at:
+  github.com/thanos-io/thanos/pkg/block.TestRace_2354_InPlace()
+      /ws/pkg/block/thanos-2354_race_test.go:62 +0x211
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:909 +0x199
+
+Goroutine 126 (running) created at:
+  github.com/thanos-io/thanos/pkg/block.TestRace_2354_InPlace()
+      /ws/pkg/block/thanos-2354_race_test.go:51 +0x1b6
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:909 +0x199
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c0009803f0 by goroutine 76:
+  runtime.mapaccess1_faststr()
+      /usr/local/go/src/runtime/map_faststr.go:12 +0x0
+  github.com/thanos-io/thanos/pkg/block.TestRace_2354_InPlace.func2()
+      /ws/pkg/block/thanos-2354_race_test.go:25 +0x10c
+
+Previous write at 0x00c0009803f0 by goroutine 148:
+  runtime.mapassign_faststr()
+      /usr/local/go/src/runtime/map_faststr.go:202 +0x0
+  github.com/thanos-io/thanos/pkg/block.(*MetaFetcher_2354).Fetch_BUG()
+      /ws/pkg/block/thanos-2354_race_test.go:33 +0x197
+  github.com/thanos-io/thanos/pkg/block.TestRace_2354_InPlace.func1()
+      /ws/pkg/block/thanos-2354_race_test.go:54 +0x75
+
+Goroutine 76 (running) created at:
+  github.com/thanos-io/thanos/pkg/block.TestRace_2354_InPlace()
+      /ws/pkg/block/thanos-2354_race_test.go:62 +0x211
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:909 +0x199
+
+Goroutine 148 (running) created at:
+  github.com/thanos-io/thanos/pkg/block.TestRace_2354_InPlace()
+      /ws/pkg/block/thanos-2354_race_test.go:51 +0x1b6
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:909 +0x199
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c0002fdc88 by goroutine 76:
+  github.com/thanos-io/thanos/pkg/block.TestRace_2354_InPlace.func2()
+      /ws/pkg/block/thanos-2354_race_test.go:25 +0x11a
+
+Previous write at 0x00c0002fdc88 by goroutine 148:
+  github.com/thanos-io/thanos/pkg/block.(*MetaFetcher_2354).Fetch_BUG()
+      /ws/pkg/block/thanos-2354_race_test.go:33 +0x1ac
+  github.com/thanos-io/thanos/pkg/block.TestRace_2354_InPlace.func1()
+      /ws/pkg/block/thanos-2354_race_test.go:54 +0x75
+
+Goroutine 76 (running) created at:
+  github.com/thanos-io/thanos/pkg/block.TestRace_2354_InPlace()
+      /ws/pkg/block/thanos-2354_race_test.go:62 +0x211
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:909 +0x199
+
+Goroutine 148 (running) created at:
+  github.com/thanos-io/thanos/pkg/block.TestRace_2354_InPlace()
+      /ws/pkg/block/thanos-2354_race_test.go:51 +0x1b6
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:909 +0x199
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c00049e210 by goroutine 173:
+  runtime.mapaccess1_faststr()
+      /usr/local/go/src/runtime/map_faststr.go:12 +0x0
+  github.com/thanos-io/thanos/pkg/block.TestRace_2354_InPlace.func2()
+      /ws/pkg/block/thanos-2354_race_test.go:25 +0x10c
+
+Previous write at 0x00c00049e210 by goroutine 149:
+  runtime.mapassign_faststr()
+      /usr/local/go/src/runtime/map_faststr.go:202 +0x0
+  github.com/thanos-io/thanos/pkg/block.(*MetaFetcher_2354).Fetch_BUG()
+      /ws/pkg/block/thanos-2354_race_test.go:33 +0x197
+  github.com/thanos-io/thanos/pkg/block.TestRace_2354_InPlace.func1()
+      /ws/pkg/block/thanos-2354_race_test.go:54 +0x75
+
+Goroutine 173 (running) created at:
+  github.com/thanos-io/thanos/pkg/block.TestRace_2354_InPlace()
+      /ws/pkg/block/thanos-2354_race_test.go:62 +0x211
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:909 +0x199
+
+Goroutine 149 (running) created at:
+  github.com/thanos-io/thanos/pkg/block.TestRace_2354_InPlace()
+      /ws/pkg/block/thanos-2354_race_test.go:51 +0x1b6
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:909 +0x199
+==================
+--- FAIL: TestRace_2354_InPlace (2.28s)
+    testing.go:853: race detected during execution of test
+--- FAIL: TestIgnoreDeletionMarkFilter_Filter (0.02s)
+    --- FAIL: TestIgnoreDeletionMarkFilter_Filter/gcs (0.02s)
+        testutil.go:44: [31mforeach.go:73:
+            
+             unexpected error: dialing: google: could not find default credentials. See https://developers.google.com/accounts/docs/application-default-credentials for more information.[39m
+            
+    --- FAIL: TestIgnoreDeletionMarkFilter_Filter/aws_s3 (0.00s)
+        testutil.go:44: [31mforeach.go:88:
+            
+             unexpected error: insufficient s3 test configuration information[39m
+            
+    --- FAIL: TestIgnoreDeletionMarkFilter_Filter/azure (0.00s)
+        azure.go:306: Using test Azure bucket.
+        azure.go:323: Cannot create Azure storage container:
+        testutil.go:44: [31mforeach.go:105:
+            
+             unexpected error: invalid Azure storage configuration[39m
+            
+    --- FAIL: TestIgnoreDeletionMarkFilter_Filter/swift (0.00s)
+        testutil.go:44: [31mforeach.go:118:
+            
+             unexpected error: insufficient swift test configuration information[39m
+            
+    --- FAIL: TestIgnoreDeletionMarkFilter_Filter/Tencent_cos (0.00s)
+        testutil.go:44: [31mforeach.go:131:
+            
+             unexpected error: insufficient cos configuration information[39m
+            
+    testutil.go:44: [31mforeach.go:143:
+        
+         unexpected error: aliyun oss endpoint or access_key_id or access_key_secret is not present in config file[39m
+        
+--- FAIL: TestMetaFetcher_Fetch (0.10s)
+    --- FAIL: TestMetaFetcher_Fetch/gcs (0.00s)
+        testutil.go:44: [31mforeach.go:73:
+            
+             unexpected error: dialing: google: could not find default credentials. See https://developers.google.com/accounts/docs/application-default-credentials for more information.[39m
+            
+    --- FAIL: TestMetaFetcher_Fetch/aws_s3 (0.00s)
+        testutil.go:44: [31mforeach.go:88:
+            
+             unexpected error: insufficient s3 test configuration information[39m
+            
+    --- FAIL: TestMetaFetcher_Fetch/azure (0.00s)
+        azure.go:306: Using test Azure bucket.
+        azure.go:323: Cannot create Azure storage container:
+        testutil.go:44: [31mforeach.go:105:
+            
+             unexpected error: invalid Azure storage configuration[39m
+            
+    --- FAIL: TestMetaFetcher_Fetch/swift (0.00s)
+        testutil.go:44: [31mforeach.go:118:
+            
+             unexpected error: insufficient swift test configuration information[39m
+            
+    --- FAIL: TestMetaFetcher_Fetch/Tencent_cos (0.00s)
+        testutil.go:44: [31mforeach.go:131:
+            
+             unexpected error: insufficient cos configuration information[39m
+            
+    testutil.go:44: [31mforeach.go:143:
+        
+         unexpected error: aliyun oss endpoint or access_key_id or access_key_secret is not present in config file[39m
+        
+--- FAIL: TestUpload (0.10s)
+    testutil.go:72: [31mblock_test.go:150:
+        
+        	exp: 3751
+        
+        	got: 3728[39m
+        
+--- FAIL: TestIgnoreDeletionMarkFilter_Filter (0.01s)
+    --- FAIL: TestIgnoreDeletionMarkFilter_Filter/gcs (0.00s)
+        testutil.go:44: [31mforeach.go:73:
+            
+             unexpected error: dialing: google: could not find default credentials. See https://developers.google.com/accounts/docs/application-default-credentials for more information.[39m
+            
+    --- FAIL: TestIgnoreDeletionMarkFilter_Filter/aws_s3 (0.00s)
+        testutil.go:44: [31mforeach.go:88:
+            
+             unexpected error: insufficient s3 test configuration information[39m
+            
+    --- FAIL: TestIgnoreDeletionMarkFilter_Filter/azure (0.00s)
+        azure.go:306: Using test Azure bucket.
+        azure.go:323: Cannot create Azure storage container:
+        testutil.go:44: [31mforeach.go:105:
+            
+             unexpected error: invalid Azure storage configuration[39m
+            
+    --- FAIL: TestIgnoreDeletionMarkFilter_Filter/swift (0.00s)
+        testutil.go:44: [31mforeach.go:118:
+            
+             unexpected error: insufficient swift test configuration information[39m
+            
+    --- FAIL: TestIgnoreDeletionMarkFilter_Filter/Tencent_cos (0.00s)
+        testutil.go:44: [31mforeach.go:131:
+            
+             unexpected error: insufficient cos configuration information[39m
+            
+    testutil.go:44: [31mforeach.go:143:
+        
+         unexpected error: aliyun oss endpoint or access_key_id or access_key_secret is not present in config file[39m
+        
+--- FAIL: TestMetaFetcher_Fetch (0.16s)
+    --- FAIL: TestMetaFetcher_Fetch/gcs (0.00s)
+        testutil.go:44: [31mforeach.go:73:
+            
+             unexpected error: dialing: google: could not find default credentials. See https://developers.google.com/accounts/docs/application-default-credentials for more information.[39m
+            
+    --- FAIL: TestMetaFetcher_Fetch/aws_s3 (0.00s)
+        testutil.go:44: [31mforeach.go:88:
+            
+             unexpected error: insufficient s3 test configuration information[39m
+            
+    --- FAIL: TestMetaFetcher_Fetch/azure (0.00s)
+        azure.go:306: Using test Azure bucket.
+        azure.go:323: Cannot create Azure storage container:
+        testutil.go:44: [31mforeach.go:105:
+            
+             unexpected error: invalid Azure storage configuration[39m
+            
+    --- FAIL: TestMetaFetcher_Fetch/swift (0.00s)
+        testutil.go:44: [31mforeach.go:118:
+            
+             unexpected error: insufficient swift test configuration information[39m
+            
+    --- FAIL: TestMetaFetcher_Fetch/Tencent_cos (0.00s)
+        testutil.go:44: [31mforeach.go:131:
+            
+             unexpected error: insufficient cos configuration information[39m
+            
+    testutil.go:44: [31mforeach.go:143:
+        
+         unexpected error: aliyun oss endpoint or access_key_id or access_key_secret is not present in config file[39m
+        
+--- FAIL: TestUpload (0.15s)
+    testutil.go:72: [31mblock_test.go:150:
+        
+        	exp: 3751
+        
+        	got: 3719[39m
+        
+--- FAIL: TestIgnoreDeletionMarkFilter_Filter (0.01s)
+    --- FAIL: TestIgnoreDeletionMarkFilter_Filter/gcs (0.00s)
+        testutil.go:44: [31mforeach.go:73:
+            
+             unexpected error: dialing: google: could not find default credentials. See https://developers.google.com/accounts/docs/application-default-credentials for more information.[39m
+            
+    --- FAIL: TestIgnoreDeletionMarkFilter_Filter/aws_s3 (0.00s)
+        testutil.go:44: [31mforeach.go:88:
+            
+             unexpected error: insufficient s3 test configuration information[39m
+            
+    --- FAIL: TestIgnoreDeletionMarkFilter_Filter/azure (0.00s)
+        azure.go:306: Using test Azure bucket.
+        azure.go:323: Cannot create Azure storage container:
+        testutil.go:44: [31mforeach.go:105:
+            
+             unexpected error: invalid Azure storage configuration[39m
+            
+    --- FAIL: TestIgnoreDeletionMarkFilter_Filter/swift (0.00s)
+        testutil.go:44: [31mforeach.go:118:
+            
+             unexpected error: insufficient swift test configuration information[39m
+            
+    --- FAIL: TestIgnoreDeletionMarkFilter_Filter/Tencent_cos (0.00s)
+        testutil.go:44: [31mforeach.go:131:
+            
+             unexpected error: insufficient cos configuration information[39m
+            
+    testutil.go:44: [31mforeach.go:143:
+        
+         unexpected error: aliyun oss endpoint or access_key_id or access_key_secret is not present in config file[39m
+        
+--- FAIL: TestMetaFetcher_Fetch (0.10s)
+    --- FAIL: TestMetaFetcher_Fetch/gcs (0.00s)
+        testutil.go:44: [31mforeach.go:73:
+            
+             unexpected error: dialing: google: could not find default credentials. See https://developers.google.com/accounts/docs/application-default-credentials for more information.[39m
+            
+    --- FAIL: TestMetaFetcher_Fetch/aws_s3 (0.00s)
+        testutil.go:44: [31mforeach.go:88:
+            
+             unexpected error: insufficient s3 test configuration information[39m
+            
+    --- FAIL: TestMetaFetcher_Fetch/azure (0.00s)
+        azure.go:306: Using test Azure bucket.
+        azure.go:323: Cannot create Azure storage container:
+        testutil.go:44: [31mforeach.go:105:
+            
+             unexpected error: invalid Azure storage configuration[39m
+            
+    --- FAIL: TestMetaFetcher_Fetch/swift (0.00s)
+        testutil.go:44: [31mforeach.go:118:
+            
+             unexpected error: insufficient swift test configuration information[39m
+            
+    --- FAIL: TestMetaFetcher_Fetch/Tencent_cos (0.00s)
+        testutil.go:44: [31mforeach.go:131:
+            
+             unexpected error: insufficient cos configuration information[39m
+            
+    testutil.go:44: [31mforeach.go:143:
+        
+         unexpected error: aliyun oss endpoint or access_key_id or access_key_secret is not present in config file[39m
+        
+--- FAIL: TestUpload (0.18s)
+    testutil.go:72: [31mblock_test.go:150:
+        
+        	exp: 3751
+        
+        	got: 3727[39m
+        
+--- FAIL: TestIgnoreDeletionMarkFilter_Filter (0.01s)
+    --- FAIL: TestIgnoreDeletionMarkFilter_Filter/gcs (0.00s)
+        testutil.go:44: [31mforeach.go:73:
+            
+             unexpected error: dialing: google: could not find default credentials. See https://developers.google.com/accounts/docs/application-default-credentials for more information.[39m
+            
+    --- FAIL: TestIgnoreDeletionMarkFilter_Filter/aws_s3 (0.00s)
+        testutil.go:44: [31mforeach.go:88:
+            
+             unexpected error: insufficient s3 test configuration information[39m
+            
+    --- FAIL: TestIgnoreDeletionMarkFilter_Filter/azure (0.00s)
+        azure.go:306: Using test Azure bucket.
+        azure.go:323: Cannot create Azure storage container:
+        testutil.go:44: [31mforeach.go:105:
+            
+             unexpected error: invalid Azure storage configuration[39m
+            
+    --- FAIL: TestIgnoreDeletionMarkFilter_Filter/swift (0.00s)
+        testutil.go:44: [31mforeach.go:118:
+            
+             unexpected error: insufficient swift test configuration information[39m
+            
+    --- FAIL: TestIgnoreDeletionMarkFilter_Filter/Tencent_cos (0.00s)
+        testutil.go:44: [31mforeach.go:131:
+            
+             unexpected error: insufficient cos configuration information[39m
+            
+    testutil.go:44: [31mforeach.go:143:
+        
+         unexpected error: aliyun oss endpoint or access_key_id or access_key_secret is not present in config file[39m
+        
+--- FAIL: TestMetaFetcher_Fetch (0.13s)
+    --- FAIL: TestMetaFetcher_Fetch/gcs (0.00s)
+        testutil.go:44: [31mforeach.go:73:
+            
+             unexpected error: dialing: google: could not find default credentials. See https://developers.google.com/accounts/docs/application-default-credentials for more information.[39m
+            
+    --- FAIL: TestMetaFetcher_Fetch/aws_s3 (0.00s)
+        testutil.go:44: [31mforeach.go:88:
+            
+             unexpected error: insufficient s3 test configuration information[39m
+            
+    --- FAIL: TestMetaFetcher_Fetch/azure (0.00s)
+        azure.go:306: Using test Azure bucket.
+        azure.go:323: Cannot create Azure storage container:
+        testutil.go:44: [31mforeach.go:105:
+            
+             unexpected error: invalid Azure storage configuration[39m
+            
+    --- FAIL: TestMetaFetcher_Fetch/swift (0.00s)
+        testutil.go:44: [31mforeach.go:118:
+            
+             unexpected error: insufficient swift test configuration information[39m
+            
+    --- FAIL: TestMetaFetcher_Fetch/Tencent_cos (0.00s)
+        testutil.go:44: [31mforeach.go:131:
+            
+             unexpected error: insufficient cos configuration information[39m
+            
+    testutil.go:44: [31mforeach.go:143:
+        
+         unexpected error: aliyun oss endpoint or access_key_id or access_key_secret is not present in config file[39m
+        
+--- FAIL: TestUpload (0.15s)
+    testutil.go:72: [31mblock_test.go:150:
+        
+        	exp: 3751
+        
+        	got: 3726[39m
+        
+--- FAIL: TestIgnoreDeletionMarkFilter_Filter (0.01s)
+    --- FAIL: TestIgnoreDeletionMarkFilter_Filter/gcs (0.00s)
+        testutil.go:44: [31mforeach.go:73:
+            
+             unexpected error: dialing: google: could not find default credentials. See https://developers.google.com/accounts/docs/application-default-credentials for more information.[39m
+            
+    --- FAIL: TestIgnoreDeletionMarkFilter_Filter/aws_s3 (0.00s)
+        testutil.go:44: [31mforeach.go:88:
+            
+             unexpected error: insufficient s3 test configuration information[39m
+            
+    --- FAIL: TestIgnoreDeletionMarkFilter_Filter/azure (0.00s)
+        azure.go:306: Using test Azure bucket.
+        azure.go:323: Cannot create Azure storage container:
+        testutil.go:44: [31mforeach.go:105:
+            
+             unexpected error: invalid Azure storage configuration[39m
+            
+    --- FAIL: TestIgnoreDeletionMarkFilter_Filter/swift (0.00s)
+        testutil.go:44: [31mforeach.go:118:
+            
+             unexpected error: insufficient swift test configuration information[39m
+            
+    --- FAIL: TestIgnoreDeletionMarkFilter_Filter/Tencent_cos (0.00s)
+        testutil.go:44: [31mforeach.go:131:
+            
+             unexpected error: insufficient cos configuration information[39m
+            
+    testutil.go:44: [31mforeach.go:143:
+        
+         unexpected error: aliyun oss endpoint or access_key_id or access_key_secret is not present in config file[39m
+        
+--- FAIL: TestMetaFetcher_Fetch (0.13s)
+    --- FAIL: TestMetaFetcher_Fetch/gcs (0.00s)
+        testutil.go:44: [31mforeach.go:73:
+            
+             unexpected error: dialing: google: could not find default credentials. See https://developers.google.com/accounts/docs/application-default-credentials for more information.[39m
+            
+    --- FAIL: TestMetaFetcher_Fetch/aws_s3 (0.00s)
+        testutil.go:44: [31mforeach.go:88:
+            
+             unexpected error: insufficient s3 test configuration information[39m
+            
+    --- FAIL: TestMetaFetcher_Fetch/azure (0.00s)
+        azure.go:306: Using test Azure bucket.
+        azure.go:323: Cannot create Azure storage container:
+        testutil.go:44: [31mforeach.go:105:
+            
+             unexpected error: invalid Azure storage configuration[39m
+            
+    --- FAIL: TestMetaFetcher_Fetch/swift (0.00s)
+        testutil.go:44: [31mforeach.go:118:
+            
+             unexpected error: insufficient swift test configuration information[39m
+            
+    --- FAIL: TestMetaFetcher_Fetch/Tencent_cos (0.00s)
+        testutil.go:44: [31mforeach.go:131:
+            
+             unexpected error: insufficient cos configuration information[39m
+            
+    testutil.go:44: [31mforeach.go:143:
+        
+         unexpected error: aliyun oss endpoint or access_key_id or access_key_secret is not present in config file[39m
+        
+FAIL
+FAIL	github.com/thanos-io/thanos/pkg/block	23.427s
+FAIL

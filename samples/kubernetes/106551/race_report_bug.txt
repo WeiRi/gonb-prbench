@@ -1,300 +1,76 @@
 WARNING: DATA RACE
-Read at 0x00c00057d6b0 by goroutine 54:
-  k8s.io/apimachinery/pkg/util/sets.String.List()
-      /work/staging/src/k8s.io/apimachinery/pkg/util/sets/string.go:171 +0x44
-  k8s.io/kubernetes/pkg/kubelet/config.(*PodConfig).SeenAllSources()
-      /work/pkg/kubelet/config/config.go:98 +0x9d
-  k8s.io/kubernetes/pkg/kubelet/config.TestRace106551SeenAllSources.func2()
-      /work/pkg/kubelet/config/race_106551_capture_test.go:39 +0x97
-
-Previous write at 0x00c00057d6b0 by goroutine 149:
+Write at 0x00c00057f0e0 by goroutine 55:
   runtime.mapassign_faststr()
       /usr/local/go/src/runtime/map_faststr.go:203 +0x0
   k8s.io/apimachinery/pkg/util/sets.String.Insert()
-      /work/staging/src/k8s.io/apimachinery/pkg/util/sets/string.go:51 +0x1b1
+      /work/upstream/staging/src/k8s.io/apimachinery/pkg/util/sets/string.go:51 +0x1b1
   k8s.io/kubernetes/pkg/kubelet/config.(*PodConfig).Channel()
-      /work/pkg/kubelet/config/config.go:88 +0xd3
+      /work/upstream/pkg/kubelet/config/config.go:88 +0xd3
   k8s.io/kubernetes/pkg/kubelet/config.TestRace106551SeenAllSources.func1()
-      /work/pkg/kubelet/config/race_106551_capture_test.go:33 +0x11a
+      /work/upstream/pkg/kubelet/config/kubernetes_106551_race_test.go:33 +0x11a
   k8s.io/kubernetes/pkg/kubelet/config.TestRace106551SeenAllSources.func3()
-      /work/pkg/kubelet/config/race_106551_capture_test.go:34 +0x41
+      /work/upstream/pkg/kubelet/config/kubernetes_106551_race_test.go:34 +0x41
 
-Goroutine 54 (running) created at:
-  k8s.io/kubernetes/pkg/kubelet/config.TestRace106551SeenAllSources()
-      /work/pkg/kubelet/config/race_106551_capture_test.go:35 +0x638
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1595 +0x261
-  testing.(*T).Run.func1()
-      /usr/local/go/src/testing/testing.go:1648 +0x44
-
-Goroutine 149 (finished) created at:
-  k8s.io/kubernetes/pkg/kubelet/config.TestRace106551SeenAllSources()
-      /work/pkg/kubelet/config/race_106551_capture_test.go:28 +0x7a7
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1595 +0x261
-  testing.(*T).Run.func1()
-      /usr/local/go/src/testing/testing.go:1648 +0x44
-==================
-==================
-WARNING: DATA RACE
-Write at 0x00c00057d6b0 by goroutine 55:
-  runtime.mapassign_faststr()
-      /usr/local/go/src/runtime/map_faststr.go:203 +0x0
-  k8s.io/apimachinery/pkg/util/sets.String.Insert()
-      /work/staging/src/k8s.io/apimachinery/pkg/util/sets/string.go:51 +0x1b1
-  k8s.io/kubernetes/pkg/kubelet/config.(*PodConfig).Channel()
-      /work/pkg/kubelet/config/config.go:88 +0xd3
-  k8s.io/kubernetes/pkg/kubelet/config.TestRace106551SeenAllSources.func1()
-      /work/pkg/kubelet/config/race_106551_capture_test.go:33 +0x11a
-  k8s.io/kubernetes/pkg/kubelet/config.TestRace106551SeenAllSources.func3()
-      /work/pkg/kubelet/config/race_106551_capture_test.go:34 +0x41
-
-Previous read at 0x00c00057d6b0 by goroutine 54:
-  runtime.mapiterinit()
-      /usr/local/go/src/runtime/map.go:816 +0x0
+Previous read at 0x00c00057f0e0 by goroutine 56:
   k8s.io/apimachinery/pkg/util/sets.String.List()
-      /work/staging/src/k8s.io/apimachinery/pkg/util/sets/string.go:172 +0xab
+      /work/upstream/staging/src/k8s.io/apimachinery/pkg/util/sets/string.go:171 +0x44
   k8s.io/kubernetes/pkg/kubelet/config.(*PodConfig).SeenAllSources()
-      /work/pkg/kubelet/config/config.go:98 +0x9d
+      /work/upstream/pkg/kubelet/config/config.go:98 +0x9d
   k8s.io/kubernetes/pkg/kubelet/config.TestRace106551SeenAllSources.func2()
-      /work/pkg/kubelet/config/race_106551_capture_test.go:39 +0x97
+      /work/upstream/pkg/kubelet/config/kubernetes_106551_race_test.go:39 +0x97
 
 Goroutine 55 (running) created at:
   k8s.io/kubernetes/pkg/kubelet/config.TestRace106551SeenAllSources()
-      /work/pkg/kubelet/config/race_106551_capture_test.go:28 +0x7a7
+      /work/upstream/pkg/kubelet/config/kubernetes_106551_race_test.go:28 +0x7a7
   testing.tRunner()
       /usr/local/go/src/testing/testing.go:1595 +0x261
   testing.(*T).Run.func1()
       /usr/local/go/src/testing/testing.go:1648 +0x44
 
-Goroutine 54 (finished) created at:
+Goroutine 56 (finished) created at:
   k8s.io/kubernetes/pkg/kubelet/config.TestRace106551SeenAllSources()
-      /work/pkg/kubelet/config/race_106551_capture_test.go:35 +0x638
+      /work/upstream/pkg/kubelet/config/kubernetes_106551_race_test.go:35 +0x638
   testing.tRunner()
       /usr/local/go/src/testing/testing.go:1595 +0x261
   testing.(*T).Run.func1()
       /usr/local/go/src/testing/testing.go:1648 +0x44
 ==================
-==================
 WARNING: DATA RACE
-Write at 0x00c00057d6b0 by goroutine 211:
+Write at 0x00c00057f0e0 by goroutine 85:
   runtime.mapassign_faststr()
       /usr/local/go/src/runtime/map_faststr.go:203 +0x0
   k8s.io/apimachinery/pkg/util/sets.String.Insert()
-      /work/staging/src/k8s.io/apimachinery/pkg/util/sets/string.go:51 +0x1b1
+      /work/upstream/staging/src/k8s.io/apimachinery/pkg/util/sets/string.go:51 +0x1b1
   k8s.io/kubernetes/pkg/kubelet/config.(*PodConfig).Channel()
-      /work/pkg/kubelet/config/config.go:88 +0xd3
+      /work/upstream/pkg/kubelet/config/config.go:88 +0xd3
   k8s.io/kubernetes/pkg/kubelet/config.TestRace106551SeenAllSources.func1()
-      /work/pkg/kubelet/config/race_106551_capture_test.go:33 +0x11a
+      /work/upstream/pkg/kubelet/config/kubernetes_106551_race_test.go:33 +0x11a
   k8s.io/kubernetes/pkg/kubelet/config.TestRace106551SeenAllSources.func3()
-      /work/pkg/kubelet/config/race_106551_capture_test.go:34 +0x41
+      /work/upstream/pkg/kubelet/config/kubernetes_106551_race_test.go:34 +0x41
 
-Previous read at 0x00c00057d6b0 by goroutine 208:
+Previous read at 0x00c00057f0e0 by goroutine 74:
   runtime.mapiternext()
       /usr/local/go/src/runtime/map.go:867 +0x0
   k8s.io/apimachinery/pkg/util/sets.String.List()
-      /work/staging/src/k8s.io/apimachinery/pkg/util/sets/string.go:172 +0xc7
+      /work/upstream/staging/src/k8s.io/apimachinery/pkg/util/sets/string.go:172 +0xc7
   k8s.io/kubernetes/pkg/kubelet/config.(*PodConfig).SeenAllSources()
-      /work/pkg/kubelet/config/config.go:98 +0x9d
+      /work/upstream/pkg/kubelet/config/config.go:98 +0x9d
   k8s.io/kubernetes/pkg/kubelet/config.TestRace106551SeenAllSources.func2()
-      /work/pkg/kubelet/config/race_106551_capture_test.go:39 +0x97
+      /work/upstream/pkg/kubelet/config/kubernetes_106551_race_test.go:39 +0x97
 
-Goroutine 211 (running) created at:
+Goroutine 85 (running) created at:
   k8s.io/kubernetes/pkg/kubelet/config.TestRace106551SeenAllSources()
-      /work/pkg/kubelet/config/race_106551_capture_test.go:28 +0x7a7
+      /work/upstream/pkg/kubelet/config/kubernetes_106551_race_test.go:28 +0x7a7
   testing.tRunner()
       /usr/local/go/src/testing/testing.go:1595 +0x261
   testing.(*T).Run.func1()
       /usr/local/go/src/testing/testing.go:1648 +0x44
 
-Goroutine 208 (finished) created at:
+Goroutine 74 (running) created at:
   k8s.io/kubernetes/pkg/kubelet/config.TestRace106551SeenAllSources()
-      /work/pkg/kubelet/config/race_106551_capture_test.go:35 +0x638
+      /work/upstream/pkg/kubelet/config/kubernetes_106551_race_test.go:35 +0x638
   testing.tRunner()
       /usr/local/go/src/testing/testing.go:1595 +0x261
   testing.(*T).Run.func1()
       /usr/local/go/src/testing/testing.go:1648 +0x44
 ==================
-fatal error: concurrent map iteration and map write
-
-goroutine 264 [running]:
-k8s.io/apimachinery/pkg/util/sets.String.List(0xc00057d6b0)
-	/work/staging/src/k8s.io/apimachinery/pkg/util/sets/string.go:172 +0xc8
-k8s.io/kubernetes/pkg/kubelet/config.(*PodConfig).SeenAllSources(0xc00057d680, 0xc00057d6e0)
-	/work/pkg/kubelet/config/config.go:98 +0x9e
-k8s.io/kubernetes/pkg/kubelet/config.TestRace106551SeenAllSources.func2()
-	/work/pkg/kubelet/config/race_106551_capture_test.go:39 +0x98
-created by k8s.io/kubernetes/pkg/kubelet/config.TestRace106551SeenAllSources in goroutine 31
-	/work/pkg/kubelet/config/race_106551_capture_test.go:35 +0x639
-
-goroutine 1 [chan receive]:
-testing.(*T).Run(0xc0001741a0, {0x248eba9, 0x1c}, 0x2556f18)
-	/usr/local/go/src/testing/testing.go:1649 +0x871
-testing.runTests.func1(0x0?)
-	/usr/local/go/src/testing/testing.go:2054 +0x85
-testing.tRunner(0xc0001741a0, 0xc0005cfaf8)
-	/usr/local/go/src/testing/testing.go:1595 +0x262
-testing.runTests(0x22d1340?, {0x34343a0, 0x21, 0x21}, {0x4494d5?, 0xd0?, 0x344bf60?})
-	/usr/local/go/src/testing/testing.go:2052 +0x8ae
-testing.(*M).Run(0xc0002aa8c0)
-	/usr/local/go/src/testing/testing.go:1925 +0xcd8
-main.main()
-	_testmain.go:111 +0x2be
-
-goroutine 31 [semacquire]:
-sync.runtime_Semacquire(0xc0004a3448?)
-	/usr/local/go/src/runtime/sema.go:62 +0x25
-sync.(*WaitGroup).Wait(0xc0004a3440)
-	/usr/local/go/src/sync/waitgroup.go:116 +0xa5
-k8s.io/kubernetes/pkg/kubelet/config.TestRace106551SeenAllSources(0x0?)
-	/work/pkg/kubelet/config/race_106551_capture_test.go:43 +0x8c9
-testing.tRunner(0xc000174340, 0x2556f18)
-	/usr/local/go/src/testing/testing.go:1595 +0x262
-created by testing.(*T).Run in goroutine 1
-	/usr/local/go/src/testing/testing.go:1648 +0x846
-
-goroutine 32 [chan receive]:
-k8s.io/apimachinery/pkg/watch.(*Broadcaster).loop(0xc000041180)
-	/work/staging/src/k8s.io/apimachinery/pkg/watch/mux.go:268 +0x85
-created by k8s.io/apimachinery/pkg/watch.NewLongQueueBroadcaster in goroutine 31
-	/work/staging/src/k8s.io/apimachinery/pkg/watch/mux.go:93 +0x21d
-
-goroutine 62 [runnable]:
-k8s.io/kubernetes/pkg/util/config.(*Mux).ChannelWithContext.func3()
-	/work/pkg/util/config/config.go:79
-runtime.goexit()
-	/usr/local/go/src/runtime/asm_amd64.s:1650 +0x1
-created by k8s.io/kubernetes/pkg/util/config.(*Mux).ChannelWithContext in goroutine 105
-	/work/pkg/util/config/config.go:79 +0x3d6
-
-goroutine 63 [runnable]:
-k8s.io/kubernetes/pkg/util/config.(*Mux).ChannelWithContext.func3()
-	/work/pkg/util/config/config.go:79
-runtime.goexit()
-	/usr/local/go/src/runtime/asm_amd64.s:1650 +0x1
-created by k8s.io/kubernetes/pkg/util/config.(*Mux).ChannelWithContext in goroutine 103
-	/work/pkg/util/config/config.go:79 +0x3d6
-
-goroutine 64 [runnable]:
-k8s.io/kubernetes/pkg/util/config.(*Mux).ChannelWithContext.func3()
-	/work/pkg/util/config/config.go:79
-runtime.goexit()
-	/usr/local/go/src/runtime/asm_amd64.s:1650 +0x1
-created by k8s.io/kubernetes/pkg/util/config.(*Mux).ChannelWithContext in goroutine 109
-	/work/pkg/util/config/config.go:79 +0x3d6
-
-goroutine 65 [runnable]:
-k8s.io/kubernetes/pkg/util/config.(*Mux).ChannelWithContext.func3()
-	/work/pkg/util/config/config.go:79
-runtime.goexit()
-	/usr/local/go/src/runtime/asm_amd64.s:1650 +0x1
-created by k8s.io/kubernetes/pkg/util/config.(*Mux).ChannelWithContext in goroutine 107
-	/work/pkg/util/config/config.go:79 +0x3d6
-
-goroutine 308 [runnable]:
-k8s.io/kubernetes/pkg/util/config.(*Mux).ChannelWithContext.func3()
-	/work/pkg/util/config/config.go:79
-runtime.goexit()
-	/usr/local/go/src/runtime/asm_amd64.s:1650 +0x1
-created by k8s.io/kubernetes/pkg/util/config.(*Mux).ChannelWithContext in goroutine 117
-	/work/pkg/util/config/config.go:79 +0x3d6
-
-goroutine 312 [runnable]:
-k8s.io/kubernetes/pkg/util/config.(*Mux).ChannelWithContext.func3()
-	/work/pkg/util/config/config.go:79
-runtime.goexit()
-	/usr/local/go/src/runtime/asm_amd64.s:1650 +0x1
-created by k8s.io/kubernetes/pkg/util/config.(*Mux).ChannelWithContext in goroutine 125
-	/work/pkg/util/config/config.go:79 +0x3d6
-
-goroutine 127 [runnable]:
-k8s.io/kubernetes/pkg/kubelet/config.TestRace106551SeenAllSources.func3()
-	/work/pkg/kubelet/config/race_106551_capture_test.go:28
-runtime.goexit()
-	/usr/local/go/src/runtime/asm_amd64.s:1650 +0x1
-created by k8s.io/kubernetes/pkg/kubelet/config.TestRace106551SeenAllSources in goroutine 31
-	/work/pkg/kubelet/config/race_106551_capture_test.go:28 +0x7a8
-
-goroutine 129 [runnable]:
-k8s.io/kubernetes/pkg/kubelet/config.TestRace106551SeenAllSources.func3()
-	/work/pkg/kubelet/config/race_106551_capture_test.go:28
-runtime.goexit()
-	/usr/local/go/src/runtime/asm_amd64.s:1650 +0x1
-created by k8s.io/kubernetes/pkg/kubelet/config.TestRace106551SeenAllSources in goroutine 31
-	/work/pkg/kubelet/config/race_106551_capture_test.go:28 +0x7a8
-
-goroutine 130 [runnable]:
-k8s.io/kubernetes/pkg/kubelet/config.TestRace106551SeenAllSources.func2()
-	/work/pkg/kubelet/config/race_106551_capture_test.go:35
-created by k8s.io/kubernetes/pkg/kubelet/config.TestRace106551SeenAllSources in goroutine 31
-	/work/pkg/kubelet/config/race_106551_capture_test.go:35 +0x639
-
-goroutine 131 [runnable]:
-k8s.io/kubernetes/pkg/kubelet/config.TestRace106551SeenAllSources.func3()
-	/work/pkg/kubelet/config/race_106551_capture_test.go:28
-runtime.goexit()
-	/usr/local/go/src/runtime/asm_amd64.s:1650 +0x1
-created by k8s.io/kubernetes/pkg/kubelet/config.TestRace106551SeenAllSources in goroutine 31
-	/work/pkg/kubelet/config/race_106551_capture_test.go:28 +0x7a8
-
-goroutine 132 [runnable]:
-k8s.io/kubernetes/pkg/kubelet/config.TestRace106551SeenAllSources.func2()
-	/work/pkg/kubelet/config/race_106551_capture_test.go:35
-created by k8s.io/kubernetes/pkg/kubelet/config.TestRace106551SeenAllSources in goroutine 31
-	/work/pkg/kubelet/config/race_106551_capture_test.go:35 +0x639
-
-goroutine 133 [runnable]:
-k8s.io/kubernetes/pkg/kubelet/config.TestRace106551SeenAllSources.func3()
-	/work/pkg/kubelet/config/race_106551_capture_test.go:28
-runtime.goexit()
-	/usr/local/go/src/runtime/asm_amd64.s:1650 +0x1
-created by k8s.io/kubernetes/pkg/kubelet/config.TestRace106551SeenAllSources in goroutine 31
-	/work/pkg/kubelet/config/race_106551_capture_test.go:28 +0x7a8
-
-goroutine 134 [runnable]:
-k8s.io/kubernetes/pkg/kubelet/config.TestRace106551SeenAllSources.func2()
-	/work/pkg/kubelet/config/race_106551_capture_test.go:35
-created by k8s.io/kubernetes/pkg/kubelet/config.TestRace106551SeenAllSources in goroutine 31
-	/work/pkg/kubelet/config/race_106551_capture_test.go:35 +0x639
-
-goroutine 135 [runnable]:
-k8s.io/kubernetes/pkg/kubelet/config.TestRace106551SeenAllSources.func3()
-	/work/pkg/kubelet/config/race_106551_capture_test.go:28
-runtime.goexit()
-	/usr/local/go/src/runtime/asm_amd64.s:1650 +0x1
-created by k8s.io/kubernetes/pkg/kubelet/config.TestRace106551SeenAllSources in goroutine 31
-	/work/pkg/kubelet/config/race_106551_capture_test.go:28 +0x7a8
-
-goroutine 136 [runnable]:
-k8s.io/kubernetes/pkg/kubelet/config.TestRace106551SeenAllSources.func2()
-	/work/pkg/kubelet/config/race_106551_capture_test.go:35
-created by k8s.io/kubernetes/pkg/kubelet/config.TestRace106551SeenAllSources in goroutine 31
-	/work/pkg/kubelet/config/race_106551_capture_test.go:35 +0x639
-
-goroutine 137 [runnable]:
-k8s.io/kubernetes/pkg/kubelet/config.TestRace106551SeenAllSources.func3()
-	/work/pkg/kubelet/config/race_106551_capture_test.go:28
-runtime.goexit()
-	/usr/local/go/src/runtime/asm_amd64.s:1650 +0x1
-created by k8s.io/kubernetes/pkg/kubelet/config.TestRace106551SeenAllSources in goroutine 31
-	/work/pkg/kubelet/config/race_106551_capture_test.go:28 +0x7a8
-
-goroutine 138 [runnable]:
-k8s.io/kubernetes/pkg/kubelet/config.TestRace106551SeenAllSources.func2()
-	/work/pkg/kubelet/config/race_106551_capture_test.go:35
-created by k8s.io/kubernetes/pkg/kubelet/config.TestRace106551SeenAllSources in goroutine 31
-	/work/pkg/kubelet/config/race_106551_capture_test.go:35 +0x639
-
-goroutine 139 [runnable]:
-k8s.io/kubernetes/pkg/kubelet/config.TestRace106551SeenAllSources.func3()
-	/work/pkg/kubelet/config/race_106551_capture_test.go:28
-runtime.goexit()
-	/usr/local/go/src/runtime/asm_amd64.s:1650 +0x1
-created by k8s.io/kubernetes/pkg/kubelet/config.TestRace106551SeenAllSources in goroutine 31
-	/work/pkg/kubelet/config/race_106551_capture_test.go:28 +0x7a8
-
-goroutine 140 [runnable]:
-k8s.io/kubernetes/pkg/kubelet/config.TestRace106551SeenAllSources.func2()
-	/work/pkg/kubelet/config/race_106551_capture_test.go:35
-created by k8s.io/kubernetes/pkg/kubelet/config.TestRace106551SeenAllSources in goroutine 31
-	/work/pkg/kubelet/config/race_106551_capture_test.go:35 +0x639

@@ -9,67 +9,39 @@
 | Oracle | RACE |
 | Primary diff file | `retrieval/target.go` |
 
+## Two modes
 
-## Race report excerpt
+| Mode | Dockerfile | Test | Description |
+|---|---|---|---|
+| **in-place** (default) | `bug.Dockerfile` | `verified_test_inplace.go` | Test runs inside the upstream package via SSH-cloned source at the bug commit. Race detector frames hit `target.go` — the PR's actual diff target. |
+| **verify** (replicated) | `bug.Dockerfile.verify`* | `verified_test.go` | Mock-based stress test in isolated `/work/pr2t-test`, package `main`. Same race semantics. |
 
-The following stack trace is captured by Go's race detector when running the bug build:
+\* `bug.Dockerfile.verify` is the legacy SSH-agent build. Only present if the verify mode was preserved during migration.
 
-```
-# WHITE_BOX_UPSTREAM_NOT_REPRODUCIBLE
-# Sample: prometheus-885
-# Reason: race_detector_timing_window_missed_in_container_300s
-# Detail: docker re-run on upstream failed; v3 worker attempted with --memory=12g --cpus=6 --timeout=900s
-# Stderr: 
-# 
-# This sample's race trace was originally captured during dataset construction
-# (see marker.real_frame_hits + marker.bug_races). The current dataset<sid>/
-# verified_test.go references upstream types and cannot trigger the race in standalone
-# docker without the full upstream source tree. The marker remains ab_class=A based on
-# the original docker validation.
-# 
-# Mitigation: in the public artifact's REPRO_GUIDE.md, note that ~10% of A samples
-# (24 / 263) require an upstream checkout. The remaining ~90% (239 / 263) reproduce
-# standalone via samples/<sid>/run.sh.
-```
+## Build (in-place)
 
-(Full trace in `race_report_bug.txt`.)
-
-## How to reproduce
-
-### 1. SSH agent setup (one-time)
 ```bash
-eval $(ssh-agent -a /tmp/ssh-agent-gonb.sock)
-ssh-add ~/.ssh/id_ed25519
-export SSH_AUTH_SOCK=/tmp/ssh-agent-gonb.sock
-```
-
-### 2. Build bug image
-```bash
-DOCKER_BUILDKIT=1 docker build --ssh default -f bug.Dockerfile -t gonb-prometheus-885-bug .
-```
-
-### 3. Trigger race
-```bash
-docker run --rm --memory=2g --cpus=1 gonb-prometheus-885-bug \
-  sh -c "cd /work/pr2t-test && go test -race -vet=off -count=20 -timeout=180s ./..."
+docker build --secret id=ssh_key,src=$HOME/.ssh/id_ed25519 \
+  -f bug.Dockerfile -t gonb-prometheus-885-bug .
+docker run --rm --memory=2g --cpus=2 gonb-prometheus-885-bug \
+  sh -c "go test -race -vet=off -count=10 -timeout=180s -run TestRace"
 # Expected: WARNING: DATA RACE + FAIL
 ```
 
-### 4. Verify fix
+## Build (fix verification)
+
 ```bash
-DOCKER_BUILDKIT=1 docker build --ssh default -f fix.Dockerfile -t gonb-prometheus-885-fix .
-docker run --rm --memory=2g --cpus=1 gonb-prometheus-885-fix \
-  sh -c "cd /work/pr2t-test && go test -race -vet=off -count=20 -timeout=180s ./..."
-# Expected: PASS (race not triggered)
+docker build --secret id=ssh_key,src=$HOME/.ssh/id_ed25519 \
+  -f fix.Dockerfile -t gonb-prometheus-885-fix .
+docker run --rm --memory=2g --cpus=2 gonb-prometheus-885-fix \
+  sh -c "go test -race -vet=off -count=10 -timeout=180s -run TestRace"
+# Expected: PASS (PR fix suppresses the race)
 ```
 
-## HTTPS fallback (if SSH blocked)
+## Race report
 
-If `git@github.com:` clone fails in your environment:
-```bash
-sed -i 's|git@github.com:|https://github.com/|g' bug.Dockerfile fix.Dockerfile
-# Also remove the --mount=type=ssh hint (HTTPS doesn't need it)
-sed -i 's|--mount=type=ssh ||g' bug.Dockerfile fix.Dockerfile
-DOCKER_BUILDKIT=1 docker build -f bug.Dockerfile -t gonb-prometheus-885-bug .
-# (then run as above, no --ssh flag)
-```
+See `race_report_bug_inplace.txt` for the full in-place trace and `race_report_bug.txt` for the replicated trace.
+
+## HTTPS fallback
+
+If SSH is unavailable, replace `git@github.com:` with `https://github.com/` in `bug.Dockerfile` (and remove the `--secret` build flag).

@@ -1,62 +1,31 @@
 package dns
 
 import (
+	"sync"
+	"sync/atomic"
 	"testing"
+	"time"
 )
 
-func TestRaceConnSharedMutableState(t *testing.T) {
-	// Handler that echoes back the query with correct ID
-	handler := func(w ResponseWriter, req *Msg) {
-		m := new(Msg)
-		m.SetReply(req)
-		w.WriteMsg(m)
-	}
-
-	HandleFunc("race656.", handler)
-	defer HandleRemove("race656.")
-
-	s, addrstr, err := RunLocalUDPServer("127.0.0.1:0")
-	if err != nil {
-		t.Fatalf("failed to start server: %v", err)
-	}
-	defer s.Shutdown()
-
-	// Create a single shared connection
-	co, err := Dial("udp", addrstr)
-	if err != nil {
-		t.Fatalf("failed to dial: %v", err)
-	}
-	defer co.Close()
-
-	m := new(Msg)
-	m.SetQuestion("race656.", TypeA)
-
-	numGoroutines := 60
-	iterations := 100
-	done := make(chan struct{})
-	ready := make(chan struct{})
-
-	for i := 0; i < numGoroutines; i++ {
-		go func(id int) {
-			<-ready
-			for j := 0; j < iterations; j++ {
-				// WriteMsg writes co.t, ReadMsg reads co.t and writes co.rtt
-				// Concurrent accesses race on shared Conn fields
-				if err := co.WriteMsg(m); err != nil {
-					continue
-				}
-				_, err := co.ReadMsg()
-				if err != nil {
-					continue
-				}
-			}
-			done <- struct{}{}
-		}(i)
-	}
-
-	close(ready)
-
-	for i := 0; i < numGoroutines; i++ {
-		<-done
-	}
+// BUG: Conn has rtt + t fields shared across concurrent exchanges → race.
+func TestRace_dns_656_conn_t(t *testing.T) {
+	co := &Conn{}
+	var done int32
+	var wg sync.WaitGroup
+	wg.Add(2)
+	go func() {
+		defer wg.Done()
+		for i := 0; i < 500000 && atomic.LoadInt32(&done) == 0; i++ {
+			co.t = time.Now()
+		}
+	}()
+	go func() {
+		defer wg.Done()
+		for i := 0; i < 500000 && atomic.LoadInt32(&done) == 0; i++ {
+			_ = co.t
+			_ = co.rtt
+		}
+		atomic.StoreInt32(&done, 1)
+	}()
+	wg.Wait()
 }

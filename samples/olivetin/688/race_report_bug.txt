@@ -1,0 +1,62 @@
+WARNING: DATA RACE
+Read at 0x00c000230960 by goroutine 72:
+  runtime.mapIterStart()
+      /usr/local/go/src/runtime/map_swiss.go:165 +0x0
+  github.com/OliveTin/OliveTin/internal/entities.TestRace_688_EntitiesMap.func2()
+      /work/upstream/service/internal/entities/olivetin_688_race_test.go:37 +0x128
+
+Previous write at 0x00c000230960 by goroutine 14:
+  runtime.mapassign_faststr()
+      /usr/local/go/src/internal/runtime/maps/runtime_faststr_swiss.go:263 +0x0
+  github.com/OliveTin/OliveTin/internal/entities.AddEntity()
+      /work/upstream/service/internal/entities/storage.go:78 +0x106
+  github.com/OliveTin/OliveTin/internal/entities.TestRace_688_EntitiesMap.func1()
+      /work/upstream/service/internal/entities/olivetin_688_race_test.go:26 +0x199
+  github.com/OliveTin/OliveTin/internal/entities.TestRace_688_EntitiesMap.gowrap1()
+      /work/upstream/service/internal/entities/olivetin_688_race_test.go:28 +0x41
+
+Goroutine 72 (running) created at:
+  github.com/OliveTin/OliveTin/internal/entities.TestRace_688_EntitiesMap()
+      /work/upstream/service/internal/entities/olivetin_688_race_test.go:33 +0x257
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1792 +0x225
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1851 +0x44
+
+Goroutine 14 (running) created at:
+  github.com/OliveTin/OliveTin/internal/entities.TestRace_688_EntitiesMap()
+      /work/upstream/service/internal/entities/olivetin_688_race_test.go:23 +0x15b
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1792 +0x225
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1851 +0x44
+==================
+WARNING: DATA RACE
+Read at 0x00c000192358 by goroutine 72:
+  github.com/OliveTin/OliveTin/internal/entities.TestRace_688_EntitiesMap.func2()
+      /work/upstream/service/internal/entities/olivetin_688_race_test.go:37 +0x1b4
+
+Previous write at 0x00c000192358 by goroutine 14:
+  github.com/OliveTin/OliveTin/internal/entities.AddEntity()
+      /work/upstream/service/internal/entities/storage.go:78 +0x112
+  github.com/OliveTin/OliveTin/internal/entities.TestRace_688_EntitiesMap.func1()
+      /work/upstream/service/internal/entities/olivetin_688_race_test.go:26 +0x199
+  github.com/OliveTin/OliveTin/internal/entities.TestRace_688_EntitiesMap.gowrap1()
+      /work/upstream/service/internal/entities/olivetin_688_race_test.go:28 +0x41
+
+Goroutine 72 (running) created at:
+  github.com/OliveTin/OliveTin/internal/entities.TestRace_688_EntitiesMap()
+      /work/upstream/service/internal/entities/olivetin_688_race_test.go:33 +0x257
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1792 +0x225
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1851 +0x44
+
+Goroutine 14 (running) created at:
+  github.com/OliveTin/OliveTin/internal/entities.TestRace_688_EntitiesMap()
+      /work/upstream/service/internal/entities/olivetin_688_race_test.go:23 +0x15b
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1792 +0x225
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1851 +0x44
+==================

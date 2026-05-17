@@ -1,69 +1,23 @@
 WARNING: DATA RACE
-Write at 0x00c0000383d0 by goroutine 96:
-  k8s.io/apiserver/pkg/util/flowcontrol/fairqueuing/queueset.(*queueSet).setConfiguration()
-      /work/staging/src/k8s.io/apiserver/pkg/util/flowcontrol/fairqueuing/queueset/queueset.go:207 +0x24b
-  k8s.io/apiserver/pkg/util/flowcontrol/fairqueuing/queueset.(*queueSetCompleter).Complete()
-      /work/staging/src/k8s.io/apiserver/pkg/util/flowcontrol/fairqueuing/queueset/queueset.go:160 +0x4e8
-  k8s.io/apiserver/pkg/util/flowcontrol/fairqueuing/queueset.TestRace_100638.func2()
-      /work/staging/src/k8s.io/apiserver/pkg/util/flowcontrol/fairqueuing/queueset/race_100638_test.go:71 +0x276
-  k8s.io/apiserver/pkg/util/flowcontrol/fairqueuing/queueset.TestRace_100638.func5()
-      /work/staging/src/k8s.io/apiserver/pkg/util/flowcontrol/fairqueuing/queueset/race_100638_test.go:73 +0x41
+Write at 0x00c0001ce050 by goroutine 27:
+  k8s.io/apiserver/pkg/util/flowcontrol/fairqueuing/queueset.TestRace_100638_qcfg_name_capture.func2()
+      /work/upstream/staging/src/k8s.io/apiserver/pkg/util/flowcontrol/fairqueuing/queueset/100638_race_test.go:56 +0xeb
 
-Previous read at 0x00c0000383d0 by goroutine 118:
+Previous read at 0x00c0001ce050 by goroutine 30:
   k8s.io/apiserver/pkg/util/flowcontrol/fairqueuing/queueset.(*queueSet).StartRequest.func1()
-      /work/staging/src/k8s.io/apiserver/pkg/util/flowcontrol/fairqueuing/queueset/queueset.go:300 +0x189
+      /work/upstream/staging/src/k8s.io/apiserver/pkg/util/flowcontrol/fairqueuing/queueset/queueset.go:300 +0x17e
 
-Goroutine 96 (running) created at:
-  k8s.io/apiserver/pkg/util/flowcontrol/fairqueuing/queueset.TestRace_100638()
-      /work/staging/src/k8s.io/apiserver/pkg/util/flowcontrol/fairqueuing/queueset/race_100638_test.go:57 +0x4f3
+Goroutine 27 (running) created at:
+  k8s.io/apiserver/pkg/util/flowcontrol/fairqueuing/queueset.TestRace_100638_qcfg_name_capture()
+      /work/upstream/staging/src/k8s.io/apiserver/pkg/util/flowcontrol/fairqueuing/queueset/100638_race_test.go:52 +0x57c
   testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1595 +0x261
-  testing.(*T).Run.func1()
-      /usr/local/go/src/testing/testing.go:1648 +0x44
+      /usr/local/go/src/testing/testing.go:1934 +0x21c
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1997 +0x44
 
-Goroutine 118 (running) created at:
+Goroutine 30 (running) created at:
   k8s.io/apiserver/pkg/util/flowcontrol/fairqueuing/queueset.(*queueSet).StartRequest()
-      /work/staging/src/k8s.io/apiserver/pkg/util/flowcontrol/fairqueuing/queueset/queueset.go:290 +0xd9c
-  k8s.io/apiserver/pkg/util/flowcontrol/fairqueuing/queueset.TestRace_100638.func1()
-      /work/staging/src/k8s.io/apiserver/pkg/util/flowcontrol/fairqueuing/queueset/race_100638_test.go:43 +0x188
-  k8s.io/apiserver/pkg/util/flowcontrol/fairqueuing/queueset.TestRace_100638.func4()
-      /work/staging/src/k8s.io/apiserver/pkg/util/flowcontrol/fairqueuing/queueset/race_100638_test.go:51 +0x41
+      /work/upstream/staging/src/k8s.io/apiserver/pkg/util/flowcontrol/fairqueuing/queueset/queueset.go:290 +0xdca
+  k8s.io/apiserver/pkg/util/flowcontrol/fairqueuing/queueset.TestRace_100638_qcfg_name_capture.func1()
+      /work/upstream/staging/src/k8s.io/apiserver/pkg/util/flowcontrol/fairqueuing/queueset/100638_race_test.go:47 +0x149
 ==================
-E0507 14:53:14.949700    3876 runtime.go:76] Observed a panic: sync: negative WaitGroup counter
-goroutine 31 [running]:
-k8s.io/apimachinery/pkg/util/runtime.logPanic({0xe55e60?, 0x1079d00?})
-	/work/staging/src/k8s.io/apimachinery/pkg/util/runtime/runtime.go:74 +0xdd
-k8s.io/apimachinery/pkg/util/runtime.HandleCrash({0x0, 0x0, 0x0?})
-	/work/staging/src/k8s.io/apimachinery/pkg/util/runtime/runtime.go:48 +0xa8
-panic({0xe55e60?, 0x1079d00?})
-	/usr/local/go/src/runtime/panic.go:920 +0x270
-sync.(*WaitGroup).Add(0xc000258ac0, 0xffffffffffffffff)
-	/usr/local/go/src/sync/waitgroup.go:62 +0x1cd
-k8s.io/apiserver/pkg/util/flowcontrol/fairqueuing/testing/clock.(*waitGroupCounter).Add(0xc000258ac0, 0xc0002d22c0?)
-	/work/staging/src/k8s.io/apiserver/pkg/util/flowcontrol/fairqueuing/testing/clock/event_clock.go:97 +0x6b4
-k8s.io/apiserver/pkg/util/flowcontrol/fairqueuing/queueset.(*queueSet).goroutineDoneOrBlocked(...)
-	/work/staging/src/k8s.io/apiserver/pkg/util/flowcontrol/fairqueuing/queueset/queueset.go:767
-k8s.io/apiserver/pkg/util/flowcontrol/fairqueuing/queueset.(*queueSet).StartRequest.func1()
-	/work/staging/src/k8s.io/apiserver/pkg/util/flowcontrol/fairqueuing/queueset/queueset.go:302 +0x3a5
-created by k8s.io/apiserver/pkg/util/flowcontrol/fairqueuing/queueset.(*queueSet).StartRequest in goroutine 12
-	/work/staging/src/k8s.io/apiserver/pkg/util/flowcontrol/fairqueuing/queueset/queueset.go:290 +0xd9d
-panic: sync: negative WaitGroup counter [recovered]
-	panic: sync: negative WaitGroup counter
-
-goroutine 31 [running]:
-k8s.io/apimachinery/pkg/util/runtime.HandleCrash({0x0, 0x0, 0x0?})
-	/work/staging/src/k8s.io/apimachinery/pkg/util/runtime/runtime.go:55 +0x136
-panic({0xe55e60?, 0x1079d00?})
-	/usr/local/go/src/runtime/panic.go:920 +0x270
-sync.(*WaitGroup).Add(0xc000258ac0, 0xffffffffffffffff)
-	/usr/local/go/src/sync/waitgroup.go:62 +0x1cd
-k8s.io/apiserver/pkg/util/flowcontrol/fairqueuing/testing/clock.(*waitGroupCounter).Add(0xc000258ac0, 0xc0002d22c0?)
-	/work/staging/src/k8s.io/apiserver/pkg/util/flowcontrol/fairqueuing/testing/clock/event_clock.go:97 +0x6b4
-k8s.io/apiserver/pkg/util/flowcontrol/fairqueuing/queueset.(*queueSet).goroutineDoneOrBlocked(...)
-	/work/staging/src/k8s.io/apiserver/pkg/util/flowcontrol/fairqueuing/queueset/queueset.go:767
-k8s.io/apiserver/pkg/util/flowcontrol/fairqueuing/queueset.(*queueSet).StartRequest.func1()
-	/work/staging/src/k8s.io/apiserver/pkg/util/flowcontrol/fairqueuing/queueset/queueset.go:302 +0x3a5
-created by k8s.io/apiserver/pkg/util/flowcontrol/fairqueuing/queueset.(*queueSet).StartRequest in goroutine 12
-	/work/staging/src/k8s.io/apiserver/pkg/util/flowcontrol/fairqueuing/queueset/queueset.go:290 +0xd9d
-FAIL	k8s.io/apiserver/pkg/util/flowcontrol/fairqueuing/queueset	0.047s
-FAIL

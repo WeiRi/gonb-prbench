@@ -1,76 +1,49 @@
 package server
 
 import (
+	"net/http"
+	"net/http/httptest"
 	"sync"
+	"sync/atomic"
 	"testing"
+	"time"
 )
 
-// TestRaceHandleRoutezNc reproduces the data race in HandleRoutez
-// (server/monitor.go) where r.nc is read at line ~325 AFTER r.mu.Unlock()
-// at line ~323, racing with closeConnection() which sets r.nc = nil under
-// r.mu.Lock() at client.go line ~1315.
-//
-// Bug pattern:
-//   HandleRoutez:     r.mu.Lock(); ... r.mu.Unlock(); _ = r.nc.(type)
-//   closeConnection:  c.mu.Lock(); c.nc = nil; c.mu.Unlock()
-//
-// The r.nc read is outside the lock, so it races with closeConnection's
-// write c.nc = nil.
-func TestRaceHandleRoutezNc(t *testing.T) {
-	type raceClient struct {
-		mu sync.Mutex
-		nc int // simulate net.Conn pointer (0=nil, 1=valid)
+// BUG: HandleRoutez releases r.mu before reading r.nc, while another goroutine
+// may mutate r.nc under r.mu. Race on r.nc field.
+// PR #540 moves r.mu.Unlock() AFTER the r.nc switch case.
+func TestRace_540_routez_nc(t *testing.T) {
+	s := &Server{
+		routes:       map[uint64]*client{},
+		httpReqStats: map[string]uint64{},
 	}
+	c := &client{
+		cid:   1,
+		start: time.Now(),
+		route: &route{},
+		subs:  map[string]*subscription{},
+	}
+	s.routes[1] = c
 
-	numReaders := 100
-	numWriters := 50
-	iterations := 1000
+	var done int32
 	var wg sync.WaitGroup
-	ready := make(chan struct{})
-
-	// Shared race client -- like a route entry in s.routes
-	rc := &raceClient{nc: 1}
-
-	// Readers: simulate HandleRoutez pattern
-	//   r.mu.Lock(); read some fields; r.mu.Unlock();
-	// BUG: then read r.nc WITHOUT re-acquiring lock
-	for i := 0; i < numReaders; i++ {
-		wg.Add(1)
-		go func() {
-			defer wg.Done()
-			<-ready
-			for j := 0; j < iterations; j++ {
-				rc.mu.Lock()
-				// Read some fields under lock (line ~303-321)
-				_ = rc.nc
-				rc.mu.Unlock()
-				// BUG: read rc.nc AGAIN after unlock (line ~325)
-				// The original code does:
-				//   if ip, ok := r.nc.(*net.TCPConn); ok { ... }
-				// This reads r.nc WITHOUT holding r.mu
-				_ = rc.nc
-			}
-		}()
-	}
-
-	// Writers: simulate closeConnection setting nc = nil under lock
-	//   c.mu.Lock(); c.nc = nil; c.mu.Unlock()  (client.go:1315)
-	for i := 0; i < numWriters; i++ {
-		wg.Add(1)
-		go func() {
-			defer wg.Done()
-			<-ready
-			for j := 0; j < iterations; j++ {
-				rc.mu.Lock()
-				rc.nc = 0 // simulate c.nc = nil
-				rc.mu.Unlock()
-				rc.mu.Lock()
-				rc.nc = 1 // restore
-				rc.mu.Unlock()
-			}
-		}()
-	}
-
-	close(ready)
+	wg.Add(2)
+	go func() {
+		defer wg.Done()
+		req := httptest.NewRequest(http.MethodGet, "/routez", nil)
+		for i := 0; i < 2000 && atomic.LoadInt32(&done) == 0; i++ {
+			rec := httptest.NewRecorder()
+			s.HandleRoutez(rec, req)
+		}
+		atomic.StoreInt32(&done, 1)
+	}()
+	go func() {
+		defer wg.Done()
+		for i := 0; i < 2000 && atomic.LoadInt32(&done) == 0; i++ {
+			c.mu.Lock()
+			c.nc = nil
+			c.mu.Unlock()
+		}
+	}()
 	wg.Wait()
 }

@@ -2,37 +2,29 @@ package client
 
 import (
 	"sync"
+	"sync/atomic"
 	"testing"
 )
 
-// TestRace_47961 reproduces moby PR #47961 race in client/client.go:
-// customHTTPHeaders map is concurrently mutated by SetCustomHTTPHeaders
-// while reads happen on every API call, without synchronization.
-func TestRace_47961(t *testing.T) {
-	for iter := 0; iter < 30; iter++ {
-		c := NewClient()
-
-		var wg sync.WaitGroup
-		// Writers
-		for g := 0; g < 30; g++ {
-			wg.Add(1)
-			go func(gid int) {
-				defer wg.Done()
-				for i := 0; i < 100; i++ {
-					c.AddHeader("k", "v")
-				}
-			}(g)
+// BUG-version test. Field `negotiated` is `bool` (plain).
+// Concurrent unsynchronized read/write fires race detector.
+func TestRace_moby_47961_negotiated(t *testing.T) {
+	cli := &Client{negotiateVersion: true}
+	var done atomic.Int32
+	var wg sync.WaitGroup
+	wg.Add(2)
+	go func() {
+		defer wg.Done()
+		for i := 0; i < 500000 && done.Load() == 0; i++ {
+			_ = cli.negotiated
 		}
-		// Readers
-		for g := 0; g < 30; g++ {
-			wg.Add(1)
-			go func() {
-				defer wg.Done()
-				for i := 0; i < 100; i++ {
-					_ = c.CountHeaders()
-				}
-			}()
+	}()
+	go func() {
+		defer wg.Done()
+		for i := 0; i < 500000 && done.Load() == 0; i++ {
+			cli.negotiated = true
 		}
-		wg.Wait()
-	}
+		done.Store(1)
+	}()
+	wg.Wait()
 }

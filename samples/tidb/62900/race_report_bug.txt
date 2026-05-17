@@ -1,34 +1,50 @@
 WARNING: DATA RACE
-Read at 0x00c00001423f by goroutine 9:
-  ase/tidb-62900.ReportMinStartTS_BUG()
-      /work/verified_test.go:66 +0xb7
-  ase/tidb-62900.TestRace_tidb62900.func2()
-      /work/verified_test.go:84 +0x90
+Write at 0x00c0007d3308 by goroutine 51:
+  github.com/pingcap/tidb/pkg/sessionctx/stmtctx.TestRace_tidb_62900_stmtctx_isddljobinqueue.func1()
+      /work/upstream/pkg/sessionctx/stmtctx/62900_race_test.go:20 +0xb7
 
-Previous write at 0x00c00001423f by goroutine 8:
-  ase/tidb-62900.(*Executor).DoDDLJobWrapper_BUG()
-      /work/verified_test.go:61 +0xcc
-  ase/tidb-62900.TestRace_tidb62900.func1()
-      /work/verified_test.go:78 +0x9b
+Previous read at 0x00c0007d3308 by goroutine 52:
+  github.com/pingcap/tidb/pkg/sessionctx/stmtctx.TestRace_tidb_62900_stmtctx_isddljobinqueue.func2()
+      /work/upstream/pkg/sessionctx/stmtctx/62900_race_test.go:28 +0xa8
 
-Goroutine 9 (running) created at:
-  ase/tidb-62900.TestRace_tidb62900()
-      /work/verified_test.go:81 +0x264
+Goroutine 51 (running) created at:
+  github.com/pingcap/tidb/pkg/sessionctx/stmtctx.TestRace_tidb_62900_stmtctx_isddljobinqueue()
+      /work/upstream/pkg/sessionctx/stmtctx/62900_race_test.go:17 +0x1a4
   testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
+      /usr/local/go/src/testing/testing.go:1690 +0x226
   testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
+      /usr/local/go/src/testing/testing.go:1743 +0x44
 
-Goroutine 8 (finished) created at:
-  ase/tidb-62900.TestRace_tidb62900()
-      /work/verified_test.go:75 +0x1bc
+Goroutine 52 (running) created at:
+  github.com/pingcap/tidb/pkg/sessionctx/stmtctx.TestRace_tidb_62900_stmtctx_isddljobinqueue()
+      /work/upstream/pkg/sessionctx/stmtctx/62900_race_test.go:25 +0x28b
   testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
+      /usr/local/go/src/testing/testing.go:1690 +0x226
   testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
+      /usr/local/go/src/testing/testing.go:1743 +0x44
 ==================
---- FAIL: TestRace_tidb62900 (0.00s)
-    testing.go:1398: race detected during execution of test
-FAIL
-FAIL	ase/tidb-62900	0.017s
-FAIL
+WARNING: DATA RACE
+Write at 0x00c0007d3308 by goroutine 51:
+  github.com/pingcap/tidb/pkg/sessionctx/stmtctx.TestRace_tidb_62900_stmtctx_isddljobinqueue.func1()
+      /work/upstream/pkg/sessionctx/stmtctx/62900_race_test.go:21 +0xcd
+
+Previous read at 0x00c0007d3308 by goroutine 52:
+  github.com/pingcap/tidb/pkg/sessionctx/stmtctx.TestRace_tidb_62900_stmtctx_isddljobinqueue.func2()
+      /work/upstream/pkg/sessionctx/stmtctx/62900_race_test.go:28 +0xa8
+
+Goroutine 51 (running) created at:
+  github.com/pingcap/tidb/pkg/sessionctx/stmtctx.TestRace_tidb_62900_stmtctx_isddljobinqueue()
+      /work/upstream/pkg/sessionctx/stmtctx/62900_race_test.go:17 +0x1a4
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1690 +0x226
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1743 +0x44
+
+Goroutine 52 (running) created at:
+  github.com/pingcap/tidb/pkg/sessionctx/stmtctx.TestRace_tidb_62900_stmtctx_isddljobinqueue()
+      /work/upstream/pkg/sessionctx/stmtctx/62900_race_test.go:25 +0x28b
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1690 +0x226
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1743 +0x44
+==================

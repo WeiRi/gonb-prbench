@@ -1,0 +1,552 @@
+go: downloading k8s.io/api v0.35.0
+go: downloading k8s.io/apimachinery v0.35.0
+go: downloading k8s.io/client-go v0.35.0
+go: downloading istio.io/api v1.29.0-alpha.0.0.20260210161025-1d9832db7b28
+go: downloading google.golang.org/protobuf v1.36.11
+go: downloading golang.org/x/sync v0.19.0
+go: downloading google.golang.org/grpc v1.78.0
+go: downloading istio.io/client-go v1.29.0-alpha.0.0.20260210161328-2c12cf6497ed
+go: downloading k8s.io/apiextensions-apiserver v0.35.0
+go: downloading k8s.io/apiserver v0.35.0
+go: downloading sigs.k8s.io/gateway-api-inference-extension v0.0.0-20250926182816-0a3bb2010751
+go: downloading sigs.k8s.io/gateway-api v1.4.0
+go: downloading github.com/spf13/cobra v1.10.0
+go: downloading github.com/spf13/pflag v1.0.10
+go: downloading github.com/prometheus/client_golang v1.23.2
+go: downloading go.opentelemetry.io/otel v1.38.0
+go: downloading go.opentelemetry.io/otel/metric v1.38.0
+go: downloading go.opentelemetry.io/otel/sdk/metric v1.38.0
+go: downloading k8s.io/utils v0.0.0-20251219084037-98d557b7f1e7
+go: downloading golang.org/x/net v0.48.0
+go: downloading go.opentelemetry.io/otel/sdk v1.38.0
+go: downloading google.golang.org/genproto/googleapis/api v0.0.0-20251213004720-97cd9d5aeac2
+go: downloading github.com/envoyproxy/go-control-plane/envoy v1.36.1-0.20260206183300-2c82eafd9a42
+go: downloading go.yaml.in/yaml/v2 v2.4.3
+go: downloading k8s.io/kube-openapi v0.0.0-20251125145642-4e65d59e963e
+go: downloading sigs.k8s.io/structured-merge-diff/v6 v6.3.1
+go: downloading github.com/google/gnostic-models v0.7.1
+go: downloading gopkg.in/evanphx/json-patch.v4 v4.13.0
+go: downloading golang.org/x/term v0.38.0
+go: downloading golang.org/x/time v0.14.0
+go: downloading github.com/prometheus/common v0.66.1
+go: downloading go.opentelemetry.io/otel/trace v1.38.0
+go: downloading github.com/fxamacker/cbor/v2 v2.9.0
+go: downloading golang.org/x/oauth2 v0.34.0
+go: downloading sigs.k8s.io/json v0.0.0-20250730193827-2d320260d730
+go: downloading github.com/cncf/xds/go v0.0.0-20251110193048-8bfbf64dc13e
+go: downloading go.yaml.in/yaml/v3 v3.0.4
+go: downloading golang.org/x/sys v0.39.0
+go: downloading go.opentelemetry.io/auto/sdk v1.2.1
+go: downloading github.com/envoyproxy/go-control-plane/contrib v1.36.1-0.20260206183300-2c82eafd9a42
+go: downloading golang.org/x/crypto v0.46.0
+go: downloading github.com/go-openapi/jsonreference v0.21.4
+go: downloading github.com/go-openapi/swag v0.25.4
+go: downloading golang.org/x/text v0.32.0
+go: downloading github.com/modern-go/reflect2 v1.0.3-0.20250322232337-35a7c28c31ee
+go: downloading google.golang.org/genproto/googleapis/rpc v0.0.0-20251213004720-97cd9d5aeac2
+go: downloading github.com/envoyproxy/protoc-gen-validate v1.3.0
+go: downloading go.opentelemetry.io/proto/otlp v1.9.0
+go: downloading github.com/go-openapi/jsonpointer v0.22.4
+go: downloading github.com/go-openapi/swag/cmdutils v0.25.4
+go: downloading github.com/go-openapi/swag/conv v0.25.4
+go: downloading github.com/go-openapi/swag/fileutils v0.25.4
+go: downloading github.com/go-openapi/swag/jsonname v0.25.4
+go: downloading github.com/go-openapi/swag/jsonutils v0.25.4
+go: downloading github.com/go-openapi/swag/loading v0.25.4
+go: downloading github.com/go-openapi/swag/mangling v0.25.4
+go: downloading github.com/go-openapi/swag/netutils v0.25.4
+go: downloading github.com/go-openapi/swag/stringutils v0.25.4
+go: downloading github.com/go-openapi/swag/typeutils v0.25.4
+go: downloading github.com/go-openapi/swag/yamlutils v0.25.4
+go: downloading github.com/emicklei/go-restful/v3 v3.13.0
+go: downloading golang.org/x/exp v0.0.0-20251017212417-90e834f514db
+==================
+WARNING: DATA RACE
+Read at 0x00c0009bc7d8 by goroutine 17:
+  istio.io/istio/pkg/kube/multicluster.(*Cluster).reportStatus()
+      /work/upstream/pkg/kube/multicluster/cluster.go:221 +0x9b
+  istio.io/istio/pkg/kube/multicluster.TestRace_59061_InPlace.func2()
+      /work/upstream/pkg/kube/multicluster/istio-59061_race_test.go:40 +0x96
+
+Previous write at 0x00c0009bc7d8 by goroutine 18:
+  istio.io/istio/pkg/kube/multicluster.TestRace_59061_InPlace.func1()
+      /work/upstream/pkg/kube/multicluster/istio-59061_race_test.go:31 +0x84
+
+Goroutine 17 (running) created at:
+  istio.io/istio/pkg/kube/multicluster.TestRace_59061_InPlace()
+      /work/upstream/pkg/kube/multicluster/istio-59061_race_test.go:38 +0x11d
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1934 +0x21c
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1997 +0x44
+
+Goroutine 18 (finished) created at:
+  istio.io/istio/pkg/kube/multicluster.TestRace_59061_InPlace()
+      /work/upstream/pkg/kube/multicluster/istio-59061_race_test.go:29 +0x1d9
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1934 +0x21c
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1997 +0x44
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c0009bc7d8 by goroutine 17:
+  istio.io/istio/pkg/kube/multicluster.(*Cluster).reportStatus()
+      /work/upstream/pkg/kube/multicluster/cluster.go:222 +0xcc
+  istio.io/istio/pkg/kube/multicluster.TestRace_59061_InPlace.func2()
+      /work/upstream/pkg/kube/multicluster/istio-59061_race_test.go:40 +0x96
+
+Previous write at 0x00c0009bc7d8 by goroutine 24:
+  istio.io/istio/pkg/kube/multicluster.TestRace_59061_InPlace.func1()
+      /work/upstream/pkg/kube/multicluster/istio-59061_race_test.go:31 +0x84
+
+Goroutine 17 (running) created at:
+  istio.io/istio/pkg/kube/multicluster.TestRace_59061_InPlace()
+      /work/upstream/pkg/kube/multicluster/istio-59061_race_test.go:38 +0x11d
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1934 +0x21c
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1997 +0x44
+
+Goroutine 24 (finished) created at:
+  istio.io/istio/pkg/kube/multicluster.TestRace_59061_InPlace()
+      /work/upstream/pkg/kube/multicluster/istio-59061_race_test.go:29 +0x1d9
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1934 +0x21c
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1997 +0x44
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c0009bc7d8 by goroutine 26:
+  istio.io/istio/pkg/kube/multicluster.TestRace_59061_InPlace.func1()
+      /work/upstream/pkg/kube/multicluster/istio-59061_race_test.go:31 +0x84
+
+Previous write at 0x00c0009bc7d8 by goroutine 48:
+  istio.io/istio/pkg/kube/multicluster.TestRace_59061_InPlace.func1()
+      /work/upstream/pkg/kube/multicluster/istio-59061_race_test.go:31 +0x84
+
+Goroutine 26 (running) created at:
+  istio.io/istio/pkg/kube/multicluster.TestRace_59061_InPlace()
+      /work/upstream/pkg/kube/multicluster/istio-59061_race_test.go:29 +0x1d9
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1934 +0x21c
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1997 +0x44
+
+Goroutine 48 (running) created at:
+  istio.io/istio/pkg/kube/multicluster.TestRace_59061_InPlace()
+      /work/upstream/pkg/kube/multicluster/istio-59061_race_test.go:29 +0x1d9
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1934 +0x21c
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1997 +0x44
+==================
+--- FAIL: TestRace_59061_InPlace (0.07s)
+    testing.go:1617: race detected during execution of test
+2026-05-11T11:49:34.355695Z	info	cluster "fake" kube client started
+2026-05-11T11:49:34.358263Z	info	sync complete	name=crd watcher attempt=2 time=2.378149ms
+2026-05-11T11:49:34.358395Z	info	controllers	starting	controller=crd watcher
+2026-05-11T11:49:34.362450Z	info	sync complete	name=crd watcher attempt=3 time=6.629073ms
+2026-05-11T11:49:34.362641Z	info	Starting multicluster remote secrets controller
+2026-05-11T11:49:34.362761Z	info	sync complete	name=multicluster remote secrets attempt=1 time=16.257µs
+2026-05-11T11:49:34.362844Z	info	multicluster remote secrets controller cache synced in 204.896µs
+2026-05-11T11:49:34.362891Z	info	controllers	starting	controller=multicluster secret
+2026-05-11T11:49:34.384441Z	info	processing secret event for secret istio-system/s0
+2026-05-11T11:49:34.384508Z	info	Add cluster	cluster=c0 secret=istio-system/s0
+2026-05-11T11:49:34.463065Z	info	Number of remote clusters: 1
+2026-05-11T11:49:34.465675Z	info	sync complete	name=discovery filter attempt=2 time=2.253135ms
+2026-05-11T11:49:34.465981Z	info	cluster "fake" kube client started
+2026-05-11T11:49:34.468270Z	info	sync complete	name=crd watcher attempt=2 time=2.241513ms
+2026-05-11T11:49:34.468381Z	info	controllers	starting	controller=crd watcher
+2026-05-11T11:49:34.472467Z	info	sync complete	name=crd watcher attempt=3 time=6.401762ms
+2026-05-11T11:49:34.481671Z	info	controllers	stopped	controller=multicluster secret
+2026-05-11T11:49:34.481713Z	info	controllers	stopped	controller=crd watcher
+2026-05-11T11:49:34.481871Z	info	Stopping CRD watcher
+2026-05-11T11:49:34.569413Z	info	cluster "fake" kube client started
+2026-05-11T11:49:34.569440Z	info	Starting multicluster remote secrets controller
+2026-05-11T11:49:34.571923Z	info	sync complete	name=multicluster remote secrets attempt=2 time=2.355208ms
+2026-05-11T11:49:34.572052Z	info	multicluster remote secrets controller cache synced in 2.622728ms
+2026-05-11T11:49:34.571982Z	info	sync complete	name=crd watcher attempt=2 time=2.5452ms
+2026-05-11T11:49:34.572106Z	info	controllers	starting	controller=multicluster secret
+2026-05-11T11:49:34.572153Z	info	controllers	starting	controller=crd watcher
+2026-05-11T11:49:34.572271Z	info	processing secret event for secret istio-system/s0
+2026-05-11T11:49:34.572361Z	info	Add cluster	cluster=c0 secret=istio-system/s0
+2026-05-11T11:49:34.576164Z	info	sync complete	name=crd watcher attempt=3 time=6.617451ms
+2026-05-11T11:49:34.633290Z	info	Number of remote clusters: 1
+2026-05-11T11:49:34.633400Z	info	processing secret event for secret istio-system/s1
+2026-05-11T11:49:34.633449Z	info	Add cluster	cluster=c1 secret=istio-system/s1
+2026-05-11T11:49:34.635997Z	info	sync complete	name=discovery filter attempt=2 time=2.222468ms
+2026-05-11T11:49:34.636192Z	info	cluster "fake" kube client started
+2026-05-11T11:49:34.638503Z	info	sync complete	name=crd watcher attempt=2 time=2.213515ms
+2026-05-11T11:49:34.638644Z	info	controllers	starting	controller=crd watcher
+2026-05-11T11:49:34.642709Z	info	sync complete	name=crd watcher attempt=3 time=6.456356ms
+2026-05-11T11:49:34.694294Z	info	Number of remote clusters: 2
+2026-05-11T11:49:34.697210Z	info	sync complete	name=discovery filter attempt=2 time=2.369777ms
+2026-05-11T11:49:34.697533Z	info	cluster "fake" kube client started
+2026-05-11T11:49:34.699799Z	info	sync complete	name=crd watcher attempt=2 time=2.141934ms
+2026-05-11T11:49:34.699920Z	info	controllers	starting	controller=crd watcher
+2026-05-11T11:49:34.704076Z	info	sync complete	name=crd watcher attempt=3 time=6.46321ms
+2026-05-11T11:49:34.771306Z	info	sync complete	name=cluster c0 attempt=7 time=128.39054ms
+2026-05-11T11:49:34.834055Z	info	sync complete	name=cluster c1 attempt=7 time=129.64958ms
+2026-05-11T11:49:34.855808Z	info	processing secret event for secret istio-system/s1
+2026-05-11T11:49:34.855996Z	info	Deleting cluster_id=c1 configured by secret=istio-system/s1
+2026-05-11T11:49:34.856319Z	info	controllers	stopped	controller=crd watcher
+2026-05-11T11:49:34.856510Z	info	Stopping CRD watcher
+2026-05-11T11:49:34.857258Z	info	Number of remote clusters: 1
+2026-05-11T11:49:34.857416Z	info	Number of remote clusters: 1
+2026-05-11T11:49:34.974640Z	info	cluster "fake" kube client started
+2026-05-11T11:49:34.974661Z	info	Starting multicluster remote secrets controller
+2026-05-11T11:49:34.977260Z	info	sync complete	name=crd watcher attempt=2 time=2.453795ms
+2026-05-11T11:49:34.977306Z	info	sync complete	name=multicluster remote secrets attempt=2 time=2.448195ms
+2026-05-11T11:49:34.977474Z	info	controllers	starting	controller=crd watcher
+2026-05-11T11:49:34.977513Z	info	multicluster remote secrets controller cache synced in 2.88814ms
+2026-05-11T11:49:34.977604Z	info	controllers	starting	controller=multicluster secret
+2026-05-11T11:49:34.977805Z	info	processing secret event for secret istio-system/s0
+2026-05-11T11:49:34.977915Z	info	Add cluster	cluster=c0 secret=istio-system/s0
+2026-05-11T11:49:34.981458Z	info	sync complete	name=crd watcher attempt=3 time=6.69041ms
+2026-05-11T11:49:35.094272Z	info	Number of remote clusters: 1
+2026-05-11T11:49:35.094425Z	info	processing secret event for secret istio-system/s1
+2026-05-11T11:49:35.094484Z	info	Add cluster	cluster=c1 secret=istio-system/s1
+2026-05-11T11:49:35.096917Z	info	sync complete	name=discovery filter attempt=2 time=2.21319ms
+2026-05-11T11:49:35.097117Z	info	cluster "fake" kube client started
+2026-05-11T11:49:35.099439Z	info	sync complete	name=crd watcher attempt=2 time=2.25896ms
+2026-05-11T11:49:35.099533Z	info	controllers	starting	controller=crd watcher
+2026-05-11T11:49:35.103603Z	info	sync complete	name=crd watcher attempt=3 time=6.439207ms
+2026-05-11T11:49:35.103789Z	info	sync complete	name=cluster c0 attempt=1 time=2.346µs
+2026-05-11T11:49:35.156916Z	info	Number of remote clusters: 2
+2026-05-11T11:49:35.159901Z	info	sync complete	name=discovery filter attempt=2 time=2.28307ms
+2026-05-11T11:49:35.160221Z	info	cluster "fake" kube client started
+2026-05-11T11:49:35.162716Z	info	sync complete	name=crd watcher attempt=2 time=2.409848ms
+2026-05-11T11:49:35.162813Z	info	controllers	starting	controller=crd watcher
+2026-05-11T11:49:35.166992Z	info	sync complete	name=crd watcher attempt=3 time=6.672887ms
+2026-05-11T11:49:35.167278Z	info	sync complete	name=cluster c1 attempt=1 time=3.555µs
+2026-05-11T11:49:35.297703Z	info	processing secret event for secret istio-system/s0
+2026-05-11T11:49:35.297874Z	info	Deleting cluster_id=c0 configured by secret=istio-system/s0
+2026-05-11T11:49:35.298090Z	info	controllers	stopped	controller=crd watcher
+2026-05-11T11:49:35.298222Z	info	Number of remote clusters: 1
+2026-05-11T11:49:35.298314Z	info	Stopping CRD watcher
+2026-05-11T11:49:35.298330Z	info	Number of remote clusters: 1
+2026-05-11T11:49:35.300678Z	info	controllers	stopped	controller=multicluster secret
+2026-05-11T11:49:35.300714Z	info	controllers	stopped	controller=crd watcher
+2026-05-11T11:49:35.300895Z	info	Stopping CRD watcher
+2026-05-11T11:49:35.424972Z	info	sync complete	name=discovery filter attempt=2 time=2.256288ms
+2026-05-11T11:49:35.467375Z	info	cluster "fake" kube client started
+2026-05-11T11:49:35.467371Z	info	Starting multicluster remote secrets controller
+2026-05-11T11:49:35.469956Z	info	sync complete	name=multicluster remote secrets attempt=2 time=2.428868ms
+2026-05-11T11:49:35.469926Z	info	sync complete	name=crd watcher attempt=2 time=2.512713ms
+2026-05-11T11:49:35.470113Z	info	multicluster remote secrets controller cache synced in 2.751417ms
+2026-05-11T11:49:35.470116Z	info	controllers	starting	controller=crd watcher
+2026-05-11T11:49:35.470181Z	info	controllers	starting	controller=multicluster secret
+2026-05-11T11:49:35.470370Z	info	processing secret event for secret istio-system/s0
+2026-05-11T11:49:35.470468Z	info	Add cluster	cluster=c0 secret=istio-system/s0
+2026-05-11T11:49:35.474312Z	info	sync complete	name=crd watcher attempt=3 time=6.806228ms
+2026-05-11T11:49:35.596682Z	info	Number of remote clusters: 1
+2026-05-11T11:49:35.596819Z	info	processing secret event for secret istio-system/s1
+2026-05-11T11:49:35.596887Z	info	Add cluster	cluster=c1 secret=istio-system/s1
+2026-05-11T11:49:35.599592Z	info	sync complete	name=discovery filter attempt=2 time=2.289259ms
+2026-05-11T11:49:35.600277Z	info	cluster "fake" kube client started
+2026-05-11T11:49:35.602757Z	info	sync complete	name=crd watcher attempt=2 time=2.393497ms
+2026-05-11T11:49:35.602950Z	info	controllers	starting	controller=crd watcher
+2026-05-11T11:49:35.606943Z	info	sync complete	name=crd watcher attempt=3 time=6.578901ms
+2026-05-11T11:49:35.607262Z	info	sync complete	name=cluster c0 attempt=1 time=3.961µs
+2026-05-11T11:49:35.677934Z	info	Number of remote clusters: 2
+2026-05-11T11:49:35.680608Z	info	sync complete	name=discovery filter attempt=2 time=2.321629ms
+2026-05-11T11:49:35.681124Z	info	cluster "fake" kube client started
+2026-05-11T11:49:35.683435Z	info	sync complete	name=crd watcher attempt=2 time=2.218725ms
+2026-05-11T11:49:35.683631Z	info	controllers	starting	controller=crd watcher
+2026-05-11T11:49:35.687683Z	info	sync complete	name=crd watcher attempt=3 time=6.494943ms
+2026-05-11T11:49:35.687837Z	info	sync complete	name=cluster c1 attempt=1 time=2.905µs
+2026-05-11T11:49:35.787269Z	info	controllers	stopped	controller=multicluster secret
+2026-05-11T11:49:35.787311Z	info	controllers	stopped	controller=crd watcher
+2026-05-11T11:49:35.787530Z	info	Stopping CRD watcher
+2026-05-11T11:49:36.063876Z	info	cluster "fake" kube client started
+2026-05-11T11:49:36.064008Z	info	Starting multicluster remote secrets controller
+2026-05-11T11:49:36.066705Z	info	sync complete	name=crd watcher attempt=2 time=2.700287ms
+2026-05-11T11:49:36.066708Z	info	sync complete	name=multicluster remote secrets attempt=2 time=2.630439ms
+2026-05-11T11:49:36.066809Z	info	controllers	starting	controller=crd watcher
+2026-05-11T11:49:36.066865Z	info	multicluster remote secrets controller cache synced in 2.842192ms
+2026-05-11T11:49:36.066937Z	info	controllers	starting	controller=multicluster secret
+2026-05-11T11:49:36.067111Z	info	processing secret event for secret istio-system/s0
+2026-05-11T11:49:36.067215Z	info	Add cluster	cluster=c0 secret=istio-system/s0
+2026-05-11T11:49:36.067338Z	info	Number of remote clusters: 1
+2026-05-11T11:49:36.069986Z	info	sync complete	name=discovery filter attempt=2 time=2.352355ms
+2026-05-11T11:49:36.070407Z	info	cluster "fake" kube client started
+2026-05-11T11:49:36.070800Z	info	sync complete	name=crd watcher attempt=3 time=6.823881ms
+2026-05-11T11:49:36.073304Z	info	sync complete	name=crd watcher attempt=2 time=2.759237ms
+2026-05-11T11:49:36.073492Z	info	controllers	starting	controller=crd watcher
+2026-05-11T11:49:36.077685Z	info	sync complete	name=crd watcher attempt=3 time=7.192392ms
+2026-05-11T11:49:36.077994Z	info	sync complete	name=cluster c0 attempt=1 time=3.699µs
+2026-05-11T11:49:36.078133Z	info	sync complete	name=cluster c0 attempt=1 time=18.263µs
+2026-05-11T11:49:36.125356Z	info	processing secret event for secret istio-system/s0
+2026-05-11T11:49:36.125457Z	info	Update cluster	cluster=c0 secret=istio-system/s0
+2026-05-11T11:49:36.125543Z	info	Number of remote clusters: 1
+2026-05-11T11:49:36.128469Z	info	sync complete	name=discovery filter attempt=2 time=2.435235ms
+2026-05-11T11:49:36.128968Z	info	cluster "fake" kube client started
+2026-05-11T11:49:36.131754Z	info	sync complete	name=crd watcher attempt=2 time=2.702786ms
+2026-05-11T11:49:36.131951Z	info	controllers	starting	controller=crd watcher
+2026-05-11T11:49:36.135972Z	info	sync complete	name=crd watcher attempt=3 time=6.913075ms
+2026-05-11T11:49:36.136345Z	info	sync complete	name=cluster c0 attempt=1 time=29.656µs
+2026-05-11T11:49:36.136510Z	info	sync complete	name=cluster c0 attempt=1 time=51.336µs
+2026-05-11T11:49:36.136696Z	info	stopping previous cluster c0 after new cluster synced
+2026-05-11T11:49:36.136805Z	info	controllers	stopped	controller=crd watcher
+2026-05-11T11:49:36.137020Z	info	Stopping CRD watcher
+2026-05-11T11:49:36.237975Z	info	cluster "fake" kube client started
+2026-05-11T11:49:36.240484Z	info	sync complete	name=crd watcher attempt=2 time=2.457853ms
+2026-05-11T11:49:36.240680Z	info	controllers	starting	controller=crd watcher
+2026-05-11T11:49:36.244642Z	info	sync complete	name=crd watcher attempt=3 time=6.567338ms
+2026-05-11T11:49:36.244924Z	info	sync complete	name=crd watcher attempt=1 time=1.919µs
+2026-05-11T11:49:36.245113Z	info	Starting multicluster remote secrets controller
+2026-05-11T11:49:36.245284Z	info	sync complete	name=multicluster remote secrets attempt=1 time=23.552µs
+2026-05-11T11:49:36.245402Z	info	multicluster remote secrets controller cache synced in 299.45µs
+2026-05-11T11:49:36.245479Z	info	controllers	starting	controller=multicluster secret
+2026-05-11T11:49:36.255906Z	info	sync complete	name=test attempt=1 time=8.32µs
+2026-05-11T11:49:36.279809Z	info	processing secret event for secret istio-system/s0
+2026-05-11T11:49:36.279988Z	info	Add cluster	cluster=c0 secret=istio-system/s0
+2026-05-11T11:49:36.377367Z	info	Number of remote clusters: 1
+2026-05-11T11:49:36.380917Z	info	sync complete	name=discovery filter attempt=2 time=3.042621ms
+2026-05-11T11:49:36.381178Z	info	cluster "fake" kube client started
+2026-05-11T11:49:36.384055Z	info	sync complete	name=crd watcher attempt=2 time=2.720555ms
+2026-05-11T11:49:36.384261Z	info	controllers	starting	controller=crd watcher
+2026-05-11T11:49:36.388401Z	info	sync complete	name=crd watcher attempt=3 time=7.127582ms
+2026-05-11T11:49:36.444505Z	info	processing secret event for secret istio-system/s0
+2026-05-11T11:49:36.444718Z	info	Update cluster	cluster=c0 secret=istio-system/s0
+2026-05-11T11:49:36.520328Z	info	Number of remote clusters: 1
+2026-05-11T11:49:36.523131Z	info	sync complete	name=discovery filter attempt=2 time=2.274524ms
+2026-05-11T11:49:36.523446Z	info	cluster "fake" kube client started
+2026-05-11T11:49:36.525953Z	info	sync complete	name=crd watcher attempt=2 time=2.416309ms
+2026-05-11T11:49:36.526127Z	info	controllers	starting	controller=crd watcher
+2026-05-11T11:49:36.530024Z	info	sync complete	name=crd watcher attempt=3 time=6.494919ms
+2026-05-11T11:49:36.568568Z	info	processing secret event for secret istio-system/s0
+2026-05-11T11:49:36.568809Z	info	skipping update (kubeconfig are identical)	cluster=c0 secret=istio-system/s0
+2026-05-11T11:49:36.568963Z	info	Number of remote clusters: 1
+2026-05-11T11:49:36.589672Z	info	processing secret event for secret istio-system/s0
+2026-05-11T11:49:36.589833Z	info	skipping update (kubeconfig are identical)	cluster=c0 secret=istio-system/s0
+2026-05-11T11:49:36.589959Z	info	Add cluster	cluster=c0-1 secret=istio-system/s0
+2026-05-11T11:49:36.685884Z	info	Number of remote clusters: 2
+2026-05-11T11:49:36.688466Z	info	sync complete	name=discovery filter attempt=2 time=2.248674ms
+2026-05-11T11:49:36.688779Z	info	cluster "fake" kube client started
+2026-05-11T11:49:36.691131Z	info	sync complete	name=crd watcher attempt=2 time=2.211059ms
+2026-05-11T11:49:36.691340Z	info	controllers	starting	controller=crd watcher
+2026-05-11T11:49:36.695920Z	info	sync complete	name=crd watcher attempt=3 time=7.040894ms
+2026-05-11T11:49:36.714314Z	info	processing secret event for secret istio-system/s0
+2026-05-11T11:49:36.714465Z	info	Deleting cluster_id=c0-1 configured by secret=istio-system/s0
+2026-05-11T11:49:36.714623Z	info	controllers	stopped	controller=crd watcher
+2026-05-11T11:49:36.714754Z	error	sync failed	name=cluster c0-1 attempt=4 time=18.54026ms
+2026-05-11T11:49:36.714845Z	info	Stopping CRD watcher
+2026-05-11T11:49:36.714921Z	warn	remote cluster c0-1 failed to sync handler
+2026-05-11T11:49:36.714942Z	info	Number of remote clusters: 1
+2026-05-11T11:49:36.715076Z	info	skipping update (kubeconfig are identical)	cluster=c0 secret=istio-system/s0
+2026-05-11T11:49:36.715184Z	info	Number of remote clusters: 1
+2026-05-11T11:49:36.738154Z	info	processing secret event for secret istio-system/s0
+2026-05-11T11:49:36.738311Z	info	skipping update (kubeconfig are identical)	cluster=c0 secret=istio-system/s0
+2026-05-11T11:49:36.738463Z	info	Add cluster	cluster=c0-1 secret=istio-system/s0
+2026-05-11T11:49:36.835515Z	info	Number of remote clusters: 2
+2026-05-11T11:49:36.838485Z	info	sync complete	name=discovery filter attempt=2 time=2.498192ms
+2026-05-11T11:49:36.838887Z	info	cluster "fake" kube client started
+2026-05-11T11:49:36.841712Z	info	sync complete	name=crd watcher attempt=2 time=2.711485ms
+2026-05-11T11:49:36.841810Z	info	controllers	starting	controller=crd watcher
+2026-05-11T11:49:36.845941Z	info	sync complete	name=crd watcher attempt=3 time=6.95176ms
+2026-05-11T11:49:36.861658Z	info	processing secret event for secret istio-system/s0
+2026-05-11T11:49:36.861794Z	info	Deleting cluster_id=c0-1 configured by secret=istio-system/s0
+2026-05-11T11:49:36.861945Z	info	controllers	stopped	controller=crd watcher
+2026-05-11T11:49:36.861970Z	error	sync failed	name=cluster c0-1 attempt=4 time=15.672691ms
+2026-05-11T11:49:36.862077Z	info	Stopping CRD watcher
+2026-05-11T11:49:36.862121Z	warn	remote cluster c0-1 failed to sync handler
+2026-05-11T11:49:36.862287Z	info	Number of remote clusters: 1
+2026-05-11T11:49:36.862394Z	info	skipping update (kubeconfig are identical)	cluster=c0 secret=istio-system/s0
+2026-05-11T11:49:36.862490Z	info	Number of remote clusters: 1
+2026-05-11T11:49:36.887495Z	info	processing secret event for secret istio-system/s1
+2026-05-11T11:49:36.887678Z	info	Add cluster	cluster=c1 secret=istio-system/s1
+2026-05-11T11:49:36.978434Z	info	Number of remote clusters: 2
+2026-05-11T11:49:36.981134Z	info	sync complete	name=discovery filter attempt=2 time=2.153151ms
+2026-05-11T11:49:36.981267Z	info	cluster "fake" kube client started
+2026-05-11T11:49:36.983528Z	info	sync complete	name=crd watcher attempt=2 time=2.176879ms
+2026-05-11T11:49:36.983720Z	info	controllers	starting	controller=crd watcher
+2026-05-11T11:49:36.987773Z	info	sync complete	name=crd watcher attempt=3 time=6.4581ms
+2026-05-11T11:49:37.007037Z	info	processing secret event for secret istio-system/s2
+2026-05-11T11:49:37.007181Z	warn	cluster has already been registered	cluster=c0 secret=istio-system/s2
+2026-05-11T11:49:37.007274Z	info	Number of remote clusters: 2
+2026-05-11T11:49:37.007784Z	info	processing secret event for secret istio-system/s2
+2026-05-11T11:49:37.007915Z	info	Number of remote clusters: 2
+2026-05-11T11:49:37.008196Z	info	processing secret event for secret istio-system/s0
+2026-05-11T11:49:37.008266Z	info	Deleting cluster_id=c0 configured by secret=istio-system/s0
+2026-05-11T11:49:37.008431Z	info	controllers	stopped	controller=crd watcher
+2026-05-11T11:49:37.008517Z	info	Stopping CRD watcher
+2026-05-11T11:49:37.008405Z	error	sync failed	name=cluster c0 attempt=10 time=478.097987ms
+2026-05-11T11:49:37.008611Z	warn	remote cluster c0 failed to sync handler
+2026-05-11T11:49:37.008635Z	info	Number of remote clusters: 1
+2026-05-11T11:49:37.008741Z	info	Number of remote clusters: 1
+2026-05-11T11:49:37.008730Z	info	stopping previous cluster c0 after new cluster synced
+2026-05-11T11:49:37.008879Z	info	controllers	stopped	controller=crd watcher
+2026-05-11T11:49:37.008954Z	info	Stopping CRD watcher
+2026-05-11T11:49:37.008948Z	error	sync failed	name=cluster c0 attempt=11 time=620.224553ms
+2026-05-11T11:49:37.009078Z	warn	remote cluster c0 failed to sync handler
+2026-05-11T11:49:37.012957Z	info	processing secret event for secret istio-system/s1
+2026-05-11T11:49:37.013073Z	info	Deleting cluster_id=c1 configured by secret=istio-system/s1
+2026-05-11T11:49:37.013206Z	info	controllers	stopped	controller=crd watcher
+2026-05-11T11:49:37.013354Z	info	Stopping CRD watcher
+2026-05-11T11:49:37.013378Z	error	sync failed	name=cluster c1 attempt=4 time=25.290009ms
+2026-05-11T11:49:37.013534Z	info	Number of remote clusters: 0
+2026-05-11T11:49:37.013661Z	info	Number of remote clusters: 0
+2026-05-11T11:49:37.013554Z	warn	remote cluster c1 failed to sync handler
+2026-05-11T11:49:37.042784Z	info	processing secret event for secret istio-system/s3
+2026-05-11T11:49:37.042910Z	info	ignoring cluster as it would overwrite the config cluster	cluster=config secret=istio-system/s3
+2026-05-11T11:49:37.043052Z	info	Number of remote clusters: 0
+2026-05-11T11:49:37.043330Z	info	processing secret event for secret istio-system/s3
+2026-05-11T11:49:37.043398Z	info	Number of remote clusters: 0
+2026-05-11T11:49:37.043770Z	info	controllers	stopped	controller=multicluster secret
+2026-05-11T11:49:37.043799Z	info	controllers	stopped	controller=crd watcher
+2026-05-11T11:49:37.043964Z	info	Stopping CRD watcher
+2026-05-11T11:49:37.137734Z	info	cluster "fake" kube client started
+2026-05-11T11:49:37.140141Z	info	sync complete	name=crd watcher attempt=2 time=2.294208ms
+2026-05-11T11:49:37.140306Z	info	controllers	starting	controller=crd watcher
+2026-05-11T11:49:37.144368Z	info	sync complete	name=crd watcher attempt=3 time=6.543895ms
+2026-05-11T11:49:37.144810Z	info	Starting multicluster remote secrets controller
+2026-05-11T11:49:37.145018Z	info	sync complete	name=multicluster remote secrets attempt=1 time=33.492µs
+2026-05-11T11:49:37.145206Z	info	multicluster remote secrets controller cache synced in 401.669µs
+2026-05-11T11:49:37.145289Z	info	controllers	starting	controller=multicluster secret
+2026-05-11T11:49:37.174220Z	info	processing secret event for secret istio-system/s0
+2026-05-11T11:49:37.174376Z	info	Add cluster	cluster=c0 secret=istio-system/s0
+2026-05-11T11:49:37.270804Z	info	Number of remote clusters: 1
+2026-05-11T11:49:37.273566Z	info	sync complete	name=discovery filter attempt=2 time=2.29454ms
+2026-05-11T11:49:37.273859Z	info	cluster "fake" kube client started
+2026-05-11T11:49:37.276114Z	info	sync complete	name=crd watcher attempt=2 time=2.217123ms
+2026-05-11T11:49:37.276221Z	info	controllers	starting	controller=crd watcher
+2026-05-11T11:49:37.280397Z	info	sync complete	name=crd watcher attempt=3 time=6.438022ms
+2026-05-11T11:49:37.280729Z	info	sync complete	name=cluster c0 attempt=1 time=4.725µs
+2026-05-11T11:49:37.323130Z	info	processing secret event for secret istio-system/s0
+2026-05-11T11:49:37.323283Z	info	Update cluster	cluster=c0 secret=istio-system/s0
+2026-05-11T11:49:37.413310Z	info	Number of remote clusters: 1
+2026-05-11T11:49:37.416071Z	info	sync complete	name=discovery filter attempt=2 time=2.257593ms
+2026-05-11T11:49:37.416331Z	info	cluster "fake" kube client started
+2026-05-11T11:49:37.418821Z	info	sync complete	name=crd watcher attempt=2 time=2.42289ms
+2026-05-11T11:49:37.419064Z	info	controllers	starting	controller=crd watcher
+2026-05-11T11:49:37.423109Z	info	sync complete	name=crd watcher attempt=3 time=6.694738ms
+2026-05-11T11:49:37.423411Z	info	sync complete	name=cluster c0 attempt=1 time=11.379µs
+2026-05-11T11:49:37.423594Z	info	stopping previous cluster c0 after new cluster synced
+2026-05-11T11:49:37.423746Z	info	controllers	stopped	controller=crd watcher
+2026-05-11T11:49:37.423956Z	info	Stopping CRD watcher
+2026-05-11T11:49:37.430683Z	info	controllers	stopped	controller=crd watcher
+2026-05-11T11:49:37.430688Z	info	controllers	stopped	controller=multicluster secret
+2026-05-11T11:49:37.430816Z	info	Stopping CRD watcher
+2026-05-11T11:49:37.525070Z	info	cluster "fake" kube client started
+2026-05-11T11:49:37.527711Z	info	sync complete	name=crd watcher attempt=2 time=2.534852ms
+2026-05-11T11:49:37.527820Z	info	controllers	starting	controller=crd watcher
+2026-05-11T11:49:37.532001Z	info	sync complete	name=crd watcher attempt=3 time=6.83338ms
+2026-05-11T11:49:37.532419Z	info	Starting multicluster remote secrets controller
+2026-05-11T11:49:37.532563Z	info	sync complete	name=multicluster remote secrets attempt=1 time=26.422µs
+2026-05-11T11:49:37.532724Z	info	multicluster remote secrets controller cache synced in 290.527µs
+2026-05-11T11:49:37.532800Z	info	controllers	starting	controller=multicluster secret
+2026-05-11T11:49:37.557901Z	info	processing secret event for secret istio-system/s0
+2026-05-11T11:49:37.558006Z	info	Add cluster	cluster=c0 secret=istio-system/s0
+2026-05-11T11:49:37.622780Z	info	Number of remote clusters: 1
+2026-05-11T11:49:37.625811Z	info	sync complete	name=discovery filter attempt=2 time=2.519875ms
+2026-05-11T11:49:37.626083Z	info	cluster "fake" kube client started
+2026-05-11T11:49:37.628646Z	info	sync complete	name=crd watcher attempt=2 time=2.457838ms
+2026-05-11T11:49:37.628830Z	info	controllers	starting	controller=crd watcher
+2026-05-11T11:49:37.632723Z	info	sync complete	name=crd watcher attempt=3 time=6.536955ms
+2026-05-11T11:49:37.633055Z	info	sync complete	name=cluster c0 attempt=1 time=3.6µs
+2026-05-11T11:49:37.652886Z	info	processing secret event for secret istio-system/s0
+2026-05-11T11:49:37.652995Z	info	Update cluster	cluster=c0 secret=istio-system/s0
+2026-05-11T11:49:37.736074Z	info	Number of remote clusters: 1
+2026-05-11T11:49:37.738939Z	info	sync complete	name=discovery filter attempt=2 time=2.309465ms
+2026-05-11T11:49:37.739189Z	info	cluster "fake" kube client started
+2026-05-11T11:49:37.741637Z	info	sync complete	name=crd watcher attempt=2 time=2.36537ms
+2026-05-11T11:49:37.741820Z	info	controllers	starting	controller=crd watcher
+2026-05-11T11:49:37.745883Z	info	sync complete	name=crd watcher attempt=3 time=6.631023ms
+2026-05-11T11:49:37.746187Z	info	sync complete	name=cluster c0 attempt=1 time=12.377µs
+2026-05-11T11:49:37.746366Z	info	stopping previous cluster c0 after new cluster synced
+2026-05-11T11:49:37.746539Z	info	controllers	stopped	controller=crd watcher
+2026-05-11T11:49:37.746750Z	info	Stopping CRD watcher
+2026-05-11T11:49:37.804501Z	info	controllers	stopped	controller=crd watcher
+2026-05-11T11:49:37.804570Z	info	controllers	stopped	controller=multicluster secret
+2026-05-11T11:49:37.804752Z	info	Stopping CRD watcher
+==================
+WARNING: DATA RACE
+Read at 0x00c00145c160 by goroutine 11270:
+  istio.io/istio/pkg/kube/multicluster.TestRace_59061.func2()
+      /work/upstream/pkg/kube/multicluster/test_59061_race_test.go:37 +0xc6
+
+Previous write at 0x00c00145c160 by goroutine 11235:
+  istio.io/istio/pkg/kube/multicluster.TestRace_59061.func1()
+      /work/upstream/pkg/kube/multicluster/test_59061_race_test.go:29 +0xc6
+
+Goroutine 11270 (running) created at:
+  istio.io/istio/pkg/kube/multicluster.TestRace_59061()
+      /work/upstream/pkg/kube/multicluster/test_59061_race_test.go:32 +0x151
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1934 +0x21c
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1997 +0x44
+
+Goroutine 11235 (running) created at:
+  istio.io/istio/pkg/kube/multicluster.TestRace_59061()
+      /work/upstream/pkg/kube/multicluster/test_59061_race_test.go:24 +0x299
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1934 +0x21c
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1997 +0x44
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c00145c160 by goroutine 11237:
+  istio.io/istio/pkg/kube/multicluster.TestRace_59061.func1()
+      /work/upstream/pkg/kube/multicluster/test_59061_race_test.go:29 +0xc6
+
+Previous write at 0x00c00145c160 by goroutine 11235:
+  istio.io/istio/pkg/kube/multicluster.TestRace_59061.func1()
+      /work/upstream/pkg/kube/multicluster/test_59061_race_test.go:29 +0xc6
+
+Goroutine 11237 (running) created at:
+  istio.io/istio/pkg/kube/multicluster.TestRace_59061()
+      /work/upstream/pkg/kube/multicluster/test_59061_race_test.go:24 +0x299
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1934 +0x21c
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1997 +0x44
+
+Goroutine 11235 (running) created at:
+  istio.io/istio/pkg/kube/multicluster.TestRace_59061()
+      /work/upstream/pkg/kube/multicluster/test_59061_race_test.go:24 +0x299
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1934 +0x21c
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1997 +0x44
+==================
+--- FAIL: TestRace_59061 (0.01s)
+    testing.go:1617: race detected during execution of test
+2026-05-11T11:49:37.956481Z	info	cluster "fake" kube client started
+2026-05-11T11:49:37.958900Z	info	sync complete	name=crd watcher attempt=2 time=2.381871ms
+2026-05-11T11:49:37.959008Z	info	controllers	starting	controller=crd watcher
+2026-05-11T11:49:37.963133Z	info	sync complete	name=crd watcher attempt=3 time=6.56563ms
+2026-05-11T11:49:37.963500Z	info	Starting multicluster remote secrets controller
+2026-05-11T11:49:37.963638Z	info	sync complete	name=multicluster remote secrets attempt=1 time=18.467µs
+2026-05-11T11:49:37.963752Z	info	multicluster remote secrets controller cache synced in 246.005µs
+2026-05-11T11:49:37.963804Z	info	controllers	starting	controller=multicluster secret
+2026-05-11T11:49:37.985356Z	info	processing secret event for secret istio-system/s0
+2026-05-11T11:49:37.985494Z	info	Add cluster	cluster=c0 secret=istio-system/s0
+2026-05-11T11:49:38.088361Z	info	Number of remote clusters: 1
+2026-05-11T11:49:38.091303Z	info	sync complete	name=discovery filter attempt=2 time=2.347315ms
+2026-05-11T11:49:38.091532Z	info	cluster "fake" kube client started
+2026-05-11T11:49:38.093869Z	info	sync complete	name=crd watcher attempt=2 time=2.281076ms
+2026-05-11T11:49:38.094039Z	info	controllers	starting	controller=crd watcher
+2026-05-11T11:49:38.098023Z	info	sync complete	name=crd watcher attempt=3 time=6.396404ms
+2026-05-11T11:49:38.116213Z	info	controllers	stopped	controller=multicluster secret
+2026-05-11T11:49:38.116302Z	info	controllers	stopped	controller=crd watcher
+2026-05-11T11:49:38.116471Z	info	Stopping CRD watcher
+2026-05-11T11:49:38.228888Z	info	cluster "fake" kube client started
+2026-05-11T11:49:38.228974Z	info	Starting multicluster remote secrets controller
+2026-05-11T11:49:38.231385Z	info	sync complete	name=multicluster remote secrets attempt=2 time=2.28013ms
+2026-05-11T11:49:38.231461Z	info	multicluster remote secrets controller cache synced in 2.500575ms
+2026-05-11T11:49:38.231503Z	info	controllers	starting	controller=multicluster secret
+2026-05-11T11:49:38.231422Z	info	sync complete	name=crd watcher attempt=2 time=2.474947ms
+2026-05-11T11:49:38.231613Z	info	processing secret event for secret istio-system/s0
+2026-05-11T11:49:38.231606Z	info	controllers	starting	controller=crd watcher
+2026-05-11T11:49:38.231670Z	info	Add cluster	cluster=c0 secret=istio-system/s0
+2026-05-11T11:49:38.235614Z	info	sync complete	name=crd watcher attempt=3 time=6.647459ms
+2026-05-11T11:49:38.300281Z	info	Number of remote clusters: 1
+2026-05-11T11:49:38.300402Z	info	processing secret event for secret istio-system/s1
+2026-05-11T11:49:38.300453Z	info	Add cluster	cluster=c1 secret=istio-system/s1
+
+...truncated to first 5 WARNING: DATA RACE blocks (original 6 blocks)...

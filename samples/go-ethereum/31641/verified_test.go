@@ -2,29 +2,35 @@ package legacypool
 
 import (
 	"sync"
+	"sync/atomic"
 	"testing"
+
+	"github.com/ethereum/go-ethereum/common"
 )
 
-// TestRace_31641_legacypool_Add_vs_Clear: races LegacyPool.Add (reads pool.all)
-// vs LegacyPool.Clear (writes pool.all). PR #31641 fixes by making Clear
-// mutate the existing lookup in-place (with internal lock) rather than swap
-// the pointer.
-func TestRace_31641_legacypool_Add_vs_Clear(t *testing.T) {
-	pool := NewLegacyPool()
-	txs := []*Transaction{{hash: Hash{1}}, {hash: Hash{2}}, {hash: Hash{3}}}
+// Race: BUG pool.Clear() reassigns pool.all = newLookup() under pool.mu, but
+// concurrent readers of pool.all (no pool.mu lock) race on the pointer.
+// FIX: pool.Clear() calls pool.all.Clear() preserving the pointer; lookup's
+// own RWMutex protects map writes.
+func TestRace_go_ethereum_31641_pool_all(t *testing.T) {
+	pool, _ := setupPool()
+	defer pool.Close()
 
+	var done atomic.Bool
 	var wg sync.WaitGroup
 	wg.Add(2)
 	go func() {
 		defer wg.Done()
-		for i := 0; i < 500; i++ {
-			pool.Add(txs)
+		for i := 0; i < 200 && !done.Load(); i++ {
+			pool.Clear()
 		}
+		done.Store(true)
 	}()
 	go func() {
 		defer wg.Done()
-		for i := 0; i < 500; i++ {
-			pool.Clear()
+		h := common.Hash{}
+		for i := 0; i < 200000 && !done.Load(); i++ {
+			_ = pool.all.Get(h)
 		}
 	}()
 	wg.Wait()

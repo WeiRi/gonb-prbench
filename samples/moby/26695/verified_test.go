@@ -1,5 +1,8 @@
-// PR: https://github.com/moby/moby/pull/26695
-// Fix: Add sync.Mutex to pauseMonitor to prevent data race on waiters map.
+// Race test for moby-26695 (libcontainerd.pauseMonitor)
+// Targets the race in pausemonitor_linux.go:
+//   - handle() reads & clears m.waiters map
+//   - append() adds to m.waiters map
+// BUG: no lock. FIX: sync.Mutex added.
 package libcontainerd
 
 import (
@@ -7,28 +10,23 @@ import (
 	"testing"
 )
 
-func TestRace26695PauseMonitor(t *testing.T) {
+func TestRace_26695_PauseMonitor(t *testing.T) {
 	pm := &pauseMonitor{}
 
 	var wg sync.WaitGroup
 	const iterations = 1000
-	wg.Add(iterations * 2)
 
-	// Concurrent handle (reads/clears waiters) and append (adds waiters).
 	for i := 0; i < iterations; i++ {
+		wg.Add(2)
 		go func() {
 			defer wg.Done()
 			ch := make(chan struct{})
 			pm.append("test", ch)
-			pm.handle("test")
 		}()
 		go func() {
 			defer wg.Done()
-			ch := make(chan struct{})
-			pm.append("other", ch)
-			pm.handle("other")
+			pm.handle("test")
 		}()
 	}
-
 	wg.Wait()
 }

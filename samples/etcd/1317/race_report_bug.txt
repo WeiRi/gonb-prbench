@@ -1,250 +1,46 @@
 WARNING: DATA RACE
-Read at 0x00c0000d4540 by goroutine 10:
+Read at 0x00c420010300 by goroutine 10:
   runtime.mapaccess2_faststr()
-      /usr/local/go/src/runtime/map_faststr.go:108 +0x0
-  ase/etcd-1317.TestRace_1317.func1()
-      /work/verified_test.go:25 +0x153
-  ase/etcd-1317.TestRace_1317.gowrap1()
-      /work/verified_test.go:39 +0x41
+      /usr/local/go/src/runtime/hashmap_fast.go:261 +0x0
+  github.com/coreos/etcd/etcdserver.TestRace_1317.func1()
+      /go/src/github.com/coreos/etcd/etcdserver/etcd_1317_race_test.go:25 +0x137
 
-Previous write at 0x00c0000d4540 by goroutine 11:
+Previous write at 0x00c420010300 by goroutine 8:
   runtime.mapassign_faststr()
-      /usr/local/go/src/runtime/map_faststr.go:203 +0x0
-  ase/etcd-1317.TestRace_1317.func1()
-      /work/verified_test.go:29 +0x20a
-  ase/etcd-1317.TestRace_1317.gowrap1()
-      /work/verified_test.go:39 +0x41
+      /usr/local/go/src/runtime/hashmap_fast.go:694 +0x0
+  github.com/coreos/etcd/etcdserver.TestRace_1317.func1()
+      /go/src/github.com/coreos/etcd/etcdserver/etcd_1317_race_test.go:29 +0x2f7
 
 Goroutine 10 (running) created at:
-  ase/etcd-1317.TestRace_1317()
-      /work/verified_test.go:19 +0x1a4
+  github.com/coreos/etcd/etcdserver.TestRace_1317()
+      /go/src/github.com/coreos/etcd/etcdserver/etcd_1317_race_test.go:19 +0xe2
   testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
+      /usr/local/go/src/testing/testing.go:777 +0x16d
 
-Goroutine 11 (finished) created at:
-  ase/etcd-1317.TestRace_1317()
-      /work/verified_test.go:19 +0x1a4
+Goroutine 8 (finished) created at:
+  github.com/coreos/etcd/etcdserver.TestRace_1317()
+      /go/src/github.com/coreos/etcd/etcdserver/etcd_1317_race_test.go:19 +0xe2
   testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
-==================
+      /usr/local/go/src/testing/testing.go:777 +0x16d
 ==================
 WARNING: DATA RACE
-Write at 0x00c00010e028 by goroutine 10:
-  ase/etcd-1317.(*FollowerStats).Succ()
-      /work/leader.go:30 +0x2c7
-  ase/etcd-1317.TestRace_1317.func1()
-      /work/verified_test.go:34 +0x2e0
-  ase/etcd-1317.TestRace_1317.gowrap1()
-      /work/verified_test.go:39 +0x41
+Read at 0x00c420102038 by goroutine 10:
+  github.com/coreos/etcd/etcdserver.TestRace_1317.func1()
+      /go/src/github.com/coreos/etcd/etcdserver/leader.go:29 +0x1a7
 
-Previous write at 0x00c00010e028 by goroutine 11:
-  ase/etcd-1317.TestRace_1317.func1()
-      /work/verified_test.go:27 +0x19a
-  ase/etcd-1317.TestRace_1317.gowrap1()
-      /work/verified_test.go:39 +0x41
+Previous write at 0x00c420102038 by goroutine 8:
+  github.com/coreos/etcd/etcdserver.TestRace_1317.func1()
+      /go/src/github.com/coreos/etcd/etcdserver/etcd_1317_race_test.go:27 +0x273
 
 Goroutine 10 (running) created at:
-  ase/etcd-1317.TestRace_1317()
-      /work/verified_test.go:19 +0x1a4
+  github.com/coreos/etcd/etcdserver.TestRace_1317()
+      /go/src/github.com/coreos/etcd/etcdserver/etcd_1317_race_test.go:19 +0xe2
   testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
+      /usr/local/go/src/testing/testing.go:777 +0x16d
 
-Goroutine 11 (finished) created at:
-  ase/etcd-1317.TestRace_1317()
-      /work/verified_test.go:19 +0x1a4
+Goroutine 8 (finished) created at:
+  github.com/coreos/etcd/etcdserver.TestRace_1317()
+      /go/src/github.com/coreos/etcd/etcdserver/etcd_1317_race_test.go:19 +0xe2
   testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
+      /usr/local/go/src/testing/testing.go:777 +0x16d
 ==================
-==================
-WARNING: DATA RACE
-Read at 0x00c00010e080 by goroutine 10:
-  ase/etcd-1317.(*FollowerStats).Fail()
-      /work/leader.go:34 +0x2f7
-  ase/etcd-1317.TestRace_1317.func1()
-      /work/verified_test.go:36 +0x257
-  ase/etcd-1317.TestRace_1317.gowrap1()
-      /work/verified_test.go:39 +0x41
-
-Previous write at 0x00c00010e080 by goroutine 11:
-  ase/etcd-1317.TestRace_1317.func1()
-      /work/verified_test.go:27 +0x19a
-  ase/etcd-1317.TestRace_1317.gowrap1()
-      /work/verified_test.go:39 +0x41
-
-Goroutine 10 (running) created at:
-  ase/etcd-1317.TestRace_1317()
-      /work/verified_test.go:19 +0x1a4
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
-
-Goroutine 11 (finished) created at:
-  ase/etcd-1317.TestRace_1317()
-      /work/verified_test.go:19 +0x1a4
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
-==================
-==================
-WARNING: DATA RACE
-Read at 0x00c00010e0d8 by goroutine 10:
-  ase/etcd-1317.(*FollowerStats).Succ()
-      /work/leader.go:29 +0x288
-  ase/etcd-1317.TestRace_1317.func1()
-      /work/verified_test.go:34 +0x2e0
-  ase/etcd-1317.TestRace_1317.gowrap1()
-      /work/verified_test.go:39 +0x41
-
-Previous write at 0x00c00010e0d8 by goroutine 11:
-  ase/etcd-1317.TestRace_1317.func1()
-      /work/verified_test.go:27 +0x19a
-  ase/etcd-1317.TestRace_1317.gowrap1()
-      /work/verified_test.go:39 +0x41
-
-Goroutine 10 (running) created at:
-  ase/etcd-1317.TestRace_1317()
-      /work/verified_test.go:19 +0x1a4
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
-
-Goroutine 11 (finished) created at:
-  ase/etcd-1317.TestRace_1317()
-      /work/verified_test.go:19 +0x1a4
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
-==================
-==================
-WARNING: DATA RACE
-Read at 0x00c000112178 by goroutine 10:
-  ase/etcd-1317.TestRace_1317.func1()
-      /work/verified_test.go:25 +0x164
-  ase/etcd-1317.TestRace_1317.gowrap1()
-      /work/verified_test.go:39 +0x41
-
-Previous write at 0x00c000112178 by goroutine 11:
-  ase/etcd-1317.TestRace_1317.func1()
-      /work/verified_test.go:29 +0x219
-  ase/etcd-1317.TestRace_1317.gowrap1()
-      /work/verified_test.go:39 +0x41
-
-Goroutine 10 (running) created at:
-  ase/etcd-1317.TestRace_1317()
-      /work/verified_test.go:19 +0x1a4
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
-
-Goroutine 11 (finished) created at:
-  ase/etcd-1317.TestRace_1317()
-      /work/verified_test.go:19 +0x1a4
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
-==================
-==================
-WARNING: DATA RACE
-Write at 0x00c00010e038 by goroutine 13:
-  ase/etcd-1317.(*FollowerStats).Succ()
-      /work/leader.go:29 +0x2a6
-  ase/etcd-1317.TestRace_1317.func1()
-      /work/verified_test.go:34 +0x2e0
-  ase/etcd-1317.TestRace_1317.gowrap1()
-      /work/verified_test.go:39 +0x41
-
-Previous write at 0x00c00010e038 by goroutine 10:
-  ase/etcd-1317.(*FollowerStats).Succ()
-      /work/leader.go:29 +0x2a6
-  ase/etcd-1317.TestRace_1317.func1()
-      /work/verified_test.go:34 +0x2e0
-  ase/etcd-1317.TestRace_1317.gowrap1()
-      /work/verified_test.go:39 +0x41
-
-Goroutine 13 (running) created at:
-  ase/etcd-1317.TestRace_1317()
-      /work/verified_test.go:19 +0x1a4
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
-
-Goroutine 10 (running) created at:
-  ase/etcd-1317.TestRace_1317()
-      /work/verified_test.go:19 +0x1a4
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
-==================
-==================
-WARNING: DATA RACE
-Write at 0x00c00010e028 by goroutine 13:
-  ase/etcd-1317.(*FollowerStats).Succ()
-      /work/leader.go:30 +0x2c7
-  ase/etcd-1317.TestRace_1317.func1()
-      /work/verified_test.go:34 +0x2e0
-  ase/etcd-1317.TestRace_1317.gowrap1()
-      /work/verified_test.go:39 +0x41
-
-Previous write at 0x00c00010e028 by goroutine 10:
-  ase/etcd-1317.(*FollowerStats).Succ()
-      /work/leader.go:30 +0x2c7
-  ase/etcd-1317.TestRace_1317.func1()
-      /work/verified_test.go:34 +0x2e0
-  ase/etcd-1317.TestRace_1317.gowrap1()
-      /work/verified_test.go:39 +0x41
-
-Goroutine 13 (running) created at:
-  ase/etcd-1317.TestRace_1317()
-      /work/verified_test.go:19 +0x1a4
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
-
-Goroutine 10 (running) created at:
-  ase/etcd-1317.TestRace_1317()
-      /work/verified_test.go:19 +0x1a4
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
-==================
-==================
-WARNING: DATA RACE
-Read at 0x00c00010e080 by goroutine 13:
-  ase/etcd-1317.(*FollowerStats).Fail()
-      /work/leader.go:34 +0x2f7
-  ase/etcd-1317.TestRace_1317.func1()
-      /work/verified_test.go:36 +0x257
-  ase/etcd-1317.TestRace_1317.gowrap1()
-      /work/verified_test.go:39 +0x41
-
-Previous write at 0x00c00010e080 by goroutine 10:
-  ase/etcd-1317.(*FollowerStats).Fail()
-      /work/leader.go:34 +0x315
-  ase/etcd-1317.TestRace_1317.func1()
-      /work/verified_test.go:36 +0x257
-  ase/etcd-1317.TestRace_1317.gowrap1()
-      /work/verified_test.go:39 +0x41
-
-Goroutine 13 (running) created at:
-  ase/etcd-1317.TestRace_1317()
-      /work/verified_test.go:19 +0x1a4
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e

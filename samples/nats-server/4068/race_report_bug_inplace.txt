@@ -1,0 +1,80 @@
+go: downloading github.com/nats-io/jwt/v2 v2.4.1
+go: downloading golang.org/x/crypto v0.8.0
+go: downloading github.com/nats-io/nkeys v0.4.4
+go: downloading github.com/klauspost/compress v1.16.4
+go: downloading github.com/minio/highwayhash v1.0.2
+go: downloading github.com/nats-io/nuid v1.0.1
+go: downloading golang.org/x/time v0.3.0
+go: downloading github.com/nats-io/nats.go v1.24.0
+go: downloading golang.org/x/sys v0.7.0
+==================
+WARNING: DATA RACE
+Write at 0x00c000124060 by goroutine 132:
+  runtime.mapassign_faststr()
+      /usr/local/go/src/runtime/map_faststr.go:203 +0x0
+  github.com/nats-io/nats-server/v2/server.TestRace_4068_InPlace.func2()
+      /work/upstream/server/nats-server-4068_race_test.go:62 +0x289
+  github.com/nats-io/nats-server/v2/server.TestRace_4068_InPlace.gowrap1()
+      /work/upstream/server/nats-server-4068_race_test.go:68 +0x41
+
+Previous read at 0x00c000124060 by goroutine 50:
+  runtime.mapiternext()
+      /usr/local/go/src/runtime/map.go:862 +0x0
+  github.com/nats-io/nats-server/v2/server.(*Account).addAllServiceImportSubs()
+      /work/upstream/server/accounts.go:2020 +0x1b3
+  github.com/nats-io/nats-server/v2/server.TestRace_4068_InPlace.func1()
+      /work/upstream/server/nats-server-4068_race_test.go:47 +0xdf
+
+Goroutine 132 (running) created at:
+  github.com/nats-io/nats-server/v2/server.TestRace_4068_InPlace()
+      /work/upstream/server/nats-server-4068_race_test.go:55 +0x3f0
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 50 (running) created at:
+  github.com/nats-io/nats-server/v2/server.TestRace_4068_InPlace()
+      /work/upstream/server/nats-server-4068_race_test.go:43 +0x28f
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c000124060 by goroutine 132:
+  runtime.mapdelete_faststr()
+      /usr/local/go/src/runtime/map_faststr.go:301 +0x0
+  github.com/nats-io/nats-server/v2/server.TestRace_4068_InPlace.func2()
+      /work/upstream/server/nats-server-4068_race_test.go:65 +0x1ef
+  github.com/nats-io/nats-server/v2/server.TestRace_4068_InPlace.gowrap1()
+      /work/upstream/server/nats-server-4068_race_test.go:68 +0x41
+
+Previous read at 0x00c000124060 by goroutine 52:
+  runtime.mapiternext()
+      /usr/local/go/src/runtime/map.go:862 +0x0
+  runtime.mapiterinit()
+      /usr/local/go/src/runtime/map.go:859 +0x22e
+
+Goroutine 132 (running) created at:
+  github.com/nats-io/nats-server/v2/server.TestRace_4068_InPlace()
+      /work/upstream/server/nats-server-4068_race_test.go:55 +0x3f0
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 52 (running) created at:
+  github.com/nats-io/nats-server/v2/server.TestRace_4068_InPlace()
+      /work/upstream/server/nats-server-4068_race_test.go:43 +0x28f
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c000124060 by goroutine 134:
+  runtime.mapdelete_faststr()
+      /usr/local/go/src/runtime/map_faststr.go:301 +0x0

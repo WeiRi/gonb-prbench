@@ -1,3 +1,4 @@
+// Race test for traefik-2287 — HealthCheck.SetBackendsConfiguration race
 package healthcheck
 
 import (
@@ -6,36 +7,23 @@ import (
 	"testing"
 )
 
-// TestRace_TR2287_SetBackendsRace triggers the data race on the Backends map
-// in HealthCheck. SetBackendsConfiguration writes hc.Backends and then
-// iterates over it without any mutex protection. Concurrent calls to
-// SetBackendsConfiguration can race on the map assignment and iteration.
-//
-// Bug: HealthCheck has no mutex. SetBackendsConfiguration assigns
-// hc.Backends (line 78) and iterates over it (line 85) without
-// synchronization.
-//
-// Fix: add mutex to protect Backends map in SetBackendsConfiguration.
-func TestRace_TR2287_SetBackendsRace(t *testing.T) {
-	hc := newHealthCheck()
-	ctx := context.Background()
+func TestRace_2287_SetBackends(t *testing.T) {
+	hc := &HealthCheck{Backends: make(map[string]*BackendHealthCheck)}
 
-	var wg sync.WaitGroup
-	const numGoroutines = 100
-
-	for g := 0; g < numGoroutines; g++ {
-		wg.Add(1)
-		go func(gid int) {
-			defer wg.Done()
-			for i := 0; i < 500; i++ {
-				backends := make(map[string]*BackendHealthCheck)
-				backends["test"] = NewBackendHealthCheck(Options{})
-				// SetBackendsConfiguration writes hc.Backends (line 78)
-				// and iterates (line 85) without mutex.
-				hc.SetBackendsConfiguration(ctx, backends)
-			}
-		}(g)
+	makeBackends := func() map[string]*BackendHealthCheck {
+		return map[string]*BackendHealthCheck{"b1": nil, "b2": nil}
 	}
 
+	var wg sync.WaitGroup
+	const N = 15
+	for i := 0; i < N; i++ {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			for j := 0; j < 30; j++ {
+				hc.SetBackendsConfiguration(context.Background(), makeBackends())
+			}
+		}()
+	}
 	wg.Wait()
 }

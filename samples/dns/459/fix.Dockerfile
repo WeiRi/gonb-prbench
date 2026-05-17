@@ -1,23 +1,9 @@
-# syntax=docker/dockerfile:1.4
-# fix.Dockerfile for dns-459 — bug + fix.diff applied
-FROM golang:1.22
-RUN apt-get update && apt-get install -y --no-install-recommends git ca-certificates patch && rm -rf /var/lib/apt/lists/*
-RUN mkdir -p /root/.ssh && ssh-keyscan -t rsa,ed25519 github.com >> /root/.ssh/known_hosts 2>/dev/null
-ENV GOPROXY=https://goproxy.cn,direct GOSUMDB=off GOFLAGS=-mod=mod CGO_ENABLED=1
-
-# === Full upstream at bug commit ===
-RUN --mount=type=ssh git clone --depth=200 git@github.com:miekg/dns.git /work/upstream
-WORKDIR /work/upstream
-RUN --mount=type=ssh git fetch --depth=200 origin 74ec3b2433529ec15e69a037fde9e6ac617257d2 && git checkout --detach 74ec3b2433529ec15e69a037fde9e6ac617257d2
+FROM inp-dns-459
 COPY fix.diff /tmp/fix.diff
-RUN git apply --whitespace=nowarn /tmp/fix.diff || patch -p1 < /tmp/fix.diff
-RUN --mount=type=ssh go mod download 2>&1 | tail -10 || true
-
-# === Race-triggering artefact in isolated sub-package ===
-WORKDIR /work/pr2t-test
-COPY go.mod ./
-COPY verified_test.go ./
-COPY *.go ./
-
-WORKDIR /work
-# NO CMD
+# Filter to apply ONLY client.go (not client_test.go which may be missing/conflicting)
+RUN awk 'BEGIN{p=0} /^diff --git/{if ($0 ~ /client\.go/ && $0 !~ /_test\.go/) p=1; else p=0} p==1' /tmp/fix.diff > /tmp/fix_prod.diff && \
+    cd /go/src/github.com/miekg/dns && \
+    git init --quiet 2>/dev/null; git add -A 2>/dev/null; git -c user.email=x@x -c user.name=x commit -m b -q 2>/dev/null; \
+    git apply --whitespace=nowarn /tmp/fix_prod.diff && \
+    grep -A 3 "shared :=" client.go | head -8
+COPY dns_helper.go /go/src/github.com/miekg/dns/dns_helper.go

@@ -1,29 +1,27 @@
-package pq_1000_poc
+// Race test for pq-1000 — conn.bad bool field race
+package pq
 
 import (
 	"sync"
 	"testing"
 )
 
-func TestRace_pq_1000(t *testing.T) {
-	c := &conn{}
-	const N = 50
-	const ITERS = 500
+func TestRace_1000_ConnBadField(t *testing.T) {
+	cn := newTestConn()
+	const N = 200
 	var wg sync.WaitGroup
-	wg.Add(N * 2)
-	for i := 0; i < N; i++ {
-		go func() {
-			defer wg.Done()
-			for j := 0; j < ITERS; j++ {
-				c.setBad()
-			}
-		}()
-		go func() {
-			defer wg.Done()
-			for j := 0; j < ITERS; j++ {
-				_ = c.getBad()
-			}
-		}()
-	}
+	wg.Add(2)
+	go func() {
+		defer wg.Done()
+		for i := 0; i < N; i++ {
+			markBad(cn)
+		}
+	}()
+	go func() {
+		defer wg.Done()
+		for i := 0; i < N; i++ {
+			_ = isBad(cn)
+		}
+	}()
 	wg.Wait()
 }

@@ -1,49 +1,32 @@
-// Race-trigger test for grpc-go-6587; see README.md for usage.
-
 package leastrequest
 
 import (
 	"sync"
 	"sync/atomic"
 	"testing"
+
+	"google.golang.org/grpc/balancer"
 )
 
-func TestRace_PR6587_LeastRequestPicker(t *testing.T) {
-	const NSC = 4
-	counters := make([]int32, NSC)
-	scs := make([]scWithRPCCount, NSC)
-	for i := 0; i < NSC; i++ {
-		scs[i] = NewSCWithCount(i, &counters[i])
+// BUG: scWithRPCCount.numRPCs is *int32. picker.Pick reads `*sc.numRPCs`
+// plain while atomic.AddInt32 writers concurrently update. Race on int32.
+func TestRace_grpc_go_6587_picker(t *testing.T) {
+	n1, n2 := int32(0), int32(0)
+	p := &picker{
+		choiceCount: 2,
+		subConns:    []scWithRPCCount{{sc: nil, numRPCs: &n1}, {sc: nil, numRPCs: &n2}},
 	}
-	p := NewPicker(2, scs)
-
+	var done int32
 	var wg sync.WaitGroup
-	const G = 8
-	const N = 5000
-
-	for g := 0; g < G; g++ {
+	for i := 0; i < 16; i++ {
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
-			for i := 0; i < N; i++ {
-				res, _ := p.Pick()
-				res.Done(DoneInfo{})
+			for j := 0; j < 5000 && atomic.LoadInt32(&done) == 0; j++ {
+				_, _ = p.Pick(balancer.PickInfo{})
 			}
+			atomic.StoreInt32(&done, 1)
 		}()
 	}
-
-	wg.Add(1)
-	go func() {
-		defer wg.Done()
-		for i := 0; i < N*G; i++ {
-			res, _ := p.Pick()
-			_ = res
-		}
-	}()
-
 	wg.Wait()
-	for i, c := range counters {
-		_ = atomic.LoadInt32(&c)
-		_ = i
-	}
 }

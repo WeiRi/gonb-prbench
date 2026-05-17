@@ -11,13 +11,13 @@ import (
 
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/util/sets"
-	"k8s.io/client-go/kubernetes/scheme"
+	clientscheme "k8s.io/client-go/kubernetes/scheme"
 	"k8s.io/client-go/tools/record"
 )
 
 func TestRace106551SeenAllSources(t *testing.T) {
 	eventBroadcaster := record.NewBroadcaster()
-	config := NewPodConfig(PodConfigNotificationIncremental, eventBroadcaster.NewRecorder(scheme.Scheme, v1.EventSource{Component: "kubelet"}))
+	config := NewPodConfig(PodConfigNotificationIncremental, eventBroadcaster.NewRecorder(clientscheme.Scheme, v1.EventSource{Component: "kubelet"}))
 	seenSources := sets.NewString(TestSource)
 
 	var wg sync.WaitGroup

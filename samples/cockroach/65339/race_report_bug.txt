@@ -1,74 +1,52 @@
 WARNING: DATA RACE
-Write at 0x00c0000b6020 by goroutine 10:
-  ase/cockroach-65339.(*crdbSpan).SetOperationName()
-      /work/crdbspan.go:25 +0x94
-  ase/cockroach-65339.Test65339Race.func1()
-      /work/verified_test.go:16 +0x8f
-  ase/cockroach-65339.Test65339Race.gowrap1()
-      /work/verified_test.go:20 +0x41
+Read at 0x00c000104000 by goroutine 9:
+  github.com/cockroachdb/cockroach/pkg/util/tracing.(*crdbSpan).getRecordingLocked()
+      /work/upstream/pkg/util/tracing/crdbspan.go:20 +0x91
+  github.com/cockroachdb/cockroach/pkg/util/tracing.(*crdbSpan).GetRecording()
+      /work/upstream/pkg/util/tracing/crdbspan.go:32 +0x9e
+  github.com/cockroachdb/cockroach/pkg/util/tracing.Test65339Race.func1()
+      /work/upstream/pkg/util/tracing/cockroach_65339_race_test.go:18 +0xdb
 
-Previous write at 0x00c0000b6020 by goroutine 8:
-  ase/cockroach-65339.(*crdbSpan).SetOperationName()
-      /work/crdbspan.go:25 +0x94
-  ase/cockroach-65339.Test65339Race.func1()
-      /work/verified_test.go:16 +0x8f
-  ase/cockroach-65339.Test65339Race.gowrap1()
-      /work/verified_test.go:20 +0x41
+Previous write at 0x00c000104000 by goroutine 8:
+  github.com/cockroachdb/cockroach/pkg/util/tracing.(*crdbSpan).SetOperationName()
+      /work/upstream/pkg/util/tracing/crdbspan.go:25 +0x84
+  github.com/cockroachdb/cockroach/pkg/util/tracing.Test65339Race.func1()
+      /work/upstream/pkg/util/tracing/cockroach_65339_race_test.go:16 +0x77
 
-Goroutine 10 (running) created at:
-  ase/cockroach-65339.Test65339Race()
-      /work/verified_test.go:13 +0xed
+Goroutine 9 (running) created at:
+  github.com/cockroachdb/cockroach/pkg/util/tracing.Test65339Race()
+      /work/upstream/pkg/util/tracing/cockroach_65339_race_test.go:13 +0x149
   testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
+      /usr/local/go/src/testing/testing.go:1203 +0x202
 
 Goroutine 8 (finished) created at:
-  ase/cockroach-65339.Test65339Race()
-      /work/verified_test.go:13 +0xed
+  github.com/cockroachdb/cockroach/pkg/util/tracing.Test65339Race()
+      /work/upstream/pkg/util/tracing/cockroach_65339_race_test.go:13 +0x149
   testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
-==================
+      /usr/local/go/src/testing/testing.go:1203 +0x202
 ==================
 WARNING: DATA RACE
-Write at 0x00c0000b6020 by goroutine 12:
-  ase/cockroach-65339.(*crdbSpan).SetOperationName()
-      /work/crdbspan.go:25 +0x94
-  ase/cockroach-65339.Test65339Race.func1()
-      /work/verified_test.go:16 +0x8f
-  ase/cockroach-65339.Test65339Race.gowrap1()
-      /work/verified_test.go:20 +0x41
+Write at 0x00c000226040 by goroutine 96:
+  github.com/cockroachdb/cockroach/pkg/util/tracing.(*crdbSpan).SetOperationName()
+      /work/upstream/pkg/util/tracing/crdbspan.go:25 +0x84
+  github.com/cockroachdb/cockroach/pkg/util/tracing.Test65339Race.func1()
+      /work/upstream/pkg/util/tracing/cockroach_65339_race_test.go:16 +0x77
 
-Previous read at 0x00c0000b6020 by goroutine 9:
-  ase/cockroach-65339.(*crdbSpan).getRecordingLocked()
-      /work/crdbspan.go:20 +0x9a
-  ase/cockroach-65339.(*crdbSpan).GetRecording()
-      /work/crdbspan.go:32 +0xaa
-  ase/cockroach-65339.Test65339Race.func1()
-      /work/verified_test.go:18 +0xcb
-  ase/cockroach-65339.Test65339Race.gowrap1()
-      /work/verified_test.go:20 +0x41
+Previous write at 0x00c000226040 by goroutine 47:
+  github.com/cockroachdb/cockroach/pkg/util/tracing.(*crdbSpan).SetOperationName()
+      /work/upstream/pkg/util/tracing/crdbspan.go:25 +0x84
+  github.com/cockroachdb/cockroach/pkg/util/tracing.Test65339Race.func1()
+      /work/upstream/pkg/util/tracing/cockroach_65339_race_test.go:16 +0x77
 
-Goroutine 12 (running) created at:
-  ase/cockroach-65339.Test65339Race()
-      /work/verified_test.go:13 +0xed
+Goroutine 96 (running) created at:
+  github.com/cockroachdb/cockroach/pkg/util/tracing.Test65339Race()
+      /work/upstream/pkg/util/tracing/cockroach_65339_race_test.go:13 +0x149
   testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
+      /usr/local/go/src/testing/testing.go:1203 +0x202
 
-Goroutine 9 (finished) created at:
-  ase/cockroach-65339.Test65339Race()
-      /work/verified_test.go:13 +0xed
+Goroutine 47 (finished) created at:
+  github.com/cockroachdb/cockroach/pkg/util/tracing.Test65339Race()
+      /work/upstream/pkg/util/tracing/cockroach_65339_race_test.go:13 +0x149
   testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
+      /usr/local/go/src/testing/testing.go:1203 +0x202
 ==================
---- FAIL: Test65339Race (0.00s)
-    testing.go:1398: race detected during execution of test
-FAIL
-FAIL	ase/cockroach-65339	0.018s
-FAIL

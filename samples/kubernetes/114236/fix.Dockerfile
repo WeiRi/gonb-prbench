@@ -1,23 +1,6 @@
-# syntax=docker/dockerfile:1.4
-# fix.Dockerfile for kubernetes-114236 — bug + fix.diff applied
-FROM golang:1.21
-RUN apt-get update && apt-get install -y --no-install-recommends git ca-certificates patch && rm -rf /var/lib/apt/lists/*
-RUN mkdir -p /root/.ssh && ssh-keyscan -t rsa,ed25519 github.com >> /root/.ssh/known_hosts 2>/dev/null
-ENV GOPROXY=https://goproxy.cn,direct GOSUMDB=off GOFLAGS=-mod=mod CGO_ENABLED=1
-
-# === Full upstream at bug commit ===
-RUN --mount=type=ssh git clone --depth=200 git@github.com:kubernetes/kubernetes.git /work/upstream
-WORKDIR /work/upstream
-RUN --mount=type=ssh git fetch --depth=200 origin 3e26e104bdf9d0dc3c4046d6350b93557c67f3f4 && git checkout --detach 3e26e104bdf9d0dc3c4046d6350b93557c67f3f4
-COPY fix.diff /tmp/fix.diff
-RUN git apply --whitespace=nowarn /tmp/fix.diff || patch -p1 < /tmp/fix.diff
-RUN --mount=type=ssh go mod download 2>&1 | tail -10 || true
-
-# === Race-triggering artefact in isolated sub-package ===
-WORKDIR /work/pr2t-test
-COPY go.mod ./
-COPY verified_test.go ./
-COPY *.go ./
-
+FROM golang:1.22
+ENV GOPROXY=off GOSUMDB=off CGO_ENABLED=1
 WORKDIR /work
-# NO CMD
+COPY go.mod event_broadcaster_fixed.go event_broadcaster.go verified_test.go ./
+RUN rm -f event_broadcaster.go && mv event_broadcaster_fixed.go event_broadcaster.go
+CMD ["sh","-c","go test -race -vet=off -count=10 -timeout=60s ."]

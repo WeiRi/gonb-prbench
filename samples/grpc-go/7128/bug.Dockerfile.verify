@@ -1,0 +1,28 @@
+# syntax=docker/dockerfile:1.4
+# bug.Dockerfile (verify/replicated) for grpc-go-7128
+# Original mock-based stress test. For comparison/verification.
+#
+# Build:
+#   docker build --secret id=ssh_key,src=$HOME/.ssh/id_ed25519 -f bug.Dockerfile.verify -t gonb-grpc-go-7128-verify .
+
+# Stage 1: clone upstream
+FROM golang:1.22 AS clone
+RUN --mount=type=secret,id=ssh_key \
+    mkdir -p /root/.ssh && \
+    cp /run/secrets/ssh_key /root/.ssh/id_ed25519 && \
+    chmod 600 /root/.ssh/id_ed25519 && \
+    ssh-keyscan github.com >> /root/.ssh/known_hosts && \
+    git clone --depth=200 git@github.com:grpc/grpc-go.git /work/upstream && \
+    cd /work/upstream && \
+    git fetch --depth=200 origin e22436abb80982dab3294250b7284eedd8f20768 && \
+    git checkout --detach e22436abb80982dab3294250b7284eedd8f20768 && \
+    rm -rf /root/.ssh
+
+# Stage 2: replicated mock test
+FROM golang:1.22
+ENV GOPROXY=https://goproxy.cn,direct GOSUMDB=off GOFLAGS=-mod=mod CGO_ENABLED=1
+COPY --from=clone /work/upstream /work/upstream
+WORKDIR /work/pr2t-test
+COPY verified_test.go ./
+RUN printf 'module ase/grpc-go-7128\n\ngo 1.22\n' > go.mod
+WORKDIR /work

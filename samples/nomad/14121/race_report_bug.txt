@@ -1,15 +1,33 @@
-# WHITE_BOX_UPSTREAM_NOT_REPRODUCIBLE
-# Sample: nomad-14121
-# Reason: race_detector_timing_window_missed_in_container_300s
-# Detail: docker re-run on upstream failed; v3 worker attempted with --memory=12g --cpus=6 --timeout=900s
-# Stderr: 
-# 
-# This sample's race trace was originally captured during dataset construction
-# (see marker.real_frame_hits + marker.bug_races). The current dataset<sid>/
-# verified_test.go references upstream types and cannot trigger the race in standalone
-# docker without the full upstream source tree. The marker remains ab_class=A based on
-# the original docker validation.
-# 
-# Mitigation: in the public artifact's REPRO_GUIDE.md, note that ~10% of A samples
-# (24 / 263) require an upstream checkout. The remaining ~90% (239 / 263) reproduce
-# standalone via samples/<sid>/run.sh.
+WARNING: DATA RACE
+Write at 0x00c000b44298 by goroutine 146:
+  github.com/hashicorp/nomad/nomad/deploymentwatcher.(*deploymentWatcher).updateDeployment()
+      /work/upstream/nomad/deploymentwatcher/deployment_watcher.go:142 +0xa4
+  github.com/hashicorp/nomad/nomad/deploymentwatcher.(*Watcher).addLocked()
+      /work/upstream/nomad/deploymentwatcher/deployments_watcher.go:253 +0x5f5
+  github.com/hashicorp/nomad/nomad/deploymentwatcher.(*Watcher).add()
+      /work/upstream/nomad/deploymentwatcher/deployments_watcher.go:235 +0xae
+  github.com/hashicorp/nomad/nomad/deploymentwatcher.(*Watcher).watchDeployments()
+      /work/upstream/nomad/deploymentwatcher/deployments_watcher.go:184 +0x344
+  github.com/hashicorp/nomad/nomad/deploymentwatcher.(*Watcher).SetEnabled.func2()
+      /work/upstream/nomad/deploymentwatcher/deployments_watcher.go:136 +0x58
+
+Previous read at 0x00c000b44298 by goroutine 511:
+  github.com/hashicorp/nomad/nomad/deploymentwatcher.(*deploymentWatcher).getEval()
+      /work/upstream/nomad/deploymentwatcher/deployment_watcher.go:843 +0x1dd
+  github.com/hashicorp/nomad/nomad/deploymentwatcher.(*deploymentWatcher).createBatchedUpdate.func1()
+      /work/upstream/nomad/deploymentwatcher/deployment_watcher.go:829 +0x10f
+
+Goroutine 146 (running) created at:
+  github.com/hashicorp/nomad/nomad/deploymentwatcher.(*Watcher).SetEnabled()
+      /work/upstream/nomad/deploymentwatcher/deployments_watcher.go:136 +0x23c
+  github.com/hashicorp/nomad/nomad/deploymentwatcher.TestDeploymentWatcher_PromotedCanary_UpdatedAllocs()
+      /work/upstream/nomad/deploymentwatcher/verified_test_dw_test.go:1466 +0xf39
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1439 +0x213
+  testing.(*T).Run.func1()
+      /usr/local/go/src/testing/testing.go:1486 +0x47
+
+Goroutine 511 (running) created at:
+  time.goFunc()
+      /usr/local/go/src/time/sleep.go:176 +0x47
+==================

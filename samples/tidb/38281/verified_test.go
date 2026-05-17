@@ -1,3 +1,6 @@
+// Race test for tidb-38281 — collationInfo.coerInit plain bool race
+// BUG: SetCoercibility writes c.coerInit = true without sync; HasCoercibility reads
+// FIX: coerInit is atomic.Bool
 package expression
 
 import (
@@ -5,25 +8,22 @@ import (
 	"testing"
 )
 
-func TestRace_tidb_38281(t *testing.T) {
+func TestRace_38281_CoerInit(t *testing.T) {
+	c := &collationInfo{}
+	const N = 50
 	var wg sync.WaitGroup
-	const N = 16
-	const ITERS = 5000
-	for g := 0; g < N; g++ {
-		ci := &collationInfo{}
-		wg.Add(2)
-		go func() {
-			defer wg.Done()
-			for i := 0; i < ITERS; i++ {
-				ci.SetCoercibility(Coercibility(i))
-			}
-		}()
-		go func() {
-			defer wg.Done()
-			for i := 0; i < ITERS; i++ {
-				_ = ci.HasCoercibility()
-			}
-		}()
-	}
+	wg.Add(2)
+	go func() {
+		defer wg.Done()
+		for i := 0; i < N*20; i++ {
+			c.SetCoercibility(CoercibilityExplicit)
+		}
+	}()
+	go func() {
+		defer wg.Done()
+		for i := 0; i < N*20; i++ {
+			_ = c.HasCoercibility()
+		}
+	}()
 	wg.Wait()
 }

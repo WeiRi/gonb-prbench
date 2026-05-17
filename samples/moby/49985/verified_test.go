@@ -1,83 +1,45 @@
-// Race-trigger test for moby-49985; see README.md for usage.
-
 package networkdb
 
 import (
 	"sync"
+	"sync/atomic"
 	"testing"
+
+	"github.com/hashicorp/memberlist"
 )
 
-type _bugKeyring struct {
-	primaryKey []byte
-	keys       [][]byte
-}
-
-func (k *_bugKeyring) UseKey(key []byte) {
-	for _, kk := range k.keys {
-		if len(kk) == len(key) {
-			k.primaryKey = kk // BUG: write while concurrent reader at PrimaryKey()
-			return
-		}
+// BUG: NetworkDB.SetPrimaryKey holds RLock; inside it calls
+// memberlist.Keyring.UseKey which reads/writes k.keys with internal locking
+// only on the write path (installKeys), not on the read iter. Concurrent
+// SetPrimaryKey under RLock therefore races on k.keys.
+// FIX (PR #49985): replace RLock with Lock so only one SetPrimaryKey runs at a time.
+func TestRace_49985_setprimarykey(t *testing.T) {
+	key1 := []byte("0123456789abcdef")
+	key2 := []byte("fedcba9876543210")
+	kr, err := memberlist.NewKeyring([][]byte{key1, key2}, key1)
+	if err != nil {
+		t.Fatal(err)
 	}
-}
-
-func (k *_bugKeyring) PrimaryKey() []byte { return k.primaryKey }
-
-type _BugNetworkDB struct {
-	sync.RWMutex
-	keys    [][]byte
-	keyring *_bugKeyring
-}
-
-// SetPrimaryKey (BUG): RLock instead of Lock — multiple writers allowed.
-func (nDB *_BugNetworkDB) SetPrimaryKey(key []byte) {
-	nDB.RLock()
-	defer nDB.RUnlock()
-	for _, dbKey := range nDB.keys {
-		if len(key) == len(dbKey) {
-			if nDB.keyring != nil {
-				nDB.keyring.UseKey(key)
-			}
-			break
-		}
+	nDB := &NetworkDB{
+		config:  &Config{Keys: [][]byte{key1, key2}},
+		keyring: kr,
 	}
-}
 
-func (nDB *_BugNetworkDB) readPrimary() []byte {
-	nDB.RLock()
-	defer nDB.RUnlock()
-	if nDB.keyring != nil {
-		return nDB.keyring.PrimaryKey()
-	}
-	return nil
-}
-
-func TestRace_PR49985_SetPrimaryKey(t *testing.T) {
-	nDB := &_BugNetworkDB{keyring: &_bugKeyring{}}
-	for i := 0; i < 8; i++ {
-		k := []byte{byte(i), byte(i), byte(i), byte(i)}
-		nDB.keys = append(nDB.keys, k)
-		nDB.keyring.keys = append(nDB.keyring.keys, k)
-	}
-	nDB.keyring.primaryKey = nDB.keys[0]
-
-	keyA := []byte{1, 1, 1, 1}
-	keyB := []byte{2, 2, 2, 2}
-
+	var done int32
 	var wg sync.WaitGroup
-	for i := 0; i < 8; i++ {
-		wg.Add(1)
-		go func(i int) {
-			defer wg.Done()
-			for j := 0; j < 200; j++ {
-				if (i+j)%2 == 0 {
-					nDB.SetPrimaryKey(keyA)
-				} else {
-					nDB.SetPrimaryKey(keyB)
-				}
-				_ = nDB.readPrimary()
-			}
-		}(i)
-	}
+	wg.Add(2)
+	go func() {
+		defer wg.Done()
+		for i := 0; i < 2000 && atomic.LoadInt32(&done) == 0; i++ {
+			nDB.SetPrimaryKey(key1)
+		}
+		atomic.StoreInt32(&done, 1)
+	}()
+	go func() {
+		defer wg.Done()
+		for i := 0; i < 2000 && atomic.LoadInt32(&done) == 0; i++ {
+			nDB.SetPrimaryKey(key2)
+		}
+	}()
 	wg.Wait()
 }

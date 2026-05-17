@@ -1,4 +1,4 @@
-package hugo7393repro
+package hugolib
 
 type pageMaps struct {
 	id int

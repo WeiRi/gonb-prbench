@@ -1,34 +1,50 @@
 WARNING: DATA RACE
-Read at 0x00c00012616c by goroutine 9:
-  ase/tidb-40277.(*castJSONAsArrayFunctionSig).EvalJSON_BUG()
-      /work/verified_test.go:77 +0x98
-  ase/tidb-40277.TestRace_tidb40277.func2()
-      /work/verified_test.go:116 +0xe4
+Read at 0x00c000631578 by goroutine 58:
+  github.com/pingcap/tidb/expression.TestRace_tidb_40277_stmt_ctx_fields.func2()
+      /work/upstream/expression/40277_race_test.go:31 +0xa5
 
-Previous write at 0x00c00012616c by goroutine 8:
-  ase/tidb-40277.(*castJSONAsArrayFunctionSig).EvalJSON_BUG()
-      /work/verified_test.go:80 +0xe5
-  ase/tidb-40277.TestRace_tidb40277.func1()
-      /work/verified_test.go:110 +0xe4
+Previous write at 0x00c000631578 by goroutine 57:
+  github.com/pingcap/tidb/expression.TestRace_tidb_40277_stmt_ctx_fields.func1()
+      /work/upstream/expression/40277_race_test.go:23 +0xcb
 
-Goroutine 9 (running) created at:
-  ase/tidb-40277.TestRace_tidb40277()
-      /work/verified_test.go:113 +0x4c7
+Goroutine 58 (running) created at:
+  github.com/pingcap/tidb/expression.TestRace_tidb_40277_stmt_ctx_fields()
+      /work/upstream/expression/40277_race_test.go:28 +0x29c
   testing.tRunner()
       /usr/local/go/src/testing/testing.go:1689 +0x21e
   testing.(*T).Run.gowrap1()
       /usr/local/go/src/testing/testing.go:1742 +0x44
 
-Goroutine 8 (finished) created at:
-  ase/tidb-40277.TestRace_tidb40277()
-      /work/verified_test.go:107 +0x3ce
+Goroutine 57 (running) created at:
+  github.com/pingcap/tidb/expression.TestRace_tidb_40277_stmt_ctx_fields()
+      /work/upstream/expression/40277_race_test.go:19 +0x1b0
   testing.tRunner()
       /usr/local/go/src/testing/testing.go:1689 +0x21e
   testing.(*T).Run.gowrap1()
       /usr/local/go/src/testing/testing.go:1742 +0x44
 ==================
---- FAIL: TestRace_tidb40277 (0.00s)
-    testing.go:1398: race detected during execution of test
-FAIL
-FAIL	ase/tidb-40277	0.015s
-FAIL
+WARNING: DATA RACE
+Write at 0x00c000631578 by goroutine 57:
+  github.com/pingcap/tidb/expression.TestRace_tidb_40277_stmt_ctx_fields.func1()
+      /work/upstream/expression/40277_race_test.go:24 +0xde
+
+Previous read at 0x00c000631578 by goroutine 58:
+  github.com/pingcap/tidb/expression.TestRace_tidb_40277_stmt_ctx_fields.func2()
+      /work/upstream/expression/40277_race_test.go:31 +0xa5
+
+Goroutine 57 (running) created at:
+  github.com/pingcap/tidb/expression.TestRace_tidb_40277_stmt_ctx_fields()
+      /work/upstream/expression/40277_race_test.go:19 +0x1b0
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 58 (running) created at:
+  github.com/pingcap/tidb/expression.TestRace_tidb_40277_stmt_ctx_fields()
+      /work/upstream/expression/40277_race_test.go:28 +0x29c
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================

@@ -4,92 +4,33 @@
 |---|---|
 | Project | moby |
 | Reference | https://github.com/moby/moby/pull/49985 |
-| Bug commit | `2e25c2b14f42` |
 | Category | data_race |
 | Oracle | RACE |
 | Primary diff file | `libnetwork/networkdb/cluster.go` |
+| Base image | `gonb-moby-49985-base-v8:latest` (built by gonb-prebuild for this sample) |
 
+## In-place reproduction
 
-## Race report excerpt
+This sample uses the original upstream source at the bug commit (pre-built into the base image — no SSH-clone required at sample-build time).
 
-The following stack trace is captured by Go's race detector when running the bug build:
+### Build & run bug
 
-```
-WARNING: DATA RACE
-Write at 0x00c0001963f0 by goroutine 12:
-  ase/moby-49985.(*_bugKeyring).UseKey()
-      /work/verified_test.go:45 +0x271
-  ase/moby-49985.(*_BugNetworkDB).SetPrimaryKey()
-      /work/verified_test.go:66 +0x187
-  ase/moby-49985.TestRace_PR49985_SetPrimaryKey.func1()
-      /work/verified_test.go:101 +0x14d
-  ase/moby-49985.TestRace_PR49985_SetPrimaryKey.func2()
-      /work/verified_test.go:107 +0x41
-
-Previous write at 0x00c0001963f0 by goroutine 14:
-  ase/moby-49985.(*_bugKeyring).UseKey()
-      /work/verified_test.go:45 +0x271
-  ase/moby-49985.(*_BugNetworkDB).SetPrimaryKey()
-      /work/verified_test.go:66 +0x187
-  ase/moby-49985.TestRace_PR49985_SetPrimaryKey.func1()
-      /work/verified_test.go:101 +0x14d
-  ase/moby-49985.TestRace_PR49985_SetPrimaryKey.func2()
-      /work/verified_test.go:107 +0x41
-
-Goroutine 12 (running) created at:
-  ase/moby-49985.TestRace_PR49985_SetPrimaryKey()
-      /work/verified_test.go:97 +0x637
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1595 +0x261
-  testing.(*T).Run.func1()
-      /usr/local/go/src/testing/testing.go:1648 +0x44
-
-Goroutine 14 (finished) created at:
-  ase/moby-49985.TestRace_PR49985_SetPrimaryKey()
-      /work/verified_test.go:97 +0x637
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1595 +0x261
-  testing.(*T).Run.func1()
-```
-
-(Full trace in `race_report_bug.txt`.)
-
-## How to reproduce
-
-### 1. SSH agent setup (one-time)
 ```bash
-eval $(ssh-agent -a /tmp/ssh-agent-gonb.sock)
-ssh-add ~/.ssh/id_ed25519
-export SSH_AUTH_SOCK=/tmp/ssh-agent-gonb.sock
-```
-
-### 2. Build bug image
-```bash
-DOCKER_BUILDKIT=1 docker build --ssh default -f bug.Dockerfile -t gonb-moby-49985-bug .
-```
-
-### 3. Trigger race
-```bash
-docker run --rm --memory=2g --cpus=1 gonb-moby-49985-bug \
-  sh -c "cd /work/pr2t-test && go test -race -vet=off -count=20 -timeout=180s ./..."
+docker build -f bug.Dockerfile -t moby-49985-bug .
+docker run --rm --cpus=2 --memory=2g moby-49985-bug \
+  sh -c "go test -race -vet=off -count=10 -timeout=300s ."
 # Expected: WARNING: DATA RACE + FAIL
 ```
 
-### 4. Verify fix
+### Build & run fix
+
 ```bash
-DOCKER_BUILDKIT=1 docker build --ssh default -f fix.Dockerfile -t gonb-moby-49985-fix .
-docker run --rm --memory=2g --cpus=1 gonb-moby-49985-fix \
-  sh -c "cd /work/pr2t-test && go test -race -vet=off -count=20 -timeout=180s ./..."
-# Expected: PASS (race not triggered)
+docker build -f fix.Dockerfile -t moby-49985-fix .
+docker run --rm --cpus=2 --memory=2g moby-49985-fix \
+  sh -c "go test -race -vet=off -count=10 -timeout=300s ."
+# Expected: PASS (PR fix suppresses the race)
 ```
 
-## HTTPS fallback (if SSH blocked)
+## Race report
 
-If `git@github.com:` clone fails in your environment:
-```bash
-sed -i 's|git@github.com:|https://github.com/|g' bug.Dockerfile fix.Dockerfile
-# Also remove the --mount=type=ssh hint (HTTPS doesn't need it)
-sed -i 's|--mount=type=ssh ||g' bug.Dockerfile fix.Dockerfile
-DOCKER_BUILDKIT=1 docker build -f bug.Dockerfile -t gonb-moby-49985-bug .
-# (then run as above, no --ssh flag)
-```
+See `race_report_bug.txt` for the captured race detector output from a bug build run.

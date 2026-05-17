@@ -1,64 +1,29 @@
 WARNING: DATA RACE
-Write at 0x00c0001a817f by goroutine 8:
-  ase/pq-1000.(*conn).setBad()
-      /work/conn.go:9 +0xa4
-  ase/pq-1000.TestRace_pq_1000.func1()
-      /work/verified_test.go:18 +0x9b
+Write at 0x00c00018c550 by goroutine 8:
+  github.com/lib/pq.markBad()
+      /work/upstream/pq_1000_helper.go:7 +0xaa
+  github.com/lib/pq.TestRace_1000_ConnBadField.func1()
+      /work/upstream/pq_1000_race_test.go:17 +0xa2
 
-Previous read at 0x00c0001a817f by goroutine 11:
-  ase/pq-1000.(*conn).getBad()
-      /work/conn.go:11 +0xa4
-  ase/pq-1000.TestRace_pq_1000.func2()
-      /work/verified_test.go:24 +0x9b
+Previous read at 0x00c00018c550 by goroutine 9:
+  github.com/lib/pq.isBad()
+      /work/upstream/pq_1000_helper.go:8 +0xaa
+  github.com/lib/pq.TestRace_1000_ConnBadField.func2()
+      /work/upstream/pq_1000_race_test.go:23 +0xa2
 
 Goroutine 8 (running) created at:
-  ase/pq-1000.TestRace_pq_1000()
-      /work/verified_test.go:15 +0x144
+  github.com/lib/pq.TestRace_1000_ConnBadField()
+      /work/upstream/pq_1000_race_test.go:14 +0x15c
   testing.tRunner()
       /usr/local/go/src/testing/testing.go:1689 +0x21e
   testing.(*T).Run.gowrap1()
       /usr/local/go/src/testing/testing.go:1742 +0x44
 
-Goroutine 11 (finished) created at:
-  ase/pq-1000.TestRace_pq_1000()
-      /work/verified_test.go:21 +0x7e
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
-==================
-==================
-WARNING: DATA RACE
-Write at 0x00c0001a817f by goroutine 14:
-  ase/pq-1000.(*conn).setBad()
-      /work/conn.go:9 +0xa4
-  ase/pq-1000.TestRace_pq_1000.func1()
-      /work/verified_test.go:18 +0x9b
-
-Previous write at 0x00c0001a817f by goroutine 8:
-  ase/pq-1000.(*conn).setBad()
-      /work/conn.go:9 +0xa4
-  ase/pq-1000.TestRace_pq_1000.func1()
-      /work/verified_test.go:18 +0x9b
-
-Goroutine 14 (running) created at:
-  ase/pq-1000.TestRace_pq_1000()
-      /work/verified_test.go:15 +0x144
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
-
-Goroutine 8 (finished) created at:
-  ase/pq-1000.TestRace_pq_1000()
-      /work/verified_test.go:15 +0x144
+Goroutine 9 (finished) created at:
+  github.com/lib/pq.TestRace_1000_ConnBadField()
+      /work/upstream/pq_1000_race_test.go:20 +0x204
   testing.tRunner()
       /usr/local/go/src/testing/testing.go:1689 +0x21e
   testing.(*T).Run.gowrap1()
       /usr/local/go/src/testing/testing.go:1742 +0x44
 ==================
-    testing.go:1398: race detected during execution of test
---- FAIL: TestRace_pq_1000 (0.00s)
-FAIL
-FAIL	ase/pq-1000	0.021s
-FAIL

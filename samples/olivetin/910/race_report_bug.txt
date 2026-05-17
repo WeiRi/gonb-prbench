@@ -1,0 +1,35 @@
+WARNING: DATA RACE
+Read at 0x00c000138720 by goroutine 53:
+  runtime.mapaccess2_faststr()
+      /usr/local/go/src/internal/runtime/maps/runtime_faststr_swiss.go:162 +0x0
+  github.com/OliveTin/OliveTin/internal/auth/otoauth2.(*OAuth2Handler).checkOAuthCallbackCookie()
+      /work/upstream/service/internal/auth/otoauth2/restapi_auth_oauth2.go:180 +0x29e
+  github.com/OliveTin/OliveTin/internal/auth/otoauth2.TestRace_910_OAuth2RegisteredStates.func2()
+      /work/upstream/service/internal/auth/otoauth2/olivetin_910_race_test.go:65 +0x224
+  github.com/OliveTin/OliveTin/internal/auth/otoauth2.TestRace_910_OAuth2RegisteredStates.gowrap1()
+      /work/upstream/service/internal/auth/otoauth2/olivetin_910_race_test.go:67 +0x41
+
+Previous write at 0x00c000138720 by goroutine 14:
+  runtime.mapassign_faststr()
+      /usr/local/go/src/internal/runtime/maps/runtime_faststr_swiss.go:263 +0x0
+  github.com/OliveTin/OliveTin/internal/auth/otoauth2.(*OAuth2Handler).HandleOAuthLogin()
+      /work/upstream/service/internal/auth/otoauth2/restapi_auth_oauth2.go:147 +0x3a6
+  github.com/OliveTin/OliveTin/internal/auth/otoauth2.TestRace_910_OAuth2RegisteredStates.func1()
+      /work/upstream/service/internal/auth/otoauth2/olivetin_910_race_test.go:51 +0x116
+
+Goroutine 53 (running) created at:
+  github.com/OliveTin/OliveTin/internal/auth/otoauth2.TestRace_910_OAuth2RegisteredStates()
+      /work/upstream/service/internal/auth/otoauth2/olivetin_910_race_test.go:58 +0x628
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1934 +0x21c
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1997 +0x44
+
+Goroutine 14 (running) created at:
+  github.com/OliveTin/OliveTin/internal/auth/otoauth2.TestRace_910_OAuth2RegisteredStates()
+      /work/upstream/service/internal/auth/otoauth2/olivetin_910_race_test.go:46 +0x527
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1934 +0x21c
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1997 +0x44
+==================

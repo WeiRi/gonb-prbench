@@ -1,31 +1,25 @@
-// Race-trigger test for etcd-7361; see README.md for usage.
-
 package tcpproxy
 
 import (
-	"sync"
+	"sync/atomic"
 	"testing"
 	"time"
 )
 
-func TestRace_TCPProxy__LoopVarCapture(t *testing.T) {
-	const N = 64
-	remotes := make([]*remote, 0, N)
-	for i := 0; i < N; i++ {
-		remotes = append(remotes, &remote{addr: "127.0.0.1:1", id: i, active: false})
+func TestRace_etcd_7361_runmonitor_loop_var(t *testing.T) {
+	tp := &TCPProxy{
+		MonitorInterval: time.Microsecond,
+		donec:           make(chan struct{}),
 	}
-	tp := &TCPProxy{remotes: remotes}
-	var wg sync.WaitGroup
-	const iters = 16
-	wg.Add(iters)
-	for i := 0; i < iters; i++ {
-		go func() {
-			defer wg.Done()
-			for k := 0; k < 32; k++ {
-				tp.runMonitorOnce()
-			}
-		}()
+	for _, addr := range []string{"127.0.0.1:1", "127.0.0.1:2", "127.0.0.1:3"} {
+		tp.remotes = append(tp.remotes, &remote{addr: addr, inactive: true})
 	}
-	wg.Wait()
-	time.Sleep(10 * time.Millisecond)
+
+	go tp.runMonitor()
+
+	var done int32
+	time.AfterFunc(2*time.Second, func() { atomic.StoreInt32(&done, 1) })
+	for atomic.LoadInt32(&done) == 0 {
+		time.Sleep(10 * time.Millisecond)
+	}
 }

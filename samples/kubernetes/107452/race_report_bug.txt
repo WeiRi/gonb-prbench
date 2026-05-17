@@ -1,250 +1,50 @@
 WARNING: DATA RACE
-Read at 0x00c000188000 by goroutine 22:
+Read at 0x00c0000d6b40 by goroutine 21:
   runtime.mapiterinit()
       /usr/local/go/src/runtime/map.go:816 +0x0
-  ase/kubernetes-107452.(*baseTimeoutWriter).WriteHeaderTimeout()
-      /work/timeout.go:23 +0x89
-  ase/kubernetes-107452.TestRace_107452_HeaderMutation.func1.2()
-      /work/verified_test.go:52 +0x84
+  k8s.io/apiserver/pkg/server/filters.(*baseTimeoutWriter).WriteHeaderTimeout()
+      /work/upstream/staging/src/k8s.io/apiserver/pkg/server/filters/timeout.go:23 +0x89
+  k8s.io/apiserver/pkg/server/filters.TestRace_107452_HeaderMutation.func1.2()
+      /work/upstream/staging/src/k8s.io/apiserver/pkg/server/filters/kubernetes_107452_race_test.go:52 +0x84
 
-Previous write at 0x00c000188000 by goroutine 20:
+Previous write at 0x00c0000d6b40 by goroutine 20:
   runtime.mapassign_faststr()
       /usr/local/go/src/runtime/map_faststr.go:203 +0x0
   net/textproto.MIMEHeader.Set()
       /usr/local/go/src/net/textproto/header.go:22 +0x171
   net/http.Header.Set()
       /usr/local/go/src/net/http/header.go:40 +0xf4
-  ase/kubernetes-107452.TestRace_107452_HeaderMutation.func1.1()
-      /work/verified_test.go:44 +0xf3
+  k8s.io/apiserver/pkg/server/filters.TestRace_107452_HeaderMutation.func1.1()
+      /work/upstream/staging/src/k8s.io/apiserver/pkg/server/filters/kubernetes_107452_race_test.go:44 +0xf3
 
-Goroutine 22 (running) created at:
-  ase/kubernetes-107452.TestRace_107452_HeaderMutation.func1()
-      /work/verified_test.go:50 +0xa9
+Goroutine 21 (running) created at:
+  k8s.io/apiserver/pkg/server/filters.TestRace_107452_HeaderMutation.func1()
+      /work/upstream/staging/src/k8s.io/apiserver/pkg/server/filters/kubernetes_107452_race_test.go:50 +0xa9
 
 Goroutine 20 (finished) created at:
-  ase/kubernetes-107452.TestRace_107452_HeaderMutation.func1()
-      /work/verified_test.go:41 +0x30a
-==================
+  k8s.io/apiserver/pkg/server/filters.TestRace_107452_HeaderMutation.func1()
+      /work/upstream/staging/src/k8s.io/apiserver/pkg/server/filters/kubernetes_107452_race_test.go:41 +0x30a
 ==================
 WARNING: DATA RACE
-Read at 0x00c000196088 by goroutine 22:
-  ase/kubernetes-107452.(*baseTimeoutWriter).WriteHeaderTimeout()
-      /work/timeout.go:23 +0xd5
-  ase/kubernetes-107452.TestRace_107452_HeaderMutation.func1.2()
-      /work/verified_test.go:52 +0x84
+Read at 0x00c0001b0088 by goroutine 21:
+  k8s.io/apiserver/pkg/server/filters.(*baseTimeoutWriter).WriteHeaderTimeout()
+      /work/upstream/staging/src/k8s.io/apiserver/pkg/server/filters/timeout.go:23 +0xd5
+  k8s.io/apiserver/pkg/server/filters.TestRace_107452_HeaderMutation.func1.2()
+      /work/upstream/staging/src/k8s.io/apiserver/pkg/server/filters/kubernetes_107452_race_test.go:52 +0x84
 
-Previous write at 0x00c000196088 by goroutine 20:
+Previous write at 0x00c0001b0088 by goroutine 20:
   net/textproto.MIMEHeader.Set()
       /usr/local/go/src/net/textproto/header.go:22 +0x17d
   net/http.Header.Set()
       /usr/local/go/src/net/http/header.go:40 +0xf4
-  ase/kubernetes-107452.TestRace_107452_HeaderMutation.func1.1()
-      /work/verified_test.go:44 +0xf3
+  k8s.io/apiserver/pkg/server/filters.TestRace_107452_HeaderMutation.func1.1()
+      /work/upstream/staging/src/k8s.io/apiserver/pkg/server/filters/kubernetes_107452_race_test.go:44 +0xf3
 
-Goroutine 22 (running) created at:
-  ase/kubernetes-107452.TestRace_107452_HeaderMutation.func1()
-      /work/verified_test.go:50 +0xa9
-
-Goroutine 20 (finished) created at:
-  ase/kubernetes-107452.TestRace_107452_HeaderMutation.func1()
-      /work/verified_test.go:41 +0x30a
-==================
-==================
-WARNING: DATA RACE
-Read at 0x00c00018c1e0 by goroutine 22:
-  runtime.slicecopy()
-      /usr/local/go/src/runtime/slice.go:325 +0x0
-  net/http.Header.Clone()
-      /usr/local/go/src/net/http/header.go:113 +0x424
-  net/http/httptest.(*ResponseRecorder).WriteHeader()
-      /usr/local/go/src/net/http/httptest/recorder.go:154 +0x13b
-  ase/kubernetes-107452.(*baseTimeoutWriter).WriteHeaderTimeout()
-      /work/timeout.go:27 +0x118
-  ase/kubernetes-107452.TestRace_107452_HeaderMutation.func1.2()
-      /work/verified_test.go:52 +0x84
-
-Previous write at 0x00c00018c1e0 by goroutine 20:
-  net/textproto.MIMEHeader.Set()
-      /usr/local/go/src/net/textproto/header.go:22 +0x128
-  net/http.Header.Set()
-      /usr/local/go/src/net/http/header.go:40 +0xf4
-  ase/kubernetes-107452.TestRace_107452_HeaderMutation.func1.1()
-      /work/verified_test.go:44 +0xf3
-
-Goroutine 22 (running) created at:
-  ase/kubernetes-107452.TestRace_107452_HeaderMutation.func1()
-      /work/verified_test.go:50 +0xa9
+Goroutine 21 (running) created at:
+  k8s.io/apiserver/pkg/server/filters.TestRace_107452_HeaderMutation.func1()
+      /work/upstream/staging/src/k8s.io/apiserver/pkg/server/filters/kubernetes_107452_race_test.go:50 +0xa9
 
 Goroutine 20 (finished) created at:
-  ase/kubernetes-107452.TestRace_107452_HeaderMutation.func1()
-      /work/verified_test.go:41 +0x30a
+  k8s.io/apiserver/pkg/server/filters.TestRace_107452_HeaderMutation.func1()
+      /work/upstream/staging/src/k8s.io/apiserver/pkg/server/filters/kubernetes_107452_race_test.go:41 +0x30a
 ==================
-==================
-WARNING: DATA RACE
-Read at 0x00c0001884b0 by goroutine 141:
-  runtime.mapiternext()
-      /usr/local/go/src/runtime/map.go:862 +0x0
-  runtime.mapiterinit()
-      /usr/local/go/src/runtime/map.go:859 +0x22e
-  ase/kubernetes-107452.TestRace_107452_HeaderMutation.func1.2()
-      /work/verified_test.go:52 +0x84
-
-Previous write at 0x00c0001884b0 by goroutine 138:
-  runtime.mapassign_faststr()
-      /usr/local/go/src/runtime/map_faststr.go:203 +0x0
-  net/textproto.MIMEHeader.Set()
-      /usr/local/go/src/net/textproto/header.go:22 +0x171
-  net/http.Header.Set()
-      /usr/local/go/src/net/http/header.go:40 +0xf4
-  ase/kubernetes-107452.TestRace_107452_HeaderMutation.func1.1()
-      /work/verified_test.go:44 +0xf3
-
-Goroutine 141 (running) created at:
-  ase/kubernetes-107452.TestRace_107452_HeaderMutation.func1()
-      /work/verified_test.go:50 +0xa9
-
-Goroutine 138 (finished) created at:
-  ase/kubernetes-107452.TestRace_107452_HeaderMutation.func1()
-      /work/verified_test.go:41 +0x30a
-==================
-==================
-WARNING: DATA RACE
-Write at 0x00c0000d4f00 by goroutine 150:
-  runtime.mapassign_faststr()
-      /usr/local/go/src/runtime/map_faststr.go:203 +0x0
-  net/textproto.MIMEHeader.Set()
-      /usr/local/go/src/net/textproto/header.go:22 +0x171
-  net/http.Header.Set()
-      /usr/local/go/src/net/http/header.go:40 +0xf4
-  ase/kubernetes-107452.TestRace_107452_HeaderMutation.func1.1()
-      /work/verified_test.go:44 +0xf3
-
-Previous read at 0x00c0000d4f00 by goroutine 152:
-  runtime.mapiterinit()
-      /usr/local/go/src/runtime/map.go:816 +0x0
-  net/http.Header.Clone()
-      /usr/local/go/src/net/http/header.go:101 +0x190
-  net/http/httptest.(*ResponseRecorder).WriteHeader()
-      /usr/local/go/src/net/http/httptest/recorder.go:154 +0x13b
-  ase/kubernetes-107452.(*baseTimeoutWriter).WriteHeaderTimeout()
-      /work/timeout.go:27 +0x118
-  ase/kubernetes-107452.TestRace_107452_HeaderMutation.func1.2()
-      /work/verified_test.go:52 +0x84
-
-Goroutine 150 (running) created at:
-  ase/kubernetes-107452.TestRace_107452_HeaderMutation.func1()
-      /work/verified_test.go:41 +0x30a
-
-Goroutine 152 (running) created at:
-  ase/kubernetes-107452.TestRace_107452_HeaderMutation.func1()
-      /work/verified_test.go:50 +0xa9
-==================
-==================
-WARNING: DATA RACE
-Read at 0x00c00061a090 by goroutine 177:
-  runtime.mapiternext()
-      /usr/local/go/src/runtime/map.go:862 +0x0
-  runtime.mapiterinit()
-      /usr/local/go/src/runtime/map.go:859 +0x22e
-  ase/kubernetes-107452.(*baseTimeoutWriter).WriteHeaderTimeout()
-      /work/timeout.go:27 +0x118
-  ase/kubernetes-107452.TestRace_107452_HeaderMutation.func1.2()
-      /work/verified_test.go:52 +0x84
-
-Previous write at 0x00c00061a090 by goroutine 163:
-  runtime.mapassign_faststr()
-      /usr/local/go/src/runtime/map_faststr.go:203 +0x0
-  net/textproto.MIMEHeader.Set()
-      /usr/local/go/src/net/textproto/header.go:22 +0x171
-  net/http.Header.Set()
-      /usr/local/go/src/net/http/header.go:40 +0xf4
-  ase/kubernetes-107452.TestRace_107452_HeaderMutation.func1.1()
-      /work/verified_test.go:44 +0xf3
-
-Goroutine 177 (running) created at:
-  ase/kubernetes-107452.TestRace_107452_HeaderMutation.func1()
-      /work/verified_test.go:50 +0xa9
-
-Goroutine 163 (running) created at:
-  ase/kubernetes-107452.TestRace_107452_HeaderMutation.func1()
-      /work/verified_test.go:41 +0x30a
-==================
-==================
-WARNING: DATA RACE
-Read at 0x00c000890088 by goroutine 177:
-  net/http.Header.Clone()
-      /usr/local/go/src/net/http/header.go:101 +0x264
-  net/http/httptest.(*ResponseRecorder).WriteHeader()
-      /usr/local/go/src/net/http/httptest/recorder.go:154 +0x13b
-  ase/kubernetes-107452.(*baseTimeoutWriter).WriteHeaderTimeout()
-      /work/timeout.go:27 +0x118
-  ase/kubernetes-107452.TestRace_107452_HeaderMutation.func1.2()
-      /work/verified_test.go:52 +0x84
-
-Previous write at 0x00c000890088 by goroutine 163:
-  net/textproto.MIMEHeader.Set()
-      /usr/local/go/src/net/textproto/header.go:22 +0x17d
-  net/http.Header.Set()
-      /usr/local/go/src/net/http/header.go:40 +0xf4
-  ase/kubernetes-107452.TestRace_107452_HeaderMutation.func1.1()
-      /work/verified_test.go:44 +0xf3
-
-Goroutine 177 (running) created at:
-  ase/kubernetes-107452.TestRace_107452_HeaderMutation.func1()
-      /work/verified_test.go:50 +0xa9
-
-Goroutine 163 (running) created at:
-  ase/kubernetes-107452.TestRace_107452_HeaderMutation.func1()
-      /work/verified_test.go:41 +0x30a
-==================
-==================
-WARNING: DATA RACE
-Read at 0x00c00061a090 by goroutine 177:
-  runtime.mapiternext()
-      /usr/local/go/src/runtime/map.go:862 +0x0
-  net/http.Header.Clone()
-      /usr/local/go/src/net/http/header.go:101 +0x284
-  net/http/httptest.(*ResponseRecorder).WriteHeader()
-      /usr/local/go/src/net/http/httptest/recorder.go:154 +0x13b
-  ase/kubernetes-107452.(*baseTimeoutWriter).WriteHeaderTimeout()
-      /work/timeout.go:27 +0x118
-  ase/kubernetes-107452.TestRace_107452_HeaderMutation.func1.2()
-      /work/verified_test.go:52 +0x84
-
-Previous write at 0x00c00061a090 by goroutine 163:
-  runtime.mapassign_faststr()
-      /usr/local/go/src/runtime/map_faststr.go:203 +0x0
-  net/textproto.MIMEHeader.Set()
-      /usr/local/go/src/net/textproto/header.go:22 +0x171
-  net/http.Header.Set()
-      /usr/local/go/src/net/http/header.go:40 +0xf4
-  ase/kubernetes-107452.TestRace_107452_HeaderMutation.func1.1()
-      /work/verified_test.go:44 +0xf3
-
-Goroutine 177 (running) created at:
-  ase/kubernetes-107452.TestRace_107452_HeaderMutation.func1()
-      /work/verified_test.go:50 +0xa9
-
-Goroutine 163 (running) created at:
-  ase/kubernetes-107452.TestRace_107452_HeaderMutation.func1()
-      /work/verified_test.go:41 +0x30a
-==================
-==================
-WARNING: DATA RACE
-Read at 0x00c000490750 by goroutine 286:
-  runtime.mapiternext()
-      /usr/local/go/src/runtime/map.go:862 +0x0
-  ase/kubernetes-107452.(*baseTimeoutWriter).WriteHeaderTimeout()
-      /work/timeout.go:23 +0xe4
-  ase/kubernetes-107452.TestRace_107452_HeaderMutation.func1.2()
-      /work/verified_test.go:52 +0x84
-
-Previous write at 0x00c000490750 by goroutine 285:
-  runtime.mapassign_faststr()
-      /usr/local/go/src/runtime/map_faststr.go:203 +0x0
-  net/textproto.MIMEHeader.Set()
-      /usr/local/go/src/net/textproto/header.go:22 +0x171
-  net/http.Header.Set()
-      /usr/local/go/src/net/http/header.go:40 +0xf4
-  ase/kubernetes-107452.TestRace_107452_HeaderMutation.func1.1()
-      /work/verified_test.go:44 +0xf3

@@ -1,23 +1,9 @@
-# syntax=docker/dockerfile:1.4
-# fix.Dockerfile for hugo-12413 — bug + fix.diff applied
-FROM golang:1.22
-RUN apt-get update && apt-get install -y --no-install-recommends git ca-certificates patch && rm -rf /var/lib/apt/lists/*
-RUN mkdir -p /root/.ssh && ssh-keyscan -t rsa,ed25519 github.com >> /root/.ssh/known_hosts 2>/dev/null
-ENV GOPROXY=https://goproxy.cn,direct GOSUMDB=off GOFLAGS=-mod=mod CGO_ENABLED=1
-
-# === Full upstream at bug commit ===
-RUN --mount=type=ssh git clone --depth=200 git@github.com:gohugoio/hugo.git /work/upstream
+FROM gonb-hugo-12413-bug:latest
 WORKDIR /work/upstream
-RUN --mount=type=ssh git fetch --depth=200 origin 2d75f539e14858a7b28484b2ad1f72db284892cb && git checkout --detach 2d75f539e14858a7b28484b2ad1f72db284892cb
 COPY fix.diff /tmp/fix.diff
-RUN git apply --whitespace=nowarn /tmp/fix.diff || patch -p1 < /tmp/fix.diff
-RUN --mount=type=ssh go mod download 2>&1 | tail -10 || true
-
-# === Race-triggering artefact in isolated sub-package ===
-WORKDIR /work/pr2t-test
-COPY go.mod ./
-COPY verified_test.go ./
-COPY *.go ./
-
-WORKDIR /work
-# NO CMD
+RUN awk 'BEGIN{p=0} /^diff --git/{if ($0 ~ /hugocontext\.go/ && $0 !~ /_test\.go/) p=1; else p=0} p==1' /tmp/fix.diff > /tmp/fix_prod.diff && \
+    (git apply --whitespace=nowarn /tmp/fix_prod.diff || (git init --quiet && git add -A && git -c user.email=x@x -c user.name=x commit -m b -q && git apply --whitespace=nowarn /tmp/fix_prod.diff))
+WORKDIR /work/upstream/markup/goldmark/hugocontext
+RUN for f in *_test.go; do mv "$f" "verified_test_$(echo $f)"; done 2>/dev/null
+COPY verified_test.go ./hugo_12413_race_test.go
+RUN go test -race -vet=off -c -o /dev/null . 2>&1 | tail -10 || true

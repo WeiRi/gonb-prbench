@@ -1,38 +1,66 @@
 WARNING: DATA RACE
-Read at 0x00c00019e540 by goroutine 9:
-  ase/kubernetes-121771.(*fakeObj).GetGroupVersionKind()
-      /work/verified_test.go:68 +0x4a
-  ase/kubernetes-121771.WithVersionEncoder.Encode()
-      /work/helper.go:37 +0xac
-  ase/kubernetes-121771.TestWithVersionEncoderRace.func1()
-      /work/verified_test.go:86 +0x1f5
+Read at 0x00c0001964e0 by goroutine 12:
+  k8s.io/apimachinery/pkg/runtime.(*fakeObj).GetGroupVersionKind()
+      /work/upstream/staging/src/k8s.io/apimachinery/pkg/runtime/kubernetes_121771_race_test.go:15 +0x4a
+  k8s.io/apimachinery/pkg/runtime.WithVersionEncoder.Encode()
+      /work/upstream/staging/src/k8s.io/apimachinery/pkg/runtime/helper.go:37 +0xac
+  k8s.io/apimachinery/pkg/runtime.TestWithVersionEncoderRace.func1()
+      /work/upstream/staging/src/k8s.io/apimachinery/pkg/runtime/kubernetes_121771_race_test.go:33 +0x1f5
 
-Previous write at 0x00c00019e540 by goroutine 8:
-  ase/kubernetes-121771.(*fakeObj).SetGroupVersionKind()
-      /work/verified_test.go:69 +0x4f
-  ase/kubernetes-121771.WithVersionEncoder.Encode()
-      /work/helper.go:40 +0x248
-  ase/kubernetes-121771.TestWithVersionEncoderRace.func1()
-      /work/verified_test.go:86 +0x1f5
+Previous write at 0x00c0001964e0 by goroutine 13:
+  k8s.io/apimachinery/pkg/runtime.(*fakeObj).SetGroupVersionKind()
+      /work/upstream/staging/src/k8s.io/apimachinery/pkg/runtime/kubernetes_121771_race_test.go:16 +0x4f
+  k8s.io/apimachinery/pkg/runtime.WithVersionEncoder.Encode()
+      /work/upstream/staging/src/k8s.io/apimachinery/pkg/runtime/helper.go:40 +0x248
+  k8s.io/apimachinery/pkg/runtime.TestWithVersionEncoderRace.func1()
+      /work/upstream/staging/src/k8s.io/apimachinery/pkg/runtime/kubernetes_121771_race_test.go:33 +0x1f5
 
-Goroutine 9 (running) created at:
-  ase/kubernetes-121771.TestWithVersionEncoderRace()
-      /work/verified_test.go:82 +0x153
+Goroutine 12 (running) created at:
+  k8s.io/apimachinery/pkg/runtime.TestWithVersionEncoderRace()
+      /work/upstream/staging/src/k8s.io/apimachinery/pkg/runtime/kubernetes_121771_race_test.go:29 +0x153
   testing.tRunner()
       /usr/local/go/src/testing/testing.go:1689 +0x21e
   testing.(*T).Run.gowrap1()
       /usr/local/go/src/testing/testing.go:1742 +0x44
 
-Goroutine 8 (running) created at:
-  ase/kubernetes-121771.TestWithVersionEncoderRace()
-      /work/verified_test.go:82 +0x153
+Goroutine 13 (finished) created at:
+  k8s.io/apimachinery/pkg/runtime.TestWithVersionEncoderRace()
+      /work/upstream/staging/src/k8s.io/apimachinery/pkg/runtime/kubernetes_121771_race_test.go:29 +0x153
   testing.tRunner()
       /usr/local/go/src/testing/testing.go:1689 +0x21e
   testing.(*T).Run.gowrap1()
       /usr/local/go/src/testing/testing.go:1742 +0x44
 ==================
-    testing.go:1398: race detected during execution of test
---- FAIL: TestWithVersionEncoderRace (0.00s)
-FAIL
-FAIL	ase/kubernetes-121771	0.019s
-FAIL
+WARNING: DATA RACE
+Read at 0x00c00028e0c0 by goroutine 21:
+  k8s.io/apimachinery/pkg/runtime.(*fakeObj).GetGroupVersionKind()
+      /work/upstream/staging/src/k8s.io/apimachinery/pkg/runtime/kubernetes_121771_race_test.go:15 +0x4a
+  k8s.io/apimachinery/pkg/runtime.WithVersionEncoder.Encode()
+      /work/upstream/staging/src/k8s.io/apimachinery/pkg/runtime/helper.go:37 +0xac
+  k8s.io/apimachinery/pkg/runtime.TestWithVersionEncoderRace.func1()
+      /work/upstream/staging/src/k8s.io/apimachinery/pkg/runtime/kubernetes_121771_race_test.go:33 +0x1f5
+
+Previous write at 0x00c00028e0c0 by goroutine 23:
+  k8s.io/apimachinery/pkg/runtime.(*fakeObj).SetGroupVersionKind()
+      /work/upstream/staging/src/k8s.io/apimachinery/pkg/runtime/kubernetes_121771_race_test.go:16 +0x4f
+  k8s.io/apimachinery/pkg/runtime.WithVersionEncoder.Encode()
+      /work/upstream/staging/src/k8s.io/apimachinery/pkg/runtime/helper.go:38 +0x182
+  k8s.io/apimachinery/pkg/runtime.TestWithVersionEncoderRace.func1()
+      /work/upstream/staging/src/k8s.io/apimachinery/pkg/runtime/kubernetes_121771_race_test.go:33 +0x1f5
+
+Goroutine 21 (running) created at:
+  k8s.io/apimachinery/pkg/runtime.TestWithVersionEncoderRace()
+      /work/upstream/staging/src/k8s.io/apimachinery/pkg/runtime/kubernetes_121771_race_test.go:29 +0x153
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 23 (running) created at:
+  k8s.io/apimachinery/pkg/runtime.TestWithVersionEncoderRace()
+      /work/upstream/staging/src/k8s.io/apimachinery/pkg/runtime/kubernetes_121771_race_test.go:29 +0x153
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================

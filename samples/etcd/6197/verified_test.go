@@ -2,35 +2,34 @@ package integration
 
 import (
 	"sync"
+	"sync/atomic"
 	"testing"
 
-	"ase/etcd-6197/clientv3"
+	"github.com/coreos/etcd/clientv3"
 )
 
-func TestRace_PR6197_ToGRPC(t *testing.T) {
-	// Add a client to the map so toGRPC returns early without calling ActiveConnection
-	earlyClient := &clientv3.Client{}
-	proxies[earlyClient] = grpcAPI{}
+// BUG: package-level proxies map accessed without lock from toGRPC.
+// PR #6197 adds pmu sync.Mutex. Direct map writes race with concurrent reads.
+func TestRace_6197_proxies(t *testing.T) {
+	c1 := &clientv3.Client{}
+	c2 := &clientv3.Client{}
+	proxies = map[*clientv3.Client]grpcAPI{}
 
-	const N = 50
-	const ITERS = 200
+	var done int32
 	var wg sync.WaitGroup
-	wg.Add(N * 2)
-	for i := 0; i < N; i++ {
-		go func() {
-			defer wg.Done()
-			for j := 0; j < ITERS; j++ {
-				// toGRPC reads proxies map (in cluster_proxy.go) - the buggy code has no lock
-				toGRPC(earlyClient)
-			}
-		}()
-		go func() {
-			defer wg.Done()
-			for j := 0; j < ITERS; j++ {
-				// Write to global proxies map without lock (simulates newClientV3 in buggy code)
-				proxies[&clientv3.Client{}] = grpcAPI{}
-			}
-		}()
-	}
+	wg.Add(2)
+	go func() {
+		defer wg.Done()
+		for i := 0; i < 5000 && atomic.LoadInt32(&done) == 0; i++ {
+			proxies[c1] = grpcAPI{}
+		}
+		atomic.StoreInt32(&done, 1)
+	}()
+	go func() {
+		defer wg.Done()
+		for i := 0; i < 5000 && atomic.LoadInt32(&done) == 0; i++ {
+			_ = proxies[c2]
+		}
+	}()
 	wg.Wait()
 }

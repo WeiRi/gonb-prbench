@@ -1,0 +1,80 @@
+2026-05-11 07:43:42.738457 W | etcdserver: the running cluster version(2.1.0) is higher than the maximum cluster version(2.0.0) supported
+2026-05-11 07:43:42.738800 W | etcdserver: the running cluster version(2.0.0) is lower than the minimal cluster version(2.1.0) supported
+==================
+WARNING: DATA RACE
+Write at 0x00c4200f4c40 by goroutine 54:
+  github.com/coreos/etcd/etcdserver.TestRace_4997_InPlace.func1()
+      /go/src/github.com/coreos/etcd/etcdserver/consistent_index.go:23 +0x6b
+
+Previous write at 0x00c4200f4c40 by goroutine 53:
+  github.com/coreos/etcd/etcdserver.TestRace_4997_InPlace.func1()
+      /go/src/github.com/coreos/etcd/etcdserver/consistent_index.go:23 +0x6b
+
+Goroutine 54 (running) created at:
+  github.com/coreos/etcd/etcdserver.TestRace_4997_InPlace()
+      /go/src/github.com/coreos/etcd/etcdserver/etcd-4997_race_test.go:22 +0xc1
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:777 +0x16d
+
+Goroutine 53 (finished) created at:
+  github.com/coreos/etcd/etcdserver.TestRace_4997_InPlace()
+      /go/src/github.com/coreos/etcd/etcdserver/etcd-4997_race_test.go:22 +0xc1
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:777 +0x16d
+==================
+--- FAIL: TestRace_4997_InPlace (0.01s)
+	testing.go:730: race detected during execution of test
+2026-05-11 07:43:42.754777 I | etcdserver: set snapshot count to default 10000
+2026-05-11 07:43:42.754842 I | etcdserver: starting server... [version: 2.3.0+git, cluster version: to_be_decided]
+2026-05-11 07:43:42.821211 N | etcdserver: removed member 2 from cluster 0
+2026-05-11 07:43:42.822691 N | etcdserver: removed member 1 from cluster 0
+2026-05-11 07:43:42.823256 N | etcdserver: removed member 3 from cluster 0
+2026-05-11 07:43:42.823488 N | etcdserver: removed member 4 from cluster 0
+2026-05-11 07:43:42.823776 I | etcdserver: set snapshot count to default 10000
+2026-05-11 07:43:42.823861 I | etcdserver: starting server... [version: 2.3.0+git, cluster version: to_be_decided]
+2026-05-11 07:43:42.824899 I | etcdserver: set snapshot count to default 10000
+2026-05-11 07:43:42.824989 I | etcdserver: starting server... [version: 2.3.0+git, cluster version: to_be_decided]
+2026-05-11 07:43:42.826104 I | etcdserver: set snapshot count to default 10000
+2026-05-11 07:43:42.826182 I | etcdserver: starting server... [version: 2.3.0+git, cluster version: to_be_decided]
+2026-05-11 07:43:42.826828 I | etcdserver: set snapshot count to default 10000
+2026-05-11 07:43:42.826879 I | etcdserver: starting server... [version: 2.3.0+git, cluster version: to_be_decided]
+2026-05-11 07:43:42.851546 I | etcdserver: set snapshot count to default 10000
+2026-05-11 07:43:42.851626 I | etcdserver: starting server... [version: 2.3.0+git, cluster version: to_be_decided]
+2026-05-11 07:43:42.864644 I | etcdserver: saved snapshot at index 1
+2026-05-11 07:43:42.864690 I | etcdserver: compacted raft log at 1
+2026-05-11 07:43:42.876969 I | etcdserver: starting server... [version: 2.3.0+git, cluster version: to_be_decided]
+2026-05-11 07:43:42.878864 I | etcdserver: start to snapshot (applied: 11, lastsnap: 0)
+2026-05-11 07:43:42.879170 I | etcdserver: saved snapshot at index 11
+2026-05-11 07:43:42.879242 I | etcdserver: compacted raft log at 1
+2026-05-11 07:43:42.891437 I | etcdserver: set snapshot count to default 10000
+2026-05-11 07:43:42.891506 I | etcdserver: starting server... [version: 2.3.0+git, cluster version: to_be_decided]
+2026-05-11 07:43:42.901304 I | etcdserver: wrote database snapshot out [total bytes: 24576]
+2026-05-11 07:43:42.901804 I | snap: saved database snapshot to disk [total bytes: 24576]
+2026-05-11 07:43:42.901998 I | etcdserver: raft applied incoming snapshot at index 3
+2026-05-11 07:43:42.907171 I | etcdserver: recovered from incoming snapshot at index 3
+2026-05-11 07:43:42.908989 I | etcdserver: wrote database snapshot out [total bytes: 24576]
+2026-05-11 07:43:42.909445 I | snap: saved database snapshot to disk [total bytes: 24576]
+2026-05-11 07:43:42.909638 I | etcdserver: raft applied incoming snapshot at index 6
+2026-05-11 07:43:42.914529 I | etcdserver: recovered from incoming snapshot at index 6
+2026-05-11 07:43:42.916217 I | etcdserver: wrote database snapshot out [total bytes: 24576]
+2026-05-11 07:43:42.916698 I | snap: saved database snapshot to disk [total bytes: 24576]
+2026-05-11 07:43:42.916928 I | etcdserver: raft applied incoming snapshot at index 9
+2026-05-11 07:43:42.921804 I | etcdserver: recovered from incoming snapshot at index 9
+2026-05-11 07:43:42.923706 I | etcdserver: wrote database snapshot out [total bytes: 24576]
+2026-05-11 07:43:42.924204 I | snap: saved database snapshot to disk [total bytes: 24576]
+2026-05-11 07:43:42.924334 I | etcdserver: raft applied incoming snapshot at index 12
+2026-05-11 07:43:42.929241 I | etcdserver: recovered from incoming snapshot at index 12
+2026-05-11 07:43:42.930694 I | etcdserver: wrote database snapshot out [total bytes: 24576]
+2026-05-11 07:43:42.931145 I | snap: saved database snapshot to disk [total bytes: 24576]
+2026-05-11 07:43:42.931322 I | etcdserver: raft applied incoming snapshot at index 15
+2026-05-11 07:43:42.935412 I | etcdserver: recovered from incoming snapshot at index 15
+2026-05-11 07:43:42.936978 I | etcdserver: wrote database snapshot out [total bytes: 24576]
+2026-05-11 07:43:42.937485 I | snap: saved database snapshot to disk [total bytes: 24576]
+2026-05-11 07:43:42.937716 I | etcdserver: raft applied incoming snapshot at index 18
+2026-05-11 07:43:42.945866 I | etcdserver: recovered from incoming snapshot at index 18
+2026-05-11 07:43:42.947610 I | etcdserver: wrote database snapshot out [total bytes: 24576]
+2026-05-11 07:43:42.948114 I | snap: saved database snapshot to disk [total bytes: 24576]
+2026-05-11 07:43:42.948285 I | etcdserver: raft applied incoming snapshot at index 21
+2026-05-11 07:43:42.952204 I | etcdserver: recovered from incoming snapshot at index 21
+2026-05-11 07:43:42.954417 I | etcdserver: wrote database snapshot out [total bytes: 24576]
+2026-05-11 07:43:42.954993 I | snap: saved database snapshot to disk [total bytes: 24576]

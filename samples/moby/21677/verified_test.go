@@ -1,33 +1,34 @@
-// Regression test for moby#21677 — layer/ro_layer.go data race
-// PR: https://github.com/moby/moby/pull/21677
-package main
+package layer
 
 import (
 	"sync"
+	"sync/atomic"
 	"testing"
 )
 
-func TestRace_21677(t *testing.T) {
-	ls := NewLayerStore()
-	l := ls.register("sha256:racy")
-	const N = 50
-	const ITERS = 200
-	var wg sync.WaitGroup
-	wg.Add(N * 2)
-	for i := 0; i < N; i++ {
-		go func() {
-			defer wg.Done()
-			for j := 0; j < ITERS; j++ {
-				l.hold()
-			}
-		}()
+func TestRace_moby_21677_layer_get_refcount(t *testing.T) {
+	ls := &layerStore{
+		layerMap: map[ChainID]*roLayer{},
+		mounts:   map[string]*mountedLayer{},
 	}
-	for i := 0; i < N; i++ {
+	cid := ChainID("sha256:test")
+	ls.layerMap[cid] = &roLayer{
+		chainID:        cid,
+		referenceCount: 1,
+		references:     map[Layer]struct{}{},
+		layerStore:     ls,
+	}
+
+	var done int32
+	var wg sync.WaitGroup
+	for i := 0; i < 8; i++ {
+		wg.Add(1)
 		go func() {
 			defer wg.Done()
-			for j := 0; j < ITERS; j++ {
-				_ = l.refCount()
+			for j := 0; j < 2000 && atomic.LoadInt32(&done) == 0; j++ {
+				_, _ = ls.Get(cid)
 			}
+			atomic.StoreInt32(&done, 1)
 		}()
 	}
 	wg.Wait()

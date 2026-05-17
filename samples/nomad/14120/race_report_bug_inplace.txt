@@ -1,0 +1,161 @@
+2026-05-11T11:27:47.597Z [TRACE] eventer/eventer.go:74: plugin_loader.raw_exec: task event loop shutdown: plugin_dir=""
+2026-05-11T11:27:47.598Z [TRACE] eventer/eventer.go:74: plugin_loader.qemu: task event loop shutdown: plugin_dir=""
+2026-05-11T11:27:47.598Z [TRACE] eventer/eventer.go:74: plugin_loader.mock_driver: task event loop shutdown: plugin_dir=""
+2026-05-11T11:27:47.598Z [TRACE] eventer/eventer.go:74: plugin_loader.docker: task event loop shutdown: plugin_dir=""
+2026-05-11T11:27:47.598Z [TRACE] eventer/eventer.go:74: plugin_loader.exec: task event loop shutdown: plugin_dir=""
+2026-05-11T11:27:47.598Z [TRACE] eventer/eventer.go:74: plugin_loader.java: task event loop shutdown: plugin_dir=""
+2026-05-11T11:27:47.599Z [TRACE] eventer/eventer.go:74: plugin_loader.qemu: task event loop shutdown: plugin_dir=""
+2026-05-11T11:27:47.600Z [TRACE] eventer/eventer.go:74: plugin_loader.java: task event loop shutdown: plugin_dir=""
+2026-05-11T11:27:47.605Z [DEBUG] docker/driver.go:1723: plugin_loader.docker: using client connection initialized from environment: plugin_dir=""
+2026-05-11T11:27:47.605Z [DEBUG] docker/driver.go:1723: plugin_loader.docker: using client connection initialized from environment: plugin_dir=""
+2026-05-11T11:27:47.605Z [TRACE] eventer/eventer.go:74: plugin_loader.docker: task event loop shutdown: plugin_dir=""
+2026-05-11T11:27:47.606Z [TRACE] eventer/eventer.go:74: plugin_loader.mock_driver: task event loop shutdown: plugin_dir=""
+2026-05-11T11:27:47.606Z [TRACE] eventer/eventer.go:74: plugin_loader.raw_exec: task event loop shutdown: plugin_dir=""
+2026-05-11T11:27:47.608Z [TRACE] eventer/eventer.go:74: plugin_loader.exec: task event loop shutdown: plugin_dir=""
+[INFO] freeport: detected ephemeral port range of [32768, 60999]
+node-001 2026-05-11T11:27:47.623Z [INFO]  raft@v1.3.9/api.go:588: nomad.raft: initial configuration: index=1 servers="[{Suffrage:Voter ID:d803eb59-0fff-f58b-b496-ccc805642056 Address:127.0.0.1:9701}]"
+node-001 2026-05-11T11:27:47.623Z [INFO]  raft@v1.3.9/raft.go:157: nomad.raft: entering follower state: follower="Node at 127.0.0.1:9701 [Follower]" leader-address= leader-id=
+node-001 2026-05-11T11:27:47.630Z [INFO]  go-hclog@v1.2.0/stdlog.go:57: nomad: serf: EventMemberJoin: nomad-001.foo 127.0.0.1
+node-001 2026-05-11T11:27:47.631Z [WARN]  nomad/server.go:1714: nomad: no enabled schedulers
+node-001 2026-05-11T11:27:47.631Z [DEBUG] nomad/encrypter.go:397: nomad.keyring.replicator: starting encryption key replication
+node-001 2026-05-11T11:27:47.632Z [INFO]  nomad/serf.go:60: nomad: adding server: server="nomad-001.foo (Addr: 127.0.0.1:9701) (DC: dc1)"
+2026-05-11T11:27:47.633Z [TRACE] eventer/eventer.go:74: plugin_loader.exec: task event loop shutdown: plugin_dir=""
+2026-05-11T11:27:47.633Z [TRACE] eventer/eventer.go:74: plugin_loader.qemu: task event loop shutdown: plugin_dir=""
+2026-05-11T11:27:47.633Z [TRACE] eventer/eventer.go:74: plugin_loader.mock_driver: task event loop shutdown: plugin_dir=""
+2026-05-11T11:27:47.633Z [TRACE] eventer/eventer.go:74: plugin_loader.java: task event loop shutdown: plugin_dir=""
+2026-05-11T11:27:47.633Z [TRACE] eventer/eventer.go:74: plugin_loader.docker: task event loop shutdown: plugin_dir=""
+2026-05-11T11:27:47.634Z [TRACE] eventer/eventer.go:74: plugin_loader.raw_exec: task event loop shutdown: plugin_dir=""
+2026-05-11T11:27:47.634Z [TRACE] eventer/eventer.go:74: plugin_loader.raw_exec: task event loop shutdown: plugin_dir=""
+2026-05-11T11:27:47.636Z [TRACE] eventer/eventer.go:74: plugin_loader.exec: task event loop shutdown: plugin_dir=""
+2026-05-11T11:27:47.637Z [TRACE] eventer/eventer.go:74: plugin_loader.qemu: task event loop shutdown: plugin_dir=""
+2026-05-11T11:27:47.638Z [TRACE] eventer/eventer.go:74: plugin_loader.java: task event loop shutdown: plugin_dir=""
+2026-05-11T11:27:47.644Z [TRACE] eventer/eventer.go:74: plugin_loader.docker: task event loop shutdown: plugin_dir=""
+2026-05-11T11:27:47.644Z [TRACE] eventer/eventer.go:74: plugin_loader.mock_driver: task event loop shutdown: plugin_dir=""
+node-002 2026-05-11T11:27:47.652Z [INFO]  raft@v1.3.9/api.go:588: nomad.raft: initial configuration: index=1 servers="[{Suffrage:Voter ID:03a765e6-9ab0-0f52-73b2-d0ea5312d5e8 Address:127.0.0.1:9703}]"
+node-002 2026-05-11T11:27:47.652Z [INFO]  raft@v1.3.9/raft.go:157: nomad.raft: entering follower state: follower="Node at 127.0.0.1:9703 [Follower]" leader-address= leader-id=
+node-002 2026-05-11T11:27:47.658Z [INFO]  go-hclog@v1.2.0/stdlog.go:57: nomad: serf: EventMemberJoin: nomad-002.bar 127.0.0.1
+node-002 2026-05-11T11:27:47.658Z [WARN]  nomad/server.go:1714: nomad: no enabled schedulers
+node-002 2026-05-11T11:27:47.659Z [DEBUG] nomad/encrypter.go:397: nomad.keyring.replicator: starting encryption key replication
+node-002 2026-05-11T11:27:47.659Z [INFO]  nomad/serf.go:60: nomad: adding server: server="nomad-002.bar (Addr: 127.0.0.1:9703) (DC: dc1)"
+node-002 2026-05-11T11:27:47.659Z [DEBUG] go-hclog@v1.2.0/stdlog.go:55: nomad: memberlist: Initiating push/pull sync with:  127.0.0.1:9702
+node-001 2026-05-11T11:27:47.659Z [DEBUG] go-hclog@v1.2.0/stdlog.go:55: nomad: memberlist: Stream connection from=127.0.0.1:41174
+node-001 2026-05-11T11:27:47.666Z [INFO]  go-hclog@v1.2.0/stdlog.go:57: nomad: serf: EventMemberJoin: nomad-002.bar 127.0.0.1
+node-001 2026-05-11T11:27:47.667Z [INFO]  nomad/serf.go:60: nomad: adding server: server="nomad-002.bar (Addr: 127.0.0.1:9703) (DC: dc1)"
+node-002 2026-05-11T11:27:47.668Z [INFO]  go-hclog@v1.2.0/stdlog.go:57: nomad: serf: EventMemberJoin: nomad-001.foo 127.0.0.1
+node-002 2026-05-11T11:27:47.669Z [INFO]  nomad/serf.go:60: nomad: adding server: server="nomad-001.foo (Addr: 127.0.0.1:9701) (DC: dc1)"
+node-001 2026-05-11T11:27:47.690Z [WARN]  raft@v1.3.9/raft.go:239: nomad.raft: heartbeat timeout reached, starting election: last-leader-addr= last-leader-id=
+node-001 2026-05-11T11:27:47.691Z [INFO]  raft@v1.3.9/raft.go:282: nomad.raft: entering candidate state: node="Node at 127.0.0.1:9701 [Candidate]" term=2
+node-001 2026-05-11T11:27:47.691Z [DEBUG] raft@v1.3.9/raft.go:301: nomad.raft: votes: needed=1
+node-001 2026-05-11T11:27:47.691Z [DEBUG] raft@v1.3.9/raft.go:324: nomad.raft: vote granted: from=d803eb59-0fff-f58b-b496-ccc805642056 term=2 tally=1
+node-001 2026-05-11T11:27:47.691Z [INFO]  raft@v1.3.9/raft.go:329: nomad.raft: election won: tally=1
+node-001 2026-05-11T11:27:47.691Z [INFO]  raft@v1.3.9/raft.go:418: nomad.raft: entering leader state: leader="Node at 127.0.0.1:9701 [Leader]"
+node-001 2026-05-11T11:27:47.691Z [INFO]  nomad/leader.go:73: nomad: cluster leadership acquired
+node-001 2026-05-11T11:27:47.696Z [TRACE] nomad/leader.go:1717: nomad.core: initializing keyring
+node-001 2026-05-11T11:27:47.710Z [INFO]  nomad/leader.go:1737: nomad.core: initialized keyring: id=d1f4e48c-68d1-b64f-0757-ad6734e295d3
+node-001 2026-05-11T11:27:47.711Z [TRACE] nomad/fsm.go:355: nomad.fsm: ClusterSetMetadata: cluster_id=6cef4988-341e-0b5b-1631-e1f6c49d01bd create_time=1778498867710763832
+node-001 2026-05-11T11:27:47.711Z [INFO]  nomad/leader.go:1753: nomad.core: established cluster id: cluster_id=6cef4988-341e-0b5b-1631-e1f6c49d01bd create_time=1778498867710763832
+node-001 2026-05-11T11:27:47.711Z [INFO]  nomad/leader.go:1805: nomad: eval broker status modified: paused=false
+node-001 2026-05-11T11:27:47.711Z [INFO]  nomad/leader.go:1812: nomad: blocked evals status modified: paused=false
+node-001 2026-05-11T11:27:47.712Z [TRACE] drainer/watch_jobs.go:150: nomad.drain.job_watcher: getting job allocs at index: index=1
+node-001 2026-05-11T11:27:47.712Z [ERROR] nomad/leader.go:1233: nomad: skipping adding Raft peer because an existing peer is in bootstrap mode and only one server should be in bootstrap mode: existing_peer=nomad-002.bar joining_peer=nomad-001.foo
+node-002 2026-05-11T11:27:47.737Z [WARN]  raft@v1.3.9/raft.go:239: nomad.raft: heartbeat timeout reached, starting election: last-leader-addr= last-leader-id=
+node-002 2026-05-11T11:27:47.737Z [INFO]  raft@v1.3.9/raft.go:282: nomad.raft: entering candidate state: node="Node at 127.0.0.1:9703 [Candidate]" term=2
+node-002 2026-05-11T11:27:47.737Z [DEBUG] raft@v1.3.9/raft.go:301: nomad.raft: votes: needed=1
+node-002 2026-05-11T11:27:47.738Z [DEBUG] raft@v1.3.9/raft.go:324: nomad.raft: vote granted: from=03a765e6-9ab0-0f52-73b2-d0ea5312d5e8 term=2 tally=1
+node-002 2026-05-11T11:27:47.738Z [INFO]  raft@v1.3.9/raft.go:329: nomad.raft: election won: tally=1
+node-002 2026-05-11T11:27:47.738Z [INFO]  raft@v1.3.9/raft.go:418: nomad.raft: entering leader state: leader="Node at 127.0.0.1:9703 [Leader]"
+node-002 2026-05-11T11:27:47.738Z [INFO]  nomad/leader.go:73: nomad: cluster leadership acquired
+node-001 2026-05-11T11:27:47.739Z [DEBUG] go-hclog@v1.2.0/stdlog.go:55: nomad: serf: messageJoinType: nomad-002.bar
+node-002 2026-05-11T11:27:47.741Z [TRACE] nomad/leader.go:1717: nomad.core: initializing keyring
+node-002 2026-05-11T11:27:47.744Z [INFO]  nomad/leader.go:1737: nomad.core: initialized keyring: id=31d5b71a-3061-02fb-c525-13e41fe2925c
+node-002 2026-05-11T11:27:47.746Z [TRACE] nomad/fsm.go:355: nomad.fsm: ClusterSetMetadata: cluster_id=79434583-786c-734d-a55d-0634002ef6bc create_time=1778498867745630636
+node-002 2026-05-11T11:27:47.746Z [INFO]  nomad/leader.go:1753: nomad.core: established cluster id: cluster_id=79434583-786c-734d-a55d-0634002ef6bc create_time=1778498867745630636
+node-002 2026-05-11T11:27:47.746Z [INFO]  nomad/leader.go:1805: nomad: eval broker status modified: paused=false
+node-002 2026-05-11T11:27:47.746Z [INFO]  nomad/leader.go:1812: nomad: blocked evals status modified: paused=false
+node-002 2026-05-11T11:27:47.747Z [TRACE] drainer/watch_jobs.go:150: nomad.drain.job_watcher: getting job allocs at index: index=1
+node-002 2026-05-11T11:27:47.748Z [ERROR] nomad/leader.go:1233: nomad: skipping adding Raft peer because an existing peer is in bootstrap mode and only one server should be in bootstrap mode: existing_peer=nomad-001.foo joining_peer=nomad-002.bar
+node-002 2026-05-11T11:27:47.760Z [DEBUG] go-hclog@v1.2.0/stdlog.go:55: nomad: serf: messageJoinType: nomad-002.bar
+node-001 2026-05-11T11:27:47.762Z [DEBUG] go-hclog@v1.2.0/stdlog.go:55: nomad: serf: messageJoinType: nomad-002.bar
+node-002 2026-05-11T11:27:47.832Z [DEBUG] go-hclog@v1.2.0/stdlog.go:55: nomad: serf: messageJoinType: nomad-002.bar
+node-002 2026-05-11T11:27:47.982Z [INFO]  nomad/server.go:665: nomad: shutting down server
+node-002 2026-05-11T11:27:47.982Z [DEBUG] nomad/leader.go:82: nomad: shutting down leader loop
+node-002 2026-05-11T11:27:47.982Z [WARN]  go-hclog@v1.2.0/stdlog.go:59: nomad: serf: Shutdown without a Leave
+node-002 2026-05-11T11:27:47.982Z [INFO]  nomad/leader.go:86: nomad: cluster leadership lost
+node-001 2026-05-11T11:27:47.983Z [I==================
+WARNING: DATA RACE
+Write at 0x00c0005fc6f0 by goroutine 51:
+  runtime.mapassign_faststr()
+      /usr/local/go/src/runtime/map_faststr.go:203 +0x0
+  github.com/hashicorp/nomad/nomad.TestRace_14120_InPlace.func1()
+      /work/upstream/nomad/nomad-14120_race_test.go:31 +0x1b2
+
+Previous read at 0x00c0005fc6f0 by goroutine 56:
+  github.com/hashicorp/nomad/nomad.TestRace_14120_InPlace.func2()
+      /work/upstream/nomad/nomad-14120_race_test.go:43 +0xd1
+
+Goroutine 51 (running) created at:
+  github.com/hashicorp/nomad/nomad.TestRace_14120_InPlace()
+      /work/upstream/nomad/nomad-14120_race_test.go:27 +0x20c
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 56 (finished) created at:
+  github.com/hashicorp/nomad/nomad.TestRace_14120_InPlace()
+      /work/upstream/nomad/nomad-14120_race_test.go:40 +0x219
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c0005fc780 by goroutine 51:
+  runtime.mapassign_faststr()
+      /usr/local/go/src/runtime/map_faststr.go:203 +0x0
+  github.com/hashicorp/nomad/nomad.TestRace_14120_InPlace.func1()
+      /work/upstream/nomad/nomad-14120_race_test.go:32 +0x368
+
+Previous read at 0x00c0005fc780 by goroutine 52:
+  github.com/hashicorp/nomad/nomad.TestRace_14120_InPlace.func2()
+      /work/upstream/nomad/nomad-14120_race_test.go:44 +0xfe
+
+Goroutine 51 (running) created at:
+  github.com/hashicorp/nomad/nomad.TestRace_14120_InPlace()
+      /work/upstream/nomad/nomad-14120_race_test.go:27 +0x20c
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 52 (finished) created at:
+  github.com/hashicorp/nomad/nomad.TestRace_14120_InPlace()
+      /work/upstream/nomad/nomad-14120_race_test.go:40 +0x219
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+--- FAIL: TestRace_14120_InPlace (0.00s)
+    testing.go:1398: race detected during execution of test
+FAIL
+FAIL	github.com/hashicorp/nomad/nomad	0.138s
+FAIL
+ [INFO]  nomad/serf.go:60: nomad: adding server: server="nomad-003.foo (Addr: 127.0.0.1:9705) (DC: dc1)"
+node-003 2026-05-11T11:27:48.025Z [DEBUG] nomad/encrypter.go:397: nomad.keyring.replicator: starting encryption key replication
+2026-05-11T11:27:48.027Z [TRACE] eventer/eventer.go:74: plugin_loader.java: task event loop shutdown: plugin_dir=""
+2026-05-11T11:27:48.027Z [TRACE] eventer/eventer.go:74: plugin_loader.qemu: task event loop shutdown: plugin_dir=""
+2026-05-11T11:27:48.027Z [TRACE] eventer/eventer.go:74: plugin_loader.exec: task event loop shutdown: plugin_dir=""
+2026-05-11T11:27:48.027Z [TRACE] eventer/eventer.go:74: plugin_loader.mock_driver: task event loop shutdown: plugin_dir=""
+2026-05-11T11:27:48.027Z [TRACE] eventer/eventer.go:74: plugin_loader.docker: task event loop shutdown: plugin_dir=""
+2026-05-11T11:27:48.027Z [TRACE] eventer/eventer.go:74: plugin_loader.raw_exec: task event loop shutdown: plugin_dir=""
+2026-05-11T11:27:48.028Z [TRACE] eventer/eventer.go:74: plugin_loader.mock_driver: task event loop shutdown: plugin_dir=""
+2026-05-11T11:27:48.029Z [TRACE] eventer/eventer.go:74: plugin_loader.raw_exec: task event loop shutdown: plugin_dir=""
+2026-05-11T11:27:48.031Z [TRACE] eventer/eventer.go:74: plugin_loader.exec: task event loop shutdown: plugin_dir=""
+node-001 2026-05-11T11:27:48.032Z [DEBUG] nomad/encrypter.go:409: nomad.keyring.replicator: exiting key replication
+2026-05-11T11:27:48.032Z [TRACE] eventer/eventer.go:74: plugin_loader.qemu: task event loop shutdown: plugin_dir=""
+2026-05-11T11:27:48.034Z [TRACE] eventer/eventer.go:74: plugin_loader.java: task event loop shutdown: plugin_dir=""
+2026-05-11T11:27:48.041Z [TRACE] eventer/eventer.go:74: plugin_loader.docker: task event loop shutdown: plugin_dir=""
+node-004 2026-05-11T11:27:48.048Z [INFO]  raft@v1.3.9/api.go:588: nomad.raft: initial configuration: index=1 servers="[{Suffrage:Voter ID:d1572894-3816-7d58-5881-abb929ce3d41 Address:127.0.0.1:9707}]"
+node-004 2026-05-11T11:27:48.049Z [INFO]  raft@v1.3.9/raft.go:157: nomad.raft: entering follower state: follower="Node at 127.0.0.1:9707 [Follower]" leader-address= leader-id=

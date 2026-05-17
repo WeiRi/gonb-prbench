@@ -1,26 +1,34 @@
 WARNING: DATA RACE
-Read at 0x00c000192040 by goroutine 58:
-  ase/etcd-5165.(*node).ReadPropc()
-      /work/node.go:26 +0x84
-  ase/etcd-5165.TestRace_5165.func1.2()
-      /work/verified_test.go:37 +0x7d
+Read at 0x00c4200fe040 by goroutine 13:
+  github.com/coreos/etcd/raft.TestRace_5165.func1.2()
+      /go/src/github.com/coreos/etcd/raft/node.go:26 +0x62
 
-Previous write at 0x00c000192040 by goroutine 57:
-  ase/etcd-5165.(*node).ClearPropc()
-      /work/node.go:21 +0x84
-  ase/etcd-5165.TestRace_5165.func1.1()
-      /work/verified_test.go:33 +0x7d
+Previous write at 0x00c4200fe040 by goroutine 11:
+  github.com/coreos/etcd/raft.TestRace_5165.func1.1()
+      /go/src/github.com/coreos/etcd/raft/node.go:21 +0x62
 
-Goroutine 58 (running) created at:
-  ase/etcd-5165.TestRace_5165.func1()
-      /work/verified_test.go:35 +0xaf
+Goroutine 13 (running) created at:
+  github.com/coreos/etcd/raft.TestRace_5165.func1()
+      /go/src/github.com/coreos/etcd/raft/etcd_5165_race_test.go:35 +0x120
 
-Goroutine 57 (finished) created at:
-  ase/etcd-5165.TestRace_5165.func1()
-      /work/verified_test.go:31 +0x4a4
+Goroutine 11 (finished) created at:
+  github.com/coreos/etcd/raft.TestRace_5165.func1()
+      /go/src/github.com/coreos/etcd/raft/etcd_5165_race_test.go:31 +0xf1
 ==================
-    testing.go:1398: race detected during execution of test
---- FAIL: TestRace_5165 (0.70s)
-FAIL
-FAIL	ase/etcd-5165	0.731s
-FAIL
+WARNING: DATA RACE
+Read at 0x00c42011a040 by goroutine 16:
+  github.com/coreos/etcd/raft.TestRace_5165.func1.2()
+      /go/src/github.com/coreos/etcd/raft/node.go:26 +0x62
+
+Previous write at 0x00c42011a040 by goroutine 14:
+  github.com/coreos/etcd/raft.TestRace_5165.func1.1()
+      /go/src/github.com/coreos/etcd/raft/node.go:21 +0x62
+
+Goroutine 16 (running) created at:
+  github.com/coreos/etcd/raft.TestRace_5165.func1()
+      /go/src/github.com/coreos/etcd/raft/etcd_5165_race_test.go:35 +0x120
+
+Goroutine 14 (finished) created at:
+  github.com/coreos/etcd/raft.TestRace_5165.func1()
+      /go/src/github.com/coreos/etcd/raft/etcd_5165_race_test.go:31 +0xf1
+==================

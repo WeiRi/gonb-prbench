@@ -2,25 +2,31 @@ package legacypool
 
 import (
 	"sync"
+	"sync/atomic"
 	"testing"
 )
 
-// TestRace_31758_legacypool_pricedList_Clear_vs_read: races readers of
-// pool.priced vs LegacyPool.Clear which reassigns pool.priced.
-func TestRace_31758_legacypool_pricedList_Clear_vs_read(t *testing.T) {
-	pool := NewLegacyPool()
+// Race: BUG pool.Clear() reassigns pool.priced = newPricedList(pool.all)
+// while concurrent readers of pool.priced FIELD race on the pointer write.
+// FIX: pool.Clear() calls pool.priced.Reheap() preserving the pointer.
+func TestRace_go_ethereum_31758_pool_priced(t *testing.T) {
+	pool, _ := setupPool()
+	defer pool.Close()
+
+	var done atomic.Bool
 	var wg sync.WaitGroup
 	wg.Add(2)
 	go func() {
 		defer wg.Done()
-		for i := 0; i < 500; i++ {
-			_ = pool.Probe()
+		for i := 0; i < 200 && !done.Load(); i++ {
+			pool.Clear()
 		}
+		done.Store(true)
 	}()
 	go func() {
 		defer wg.Done()
-		for i := 0; i < 500; i++ {
-			pool.Clear()
+		for i := 0; i < 500000 && !done.Load(); i++ {
+			_ = pool.priced
 		}
 	}()
 	wg.Wait()

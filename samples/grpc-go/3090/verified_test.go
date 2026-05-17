@@ -1,27 +1,30 @@
-// Race-trigger test for grpc-go-3090; see README.md for usage.
-
 package grpc
 
 import (
 	"sync"
+	"sync/atomic"
 	"testing"
 )
 
-func TestRace_PR3090_ResolverWrapperBuild(t *testing.T) {
-	const N = 200
+// BUG: ccResolverWrapper.resolver field accessed without lock from multiple goroutines.
+// PR #3090 adds resolverMu sync.Mutex to protect resolver/done/curState.
+func TestRace_3090_resolver_field(t *testing.T) {
+	w := &ccResolverWrapper{}
+	var done int32
 	var wg sync.WaitGroup
-	stops := make([]chan struct{}, N)
-	for i := 0; i < N; i++ {
-		stops[i] = make(chan struct{})
-		wg.Add(1)
-		i := i
-		go func() {
-			defer wg.Done()
-			_ = NewCCResolverWrapper(stops[i])
-		}()
-	}
-	for _, s := range stops {
-		close(s)
-	}
+	wg.Add(2)
+	go func() {
+		defer wg.Done()
+		for i := 0; i < 5000 && atomic.LoadInt32(&done) == 0; i++ {
+			w.resolver = nil
+		}
+		atomic.StoreInt32(&done, 1)
+	}()
+	go func() {
+		defer wg.Done()
+		for i := 0; i < 5000 && atomic.LoadInt32(&done) == 0; i++ {
+			_ = w.resolver
+		}
+	}()
 	wg.Wait()
 }

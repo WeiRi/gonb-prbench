@@ -1,3 +1,2 @@
-module ase/thanos-5503
-
-go 1.20
+module thanos-5503
+go 1.22

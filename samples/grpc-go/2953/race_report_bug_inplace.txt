@@ -1,0 +1,65 @@
+==================
+WARNING: DATA RACE
+Write at 0x00c00019e1b8 by goroutine 8:
+  ase/grpc-go-2953/internal/transport.(*Shared).Write()
+      /work/upstream/internal/transport/grpc-go-2953_race_bug_test.go:14 +0x8a
+  ase/grpc-go-2953/internal/transport.TestRace_2953_InPlace.func1()
+      /work/upstream/internal/transport/grpc-go-2953_race_bug_test.go:30 +0x12
+
+Previous read at 0x00c00019e1b8 by goroutine 11:
+  ase/grpc-go-2953/internal/transport.(*Shared).Read()
+      /work/upstream/internal/transport/grpc-go-2953_race_bug_test.go:18 +0x84
+  ase/grpc-go-2953/internal/transport.TestRace_2953_InPlace.func2()
+      /work/upstream/internal/transport/grpc-go-2953_race_bug_test.go:31 +0x12
+
+Goroutine 8 (running) created at:
+  ase/grpc-go-2953/internal/transport.TestRace_2953_InPlace()
+      /work/upstream/internal/transport/grpc-go-2953_race_bug_test.go:30 +0x197
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 11 (finished) created at:
+  ase/grpc-go-2953/internal/transport.TestRace_2953_InPlace()
+      /work/upstream/internal/transport/grpc-go-2953_race_bug_test.go:31 +0xb3
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c00019e1b8 by goroutine 20:
+  ase/grpc-go-2953/internal/transport.(*Shared).Write()
+      /work/upstream/internal/transport/grpc-go-2953_race_bug_test.go:14 +0x8a
+  ase/grpc-go-2953/internal/transport.TestRace_2953_InPlace.func1()
+      /work/upstream/internal/transport/grpc-go-2953_race_bug_test.go:30 +0x12
+
+Previous write at 0x00c00019e1b8 by goroutine 16:
+  ase/grpc-go-2953/internal/transport.(*Shared).Write()
+      /work/upstream/internal/transport/grpc-go-2953_race_bug_test.go:14 +0x8a
+  ase/grpc-go-2953/internal/transport.TestRace_2953_InPlace.func1()
+      /work/upstream/internal/transport/grpc-go-2953_race_bug_test.go:30 +0x12
+
+Goroutine 20 (running) created at:
+  ase/grpc-go-2953/internal/transport.TestRace_2953_InPlace()
+      /work/upstream/internal/transport/grpc-go-2953_race_bug_test.go:30 +0x197
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 16 (finished) created at:
+  ase/grpc-go-2953/internal/transport.TestRace_2953_InPlace()
+      /work/upstream/internal/transport/grpc-go-2953_race_bug_test.go:30 +0x197
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+--- FAIL: TestRace_2953_InPlace (0.98s)
+    testing.go:1398: race detected during execution of test
+FAIL
+FAIL	ase/grpc-go-2953/internal/transport	29.045s
+FAIL

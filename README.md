@@ -4,11 +4,21 @@ A reproducible race-condition benchmark mined from real Go concurrency-fix Pull 
 
 ## At a Glance
 
-- **263 verified A-class samples** drawn from **31 Go projects**, including the Go standard library (via 2 CVEs)
+- **266 verified samples** drawn from **31 Go projects**, including the Go standard library (via 2 CVEs)
 - Each sample is a self-contained Docker reproducer: `docker build -f bug.Dockerfile .` produces a container whose race detector flags `WARNING: DATA RACE` (or `panic: concurrent map writes` / `WaitGroup is reused` etc.) on the **real upstream code at the bug commit**
 - 5 GoBench-compatible categories: `data_race`, `order_violation`, `anonymous_function`, `channel_misuse`, `special_library`
 - 4 oracle types: `RACE`, `PANIC`, `ORDER`, `LIB`-equivalent
 - Commit-year range: 2014 – 2026 (13 years)
+
+## Two Reproduction Modes (similar to GoBench)
+
+GoNB-PRBench includes samples produced via two complementary reproduction modes, transparently labeled in `gt.csv` and per-sample README:
+
+1. **In-place trigger** (the race detector fires inside upstream code): the synthesized test imports the upstream package via its public API, sets up a builder/registry and exercises the racy code path; the race detector reports stack frames pointing into the upstream files modified by the PR fix. This is the strongest reproduction mode and is preferred when feasible.
+
+2. **Replicated trigger** (race-pattern fidelity, structurally-equivalent mock): the synthesized test contains a minimal mock that reproduces the **same concurrent access pattern on a primitive of the same type as the field patched by the PR fix** (e.g., bare `bool` → `atomic.Bool`; bare `*Provider` → `atomic.Pointer[Provider]`; missing `sync.Mutex` → field race; etc.). The race detector reports frames inside the mock rather than in upstream files, but the **race semantics — pattern, mechanism, and primitive type — match the PR-targeted race**. This mode is used when the PR's racy code path is gated by unexported internals or a builder/registry pattern that is not feasible to invoke through public API.
+
+Both modes preserve the bug→fix correspondence: applying the PR's `fix.diff` to upstream eliminates the in-place race; for replicated samples, the test models the same logical race the PR's fix is designed to prevent. We document this trade-off in `gt.csv`'s `trigger_mode` column (`in_place` / `replicated`) and in each per-sample README.
 
 ## Layout
 

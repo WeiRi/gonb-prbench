@@ -1,250 +1,54 @@
 WARNING: DATA RACE
-Read at 0x00c000126420 by goroutine 15:
-  runtime.mapaccess1_faststr()
-      /usr/local/go/src/runtime/map_faststr.go:13 +0x0
-  ase/moby-28290.(*_BugVolumeStore).list()
-      /work/verified_test.go:49 +0xf9
-  ase/moby-28290.TestRace_PR28290_VolumeStoreMapAccess.func2()
-      /work/verified_test.go:104 +0xd0
-
-Previous write at 0x00c000126420 by goroutine 11:
-  runtime.mapdelete_faststr()
-      /usr/local/go/src/runtime/map_faststr.go:301 +0x0
-  ase/moby-28290.(*_BugVolumeStore).removeVolume()
-      /work/verified_test.go:63 +0xa4
-  ase/moby-28290.TestRace_PR28290_VolumeStoreMapAccess.func1()
-      /work/verified_test.go:89 +0xbd
-
-Goroutine 15 (running) created at:
-  ase/moby-28290.TestRace_PR28290_VolumeStoreMapAccess()
-      /work/verified_test.go:96 +0x2f7
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1595 +0x261
-  testing.(*T).Run.func1()
-      /usr/local/go/src/testing/testing.go:1648 +0x44
-
-Goroutine 11 (running) created at:
-  ase/moby-28290.TestRace_PR28290_VolumeStoreMapAccess()
-      /work/verified_test.go:81 +0x1d7
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1595 +0x261
-  testing.(*T).Run.func1()
-      /usr/local/go/src/testing/testing.go:1648 +0x44
-==================
-==================
-WARNING: DATA RACE
-Read at 0x00c000126450 by goroutine 13:
-  runtime.mapaccess1_faststr()
-      /usr/local/go/src/runtime/map_faststr.go:13 +0x0
-  ase/moby-28290.(*_BugVolumeStore).list()
-      /work/verified_test.go:49 +0x129
-  ase/moby-28290.TestRace_PR28290_VolumeStoreMapAccess.func2()
-      /work/verified_test.go:104 +0xd0
-
-Previous write at 0x00c000126450 by goroutine 8:
+Write at 0x00c0001d3a10 by goroutine 8:
   runtime.mapassign_faststr()
       /usr/local/go/src/runtime/map_faststr.go:203 +0x0
-  ase/moby-28290.(*_BugVolumeStore).addVolume()
-      /work/verified_test.go:56 +0x204
-  ase/moby-28290.TestRace_PR28290_VolumeStoreMapAccess.func1()
-      /work/verified_test.go:90 +0xd3
+  github.com/docker/docker/volume/store.TestRace_moby_28290_labels_map.func1()
+      /go/src/github.com/docker/docker/volume/store/28290_race_test.go:29 +0x1ab
 
-Goroutine 13 (running) created at:
-  ase/moby-28290.TestRace_PR28290_VolumeStoreMapAccess()
-      /work/verified_test.go:96 +0x2f7
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1595 +0x261
-  testing.(*T).Run.func1()
-      /usr/local/go/src/testing/testing.go:1648 +0x44
-
-Goroutine 8 (running) created at:
-  ase/moby-28290.TestRace_PR28290_VolumeStoreMapAccess()
-      /work/verified_test.go:81 +0x1d7
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1595 +0x261
-  testing.(*T).Run.func1()
-      /usr/local/go/src/testing/testing.go:1648 +0x44
-==================
-==================
-WARNING: DATA RACE
-Read at 0x00c000126420 by goroutine 13:
+Previous read at 0x00c0001d3a10 by goroutine 9:
   runtime.mapaccess1_faststr()
       /usr/local/go/src/runtime/map_faststr.go:13 +0x0
-  ase/moby-28290.(*_BugVolumeStore).list()
-      /work/verified_test.go:49 +0xf9
-  ase/moby-28290.TestRace_PR28290_VolumeStoreMapAccess.func2()
-      /work/verified_test.go:104 +0xd0
-
-Previous write at 0x00c000126420 by goroutine 10:
-  runtime.mapassign_faststr()
-      /usr/local/go/src/runtime/map_faststr.go:203 +0x0
-  ase/moby-28290.(*_BugVolumeStore).addVolume()
-      /work/verified_test.go:55 +0x133
-  ase/moby-28290.TestRace_PR28290_VolumeStoreMapAccess.func1()
-      /work/verified_test.go:90 +0xd3
-
-Goroutine 13 (running) created at:
-  ase/moby-28290.TestRace_PR28290_VolumeStoreMapAccess()
-      /work/verified_test.go:96 +0x2f7
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1595 +0x261
-  testing.(*T).Run.func1()
-      /usr/local/go/src/testing/testing.go:1648 +0x44
-
-Goroutine 10 (running) created at:
-  ase/moby-28290.TestRace_PR28290_VolumeStoreMapAccess()
-      /work/verified_test.go:81 +0x1d7
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1595 +0x261
-  testing.(*T).Run.func1()
-      /usr/local/go/src/testing/testing.go:1648 +0x44
-==================
-==================
-WARNING: DATA RACE
-Read at 0x00c000126450 by goroutine 13:
-  runtime.mapaccess1_faststr()
-      /usr/local/go/src/runtime/map_faststr.go:13 +0x0
-  ase/moby-28290.(*_BugVolumeStore).list()
-      /work/verified_test.go:49 +0x129
-  ase/moby-28290.TestRace_PR28290_VolumeStoreMapAccess.func2()
-      /work/verified_test.go:104 +0xd0
-
-Previous write at 0x00c000126450 by goroutine 10:
-  runtime.mapdelete_faststr()
-      /usr/local/go/src/runtime/map_faststr.go:301 +0x0
-  ase/moby-28290.(*_BugVolumeStore).removeVolume()
-      /work/verified_test.go:64 +0xcd
-  ase/moby-28290.TestRace_PR28290_VolumeStoreMapAccess.func1()
-      /work/verified_test.go:89 +0xbd
-
-Goroutine 13 (running) created at:
-  ase/moby-28290.TestRace_PR28290_VolumeStoreMapAccess()
-      /work/verified_test.go:96 +0x2f7
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1595 +0x261
-  testing.(*T).Run.func1()
-      /usr/local/go/src/testing/testing.go:1648 +0x44
-
-Goroutine 10 (running) created at:
-  ase/moby-28290.TestRace_PR28290_VolumeStoreMapAccess()
-      /work/verified_test.go:81 +0x1d7
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1595 +0x261
-  testing.(*T).Run.func1()
-      /usr/local/go/src/testing/testing.go:1648 +0x44
-==================
-==================
-WARNING: DATA RACE
-Write at 0x00c0001288a8 by goroutine 10:
-  ase/moby-28290.(*_BugVolumeStore).addVolume()
-      /work/verified_test.go:55 +0x144
-  ase/moby-28290.TestRace_PR28290_VolumeStoreMapAccess.func1()
-      /work/verified_test.go:90 +0xd3
-
-Previous read at 0x00c0001288a8 by goroutine 13:
-  ase/moby-28290.(*_BugVolumeStore).list()
-      /work/verified_test.go:49 +0xfe
-  ase/moby-28290.TestRace_PR28290_VolumeStoreMapAccess.func2()
-      /work/verified_test.go:104 +0xd0
-
-Goroutine 10 (running) created at:
-  ase/moby-28290.TestRace_PR28290_VolumeStoreMapAccess()
-      /work/verified_test.go:81 +0x1d7
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1595 +0x261
-  testing.(*T).Run.func1()
-      /usr/local/go/src/testing/testing.go:1648 +0x44
-
-Goroutine 13 (running) created at:
-  ase/moby-28290.TestRace_PR28290_VolumeStoreMapAccess()
-      /work/verified_test.go:96 +0x2f7
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1595 +0x261
-  testing.(*T).Run.func1()
-      /usr/local/go/src/testing/testing.go:1648 +0x44
-==================
-fatal error: concurrent map read and map write
-==================
-WARNING: DATA RACE
-Read at 0x00c000128978 by goroutine 13:
-  ase/moby-28290.(*_BugVolumeStore).list()
-      /work/verified_test.go:49 +0x12e
-  ase/moby-28290.TestRace_PR28290_VolumeStoreMapAccess.func2()
-      /work/verified_test.go:104 +0xd0
-
-Previous write at 0x00c000128978 by goroutine 8:
-  ase/moby-28290.(*_BugVolumeStore).addVolume()
-      /work/verified_test.go:56 +0x210
-  ase/moby-28290.TestRace_PR28290_VolumeStoreMapAccess.func1()
-      /work/verified_test.go:90 +0xd3
-
-Goroutine 13 (running) created at:
-  ase/moby-28290.TestRace_PR28290_VolumeStoreMapAccess()
-      /work/verified_test.go:96 +0x2f7
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1595 +0x261
-  testing.(*T).Run.func1()
-      /usr/local/go/src/testing/testing.go:1648 +0x44
+  github.com/docker/docker/volume/store.TestRace_moby_28290_labels_map.func2()
+      /go/src/github.com/docker/docker/volume/store/28290_race_test.go:38 +0xe5
 
 Goroutine 8 (running) created at:
-  ase/moby-28290.TestRace_PR28290_VolumeStoreMapAccess()
-      /work/verified_test.go:81 +0x1d7
+  github.com/docker/docker/volume/store.TestRace_moby_28290_labels_map()
+      /go/src/github.com/docker/docker/volume/store/28290_race_test.go:25 +0x32e
   testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1595 +0x261
+      /usr/local/go/src/testing/testing.go:1446 +0x216
   testing.(*T).Run.func1()
-      /usr/local/go/src/testing/testing.go:1648 +0x44
+      /usr/local/go/src/testing/testing.go:1493 +0x47
+
+Goroutine 9 (running) created at:
+  github.com/docker/docker/volume/store.TestRace_moby_28290_labels_map()
+      /go/src/github.com/docker/docker/volume/store/28290_race_test.go:35 +0x424
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1446 +0x216
+  testing.(*T).Run.func1()
+      /usr/local/go/src/testing/testing.go:1493 +0x47
 ==================
+WARNING: DATA RACE
+Read at 0x00c000112088 by goroutine 9:
+  github.com/docker/docker/volume/store.TestRace_moby_28290_labels_map.func2()
+      /go/src/github.com/docker/docker/volume/store/28290_race_test.go:38 +0xea
 
-goroutine 29 [running]:
-ase/moby-28290.(*_BugVolumeStore).list(...)
-	/work/verified_test.go:49
-ase/moby-28290.TestRace_PR28290_VolumeStoreMapAccess.func2()
-	/work/verified_test.go:104 +0xfa
-created by ase/moby-28290.TestRace_PR28290_VolumeStoreMapAccess in goroutine 21
-	/work/verified_test.go:96 +0x2f8
+Previous write at 0x00c000112088 by goroutine 8:
+  github.com/docker/docker/volume/store.TestRace_moby_28290_labels_map.func1()
+      /go/src/github.com/docker/docker/volume/store/28290_race_test.go:29 +0x1b7
 
-goroutine 1 [chan receive]:
-testing.(*T).Run(0xc000102ea0, {0x5d8173, 0x25}, 0x5dc210)
-	/usr/local/go/src/testing/testing.go:1649 +0x871
-testing.runTests.func1(0x0?)
-	/usr/local/go/src/testing/testing.go:2054 +0x85
-testing.tRunner(0xc000102ea0, 0xc00013baf8)
-	/usr/local/go/src/testing/testing.go:1595 +0x262
-testing.runTests(0xc00012a0a0?, {0x6f1060, 0x1, 0x1}, {0x1c?, 0x1e?, 0x6fa120?})
-	/usr/local/go/src/testing/testing.go:2052 +0x8ae
-testing.(*M).Run(0xc00012a0a0)
-	/usr/local/go/src/testing/testing.go:1925 +0xcd8
-main.main()
-	_testmain.go:47 +0x2be
+Goroutine 9 (running) created at:
+  github.com/docker/docker/volume/store.TestRace_moby_28290_labels_map()
+      /go/src/github.com/docker/docker/volume/store/28290_race_test.go:35 +0x424
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1446 +0x216
+  testing.(*T).Run.func1()
+      /usr/local/go/src/testing/testing.go:1493 +0x47
 
-goroutine 21 [sleep]:
-time.Sleep(0x8f0d180)
-	/usr/local/go/src/runtime/time.go:195 +0x125
-ase/moby-28290.TestRace_PR28290_VolumeStoreMapAccess(0x0?)
-	/work/verified_test.go:108 +0x415
-testing.tRunner(0xc000103040, 0x5dc210)
-	/usr/local/go/src/testing/testing.go:1595 +0x262
-created by testing.(*T).Run in goroutine 1
-	/usr/local/go/src/testing/testing.go:1648 +0x846
-
-goroutine 22 [sync.Mutex.Lock]:
-sync.runtime_SemacquireMutex(0xc00015e000?, 0xff?, 0x4a54c9?)
-	/usr/local/go/src/runtime/sema.go:77 +0x25
-sync.(*Mutex).lockSlow(0xc00015e000)
-	/usr/local/go/src/sync/mutex.go:171 +0x213
-sync.(*Mutex).Lock(0xc00015e000)
-	/usr/local/go/src/sync/mutex.go:90 +0x55
-ase/moby-28290.(*_BugVolumeStore).removeVolume(0xc00015e000, {0x5d003e, 0x1})
-	/work/verified_test.go:61 +0x37
-ase/moby-28290.TestRace_PR28290_VolumeStoreMapAccess.func1()
-	/work/verified_test.go:89 +0xbe
-created by ase/moby-28290.TestRace_PR28290_VolumeStoreMapAccess in goroutine 21
-	/work/verified_test.go:81 +0x1d8
-
-goroutine 23 [sync.Mutex.Lock]:
-sync.runtime_SemacquireMutex(0x0?, 0x0?, 0x0?)
-	/usr/local/go/src/runtime/sema.go:77 +0x25
-sync.(*Mutex).lockSlow(0xc00015e000)
-	/usr/local/go/src/sync/mutex.go:171 +0x213
-sync.(*Mutex).Lock(0xc00015e000)
-	/usr/local/go/src/sync/mutex.go:90 +0x55
+Goroutine 8 (running) created at:
+  github.com/docker/docker/volume/store.TestRace_moby_28290_labels_map()
+      /go/src/github.com/docker/docker/volume/store/28290_race_test.go:25 +0x32e
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1446 +0x216
+  testing.(*T).Run.func1()
+      /usr/local/go/src/testing/testing.go:1493 +0x47
+==================

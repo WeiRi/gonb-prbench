@@ -1,21 +1,6 @@
-# syntax=docker/dockerfile:1.4
-# bug.Dockerfile for hugo-7393 — full upstream clone at bug commit
-FROM golang:1.22
-RUN apt-get update && apt-get install -y --no-install-recommends git ca-certificates patch && rm -rf /var/lib/apt/lists/*
-RUN mkdir -p /root/.ssh && ssh-keyscan -t rsa,ed25519 github.com >> /root/.ssh/known_hosts 2>/dev/null
-ENV GOPROXY=https://goproxy.cn,direct GOSUMDB=off GOFLAGS=-mod=mod CGO_ENABLED=1
-
-# === Full upstream at bug commit ===
-RUN --mount=type=ssh git clone --depth=200 git@github.com:gohugoio/hugo.git /work/upstream
-WORKDIR /work/upstream
-RUN --mount=type=ssh git fetch --depth=200 origin 522ba1cd98ac67482061448c3a7528e68a720f0d && git checkout --detach 522ba1cd98ac67482061448c3a7528e68a720f0d
-RUN --mount=type=ssh go mod download 2>&1 | tail -10 || true
-
-# === Race-triggering artefact in isolated sub-package ===
-WORKDIR /work/pr2t-test
-COPY go.mod ./
-COPY verified_test.go ./
-COPY *.go ./
-
-WORKDIR /work
-# NO CMD — race trigger command is in README
+FROM gonb-hugo-7393-base-v2:latest
+RUN rm -rf /work/pr2t-test 2>/dev/null || true
+WORKDIR /work/upstream/hugolib
+RUN find . -maxdepth 1 -name "*_test.go" -delete 2>/dev/null || true
+COPY verified_test.go ./7393_race_test.go
+RUN go test -race -vet=off -c -o /dev/null . 2>&1 | tail -10 || true

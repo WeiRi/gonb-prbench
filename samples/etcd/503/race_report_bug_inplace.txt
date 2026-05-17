@@ -1,0 +1,35 @@
+==================
+WARNING: DATA RACE
+Read at 0x00c0001b2098 by goroutine 9:
+  etcd-503.(*Shared).Read()
+      /work/acquire_handler.go:17 +0xa6
+  etcd-503.TestRace.func2()
+      /work/race_test.go:11 +0x12
+
+Previous write at 0x00c0001b2098 by goroutine 8:
+  etcd-503.(*Shared).Write()
+      /work/acquire_handler.go:14 +0xd0
+  etcd-503.TestRace.func1()
+      /work/race_test.go:10 +0x1a
+
+Goroutine 9 (running) created at:
+  etcd-503.TestRace()
+      /work/race_test.go:11 +0x2a
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 8 (finished) created at:
+  etcd-503.TestRace()
+      /work/race_test.go:10 +0x1c4
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+--- FAIL: TestRace (0.00s)
+    testing.go:1398: race detected during execution of test
+FAIL
+FAIL	etcd-503	0.039s
+FAIL

@@ -1,3 +1,2 @@
-module ase/grpc-go-5927
-
-go 1.20
+module grpc-go-5927
+go 1.22

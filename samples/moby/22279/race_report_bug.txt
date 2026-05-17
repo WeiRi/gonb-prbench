@@ -1,139 +1,58 @@
 WARNING: DATA RACE
-Write at 0x00c0000b2038 by goroutine 67:
-  ase/moby-22279.(*State).SetRunning()
-      /work/state.go:27 +0x157
-  ase/moby-22279.TestRace_22279.func2()
-      /work/verified_test.go:36 +0xd5
+Read at 0x00c00033f3b8 by goroutine 10:
+  github.com/docker/docker/container.(*State).WaitRunning()
+      /go/src/github.com/docker/docker/container/state.go:126 +0x48
+  github.com/docker/docker/container.TestRace_moby_22279_waitchan.func2()
+      /go/src/github.com/docker/docker/container/22279_race_test.go:29 +0xb5
 
-Previous read at 0x00c0000b2038 by goroutine 24:
-  ase/moby-22279.(*State).WaitRunning()
-      /work/state.go:33 +0x39
-  ase/moby-22279.TestRace_22279.func1()
-      /work/verified_test.go:25 +0xab
+Previous write at 0x00c00033f3b8 by goroutine 9:
+  github.com/docker/docker/container.(*State).SetRunning()
+      /go/src/github.com/docker/docker/container/state.go:183 +0x84
+  github.com/docker/docker/container.TestRace_moby_22279_waitchan.func1()
+      /go/src/github.com/docker/docker/container/22279_race_test.go:22 +0xbc
 
-Goroutine 67 (running) created at:
-  ase/moby-22279.TestRace_22279()
-      /work/verified_test.go:33 +0x1f1
+Goroutine 10 (running) created at:
+  github.com/docker/docker/container.TestRace_moby_22279_waitchan()
+      /go/src/github.com/docker/docker/container/22279_race_test.go:26 +0x316
   testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
+      /usr/local/go/src/testing/testing.go:1446 +0x216
+  testing.(*T).Run.func1()
+      /usr/local/go/src/testing/testing.go:1493 +0x47
 
-Goroutine 24 (running) created at:
-  ase/moby-22279.TestRace_22279()
-      /work/verified_test.go:22 +0xfa
+Goroutine 9 (running) created at:
+  github.com/docker/docker/container.TestRace_moby_22279_waitchan()
+      /go/src/github.com/docker/docker/container/22279_race_test.go:18 +0x22e
   testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
-==================
-==================
-WARNING: DATA RACE
-Write at 0x00c0000b2028 by goroutine 60:
-  ase/moby-22279.(*State).SetRunning()
-      /work/state.go:24 +0xfe
-  ase/moby-22279.TestRace_22279.func2()
-      /work/verified_test.go:36 +0xd5
-
-Previous write at 0x00c0000b2028 by goroutine 67:
-  ase/moby-22279.(*State).SetRunning()
-      /work/state.go:24 +0xfe
-  ase/moby-22279.TestRace_22279.func2()
-      /work/verified_test.go:36 +0xd5
-
-Goroutine 60 (running) created at:
-  ase/moby-22279.TestRace_22279()
-      /work/verified_test.go:33 +0x1f1
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
-
-Goroutine 67 (running) created at:
-  ase/moby-22279.TestRace_22279()
-      /work/verified_test.go:33 +0x1f1
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
-==================
+      /usr/local/go/src/testing/testing.go:1446 +0x216
+  testing.(*T).Run.func1()
+      /usr/local/go/src/testing/testing.go:1493 +0x47
 ==================
 WARNING: DATA RACE
-Write at 0x00c0000b2030 by goroutine 60:
-  ase/moby-22279.(*State).SetRunning()
-      /work/state.go:25 +0x114
-  ase/moby-22279.TestRace_22279.func2()
-      /work/verified_test.go:36 +0xd5
+Read at 0x00c00033f3c0 by goroutine 10:
+  github.com/docker/docker/container.(*State).WaitRunning()
+      /go/src/github.com/docker/docker/container/state.go:127 +0xed
+  github.com/docker/docker/container.TestRace_moby_22279_waitchan.func2()
+      /go/src/github.com/docker/docker/container/22279_race_test.go:29 +0xb5
 
-Previous write at 0x00c0000b2030 by goroutine 67:
-  ase/moby-22279.(*State).SetRunning()
-      /work/state.go:25 +0x114
-  ase/moby-22279.TestRace_22279.func2()
-      /work/verified_test.go:36 +0xd5
+Previous write at 0x00c00033f3c0 by goroutine 9:
+  github.com/docker/docker/container.(*State).SetRunning()
+      /go/src/github.com/docker/docker/container/state.go:187 +0xdd
+  github.com/docker/docker/container.TestRace_moby_22279_waitchan.func1()
+      /go/src/github.com/docker/docker/container/22279_race_test.go:22 +0xbc
 
-Goroutine 60 (running) created at:
-  ase/moby-22279.TestRace_22279()
-      /work/verified_test.go:33 +0x1f1
+Goroutine 10 (running) created at:
+  github.com/docker/docker/container.TestRace_moby_22279_waitchan()
+      /go/src/github.com/docker/docker/container/22279_race_test.go:26 +0x316
   testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
+      /usr/local/go/src/testing/testing.go:1446 +0x216
+  testing.(*T).Run.func1()
+      /usr/local/go/src/testing/testing.go:1493 +0x47
 
-Goroutine 67 (running) created at:
-  ase/moby-22279.TestRace_22279()
-      /work/verified_test.go:33 +0x1f1
+Goroutine 9 (running) created at:
+  github.com/docker/docker/container.TestRace_moby_22279_waitchan()
+      /go/src/github.com/docker/docker/container/22279_race_test.go:18 +0x22e
   testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
+      /usr/local/go/src/testing/testing.go:1446 +0x216
+  testing.(*T).Run.func1()
+      /usr/local/go/src/testing/testing.go:1493 +0x47
 ==================
-==================
-WARNING: DATA RACE
-Write at 0x00c0000b2038 by goroutine 67:
-  ase/moby-22279.(*State).SetRunning()
-      /work/state.go:27 +0x157
-  ase/moby-22279.TestRace_22279.func2()
-      /work/verified_test.go:36 +0xd5
-
-Previous read at 0x00c0000b2038 by goroutine 60:
-  ase/moby-22279.(*State).SetRunning()
-      /work/state.go:26 +0x12c
-  ase/moby-22279.TestRace_22279.func2()
-      /work/verified_test.go:36 +0xd5
-
-Goroutine 67 (running) created at:
-  ase/moby-22279.TestRace_22279()
-      /work/verified_test.go:33 +0x1f1
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
-
-Goroutine 60 (running) created at:
-  ase/moby-22279.TestRace_22279()
-      /work/verified_test.go:33 +0x1f1
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
-==================
-panic: close of closed channel
-
-goroutine 60 [running]:
-ase/moby-22279.(*State).SetRunning(...)
-	/work/state.go:26
-ase/moby-22279.TestRace_22279.func2()
-	/work/verified_test.go:36 +0x13b
-created by ase/moby-22279.TestRace_22279 in goroutine 6
-	/work/verified_test.go:33 +0x1f2
-panic: close of closed channel
-
-goroutine 64 [running]:
-ase/moby-22279.(*State).SetRunning(...)
-	/work/state.go:26
-ase/moby-22279.TestRace_22279.func2()
-	/work/verified_test.go:36 +0x13b
-created by ase/moby-22279.TestRace_22279 in goroutine 6
-	/work/verified_test.go:33 +0x1f2
-FAIL	ase/moby-22279	0.036s
-FAIL

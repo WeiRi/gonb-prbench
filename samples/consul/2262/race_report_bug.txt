@@ -1,127 +1,50 @@
 WARNING: DATA RACE
-Read at 0x00c0000161b8 by goroutine 10:
-  ase/consul-2262.(*GatedWriter).Write()
-      /work/gated_writer.go:26 +0x155
-  ase/consul-2262.TestGatedWriterRace.func1()
-      /work/verified_test.go:30 +0xfb
+Read at 0x00c0002948d0 by goroutine 10:
+  github.com/hashicorp/consul/command/agent.(*GatedWriter).Write()
+      /go/src/github.com/hashicorp/consul/command/agent/gated_writer.go:41 +0x158
+  github.com/hashicorp/consul/command/agent.TestRace_2262_gatedwriter_write.func1()
+      /go/src/github.com/hashicorp/consul/command/agent/2262_race_test.go:24 +0xf6
 
-Previous write at 0x00c0000161b8 by goroutine 9:
-  ase/consul-2262.(*GatedWriter).Write()
-      /work/gated_writer.go:26 +0x215
-  ase/consul-2262.TestGatedWriterRace.func1()
-      /work/verified_test.go:30 +0xfb
+Previous write at 0x00c0002948d0 by goroutine 9:
+  github.com/hashicorp/consul/command/agent.(*GatedWriter).Write()
+      /go/src/github.com/hashicorp/consul/command/agent/gated_writer.go:41 +0x1f5
+  github.com/hashicorp/consul/command/agent.TestRace_2262_gatedwriter_write.func1()
+      /go/src/github.com/hashicorp/consul/command/agent/2262_race_test.go:24 +0xf6
 
 Goroutine 10 (running) created at:
-  ase/consul-2262.TestGatedWriterRace()
-      /work/verified_test.go:27 +0x139
+  github.com/hashicorp/consul/command/agent.TestRace_2262_gatedwriter_write()
+      /go/src/github.com/hashicorp/consul/command/agent/2262_race_test.go:20 +0x1a9
   testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
+      /usr/local/go/src/testing/testing.go:1203 +0x202
 
 Goroutine 9 (running) created at:
-  ase/consul-2262.TestGatedWriterRace()
-      /work/verified_test.go:27 +0x139
+  github.com/hashicorp/consul/command/agent.TestRace_2262_gatedwriter_write()
+      /go/src/github.com/hashicorp/consul/command/agent/2262_race_test.go:20 +0x1a9
   testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
-==================
+      /usr/local/go/src/testing/testing.go:1203 +0x202
 ==================
 WARNING: DATA RACE
-Read at 0x00c000124ff8 by goroutine 10:
-  runtime.growslice()
-      /usr/local/go/src/runtime/slice.go:155 +0x0
-  ase/consul-2262.(*GatedWriter).Write()
-      /work/gated_writer.go:26 +0x18b
-  ase/consul-2262.TestGatedWriterRace.func1()
-      /work/verified_test.go:30 +0xfb
+Write at 0x00c000144250 by goroutine 11:
+  github.com/hashicorp/consul/command/agent.(*GatedWriter).Write()
+      /go/src/github.com/hashicorp/consul/command/agent/gated_writer.go:41 +0x1ac
+  github.com/hashicorp/consul/command/agent.TestRace_2262_gatedwriter_write.func1()
+      /go/src/github.com/hashicorp/consul/command/agent/2262_race_test.go:24 +0xf6
 
-Previous write at 0x00c000124ff8 by goroutine 9:
-  ase/consul-2262.(*GatedWriter).Write()
-      /work/gated_writer.go:26 +0x1ba
-  ase/consul-2262.TestGatedWriterRace.func1()
-      /work/verified_test.go:30 +0xfb
+Previous write at 0x00c000144250 by goroutine 9:
+  github.com/hashicorp/consul/command/agent.(*GatedWriter).Write()
+      /go/src/github.com/hashicorp/consul/command/agent/gated_writer.go:41 +0x1ac
+  github.com/hashicorp/consul/command/agent.TestRace_2262_gatedwriter_write.func1()
+      /go/src/github.com/hashicorp/consul/command/agent/2262_race_test.go:24 +0xf6
 
-Goroutine 10 (running) created at:
-  ase/consul-2262.TestGatedWriterRace()
-      /work/verified_test.go:27 +0x139
+Goroutine 11 (running) created at:
+  github.com/hashicorp/consul/command/agent.TestRace_2262_gatedwriter_write()
+      /go/src/github.com/hashicorp/consul/command/agent/2262_race_test.go:20 +0x1a9
   testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
+      /usr/local/go/src/testing/testing.go:1203 +0x202
 
-Goroutine 9 (finished) created at:
-  ase/consul-2262.TestGatedWriterRace()
-      /work/verified_test.go:27 +0x139
+Goroutine 9 (running) created at:
+  github.com/hashicorp/consul/command/agent.TestRace_2262_gatedwriter_write()
+      /go/src/github.com/hashicorp/consul/command/agent/2262_race_test.go:20 +0x1a9
   testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
+      /usr/local/go/src/testing/testing.go:1203 +0x202
 ==================
-==================
-WARNING: DATA RACE
-Write at 0x00c00021aea0 by goroutine 10:
-  ase/consul-2262.(*GatedWriter).Write()
-      /work/gated_writer.go:26 +0x1ba
-  ase/consul-2262.TestGatedWriterRace.func1()
-      /work/verified_test.go:30 +0xfb
-
-Previous write at 0x00c00021aea0 by goroutine 15:
-  ase/consul-2262.(*GatedWriter).Write()
-      /work/gated_writer.go:26 +0x1ba
-  ase/consul-2262.TestGatedWriterRace.func1()
-      /work/verified_test.go:30 +0xfb
-
-Goroutine 10 (running) created at:
-  ase/consul-2262.TestGatedWriterRace()
-      /work/verified_test.go:27 +0x139
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
-
-Goroutine 15 (running) created at:
-  ase/consul-2262.TestGatedWriterRace()
-      /work/verified_test.go:27 +0x139
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
-==================
-==================
-WARNING: DATA RACE
-Write at 0x00c0000161b8 by goroutine 34:
-  ase/consul-2262.(*GatedWriter).Write()
-      /work/gated_writer.go:26 +0x215
-  ase/consul-2262.TestGatedWriterRace.func1()
-      /work/verified_test.go:30 +0xfb
-
-Previous write at 0x00c0000161b8 by goroutine 33:
-  ase/consul-2262.(*GatedWriter).Write()
-      /work/gated_writer.go:26 +0x215
-  ase/consul-2262.TestGatedWriterRace.func1()
-      /work/verified_test.go:30 +0xfb
-
-Goroutine 34 (running) created at:
-  ase/consul-2262.TestGatedWriterRace()
-      /work/verified_test.go:27 +0x139
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
-
-Goroutine 33 (running) created at:
-  ase/consul-2262.TestGatedWriterRace()
-      /work/verified_test.go:27 +0x139
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
-==================
-    verified_test.go:40: buf length: 1059, expected: 18000 (race may cause loss)
-    testing.go:1398: race detected during execution of test
---- FAIL: TestGatedWriterRace (0.71s)
-FAIL
-FAIL	ase/consul-2262	0.735s
-FAIL

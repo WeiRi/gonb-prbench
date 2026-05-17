@@ -1,102 +1,60 @@
 WARNING: DATA RACE
-Write at 0x00c000114010 by goroutine 34:
-  ase/grpc-go-8519.(*Stream).SetTrailer()
-      /work/handler_server.go:27 +0x492
-  ase/grpc-go-8519.TestRace_HandlerServer_TrailerCopy_8519.func1.1()
-      /work/verified_test.go:25 +0xc9
+Read at 0x00c0002427d8 by goroutine 9:
+  google.golang.org/grpc/internal/transport.TestRace_grpc_go_8519_trailer.func1()
+      /work/upstream/internal/transport/8519_race_test.go:21 +0x124
 
-Previous read at 0x00c000114010 by goroutine 37:
-  ase/grpc-go-8519.(*serverHandlerTransport).writeStatus()
-      /work/handler_server.go:38 +0xe4
-  ase/grpc-go-8519.TestRace_HandlerServer_TrailerCopy_8519.func1.2()
-      /work/verified_test.go:31 +0xd8
+Previous write at 0x00c0002427d8 by goroutine 10:
+  google.golang.org/grpc/internal/transport.(*ServerStream).SetTrailer()
+      /work/upstream/internal/transport/server_stream.go:177 +0x238
+  google.golang.org/grpc/internal/transport.TestRace_grpc_go_8519_trailer.func2()
+      /work/upstream/internal/transport/8519_race_test.go:27 +0xc4
 
-Goroutine 34 (running) created at:
-  ase/grpc-go-8519.TestRace_HandlerServer_TrailerCopy_8519.func1()
-      /work/verified_test.go:22 +0x364
+Goroutine 9 (running) created at:
+  google.golang.org/grpc/internal/transport.TestRace_grpc_go_8519_trailer()
+      /work/upstream/internal/transport/8519_race_test.go:18 +0x29c
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1934 +0x21c
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1997 +0x44
 
-Goroutine 37 (finished) created at:
-  ase/grpc-go-8519.TestRace_HandlerServer_TrailerCopy_8519.func1()
-      /work/verified_test.go:28 +0x451
-==================
+Goroutine 10 (running) created at:
+  google.golang.org/grpc/internal/transport.TestRace_grpc_go_8519_trailer()
+      /work/upstream/internal/transport/8519_race_test.go:24 +0x37c
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1934 +0x21c
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1997 +0x44
 ==================
 WARNING: DATA RACE
-Read at 0x00c0002099b0 by goroutine 30:
-  runtime.mapiterinit()
-      /usr/local/go/src/runtime/map.go:816 +0x0
-  ase/grpc-go-8519.(*serverHandlerTransport).writeStatus()
-      /work/handler_server.go:38 +0x124
-  ase/grpc-go-8519.TestRace_HandlerServer_TrailerCopy_8519.func1.2()
-      /work/verified_test.go:31 +0xd8
+Read at 0x00c000257b90 by goroutine 9:
+  google.golang.org/grpc/metadata.MD.Copy()
+      /work/upstream/metadata/metadata.go:100 +0x149
+  google.golang.org/grpc/internal/transport.TestRace_grpc_go_8519_trailer.func1()
+      /work/upstream/internal/transport/8519_race_test.go:21 +0xf1
 
-Previous write at 0x00c0002099b0 by goroutine 27:
+Previous write at 0x00c000257b90 by goroutine 10:
   runtime.mapassign_faststr()
-      /usr/local/go/src/runtime/map_faststr.go:203 +0x0
-  ase/grpc-go-8519.MD.Join()
-      /work/handler_server.go:10 +0x194
-  ase/grpc-go-8519.(*Stream).SetTrailer()
-      /work/handler_server.go:27 +0x49
-  ase/grpc-go-8519.TestRace_HandlerServer_TrailerCopy_8519.func1.1()
-      /work/verified_test.go:25 +0xc9
+      /usr/local/go/src/internal/runtime/maps/runtime_faststr_swiss.go:263 +0x0
+  google.golang.org/grpc/metadata.Join()
+      /work/upstream/metadata/metadata.go:153 +0x35b
+  google.golang.org/grpc/internal/transport.(*ServerStream).SetTrailer()
+      /work/upstream/internal/transport/server_stream.go:177 +0x59
+  google.golang.org/grpc/internal/transport.TestRace_grpc_go_8519_trailer.func2()
+      /work/upstream/internal/transport/8519_race_test.go:27 +0xc4
 
-Goroutine 30 (running) created at:
-  ase/grpc-go-8519.TestRace_HandlerServer_TrailerCopy_8519.func1()
-      /work/verified_test.go:28 +0x451
+Goroutine 9 (running) created at:
+  google.golang.org/grpc/internal/transport.TestRace_grpc_go_8519_trailer()
+      /work/upstream/internal/transport/8519_race_test.go:18 +0x29c
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1934 +0x21c
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1997 +0x44
 
-Goroutine 27 (running) created at:
-  ase/grpc-go-8519.TestRace_HandlerServer_TrailerCopy_8519.func1()
-      /work/verified_test.go:22 +0x364
+Goroutine 10 (running) created at:
+  google.golang.org/grpc/internal/transport.TestRace_grpc_go_8519_trailer()
+      /work/upstream/internal/transport/8519_race_test.go:24 +0x37c
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1934 +0x21c
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1997 +0x44
 ==================
-==================
-WARNING: DATA RACE
-Read at 0x00c0005068c8 by goroutine 30:
-  ase/grpc-go-8519.(*serverHandlerTransport).writeStatus()
-      /work/handler_server.go:38 +0x193
-  ase/grpc-go-8519.TestRace_HandlerServer_TrailerCopy_8519.func1.2()
-      /work/verified_test.go:31 +0xd8
-
-Previous write at 0x00c0005068c8 by goroutine 27:
-  ase/grpc-go-8519.MD.Join()
-      /work/handler_server.go:10 +0x233
-  ase/grpc-go-8519.(*Stream).SetTrailer()
-      /work/handler_server.go:27 +0x49
-  ase/grpc-go-8519.TestRace_HandlerServer_TrailerCopy_8519.func1.1()
-      /work/verified_test.go:25 +0xc9
-
-Goroutine 30 (running) created at:
-  ase/grpc-go-8519.TestRace_HandlerServer_TrailerCopy_8519.func1()
-      /work/verified_test.go:28 +0x451
-
-Goroutine 27 (running) created at:
-  ase/grpc-go-8519.TestRace_HandlerServer_TrailerCopy_8519.func1()
-      /work/verified_test.go:22 +0x364
-==================
-==================
-WARNING: DATA RACE
-Read at 0x00c0009804c0 by goroutine 169:
-  ase/grpc-go-8519.(*serverHandlerTransport).writeStatus()
-      /work/handler_server.go:38 +0x193
-  ase/grpc-go-8519.TestRace_HandlerServer_TrailerCopy_8519.func1.2()
-      /work/verified_test.go:31 +0xd8
-
-Previous write at 0x00c0009804c0 by goroutine 168:
-  ase/grpc-go-8519.MD.Join()
-      /work/handler_server.go:13 +0x439
-  ase/grpc-go-8519.(*Stream).SetTrailer()
-      /work/handler_server.go:27 +0x49
-  ase/grpc-go-8519.TestRace_HandlerServer_TrailerCopy_8519.func1.1()
-      /work/verified_test.go:25 +0xc9
-
-Goroutine 169 (running) created at:
-  ase/grpc-go-8519.TestRace_HandlerServer_TrailerCopy_8519.func1()
-      /work/verified_test.go:28 +0x451
-
-Goroutine 168 (running) created at:
-  ase/grpc-go-8519.TestRace_HandlerServer_TrailerCopy_8519.func1()
-      /work/verified_test.go:22 +0x364
-==================
-    testing.go:1398: race detected during execution of test
---- FAIL: TestRace_HandlerServer_TrailerCopy_8519 (0.15s)
-FAIL
-FAIL	ase/grpc-go-8519	0.177s
-FAIL

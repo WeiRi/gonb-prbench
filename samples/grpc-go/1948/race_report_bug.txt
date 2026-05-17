@@ -1,34 +1,33 @@
 WARNING: DATA RACE
-Write at 0x00c000110000 by goroutine 18:
+Write at 0x00c0000b6500 by goroutine 26:
   runtime.slicecopy()
-      /usr/local/go/src/runtime/slice.go:325 +0x0
-  ase/grpc-go-1948.(*ClientConn).Invoke()
-      /work/call.go:19 +0xef
-  ase/grpc-go-1948.TestRace_1948_SliceBackingArray.func1.1()
-      /work/verified_test.go:34 +0x111
-  ase/grpc-go-1948.TestRace_1948_SliceBackingArray.func1.gowrap2()
-      /work/verified_test.go:36 +0x41
+      /usr/local/go/src/runtime/slice.go:355 +0x0
+  google.golang.org/grpc.(*ClientConn).Invoke()
+      /work/upstream/call.go:32 +0x11a
+  google.golang.org/grpc.TestRace_grpc_go_1948_invoke_callopts_append.func2()
+      /work/upstream/1948_race_test.go:38 +0x15a
 
-Previous write at 0x00c000110000 by goroutine 19:
+Previous write at 0x00c0000b6500 by goroutine 11:
   runtime.slicecopy()
-      /usr/local/go/src/runtime/slice.go:325 +0x0
-  ase/grpc-go-1948.(*ClientConn).Invoke()
-      /work/call.go:19 +0xef
-  ase/grpc-go-1948.TestRace_1948_SliceBackingArray.func1.1()
-      /work/verified_test.go:34 +0x111
-  ase/grpc-go-1948.TestRace_1948_SliceBackingArray.func1.gowrap2()
-      /work/verified_test.go:36 +0x41
+      /usr/local/go/src/runtime/slice.go:355 +0x0
+  google.golang.org/grpc.(*ClientConn).Invoke()
+      /work/upstream/call.go:32 +0x11a
+  google.golang.org/grpc.TestRace_grpc_go_1948_invoke_callopts_append.func2()
+      /work/upstream/1948_race_test.go:38 +0x15a
 
-Goroutine 18 (running) created at:
-  ase/grpc-go-1948.TestRace_1948_SliceBackingArray.func1()
-      /work/verified_test.go:31 +0x177
+Goroutine 26 (running) created at:
+  google.golang.org/grpc.TestRace_grpc_go_1948_invoke_callopts_append()
+      /work/upstream/1948_race_test.go:33 +0x184
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1934 +0x21c
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1997 +0x44
 
-Goroutine 19 (running) created at:
-  ase/grpc-go-1948.TestRace_1948_SliceBackingArray.func1()
-      /work/verified_test.go:31 +0x177
+Goroutine 11 (running) created at:
+  google.golang.org/grpc.TestRace_grpc_go_1948_invoke_callopts_append()
+      /work/upstream/1948_race_test.go:33 +0x184
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1934 +0x21c
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1997 +0x44
 ==================
-    testing.go:1398: race detected during execution of test
---- FAIL: TestRace_1948_SliceBackingArray (0.03s)
-FAIL
-FAIL	ase/grpc-go-1948	0.050s
-FAIL

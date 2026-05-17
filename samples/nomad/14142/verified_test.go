@@ -1,99 +1,64 @@
 package nomad
 
 import (
-	"fmt"
 	"sync"
+	"sync/atomic"
 	"testing"
-
-	hclog "github.com/hashicorp/go-hclog"
-
-	"github.com/hashicorp/nomad/nomad/structs"
 )
 
-// TestRace_BlockedEvals_ChannelCapture reproduces the data race on
-// capacityChangeCh. Unblock() and UnblockQuota() release the lock and then
-// send on b.capacityChangeCh without the lock held. Flush() replaces
-// b.capacityChangeCh with a new channel under the lock.
-//
-// This is a concurrent read (sending on the channel reads the pointer) and
-// write (Flush writes a new pointer) to the same field.
-//
-// 60+ goroutines directly access the capacityChangeCh field: readers capture
-// the channel reference and send on it, writers replace it. A drain goroutine
-// consumes from all channels to prevent blocking.
-func TestRace_BlockedEvals_ChannelCapture(t *testing.T) {
-	logger := hclog.NewNullLogger()
+// BUG: Unblock reads b.capacityChangeCh AFTER releasing b.l, while Flush reassigns
+// b.capacityChangeCh under b.l. Race on the field.
+func TestRace_14142_capacityChangeCh(t *testing.T) {
 	b := &BlockedEvals{
-		logger:           logger.Named("blocked_evals"),
-		evalBroker:       nil,
-		captured:         make(map[string]wrappedEval),
-		escaped:          make(map[string]wrappedEval),
-		system:           newSystemEvals(),
-		jobs:             make(map[structs.NamespacedID]string),
+		enabled:          true,
+		stats:            NewBlockedStats(),
+		captured:         map[string]wrappedEval{},
+		escaped:          map[string]wrappedEval{},
 		unblockIndexes:   make(map[string]uint64),
-		capacityChangeCh: make(chan *capacityUpdate, 1000),
+		capacityChangeCh: make(chan *capacityUpdate, 1024),
 		duplicateCh:      make(chan struct{}, 1),
 		stopCh:           make(chan struct{}),
-		stats:            NewBlockedStats(),
+		system:           newSystemEvals(),
 	}
-	b.enabled = true
 
-	// Drain goroutine: consume from capacityChangeCh to prevent blocking.
-	// Uses a for-select that reads via an intermediate variable so it
-	// doesn't get stuck when the channel is replaced.
-	drainDone := make(chan struct{})
+	stopDrain := make(chan struct{})
 	go func() {
-		defer func() { recover() }()
+		// Drain Unblock sends without reading b.capacityChangeCh (avoid concurrent
+		// access to the field; the racy field access we want is in Unblock itself).
 		for {
 			select {
-			case <-drainDone:
+			case <-stopDrain:
 				return
 			default:
+				// snapshot copy of the chan pointer inside b.l for safe read:
+				b.l.RLock()
+				ch := b.capacityChangeCh
+				b.l.RUnlock()
 				select {
-				case <-b.capacityChangeCh:
-				default:
+				case <-ch:
+				case <-stopDrain:
+					return
 				}
 			}
 		}
 	}()
+	defer close(stopDrain)
 
+	var done int32
 	var wg sync.WaitGroup
-	nWriters := 60
-	nReaders := 60
-	nIters := 500
-
-	// Writer goroutines: replace capacityChangeCh (simulating Flush)
-	for i := 0; i < nWriters; i++ {
-		wg.Add(1)
-		go func(id int) {
-			defer wg.Done()
-			for j := 0; j < nIters; j++ {
-				// Write to the channel field (simulating Flush)
-				b.capacityChangeCh = make(chan *capacityUpdate, 100)
-			}
-		}(i)
-	}
-
-	// Reader goroutines: read capacityChangeCh and send on it (simulating Unblock)
-	for i := 0; i < nReaders; i++ {
-		wg.Add(1)
-		go func(id int) {
-			defer wg.Done()
-			for j := 0; j < nIters; j++ {
-				// Read the channel field and send on it (simulating Unblock)
-				ch := b.capacityChangeCh
-				// Non-blocking send to avoid deadlock
-				select {
-				case ch <- &capacityUpdate{
-					computedClass: fmt.Sprintf("class-%d-%d", id, j),
-					index:         uint64(j),
-				}:
-				default:
-				}
-			}
-		}(i)
-	}
-
+	wg.Add(2)
+	go func() {
+		defer wg.Done()
+		for i := 0; i < 2000 && atomic.LoadInt32(&done) == 0; i++ {
+			b.Unblock("class", uint64(i))
+		}
+		atomic.StoreInt32(&done, 1)
+	}()
+	go func() {
+		defer wg.Done()
+		for i := 0; i < 200 && atomic.LoadInt32(&done) == 0; i++ {
+			b.Flush()
+		}
+	}()
 	wg.Wait()
-	close(drainDone)
 }

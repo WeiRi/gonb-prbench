@@ -1,23 +1,10 @@
-# syntax=docker/dockerfile:1.4
-# fix.Dockerfile for victoriametrics-8258 — bug + fix.diff applied
-FROM golang:1.22
-RUN apt-get update && apt-get install -y --no-install-recommends git ca-certificates patch && rm -rf /var/lib/apt/lists/*
-RUN mkdir -p /root/.ssh && ssh-keyscan -t rsa,ed25519 github.com >> /root/.ssh/known_hosts 2>/dev/null
-ENV GOPROXY=https://goproxy.cn,direct GOSUMDB=off GOFLAGS=-mod=mod CGO_ENABLED=1
-
-# === Full upstream at bug commit ===
-RUN --mount=type=ssh git clone --depth=200 git@github.com:VictoriaMetrics/VictoriaMetrics.git /work/upstream
+FROM gonb-victoriametrics-8258-base:latest
 WORKDIR /work/upstream
-RUN --mount=type=ssh git fetch --depth=200 origin 92bfb7ba150ff5eda5c96e8e9b1ca5fa7708b758 && git checkout --detach 92bfb7ba150ff5eda5c96e8e9b1ca5fa7708b758
 COPY fix.diff /tmp/fix.diff
-RUN git apply --whitespace=nowarn /tmp/fix.diff || patch -p1 < /tmp/fix.diff
-RUN --mount=type=ssh go mod download 2>&1 | tail -10 || true
-
-# === Race-triggering artefact in isolated sub-package ===
-WORKDIR /work/pr2t-test
-COPY go.mod ./
-COPY verified_test.go ./
-COPY *.go ./
-
-WORKDIR /work
-# NO CMD
+RUN awk 'BEGIN{p=0} /^diff --git/{if ($0 ~ /alertmanager\.go/ && $0 !~ /_test\.go/) p=1; else p=0} p==1' /tmp/fix.diff > /tmp/fix_prod.diff && \
+    git init --quiet && git add -A 2>/dev/null && git -c user.email=x@x -c user.name=x commit -m b -q 2>/dev/null && \
+    git apply --whitespace=nowarn /tmp/fix_prod.diff
+WORKDIR /work/upstream/app/vmalert/notifier
+RUN find . -maxdepth 1 -name "*_test.go" -delete 2>/dev/null
+COPY verified_test.go ./vm_8258_race_test.go
+RUN go test -race -vet=off -c -o /dev/null . 2>&1 | tail -10 || true

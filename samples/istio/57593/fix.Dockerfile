@@ -1,23 +1,3 @@
-# syntax=docker/dockerfile:1.4
-# fix.Dockerfile for istio-57593 — bug + fix.diff applied
-FROM golang:1.22
-RUN apt-get update && apt-get install -y --no-install-recommends git ca-certificates patch && rm -rf /var/lib/apt/lists/*
-RUN mkdir -p /root/.ssh && ssh-keyscan -t rsa,ed25519 github.com >> /root/.ssh/known_hosts 2>/dev/null
-ENV GOPROXY=https://goproxy.cn,direct GOSUMDB=off GOFLAGS=-mod=mod CGO_ENABLED=1
-
-# === Full upstream at bug commit ===
-RUN --mount=type=ssh git clone --depth=200 git@github.com:istio/istio.git /work/upstream
-WORKDIR /work/upstream
-RUN --mount=type=ssh git fetch --depth=200 origin a1bb3229811368988d76290be56396e5b3eab109 && git checkout --detach a1bb3229811368988d76290be56396e5b3eab109
-COPY fix.diff /tmp/fix.diff
-RUN git apply --whitespace=nowarn /tmp/fix.diff || patch -p1 < /tmp/fix.diff
-RUN --mount=type=ssh go mod download 2>&1 | tail -10 || true
-
-# === Race-triggering artefact in isolated sub-package ===
-WORKDIR /work/pr2t-test
-COPY go.mod ./
-COPY verified_test.go ./
-COPY *.go ./
-
-WORKDIR /work
-# NO CMD
+verified_test.goFROMverified_test.go verified_test.goinpverified_test.go-verified_test.goistioverified_test.go-verified_test.go57593verified_test.go
+verified_test.goCOPYverified_test.go verified_test.gofixverified_test.go.verified_test.godiffverified_test.go /verified_test.gotmpverified_test.go/verified_test.gofixverified_test.go.verified_test.godiffverified_test.go
+verified_test.goRUNverified_test.go verified_test.gocdverified_test.go /verified_test.gogoverified_test.go/verified_test.gosrcverified_test.go/verified_test.goistioverified_test.go.verified_test.goioverified_test.go/verified_test.goistioverified_test.go && verified_test.gogitverified_test.go verified_test.goapplyverified_test.go --verified_test.gowhitespaceverified_test.go=verified_test.gonowarnverified_test.go /verified_test.gotmpverified_test.go/verified_test.gofixverified_test.go.verified_test.godiffverified_test.go verified_test.go2verified_test.go>/verified_test.godevverified_test.go/verified_test.gonullverified_test.go || verified_test.gotrueverified_test.go

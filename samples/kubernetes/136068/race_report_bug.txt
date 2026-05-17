@@ -1,32 +1,27 @@
 WARNING: DATA RACE
-Write at 0x00c0003c7db0 by goroutine 111:
-  k8s.io/client-go/tools/leaderelection.(*LeaderElector).setObservedRecord()
-      /work/staging/src/k8s.io/client-go/tools/leaderelection/leaderelection.go:533 +0x171
-  k8s.io/client-go/tools/leaderelection.TestRace_136068.func2()
-      /work/staging/src/k8s.io/client-go/tools/leaderelection/race_136068_capture_test.go:43 +0x14f
+Write at 0x00c00045aeb0 by goroutine 10:
+  k8s.io/client-go/tools/leaderelection.TestRace_136068_ObservedTimeRace.func1()
+      /work/upstream/staging/src/k8s.io/client-go/tools/leaderelection/kubernetes_136068_race_test.go:22 +0x12b
 
-Previous read at 0x00c0003c7db0 by goroutine 40:
-  k8s.io/client-go/tools/leaderelection.TestRace_136068.func1()
-      /work/staging/src/k8s.io/client-go/tools/leaderelection/race_136068_capture_test.go:28 +0xa6
+Previous read at 0x00c00045aeb0 by goroutine 11:
+  k8s.io/client-go/tools/leaderelection.(*LeaderElector).isLeaseValid()
+      /work/upstream/staging/src/k8s.io/client-go/tools/leaderelection/leaderelection.go:523 +0x96
+  k8s.io/client-go/tools/leaderelection.TestRace_136068_ObservedTimeRace.func2()
+      /work/upstream/staging/src/k8s.io/client-go/tools/leaderelection/kubernetes_136068_race_test.go:31 +0xac
 
-Goroutine 111 (running) created at:
-  k8s.io/client-go/tools/leaderelection.TestRace_136068()
-      /work/staging/src/k8s.io/client-go/tools/leaderelection/race_136068_capture_test.go:36 +0x311
+Goroutine 10 (running) created at:
+  k8s.io/client-go/tools/leaderelection.TestRace_136068_ObservedTimeRace()
+      /work/upstream/staging/src/k8s.io/client-go/tools/leaderelection/kubernetes_136068_race_test.go:18 +0x19c
   testing.tRunner()
       /usr/local/go/src/testing/testing.go:1934 +0x21c
   testing.(*T).Run.gowrap1()
       /usr/local/go/src/testing/testing.go:1997 +0x44
 
-Goroutine 40 (finished) created at:
-  k8s.io/client-go/tools/leaderelection.TestRace_136068()
-      /work/staging/src/k8s.io/client-go/tools/leaderelection/race_136068_capture_test.go:25 +0x22f
+Goroutine 11 (running) created at:
+  k8s.io/client-go/tools/leaderelection.TestRace_136068_ObservedTimeRace()
+      /work/upstream/staging/src/k8s.io/client-go/tools/leaderelection/kubernetes_136068_race_test.go:28 +0x244
   testing.tRunner()
       /usr/local/go/src/testing/testing.go:1934 +0x21c
   testing.(*T).Run.gowrap1()
       /usr/local/go/src/testing/testing.go:1997 +0x44
 ==================
---- FAIL: TestRace_136068 (0.02s)
-    testing.go:1617: race detected during execution of test
-FAIL
-FAIL	k8s.io/client-go/tools/leaderelection	0.103s
-FAIL

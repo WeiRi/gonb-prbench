@@ -1,0 +1,62 @@
+WARNING: DATA RACE
+Write at 0x00c000188000 by goroutine 8:
+  emp3r0r-540.(*ResponseBuffer).Reset()
+      /work/handler.go:18 +0x36
+  emp3r0r-540.handleMessageTunnel.func1()
+      /work/handler.go:30 +0x31
+  runtime.deferreturn()
+      /usr/local/go/src/runtime/panic.go:602 +0x5d
+  emp3r0r-540.TestRace_540_HandlerLifecycle.func1()
+      /work/verified_test.go:18 +0xb5
+
+Previous write at 0x00c000188000 by goroutine 21:
+  emp3r0r-540.(*ResponseBuffer).Write()
+      /work/handler.go:22 +0x171
+  emp3r0r-540.handleMessageTunnel.func2()
+      /work/handler.go:41 +0xd7
+
+Goroutine 8 (running) created at:
+  emp3r0r-540.TestRace_540_HandlerLifecycle()
+      /work/verified_test.go:15 +0x84
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 21 (running) created at:
+  emp3r0r-540.handleMessageTunnel()
+      /work/handler.go:34 +0x1ab
+  emp3r0r-540.TestRace_540_HandlerLifecycle.func1()
+      /work/verified_test.go:18 +0xb5
+==================
+WARNING: DATA RACE
+Write at 0x00c0004102a0 by goroutine 832:
+  emp3r0r-540.(*ResponseBuffer).Reset()
+      /work/handler.go:18 +0x36
+  emp3r0r-540.handleMessageTunnel.func1()
+      /work/handler.go:30 +0x31
+  runtime.deferreturn()
+      /usr/local/go/src/runtime/panic.go:602 +0x5d
+  emp3r0r-540.TestRace_540_HandlerLifecycle.func1()
+      /work/verified_test.go:18 +0xb5
+
+Previous read at 0x00c0004102a0 by goroutine 857:
+  emp3r0r-540.(*ResponseBuffer).Write()
+      /work/handler.go:22 +0xdc
+  emp3r0r-540.handleMessageTunnel.func2()
+      /work/handler.go:41 +0xd7
+
+Goroutine 832 (running) created at:
+  emp3r0r-540.TestRace_540_HandlerLifecycle()
+      /work/verified_test.go:15 +0x84
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 857 (running) created at:
+  emp3r0r-540.handleMessageTunnel()
+      /work/handler.go:34 +0x1ab
+  emp3r0r-540.TestRace_540_HandlerLifecycle.func1()
+      /work/verified_test.go:18 +0xb5
+==================

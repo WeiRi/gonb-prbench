@@ -1,250 +1,106 @@
 WARNING: DATA RACE
-Write at 0x00c0005381f0 by goroutine 485:
+Write at 0x00c0005a2380 by goroutine 497:
   github.com/thanos-io/thanos/pkg/compact.(*Group).compact.(*Group).compact.func2.func7.1()
-      /workspace/pkg/compact/compact.go:1033 +0x1fb
-  github.com/thanos-io/thanos/pkg/compact.(*Group).compact.(*Group).compact.func2.func7.1()
-      /workspace/pkg/compact/compact.go:1033 +0x1de
+      /work/upstream/pkg/compact/compact.go:1033 +0x204
   github.com/thanos-io/thanos/pkg/tracing.DoInSpanWithErr()
-      /workspace/pkg/tracing/tracing.go:82 +0x14f
+      /work/upstream/pkg/tracing/tracing.go:82 +0x153
   github.com/thanos-io/thanos/pkg/compact.(*Group).compact.(*Group).compact.func2.func7()
-      /workspace/pkg/compact/compact.go:1032 +0x270
+      /work/upstream/pkg/compact/compact.go:1032 +0x270
   golang.org/x/sync/errgroup.(*Group).Go.func1()
-      /go/pkg/mod/golang.org/x/sync@v0.0.0-20220601150217-0de741cfad7f/errgroup/errgroup.go:75 +0x86
+      /go/pkg/mod/golang.org/x/sync@v0.0.0-20220601150217-0de741cfad7f/errgroup/errgroup.go:75 +0x91
 
-Previous write at 0x00c0005381f0 by goroutine 486:
-  github.com/thanos-io/thanos/pkg/compact.(*Group).compact.(*Group).compact.func2.func7.1()
-      /workspace/pkg/compact/compact.go:1033 +0x1fb
-  github.com/thanos-io/thanos/pkg/compact.(*Group).compact.(*Group).compact.func2.func7.1()
-      /workspace/pkg/compact/compact.go:1033 +0x1de
-  github.com/thanos-io/thanos/pkg/tracing.DoInSpanWithErr()
-      /workspace/pkg/tracing/tracing.go:82 +0x14f
-  github.com/thanos-io/thanos/pkg/compact.(*Group).compact.(*Group).compact.func2.func7()
-      /workspace/pkg/compact/compact.go:1032 +0x270
-  golang.org/x/sync/errgroup.(*Group).Go.func1()
-      /go/pkg/mod/golang.org/x/sync@v0.0.0-20220601150217-0de741cfad7f/errgroup/errgroup.go:75 +0x86
-
-Goroutine 485 (running) created at:
-  golang.org/x/sync/errgroup.(*Group).Go()
-      /go/pkg/mod/golang.org/x/sync@v0.0.0-20220601150217-0de741cfad7f/errgroup/errgroup.go:72 +0x11c
-  github.com/thanos-io/thanos/pkg/compact.(*Group).compact.func2()
-      /workspace/pkg/compact/compact.go:1031 +0xe86
-  github.com/thanos-io/thanos/pkg/compact.(*Group).compact()
-      /workspace/pkg/compact/compact.go:1068 +0xcda
-  github.com/thanos-io/thanos/pkg/compact.(*Group).Compact.func2()
-      /workspace/pkg/compact/compact.go:778 +0xfb
-  github.com/thanos-io/thanos/pkg/tracing.DoInSpanWithErr()
-      /workspace/pkg/tracing/tracing.go:82 +0x14f
-  github.com/thanos-io/thanos/pkg/compact.(*Group).Compact()
-      /workspace/pkg/compact/compact.go:777 +0x4dd
-  github.com/thanos-io/thanos/pkg/compact.(*BucketCompactor).Compact.func2()
-      /workspace/pkg/compact/compact.go:1257 +0x21a
-
-Goroutine 486 (running) created at:
-  golang.org/x/sync/errgroup.(*Group).Go()
-      /go/pkg/mod/golang.org/x/sync@v0.0.0-20220601150217-0de741cfad7f/errgroup/errgroup.go:72 +0x11c
-  github.com/thanos-io/thanos/pkg/compact.(*Group).compact.func2()
-      /workspace/pkg/compact/compact.go:1031 +0xe86
-  github.com/thanos-io/thanos/pkg/compact.(*Group).compact()
-      /workspace/pkg/compact/compact.go:1068 +0xcda
-  github.com/thanos-io/thanos/pkg/compact.(*Group).Compact.func2()
-      /workspace/pkg/compact/compact.go:778 +0xfb
-  github.com/thanos-io/thanos/pkg/tracing.DoInSpanWithErr()
-      /workspace/pkg/tracing/tracing.go:82 +0x14f
-  github.com/thanos-io/thanos/pkg/compact.(*Group).Compact()
-      /workspace/pkg/compact/compact.go:777 +0x4dd
-  github.com/thanos-io/thanos/pkg/compact.(*BucketCompactor).Compact.func2()
-      /workspace/pkg/compact/compact.go:1257 +0x21a
-==================
-==================
-WARNING: DATA RACE
-Write at 0x00c0005381f0 by goroutine 485:
+Previous write at 0x00c0005a2380 by goroutine 496:
   github.com/thanos-io/thanos/pkg/compact.(*Group).compact.(*Group).compact.func2.func7.2()
-      /workspace/pkg/compact/compact.go:1043 +0x244
+      /work/upstream/pkg/compact/compact.go:1043 +0x244
   github.com/thanos-io/thanos/pkg/tracing.DoInSpanWithErr()
-      /workspace/pkg/tracing/tracing.go:82 +0x14f
+      /work/upstream/pkg/tracing/tracing.go:82 +0x153
   github.com/thanos-io/thanos/pkg/compact.(*Group).compact.(*Group).compact.func2.func7()
-      /workspace/pkg/compact/compact.go:1042 +0x4b9
-  github.com/thanos-io/thanos/pkg/compact.(*Group).compact.(*Group).compact.func2.func7()
-      /workspace/pkg/compact/compact.go:1032 +0x270
+      /work/upstream/pkg/compact/compact.go:1042 +0x4b9
   golang.org/x/sync/errgroup.(*Group).Go.func1()
-      /go/pkg/mod/golang.org/x/sync@v0.0.0-20220601150217-0de741cfad7f/errgroup/errgroup.go:75 +0x86
+      /go/pkg/mod/golang.org/x/sync@v0.0.0-20220601150217-0de741cfad7f/errgroup/errgroup.go:75 +0x91
 
-Previous write at 0x00c0005381f0 by goroutine 486:
-  github.com/thanos-io/thanos/pkg/compact.(*Group).compact.(*Group).compact.func2.func7.2()
-      /workspace/pkg/compact/compact.go:1043 +0x244
-  github.com/thanos-io/thanos/pkg/tracing.DoInSpanWithErr()
-      /workspace/pkg/tracing/tracing.go:82 +0x14f
-  github.com/thanos-io/thanos/pkg/compact.(*Group).compact.(*Group).compact.func2.func7()
-      /workspace/pkg/compact/compact.go:1042 +0x4b9
-  github.com/thanos-io/thanos/pkg/compact.(*Group).compact.(*Group).compact.func2.func7()
-      /workspace/pkg/compact/compact.go:1032 +0x270
-  golang.org/x/sync/errgroup.(*Group).Go.func1()
-      /go/pkg/mod/golang.org/x/sync@v0.0.0-20220601150217-0de741cfad7f/errgroup/errgroup.go:75 +0x86
-
-Goroutine 485 (running) created at:
+Goroutine 497 (running) created at:
   golang.org/x/sync/errgroup.(*Group).Go()
-      /go/pkg/mod/golang.org/x/sync@v0.0.0-20220601150217-0de741cfad7f/errgroup/errgroup.go:72 +0x11c
+      /go/pkg/mod/golang.org/x/sync@v0.0.0-20220601150217-0de741cfad7f/errgroup/errgroup.go:72 +0x124
   github.com/thanos-io/thanos/pkg/compact.(*Group).compact.func2()
-      /workspace/pkg/compact/compact.go:1031 +0xe86
+      /work/upstream/pkg/compact/compact.go:1031 +0xe97
   github.com/thanos-io/thanos/pkg/compact.(*Group).compact()
-      /workspace/pkg/compact/compact.go:1068 +0xcda
+      /work/upstream/pkg/compact/compact.go:1068 +0xcda
   github.com/thanos-io/thanos/pkg/compact.(*Group).Compact.func2()
-      /workspace/pkg/compact/compact.go:778 +0xfb
+      /work/upstream/pkg/compact/compact.go:778 +0xfb
   github.com/thanos-io/thanos/pkg/tracing.DoInSpanWithErr()
-      /workspace/pkg/tracing/tracing.go:82 +0x14f
+      /work/upstream/pkg/tracing/tracing.go:82 +0x153
   github.com/thanos-io/thanos/pkg/compact.(*Group).Compact()
-      /workspace/pkg/compact/compact.go:777 +0x4dd
+      /work/upstream/pkg/compact/compact.go:777 +0x4fd
   github.com/thanos-io/thanos/pkg/compact.(*BucketCompactor).Compact.func2()
-      /workspace/pkg/compact/compact.go:1257 +0x21a
+      /work/upstream/pkg/compact/compact.go:1257 +0x224
 
-Goroutine 486 (finished) created at:
+Goroutine 496 (finished) created at:
   golang.org/x/sync/errgroup.(*Group).Go()
-      /go/pkg/mod/golang.org/x/sync@v0.0.0-20220601150217-0de741cfad7f/errgroup/errgroup.go:72 +0x11c
+      /go/pkg/mod/golang.org/x/sync@v0.0.0-20220601150217-0de741cfad7f/errgroup/errgroup.go:72 +0x124
   github.com/thanos-io/thanos/pkg/compact.(*Group).compact.func2()
-      /workspace/pkg/compact/compact.go:1031 +0xe86
+      /work/upstream/pkg/compact/compact.go:1031 +0xe97
   github.com/thanos-io/thanos/pkg/compact.(*Group).compact()
-      /workspace/pkg/compact/compact.go:1068 +0xcda
+      /work/upstream/pkg/compact/compact.go:1068 +0xcda
   github.com/thanos-io/thanos/pkg/compact.(*Group).Compact.func2()
-      /workspace/pkg/compact/compact.go:778 +0xfb
+      /work/upstream/pkg/compact/compact.go:778 +0xfb
   github.com/thanos-io/thanos/pkg/tracing.DoInSpanWithErr()
-      /workspace/pkg/tracing/tracing.go:82 +0x14f
+      /work/upstream/pkg/tracing/tracing.go:82 +0x153
   github.com/thanos-io/thanos/pkg/compact.(*Group).Compact()
-      /workspace/pkg/compact/compact.go:777 +0x4dd
+      /work/upstream/pkg/compact/compact.go:777 +0x4fd
   github.com/thanos-io/thanos/pkg/compact.(*BucketCompactor).Compact.func2()
-      /workspace/pkg/compact/compact.go:1257 +0x21a
-==================
+      /work/upstream/pkg/compact/compact.go:1257 +0x224
 ==================
 WARNING: DATA RACE
-Write at 0x00c000ba6ac0 by goroutine 602:
+Write at 0x00c000782170 by goroutine 612:
   github.com/thanos-io/thanos/pkg/compact.(*Group).compact.(*Group).compact.func2.func7.1()
-      /workspace/pkg/compact/compact.go:1033 +0x1fb
+      /work/upstream/pkg/compact/compact.go:1033 +0x204
+  github.com/thanos-io/thanos/pkg/tracing.DoInSpanWithErr()
+      /work/upstream/pkg/tracing/tracing.go:82 +0x153
+  github.com/thanos-io/thanos/pkg/compact.(*Group).compact.(*Group).compact.func2.func7()
+      /work/upstream/pkg/compact/compact.go:1032 +0x270
+  golang.org/x/sync/errgroup.(*Group).Go.func1()
+      /go/pkg/mod/golang.org/x/sync@v0.0.0-20220601150217-0de741cfad7f/errgroup/errgroup.go:75 +0x91
+
+Previous write at 0x00c000782170 by goroutine 613:
   github.com/thanos-io/thanos/pkg/compact.(*Group).compact.(*Group).compact.func2.func7.1()
-      /workspace/pkg/compact/compact.go:1033 +0x1de
+      /work/upstream/pkg/compact/compact.go:1033 +0x204
   github.com/thanos-io/thanos/pkg/tracing.DoInSpanWithErr()
-      /workspace/pkg/tracing/tracing.go:82 +0x14f
+      /work/upstream/pkg/tracing/tracing.go:82 +0x153
   github.com/thanos-io/thanos/pkg/compact.(*Group).compact.(*Group).compact.func2.func7()
-      /workspace/pkg/compact/compact.go:1032 +0x270
+      /work/upstream/pkg/compact/compact.go:1032 +0x270
   golang.org/x/sync/errgroup.(*Group).Go.func1()
-      /go/pkg/mod/golang.org/x/sync@v0.0.0-20220601150217-0de741cfad7f/errgroup/errgroup.go:75 +0x86
+      /go/pkg/mod/golang.org/x/sync@v0.0.0-20220601150217-0de741cfad7f/errgroup/errgroup.go:75 +0x91
 
-Previous write at 0x00c000ba6ac0 by goroutine 600:
-  github.com/thanos-io/thanos/pkg/compact.(*Group).compact.(*Group).compact.func2.func7.2()
-      /workspace/pkg/compact/compact.go:1043 +0x244
-  github.com/thanos-io/thanos/pkg/tracing.DoInSpanWithErr()
-      /workspace/pkg/tracing/tracing.go:82 +0x14f
-  github.com/thanos-io/thanos/pkg/compact.(*Group).compact.(*Group).compact.func2.func7()
-      /workspace/pkg/compact/compact.go:1042 +0x4b9
-  github.com/thanos-io/thanos/pkg/compact.(*Group).compact.(*Group).compact.func2.func7()
-      /workspace/pkg/compact/compact.go:1032 +0x270
-  golang.org/x/sync/errgroup.(*Group).Go.func1()
-      /go/pkg/mod/golang.org/x/sync@v0.0.0-20220601150217-0de741cfad7f/errgroup/errgroup.go:75 +0x86
-
-Goroutine 602 (running) created at:
+Goroutine 612 (running) created at:
   golang.org/x/sync/errgroup.(*Group).Go()
-      /go/pkg/mod/golang.org/x/sync@v0.0.0-20220601150217-0de741cfad7f/errgroup/errgroup.go:72 +0x11c
+      /go/pkg/mod/golang.org/x/sync@v0.0.0-20220601150217-0de741cfad7f/errgroup/errgroup.go:72 +0x124
   github.com/thanos-io/thanos/pkg/compact.(*Group).compact.func2()
-      /workspace/pkg/compact/compact.go:1031 +0xe86
+      /work/upstream/pkg/compact/compact.go:1031 +0xe97
   github.com/thanos-io/thanos/pkg/compact.(*Group).compact()
-      /workspace/pkg/compact/compact.go:1068 +0xcda
+      /work/upstream/pkg/compact/compact.go:1068 +0xcda
   github.com/thanos-io/thanos/pkg/compact.(*Group).Compact.func2()
-      /workspace/pkg/compact/compact.go:778 +0xfb
+      /work/upstream/pkg/compact/compact.go:778 +0xfb
   github.com/thanos-io/thanos/pkg/tracing.DoInSpanWithErr()
-      /workspace/pkg/tracing/tracing.go:82 +0x14f
+      /work/upstream/pkg/tracing/tracing.go:82 +0x153
   github.com/thanos-io/thanos/pkg/compact.(*Group).Compact()
-      /workspace/pkg/compact/compact.go:777 +0x4dd
+      /work/upstream/pkg/compact/compact.go:777 +0x4fd
   github.com/thanos-io/thanos/pkg/compact.(*BucketCompactor).Compact.func2()
-      /workspace/pkg/compact/compact.go:1257 +0x21a
+      /work/upstream/pkg/compact/compact.go:1257 +0x224
 
-Goroutine 600 (finished) created at:
+Goroutine 613 (running) created at:
   golang.org/x/sync/errgroup.(*Group).Go()
-      /go/pkg/mod/golang.org/x/sync@v0.0.0-20220601150217-0de741cfad7f/errgroup/errgroup.go:72 +0x11c
+      /go/pkg/mod/golang.org/x/sync@v0.0.0-20220601150217-0de741cfad7f/errgroup/errgroup.go:72 +0x124
   github.com/thanos-io/thanos/pkg/compact.(*Group).compact.func2()
-      /workspace/pkg/compact/compact.go:1031 +0xe86
+      /work/upstream/pkg/compact/compact.go:1031 +0xe97
   github.com/thanos-io/thanos/pkg/compact.(*Group).compact()
-      /workspace/pkg/compact/compact.go:1068 +0xcda
+      /work/upstream/pkg/compact/compact.go:1068 +0xcda
   github.com/thanos-io/thanos/pkg/compact.(*Group).Compact.func2()
-      /workspace/pkg/compact/compact.go:778 +0xfb
+      /work/upstream/pkg/compact/compact.go:778 +0xfb
   github.com/thanos-io/thanos/pkg/tracing.DoInSpanWithErr()
-      /workspace/pkg/tracing/tracing.go:82 +0x14f
+      /work/upstream/pkg/tracing/tracing.go:82 +0x153
   github.com/thanos-io/thanos/pkg/compact.(*Group).Compact()
-      /workspace/pkg/compact/compact.go:777 +0x4dd
+      /work/upstream/pkg/compact/compact.go:777 +0x4fd
   github.com/thanos-io/thanos/pkg/compact.(*BucketCompactor).Compact.func2()
-      /workspace/pkg/compact/compact.go:1257 +0x21a
+      /work/upstream/pkg/compact/compact.go:1257 +0x224
 ==================
-==================
-WARNING: DATA RACE
-Write at 0x00c000ba6ac0 by goroutine 601:
-  github.com/thanos-io/thanos/pkg/compact.(*Group).compact.(*Group).compact.func2.func7.1()
-      /workspace/pkg/compact/compact.go:1033 +0x1fb
-  github.com/thanos-io/thanos/pkg/compact.(*Group).compact.(*Group).compact.func2.func7.1()
-      /workspace/pkg/compact/compact.go:1033 +0x1de
-  github.com/thanos-io/thanos/pkg/tracing.DoInSpanWithErr()
-      /workspace/pkg/tracing/tracing.go:82 +0x14f
-  github.com/thanos-io/thanos/pkg/compact.(*Group).compact.(*Group).compact.func2.func7()
-      /workspace/pkg/compact/compact.go:1032 +0x270
-  golang.org/x/sync/errgroup.(*Group).Go.func1()
-      /go/pkg/mod/golang.org/x/sync@v0.0.0-20220601150217-0de741cfad7f/errgroup/errgroup.go:75 +0x86
-
-Previous read at 0x00c000ba6ac0 by goroutine 602:
-  github.com/thanos-io/thanos/pkg/compact.(*Group).compact.(*Group).compact.func2.func7.1()
-      /workspace/pkg/compact/compact.go:1034 +0x244
-  github.com/thanos-io/thanos/pkg/compact.(*Group).compact.(*Group).compact.func2.func7.1()
-      /workspace/pkg/compact/compact.go:1033 +0x1de
-  github.com/thanos-io/thanos/pkg/tracing.DoInSpanWithErr()
-      /workspace/pkg/tracing/tracing.go:82 +0x14f
-  github.com/thanos-io/thanos/pkg/compact.(*Group).compact.(*Group).compact.func2.func7()
-      /workspace/pkg/compact/compact.go:1032 +0x270
-  golang.org/x/sync/errgroup.(*Group).Go.func1()
-      /go/pkg/mod/golang.org/x/sync@v0.0.0-20220601150217-0de741cfad7f/errgroup/errgroup.go:75 +0x86
-
-Goroutine 601 (running) created at:
-  golang.org/x/sync/errgroup.(*Group).Go()
-      /go/pkg/mod/golang.org/x/sync@v0.0.0-20220601150217-0de741cfad7f/errgroup/errgroup.go:72 +0x11c
-  github.com/thanos-io/thanos/pkg/compact.(*Group).compact.func2()
-      /workspace/pkg/compact/compact.go:1031 +0xe86
-  github.com/thanos-io/thanos/pkg/compact.(*Group).compact()
-      /workspace/pkg/compact/compact.go:1068 +0xcda
-  github.com/thanos-io/thanos/pkg/compact.(*Group).Compact.func2()
-      /workspace/pkg/compact/compact.go:778 +0xfb
-  github.com/thanos-io/thanos/pkg/tracing.DoInSpanWithErr()
-      /workspace/pkg/tracing/tracing.go:82 +0x14f
-  github.com/thanos-io/thanos/pkg/compact.(*Group).Compact()
-      /workspace/pkg/compact/compact.go:777 +0x4dd
-  github.com/thanos-io/thanos/pkg/compact.(*BucketCompactor).Compact.func2()
-      /workspace/pkg/compact/compact.go:1257 +0x21a
-
-Goroutine 602 (running) created at:
-  golang.org/x/sync/errgroup.(*Group).Go()
-      /go/pkg/mod/golang.org/x/sync@v0.0.0-20220601150217-0de741cfad7f/errgroup/errgroup.go:72 +0x11c
-  github.com/thanos-io/thanos/pkg/compact.(*Group).compact.func2()
-      /workspace/pkg/compact/compact.go:1031 +0xe86
-  github.com/thanos-io/thanos/pkg/compact.(*Group).compact()
-      /workspace/pkg/compact/compact.go:1068 +0xcda
-  github.com/thanos-io/thanos/pkg/compact.(*Group).Compact.func2()
-      /workspace/pkg/compact/compact.go:778 +0xfb
-  github.com/thanos-io/thanos/pkg/tracing.DoInSpanWithErr()
-      /workspace/pkg/tracing/tracing.go:82 +0x14f
-  github.com/thanos-io/thanos/pkg/compact.(*Group).Compact()
-      /workspace/pkg/compact/compact.go:777 +0x4dd
-  github.com/thanos-io/thanos/pkg/compact.(*BucketCompactor).Compact.func2()
-      /workspace/pkg/compact/compact.go:1257 +0x21a
-==================
-==================
-WARNING: DATA RACE
-Write at 0x00c00080c200 by goroutine 722:
-  github.com/thanos-io/thanos/pkg/compact.(*Group).compact.(*Group).compact.func2.func7.1()
-      /workspace/pkg/compact/compact.go:1033 +0x1fb
-  github.com/thanos-io/thanos/pkg/compact.(*Group).compact.(*Group).compact.func2.func7.1()
-      /workspace/pkg/compact/compact.go:1033 +0x1de
-  github.com/thanos-io/thanos/pkg/tracing.DoInSpanWithErr()
-      /workspace/pkg/tracing/tracing.go:82 +0x14f
-  github.com/thanos-io/thanos/pkg/compact.(*Group).compact.(*Group).compact.func2.func7()
-      /workspace/pkg/compact/compact.go:1032 +0x270
-  golang.org/x/sync/errgroup.(*Group).Go.func1()
-      /go/pkg/mod/golang.org/x/sync@v0.0.0-20220601150217-0de741cfad7f/errgroup/errgroup.go:75 +0x86
-
-Previous read at 0x00c00080c200 by goroutine 721:
-  github.com/thanos-io/thanos/pkg/compact.(*Group).compact.(*Group).compact.func2.func7()
-      /workspace/pkg/compact/compact.go:1046 +0x4c6
-  github.com/thanos-io/thanos/pkg/compact.(*Group).compact.(*Group).compact.func2.func7()
-      /workspace/pkg/compact/compact.go:1032 +0x270

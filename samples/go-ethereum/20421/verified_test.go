@@ -5,16 +5,15 @@ import (
 	"testing"
 )
 
-// TestRace_20421_sliceIter_Node_vs_Close: races Node() (read nodes) vs
-// Close() (writes nodes=nil under lock). PR #20421 fixes by adding mu.Lock
-// to Node(). Production-code path: p2p/enode/iter.go.
+// Race on sliceIter: Node() reads it.nodes without lock in BUG; Close() writes nodes=nil under lock.
 func TestRace_20421_sliceIter_Node_vs_Close(t *testing.T) {
 	nodes := make([]*Node, 32)
 	for i := range nodes {
-		nodes[i] = &Node{id: i}
+		nodes[i] = &Node{}
 	}
-	it := &sliceIter{nodes: nodes, cycle: true}
-
+	it := CycleNodes(nodes).(*sliceIter)
+	// Drive Next once to set up state.
+	it.Next()
 	var wg sync.WaitGroup
 	wg.Add(2)
 	go func() {
@@ -25,7 +24,6 @@ func TestRace_20421_sliceIter_Node_vs_Close(t *testing.T) {
 	}()
 	go func() {
 		defer wg.Done()
-		// Drive Close to write the racy field.
 		for i := 0; i < 500; i++ {
 			it.Close()
 		}

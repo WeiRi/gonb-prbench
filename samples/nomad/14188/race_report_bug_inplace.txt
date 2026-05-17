@@ -1,0 +1,218 @@
+go: downloading github.com/hashicorp/golang-lru v0.5.4
+go: downloading github.com/hashicorp/go-memdb v1.3.2
+go: downloading github.com/hashicorp/go-hclog v1.2.0
+go: downloading github.com/stretchr/testify v1.8.0
+go: downloading github.com/ryanuber/go-glob v1.0.0
+go: downloading github.com/hashicorp/hcl v1.0.1-0.20201016140508-a07e7d50bbee
+go: downloading github.com/golang-jwt/jwt/v4 v4.4.1
+go: downloading github.com/armon/go-metrics v0.4.0
+go: downloading github.com/mitchellh/go-testing-interface v1.14.1
+go: downloading github.com/brianvoe/gofakeit/v6 v6.16.0
+go: downloading github.com/hashicorp/consul/api v1.13.1
+go: downloading github.com/hashicorp/go-immutable-radix v1.3.1
+go: downloading github.com/hashicorp/go-plugin v1.4.3
+go: downloading github.com/hashicorp/cronexpr v1.1.1
+go: downloading github.com/hashicorp/go-multierror v1.1.1
+go: downloading github.com/hashicorp/go-secure-stdlib/strutil v0.1.2
+go: downloading github.com/golang/protobuf v1.5.2
+go: downloading github.com/hashicorp/go-msgpack v1.1.5
+go: downloading github.com/hashicorp/go-set v0.1.2
+go: downloading github.com/hashicorp/go-version v1.4.0
+go: downloading github.com/hashicorp/raft v1.3.9
+go: downloading github.com/hashicorp/vault/api v1.4.1
+go: downloading github.com/miekg/dns v1.1.41
+go: downloading github.com/mitchellh/copystructure v1.2.0
+go: downloading github.com/mitchellh/hashstructure v1.1.0
+go: downloading github.com/mitchellh/mapstructure v1.5.0
+go: downloading golang.org/x/crypto v0.0.0-20220622213112-05595931fe9d
+go: downloading golang.org/x/exp v0.0.0-20220609121020-a51bd0440498
+go: downloading github.com/hashicorp/go-sockaddr v1.0.2
+go: downloading golang.org/x/sys v0.0.0-20220803195053-6e608f9ce704
+go: downloading github.com/hashicorp/yamux v0.0.0-20211028200310-0bc27b27de87
+go: downloading github.com/hashicorp/consul v1.7.8
+go: downloading github.com/mitchellh/reflectwalk v1.0.2
+go: downloading github.com/hashicorp/errwrap v1.1.0
+go: downloading github.com/fatih/color v1.13.0
+go: downloading github.com/mattn/go-isatty v0.0.14
+go: downloading github.com/hashicorp/vault/sdk v0.4.1
+go: downloading google.golang.org/grpc v1.48.0
+go: downloading github.com/hashicorp/go-cleanhttp v0.5.2
+go: downloading github.com/cenkalti/backoff/v3 v3.2.2
+go: downloading github.com/oklog/run v1.1.0
+go: downloading golang.org/x/net v0.0.0-20220802222814-0bcc04d9c69b
+go: downloading golang.org/x/time v0.0.0-20220224211638-0e9765cccd65
+go: downloading gopkg.in/square/go-jose.v2 v2.6.0
+go: downloading github.com/hashicorp/go-secure-stdlib/parseutil v0.1.4
+go: downloading github.com/davecgh/go-spew v1.1.1
+go: downloading github.com/hashicorp/go-rootcerts v1.0.2
+go: downloading github.com/hashicorp/go-retryablehttp v0.7.0
+go: downloading github.com/pmezard/go-difflib v1.0.0
+go: downloading gopkg.in/yaml.v3 v3.0.1
+go: downloading google.golang.org/protobuf v1.28.1
+go: downloading github.com/mattn/go-colorable v0.1.12
+go: downloading github.com/pierrec/lz4 v2.6.1+incompatible
+go: downloading github.com/golang/snappy v0.0.4
+go: downloading go.uber.org/atomic v1.9.0
+go: downloading github.com/armon/go-radix v1.0.0
+go: downloading github.com/hashicorp/go-uuid v1.0.2
+go: downloading github.com/hashicorp/go-secure-stdlib/mlock v0.1.2
+go: downloading github.com/hashicorp/serf v0.9.7
+go: downloading golang.org/x/text v0.3.7
+go: downloading google.golang.org/genproto v0.0.0-20220314164441-57ef72a4c106
+==================
+WARNING: DATA RACE
+Read at 0x00c00051c700 by goroutine 48:
+  github.com/hashicorp/nomad/nomad/stream.TestRace_14188_InPlace.func1()
+      /work/upstream/nomad/stream/nomad-14188_race_test.go:34 +0xd9
+
+Previous write at 0x00c00051c700 by goroutine 47:
+  github.com/hashicorp/nomad/nomad/stream.(*EventBroker).Publish()
+      /work/upstream/nomad/stream/event_broker.go:102 +0x5e5
+  github.com/hashicorp/nomad/nomad/stream.TestRace_14188_InPlace()
+      /work/upstream/nomad/stream/nomad-14188_race_test.go:50 +0x565
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 48 (running) created at:
+  github.com/hashicorp/nomad/nomad/stream.TestRace_14188_InPlace()
+      /work/upstream/nomad/stream/nomad-14188_race_test.go:30 +0x199
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 47 (running) created at:
+  testing.(*T).Run()
+      /usr/local/go/src/testing/testing.go:1742 +0x825
+  testing.runTests.func1()
+      /usr/local/go/src/testing/testing.go:2161 +0x85
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.runTests()
+      /usr/local/go/src/testing/testing.go:2159 +0x8be
+  testing.(*M).Run()
+      /usr/local/go/src/testing/testing.go:2027 +0xf17
+  main.main()
+      _testmain.go:95 +0x2bd
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c00051c710 by goroutine 48:
+  github.com/hashicorp/nomad/nomad/stream.TestRace_14188_InPlace.func1()
+      /work/upstream/nomad/stream/nomad-14188_race_test.go:35 +0xea
+
+Previous write at 0x00c00051c710 by goroutine 47:
+  github.com/hashicorp/nomad/nomad/stream.(*EventBroker).Publish()
+      /work/upstream/nomad/stream/event_broker.go:102 +0x5e5
+  github.com/hashicorp/nomad/nomad/stream.TestRace_14188_InPlace()
+      /work/upstream/nomad/stream/nomad-14188_race_test.go:50 +0x565
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 48 (running) created at:
+  github.com/hashicorp/nomad/nomad/stream.TestRace_14188_InPlace()
+      /work/upstream/nomad/stream/nomad-14188_race_test.go:30 +0x199
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 47 (running) created at:
+  testing.(*T).Run()
+      /usr/local/go/src/testing/testing.go:1742 +0x825
+  testing.runTests.func1()
+      /usr/local/go/src/testing/testing.go:2161 +0x85
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.runTests()
+      /usr/local/go/src/testing/testing.go:2159 +0x8be
+  testing.(*M).Run()
+      /usr/local/go/src/testing/testing.go:2027 +0xf17
+  main.main()
+      _testmain.go:95 +0x2bd
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c00051c720 by goroutine 48:
+  github.com/hashicorp/nomad/nomad/stream.TestRace_14188_InPlace.func1()
+      /work/upstream/nomad/stream/nomad-14188_race_test.go:36 +0xfb
+
+Previous write at 0x00c00051c720 by goroutine 47:
+  github.com/hashicorp/nomad/nomad/stream.(*EventBroker).Publish()
+      /work/upstream/nomad/stream/event_broker.go:102 +0x5e5
+  github.com/hashicorp/nomad/nomad/stream.TestRace_14188_InPlace()
+      /work/upstream/nomad/stream/nomad-14188_race_test.go:50 +0x565
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 48 (running) created at:
+  github.com/hashicorp/nomad/nomad/stream.TestRace_14188_InPlace()
+      /work/upstream/nomad/stream/nomad-14188_race_test.go:30 +0x199
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 47 (running) created at:
+  testing.(*T).Run()
+      /usr/local/go/src/testing/testing.go:1742 +0x825
+  testing.runTests.func1()
+      /usr/local/go/src/testing/testing.go:2161 +0x85
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.runTests()
+      /usr/local/go/src/testing/testing.go:2159 +0x8be
+  testing.(*M).Run()
+      /usr/local/go/src/testing/testing.go:2027 +0xf17
+  main.main()
+      _testmain.go:95 +0x2bd
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c00051c758 by goroutine 48:
+  github.com/hashicorp/nomad/nomad/stream.TestRace_14188_InPlace.func1()
+      /work/upstream/nomad/stream/nomad-14188_race_test.go:37 +0x109
+
+Previous write at 0x00c00051c758 by goroutine 47:
+  github.com/hashicorp/nomad/nomad/stream.(*EventBroker).Publish()
+      /work/upstream/nomad/stream/event_broker.go:102 +0x5e5
+  github.com/hashicorp/nomad/nomad/stream.TestRace_14188_InPlace()
+      /work/upstream/nomad/stream/nomad-14188_race_test.go:50 +0x565
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 48 (running) created at:
+  github.com/hashicorp/nomad/nomad/stream.TestRace_14188_InPlace()
+      /work/upstream/nomad/stream/nomad-14188_race_test.go:30 +0x199
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 47 (running) created at:
+  testing.(*T).Run()
+      /usr/local/go/src/testing/testing.go:1742 +0x825
+  testing.runTests.func1()
+      /usr/local/go/src/testing/testing.go:2161 +0x85
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.runTests()
+      /usr/local/go/src/testing/testing.go:2159 +0x8be
+  testing.(*M).Run()
+      /usr/local/go/src/testing/testing.go:2027 +0xf17
+  main.main()
+      _testmain.go:95 +0x2bd
+==================
+--- FAIL: TestRace_14188_InPlace (18.95s)
+    testing.go:1398: race detected during execution of test
+FAIL
+FAIL	github.com/hashicorp/nomad/nomad/stream	19.012s
+FAIL

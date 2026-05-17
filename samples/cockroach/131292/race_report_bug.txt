@@ -1,80 +1,74 @@
 WARNING: DATA RACE
-Write at 0x00c000194120 by goroutine 8:
-  ase/cockroach-131292.(*heap).Push()
-      /work/work_queue.go:12 +0x167
-  ase/cockroach-131292.(*WorkQueue).Push()
-      /work/work_queue.go:37 +0x9b
-  ase/cockroach-131292.Test131292Race.func1()
-      /work/verified_test.go:16 +0xa4
-  ase/cockroach-131292.Test131292Race.gowrap1()
-      /work/verified_test.go:21 +0x41
+Read at 0x00c0000120a8 by goroutine 9:
+  github.com/cockroachdb/cockroach/pkg/util/admission.(*heap).Len()
+      /work/upstream/pkg/util/admission/work_queue.go:11 +0xed
+  github.com/cockroachdb/cockroach/pkg/util/admission.(*WorkQueue).Admit()
+      /work/upstream/pkg/util/admission/work_queue.go:25 +0xb1
+  github.com/cockroachdb/cockroach/pkg/util/admission.Test131292Race.func1()
+      /work/upstream/pkg/util/admission/cockroach_131292_race_test.go:18 +0xc1
+  github.com/cockroachdb/cockroach/pkg/util/admission.Test131292Race.func2()
+      /work/upstream/pkg/util/admission/cockroach_131292_race_test.go:21 +0x41
 
-Previous read at 0x00c000194120 by goroutine 39:
-  ase/cockroach-131292.(*heap).Len()
-      /work/work_queue.go:11 +0xe8
-  ase/cockroach-131292.(*WorkQueue).Admit()
-      /work/work_queue.go:25 +0xa7
-  ase/cockroach-131292.Test131292Race.func1()
-      /work/verified_test.go:18 +0xb7
-  ase/cockroach-131292.Test131292Race.gowrap1()
-      /work/verified_test.go:21 +0x41
+Previous write at 0x00c0000120a8 by goroutine 8:
+  github.com/cockroachdb/cockroach/pkg/util/admission.(*heap).Push()
+      /work/upstream/pkg/util/admission/work_queue.go:12 +0x177
+  github.com/cockroachdb/cockroach/pkg/util/admission.(*WorkQueue).Push()
+      /work/upstream/pkg/util/admission/work_queue.go:37 +0xa8
+  github.com/cockroachdb/cockroach/pkg/util/admission.Test131292Race.func1()
+      /work/upstream/pkg/util/admission/cockroach_131292_race_test.go:16 +0xae
+  github.com/cockroachdb/cockroach/pkg/util/admission.Test131292Race.func2()
+      /work/upstream/pkg/util/admission/cockroach_131292_race_test.go:21 +0x41
 
-Goroutine 8 (running) created at:
-  ase/cockroach-131292.Test131292Race()
-      /work/verified_test.go:13 +0x184
+Goroutine 9 (running) created at:
+  github.com/cockroachdb/cockroach/pkg/util/admission.Test131292Race()
+      /work/upstream/pkg/util/admission/cockroach_131292_race_test.go:13 +0x184
   testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
+      /usr/local/go/src/testing/testing.go:1595 +0x261
+  testing.(*T).Run.func1()
+      /usr/local/go/src/testing/testing.go:1648 +0x44
 
-Goroutine 39 (finished) created at:
-  ase/cockroach-131292.Test131292Race()
-      /work/verified_test.go:13 +0x184
+Goroutine 8 (finished) created at:
+  github.com/cockroachdb/cockroach/pkg/util/admission.Test131292Race()
+      /work/upstream/pkg/util/admission/cockroach_131292_race_test.go:13 +0x184
   testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
-==================
+      /usr/local/go/src/testing/testing.go:1595 +0x261
+  testing.(*T).Run.func1()
+      /usr/local/go/src/testing/testing.go:1648 +0x44
 ==================
 WARNING: DATA RACE
-Read at 0x00c000194120 by goroutine 15:
-  ase/cockroach-131292.(*heap).Len()
-      /work/work_queue.go:11 +0x117
-  ase/cockroach-131292.(*WorkQueue).Granted()
-      /work/work_queue.go:30 +0xea
-  ase/cockroach-131292.Test131292Race.func1()
-      /work/verified_test.go:19 +0xe9
-  ase/cockroach-131292.Test131292Race.gowrap1()
-      /work/verified_test.go:21 +0x41
+Write at 0x00c0000120a8 by goroutine 18:
+  github.com/cockroachdb/cockroach/pkg/util/admission.(*heap).Push()
+      /work/upstream/pkg/util/admission/work_queue.go:12 +0x177
+  github.com/cockroachdb/cockroach/pkg/util/admission.(*WorkQueue).Push()
+      /work/upstream/pkg/util/admission/work_queue.go:37 +0xa8
+  github.com/cockroachdb/cockroach/pkg/util/admission.Test131292Race.func1()
+      /work/upstream/pkg/util/admission/cockroach_131292_race_test.go:16 +0xae
+  github.com/cockroachdb/cockroach/pkg/util/admission.Test131292Race.func2()
+      /work/upstream/pkg/util/admission/cockroach_131292_race_test.go:21 +0x41
 
-Previous write at 0x00c000194120 by goroutine 26:
-  ase/cockroach-131292.(*heap).Push()
-      /work/work_queue.go:12 +0x167
-  ase/cockroach-131292.(*WorkQueue).Push()
-      /work/work_queue.go:37 +0x9b
-  ase/cockroach-131292.Test131292Race.func1()
-      /work/verified_test.go:16 +0xa4
-  ase/cockroach-131292.Test131292Race.gowrap1()
-      /work/verified_test.go:21 +0x41
+Previous read at 0x00c0000120a8 by goroutine 25:
+  github.com/cockroachdb/cockroach/pkg/util/admission.(*heap).Len()
+      /work/upstream/pkg/util/admission/work_queue.go:11 +0x11c
+  github.com/cockroachdb/cockroach/pkg/util/admission.(*WorkQueue).Granted()
+      /work/upstream/pkg/util/admission/work_queue.go:30 +0xef
+  github.com/cockroachdb/cockroach/pkg/util/admission.Test131292Race.func1()
+      /work/upstream/pkg/util/admission/cockroach_131292_race_test.go:19 +0xee
+  github.com/cockroachdb/cockroach/pkg/util/admission.Test131292Race.func2()
+      /work/upstream/pkg/util/admission/cockroach_131292_race_test.go:21 +0x41
 
-Goroutine 15 (running) created at:
-  ase/cockroach-131292.Test131292Race()
-      /work/verified_test.go:13 +0x184
+Goroutine 18 (running) created at:
+  github.com/cockroachdb/cockroach/pkg/util/admission.Test131292Race()
+      /work/upstream/pkg/util/admission/cockroach_131292_race_test.go:13 +0x184
   testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
+      /usr/local/go/src/testing/testing.go:1595 +0x261
+  testing.(*T).Run.func1()
+      /usr/local/go/src/testing/testing.go:1648 +0x44
 
-Goroutine 26 (finished) created at:
-  ase/cockroach-131292.Test131292Race()
-      /work/verified_test.go:13 +0x184
+Goroutine 25 (running) created at:
+  github.com/cockroachdb/cockroach/pkg/util/admission.Test131292Race()
+      /work/upstream/pkg/util/admission/cockroach_131292_race_test.go:13 +0x184
   testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
+      /usr/local/go/src/testing/testing.go:1595 +0x261
+  testing.(*T).Run.func1()
+      /usr/local/go/src/testing/testing.go:1648 +0x44
 ==================
---- FAIL: Test131292Race (0.00s)
-    testing.go:1398: race detected during execution of test
-FAIL
-FAIL	ase/cockroach-131292	0.019s
-FAIL

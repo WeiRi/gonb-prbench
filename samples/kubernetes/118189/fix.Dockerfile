@@ -1,23 +1,9 @@
-# syntax=docker/dockerfile:1.4
-# fix.Dockerfile for kubernetes-118189 — bug + fix.diff applied
-FROM golang:1.21
-RUN apt-get update && apt-get install -y --no-install-recommends git ca-certificates patch && rm -rf /var/lib/apt/lists/*
-RUN mkdir -p /root/.ssh && ssh-keyscan -t rsa,ed25519 github.com >> /root/.ssh/known_hosts 2>/dev/null
-ENV GOPROXY=https://goproxy.cn,direct GOSUMDB=off GOFLAGS=-mod=mod CGO_ENABLED=1
-
-# === Full upstream at bug commit ===
-RUN --mount=type=ssh git clone --depth=200 git@github.com:kubernetes/kubernetes.git /work/upstream
+FROM gonb-kubernetes-118189-bug:latest
 WORKDIR /work/upstream
-RUN --mount=type=ssh git fetch --depth=200 origin 6d83e22ba48e6e5c09c9b61612ecdf9ce07e4ccf && git checkout --detach 6d83e22ba48e6e5c09c9b61612ecdf9ce07e4ccf
 COPY fix.diff /tmp/fix.diff
-RUN git apply --whitespace=nowarn /tmp/fix.diff || patch -p1 < /tmp/fix.diff
-RUN --mount=type=ssh go mod download 2>&1 | tail -10 || true
-
-# === Race-triggering artefact in isolated sub-package ===
-WORKDIR /work/pr2t-test
-COPY go.mod ./
-COPY verified_test.go ./
-COPY *.go ./
-
-WORKDIR /work
-# NO CMD
+RUN awk 'BEGIN{p=0} /^diff --git/{if ($0 ~ /topologycache.go/ && $0 !~ /_test\.go/) p=1; else p=0} p==1' /tmp/fix.diff > /tmp/fix_prod.diff && \
+    (git apply --whitespace=nowarn /tmp/fix_prod.diff || (git init --quiet && git add -A && git -c user.email=x@x -c user.name=x commit -m b -q && git apply --whitespace=nowarn /tmp/fix_prod.diff))
+WORKDIR /work/upstream/staging/src/k8s.io/endpointslice/topologycache
+RUN for f in *_test.go; do mv "$f" "verified_test_$(echo $f)"; done 2>/dev/null
+COPY verified_test.go ./kubernetes_118189_race_test.go
+RUN go test -race -vet=off -c -o /dev/null . 2>&1 | tail -10 || true

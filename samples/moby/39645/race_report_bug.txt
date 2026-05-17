@@ -1,30 +1,29 @@
 WARNING: DATA RACE
-Write at 0x00c000012140 by goroutine 12:
-  ase/moby-39645.TestRace_39645.func1()
-      /work/verified_test.go:22 +0xcc
+Write at 0x00c000110980 by goroutine 86:
+  github.com/docker/docker/container.(*Health).SetStatus()
+      /go/src/github.com/docker/docker/container/health.go:52 +0x96
+  github.com/docker/docker/container.TestRace_39645_HealthString.func1()
+      /go/src/github.com/docker/docker/container/moby_39645_race_test.go:28 +0xa5
 
-Previous read at 0x00c000012140 by goroutine 15:
-  ase/moby-39645.TestRace_39645.func2()
-      /work/verified_test.go:29 +0xa4
+Previous read at 0x00c000110980 by goroutine 101:
+  github.com/docker/docker/container.(*Health).String()
+      /go/src/github.com/docker/docker/container/health.go:25 +0xca
+  github.com/docker/docker/container.TestRace_39645_HealthString.func2()
+      /go/src/github.com/docker/docker/container/moby_39645_race_test.go:39 +0xd5
 
-Goroutine 12 (running) created at:
-  ase/moby-39645.TestRace_39645()
-      /work/verified_test.go:18 +0x17c
+Goroutine 86 (running) created at:
+  github.com/docker/docker/container.TestRace_39645_HealthString()
+      /go/src/github.com/docker/docker/container/moby_39645_race_test.go:25 +0xa5
   testing.tRunner()
       /usr/local/go/src/testing/testing.go:1689 +0x21e
   testing.(*T).Run.gowrap1()
       /usr/local/go/src/testing/testing.go:1742 +0x44
 
-Goroutine 15 (finished) created at:
-  ase/moby-39645.TestRace_39645()
-      /work/verified_test.go:26 +0xb1
+Goroutine 101 (running) created at:
+  github.com/docker/docker/container.TestRace_39645_HealthString()
+      /go/src/github.com/docker/docker/container/moby_39645_race_test.go:36 +0x18b
   testing.tRunner()
       /usr/local/go/src/testing/testing.go:1689 +0x21e
   testing.(*T).Run.gowrap1()
       /usr/local/go/src/testing/testing.go:1742 +0x44
 ==================
-    testing.go:1398: race detected during execution of test
---- FAIL: TestRace_39645 (0.02s)
-FAIL
-FAIL	ase/moby-39645	0.039s
-FAIL

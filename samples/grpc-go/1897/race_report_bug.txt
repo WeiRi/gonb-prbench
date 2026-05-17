@@ -1,60 +1,25 @@
 WARNING: DATA RACE
-Write at 0x0000006fc428 by goroutine 9:
-  ase/grpc-go-1897.TestRace_PR1897_MinConnectTimeout.func2()
-      /work/verified_test.go:80 +0x91
+Read at 0x0000011626e0 by goroutine 11:
+  google.golang.org/grpc.TestRace_grpc_go_1897_min_timeout.func2()
+      /work/upstream/1897_race_test.go:26 +0x96
 
-Previous read at 0x0000006fc428 by goroutine 8:
-  ase/grpc-go-1897.resetTransport()
-      /work/clientconn.go:20 +0x96
-  ase/grpc-go-1897.TestRace_PR1897_MinConnectTimeout.func1()
-      /work/verified_test.go:73 +0xa9
+Previous write at 0x0000011626e0 by goroutine 10:
+  google.golang.org/grpc.TestRace_grpc_go_1897_min_timeout.func1()
+      /work/upstream/1897_race_test.go:19 +0x96
 
-Goroutine 9 (running) created at:
-  ase/grpc-go-1897.TestRace_PR1897_MinConnectTimeout()
-      /work/verified_test.go:77 +0x18d
+Goroutine 11 (running) created at:
+  google.golang.org/grpc.TestRace_grpc_go_1897_min_timeout()
+      /work/upstream/1897_race_test.go:23 +0x1c4
   testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
+      /usr/local/go/src/testing/testing.go:1934 +0x21c
   testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
+      /usr/local/go/src/testing/testing.go:1997 +0x44
 
-Goroutine 8 (running) created at:
-  ase/grpc-go-1897.TestRace_PR1897_MinConnectTimeout()
-      /work/verified_test.go:71 +0x110
+Goroutine 10 (running) created at:
+  google.golang.org/grpc.TestRace_grpc_go_1897_min_timeout()
+      /work/upstream/1897_race_test.go:16 +0x11c
   testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
+      /usr/local/go/src/testing/testing.go:1934 +0x21c
   testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
+      /usr/local/go/src/testing/testing.go:1997 +0x44
 ==================
-==================
-WARNING: DATA RACE
-Write at 0x0000006fc428 by goroutine 9:
-  ase/grpc-go-1897.TestRace_PR1897_MinConnectTimeout.func2()
-      /work/verified_test.go:82 +0xb2
-
-Previous read at 0x0000006fc428 by goroutine 8:
-  ase/grpc-go-1897.resetTransport()
-      /work/clientconn.go:20 +0x96
-  ase/grpc-go-1897.TestRace_PR1897_MinConnectTimeout.func1()
-      /work/verified_test.go:73 +0xa9
-
-Goroutine 9 (running) created at:
-  ase/grpc-go-1897.TestRace_PR1897_MinConnectTimeout()
-      /work/verified_test.go:77 +0x18d
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
-
-Goroutine 8 (running) created at:
-  ase/grpc-go-1897.TestRace_PR1897_MinConnectTimeout()
-      /work/verified_test.go:71 +0x110
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
-==================
-    testing.go:1398: race detected during execution of test
---- FAIL: TestRace_PR1897_MinConnectTimeout (0.05s)
-FAIL
-FAIL	ase/grpc-go-1897	0.067s
-FAIL

@@ -1,21 +1,6 @@
-# syntax=docker/dockerfile:1.4
-# bug.Dockerfile for prometheus-18127 — full upstream clone at bug commit
-FROM golang:1.25
-RUN apt-get update && apt-get install -y --no-install-recommends git ca-certificates patch && rm -rf /var/lib/apt/lists/*
-RUN mkdir -p /root/.ssh && ssh-keyscan -t rsa,ed25519 github.com >> /root/.ssh/known_hosts 2>/dev/null
-ENV GOPROXY=https://goproxy.cn,direct GOSUMDB=off GOFLAGS=-mod=mod CGO_ENABLED=1
-
-# === Full upstream at bug commit ===
-RUN --mount=type=ssh git clone --depth=200 git@github.com:prometheus/prometheus.git /work/upstream
-WORKDIR /work/upstream
-RUN --mount=type=ssh git fetch --depth=200 origin 019e842249585abcb8c7bf8f842cdded78535236 && git checkout --detach 019e842249585abcb8c7bf8f842cdded78535236
-RUN --mount=type=ssh go mod download 2>&1 | tail -10 || true
-
-# === Race-triggering artefact in isolated sub-package ===
-WORKDIR /work/pr2t-test
-COPY go.mod ./
-COPY verified_test.go ./
-COPY *.go ./
-
-WORKDIR /work
-# NO CMD — race trigger command is in README
+FROM gonb-prometheus-18127-bug:latest
+ENV GOWORK=off
+WORKDIR /work/upstream/scrape
+RUN for f in *_test.go; do mv "$f" "verified_test_$(echo $f)"; done 2>/dev/null
+COPY verified_test.go ./prometheus_18127_race_test.go
+RUN go test -race -vet=off -c -o /dev/null . 2>&1 | tail -10 || true

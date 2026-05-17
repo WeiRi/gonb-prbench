@@ -5,47 +5,31 @@ import (
 	"testing"
 	"time"
 
-	rl "k8s.io/client-go/tools/leaderelection/resourcelock"
 	"k8s.io/utils/clock"
-	clocktesting "k8s.io/utils/clock/testing"
+	rl "k8s.io/client-go/tools/leaderelection/resourcelock"
 )
 
-func TestRace_136068(t *testing.T) {
-	le := &LeaderElector{
-		clock:              clocktesting.NewFakeClock(time.Now()),
-		observedRecordLock: sync.Mutex{},
-	}
-
+func TestRace_136068_ObservedTimeRace(t *testing.T) {
+	le := &LeaderElector{clock: clock.RealClock{}}
 	var wg sync.WaitGroup
-	n := 50
-
-	// Readers: read le.observedTime WITHOUT lock
-	for i := 0; i < n; i++ {
-		wg.Add(1)
-		go func() {
-			defer wg.Done()
-			for j := 0; j < 200; j++ {
-				_ = le.observedTime
-			}
-		}()
-	}
-
-	// Writers: call setObservedRecord which writes le.observedTime under lock
-	for i := 0; i < n; i++ {
-		wg.Add(1)
-		go func() {
-			defer wg.Done()
-			rec := &rl.LeaderElectionRecord{
-				HolderIdentity:       "test",
-				LeaseDurationSeconds: 15,
-			}
-			for j := 0; j < 200; j++ {
-				le.setObservedRecord(rec)
-			}
-		}()
-	}
-
+	const N = 200
+	wg.Add(2)
+	// Goroutine A: setObservedRecord writes observedTime under lock
+	go func() {
+		defer wg.Done()
+		for i := 0; i < N; i++ {
+			le.observedRecordLock.Lock()
+			le.observedTime = time.Now()
+			le.observedRecord = rl.LeaderElectionRecord{LeaseDurationSeconds: 10}
+			le.observedRecordLock.Unlock()
+		}
+	}()
+	// Goroutine B: call isLeaseValid which reads observedTime (BUG: outside lock)
+	go func() {
+		defer wg.Done()
+		for i := 0; i < N; i++ {
+			_ = le.isLeaseValid(time.Now())
+		}
+	}()
 	wg.Wait()
 }
-
-var _ = clock.RealClock{}

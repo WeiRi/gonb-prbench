@@ -1,6 +1,6 @@
 // Production stub for moby libcontainerd/pausemonitor_linux.go (PR #26695).
 // Pre-PR: pauseMonitor.waiters map accessed without sync -> race.
-package libcontainerd
+package main
 
 type pauseMonitor struct {
 	waiters map[string][]chan struct{}

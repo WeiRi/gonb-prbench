@@ -1,94 +1,37 @@
 WARNING: DATA RACE
-Read at 0x00c000012148 by goroutine 14:
-  ase/moby-21677.(*roLayer).hold()
-      /work/ro_layer.go:29 +0xac
-  ase/moby-21677.TestRace_21677.func1()
-      /work/verified_test.go:21 +0xa4
+Write at 0x00c000194b40 by goroutine 11:
+  runtime.mapassign()
+      /usr/local/go/src/runtime/map.go:578 +0x0
+  github.com/docker/docker/layer.(*roLayer).getReference()
+      /go/src/github.com/docker/docker/layer/ro_layer.go:86 +0xca
+  github.com/docker/docker/layer.(*layerStore).Get()
+      /go/src/github.com/docker/docker/layer/layer_store.go:342 +0xcd
+  github.com/docker/docker/layer.TestRace_moby_21677_layer_get_refcount.func1()
+      /go/src/github.com/docker/docker/layer/21677_race_test.go:29 +0xda
 
-Previous write at 0x00c000012148 by goroutine 8:
-  ase/moby-21677.(*roLayer).hold()
-      /work/ro_layer.go:29 +0xc4
-  ase/moby-21677.TestRace_21677.func1()
-      /work/verified_test.go:21 +0xa4
+Previous write at 0x00c000194b40 by goroutine 12:
+  runtime.mapassign()
+      /usr/local/go/src/runtime/map.go:578 +0x0
+  github.com/docker/docker/layer.(*roLayer).getReference()
+      /go/src/github.com/docker/docker/layer/ro_layer.go:86 +0xca
+  github.com/docker/docker/layer.(*layerStore).Get()
+      /go/src/github.com/docker/docker/layer/layer_store.go:342 +0xcd
+  github.com/docker/docker/layer.TestRace_moby_21677_layer_get_refcount.func1()
+      /go/src/github.com/docker/docker/layer/21677_race_test.go:29 +0xda
 
-Goroutine 14 (running) created at:
-  ase/moby-21677.TestRace_21677()
-      /work/verified_test.go:18 +0x245
+Goroutine 11 (running) created at:
+  github.com/docker/docker/layer.TestRace_moby_21677_layer_get_refcount()
+      /go/src/github.com/docker/docker/layer/21677_race_test.go:26 +0x355
   testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
+      /usr/local/go/src/testing/testing.go:1446 +0x216
+  testing.(*T).Run.func1()
+      /usr/local/go/src/testing/testing.go:1493 +0x47
 
-Goroutine 8 (finished) created at:
-  ase/moby-21677.TestRace_21677()
-      /work/verified_test.go:18 +0x245
+Goroutine 12 (running) created at:
+  github.com/docker/docker/layer.TestRace_moby_21677_layer_get_refcount()
+      /go/src/github.com/docker/docker/layer/21677_race_test.go:26 +0x355
   testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
+      /usr/local/go/src/testing/testing.go:1446 +0x216
+  testing.(*T).Run.func1()
+      /usr/local/go/src/testing/testing.go:1493 +0x47
 ==================
-==================
-WARNING: DATA RACE
-Write at 0x00c000012148 by goroutine 14:
-  ase/moby-21677.(*roLayer).hold()
-      /work/ro_layer.go:29 +0xc4
-  ase/moby-21677.TestRace_21677.func1()
-      /work/verified_test.go:21 +0xa4
-
-Previous write at 0x00c000012148 by goroutine 13:
-  ase/moby-21677.(*roLayer).hold()
-      /work/ro_layer.go:29 +0xc4
-  ase/moby-21677.TestRace_21677.func1()
-      /work/verified_test.go:21 +0xa4
-
-Goroutine 14 (running) created at:
-  ase/moby-21677.TestRace_21677()
-      /work/verified_test.go:18 +0x245
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
-
-Goroutine 13 (finished) created at:
-  ase/moby-21677.TestRace_21677()
-      /work/verified_test.go:18 +0x245
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
-==================
-==================
-WARNING: DATA RACE
-Read at 0x00c000012148 by goroutine 58:
-  ase/moby-21677.(*roLayer).refCount()
-      /work/ro_layer.go:34 +0xa7
-  ase/moby-21677.TestRace_21677.func2()
-      /work/verified_test.go:29 +0x9f
-
-Previous write at 0x00c000012148 by goroutine 54:
-  ase/moby-21677.(*roLayer).hold()
-      /work/ro_layer.go:29 +0xc4
-  ase/moby-21677.TestRace_21677.func1()
-      /work/verified_test.go:21 +0xa4
-
-Goroutine 58 (running) created at:
-  ase/moby-21677.TestRace_21677()
-      /work/verified_test.go:26 +0x316
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
-
-Goroutine 54 (running) created at:
-  ase/moby-21677.TestRace_21677()
-      /work/verified_test.go:18 +0x245
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
-==================
---- FAIL: TestRace_21677 (0.00s)
-    testing.go:1398: race detected during execution of test
-FAIL
-FAIL	ase/moby-21677	0.022s
-FAIL

@@ -1,0 +1,294 @@
+go: downloading github.com/envoyproxy/go-control-plane/envoy v1.32.5-0.20250627145903-197b96a9c7f8
+go: downloading github.com/miekg/dns v1.1.68
+go: downloading istio.io/api v1.26.0-alpha.0.0.20250903230959-6020cb55bff4
+go: downloading go.opentelemetry.io/proto/otlp v1.7.1
+go: downloading github.com/google/go-cmp v0.7.0
+go: downloading google.golang.org/protobuf v1.36.7
+go: downloading github.com/cncf/xds/go v0.0.0-20250501225837-2ac532fd4443
+go: downloading k8s.io/api v0.33.4
+go: downloading k8s.io/apimachinery v0.33.4
+go: downloading github.com/onsi/gomega v1.38.0
+go: downloading sigs.k8s.io/yaml v1.6.0
+go: downloading k8s.io/apiextensions-apiserver v0.33.4
+go: downloading sigs.k8s.io/gateway-api-inference-extension v1.0.0-rc.2
+go: downloading sigs.k8s.io/gateway-api v1.3.0
+go: downloading github.com/spf13/cobra v1.9.1
+go: downloading github.com/go-logr/logr v1.4.3
+go: downloading github.com/spf13/pflag v1.0.7
+go: downloading google.golang.org/grpc v1.74.2
+go: downloading gopkg.in/natefinch/lumberjack.v2 v2.2.1
+go: downloading github.com/prometheus/client_golang v1.23.0
+go: downloading go.opentelemetry.io/otel v1.37.0
+go: downloading go.opentelemetry.io/otel/exporters/prometheus v0.59.1
+go: downloading go.opentelemetry.io/otel/metric v1.37.0
+go: downloading go.opentelemetry.io/otel/sdk/metric v1.37.0
+go: downloading github.com/envoyproxy/go-control-plane/contrib v1.32.5-0.20250627145903-197b96a9c7f8
+go: downloading github.com/envoyproxy/go-control-plane v0.13.5-0.20250705082150-f8f2cd45490a
+go: downloading go.opentelemetry.io/otel/sdk v1.37.0
+go: downloading github.com/go-jose/go-jose/v4 v4.1.2
+go: downloading github.com/AdaLogics/go-fuzz-headers v0.0.0-20240806141605-e8a1dd7889d6
+go: downloading github.com/prometheus/client_model v0.6.2
+go: downloading golang.org/x/net v0.43.0
+go: downloading golang.org/x/sys v0.35.0
+go: downloading google.golang.org/genproto/googleapis/api v0.0.0-20250811230008-5f3141c8851a
+go: downloading github.com/fsnotify/fsnotify v1.9.0
+go: downloading github.com/google/cel-go v0.26.0
+go: downloading github.com/lestrrat-go/jwx v1.2.31
+go: downloading k8s.io/client-go v0.33.4
+go: downloading k8s.io/utils v0.0.0-20250604170112-4c0f3b243397
+go: downloading go.yaml.in/yaml/v2 v2.4.2
+go: downloading sigs.k8s.io/randfill v1.0.0
+go: downloading github.com/envoyproxy/protoc-gen-validate v1.2.1
+go: downloading github.com/prometheus/common v0.65.0
+go: downloading github.com/prometheus/procfs v0.17.0
+go: downloading google.golang.org/genproto/googleapis/rpc v0.0.0-20250811230008-5f3141c8851a
+go: downloading sigs.k8s.io/structured-merge-diff/v4 v4.7.0
+go: downloading istio.io/client-go v1.26.0-alpha.0.0.20250903231259-a7fc785d2a9d
+go: downloading golang.org/x/sync v0.16.0
+go: downloading k8s.io/apiserver v0.33.4
+go: downloading sigs.k8s.io/json v0.0.0-20241014173422-cfa47c3a1cc8
+go: downloading github.com/Masterminds/semver/v3 v3.4.0
+go: downloading go.opentelemetry.io/otel/trace v1.37.0
+go: downloading cel.dev/expr v0.24.0
+go: downloading github.com/prometheus/otlptranslator v0.0.0-20250717125610-8549f4ab4f8f
+go: downloading sigs.k8s.io/mcs-api v0.2.0
+go: downloading github.com/moby/spdystream v0.5.0
+go: downloading github.com/lestrrat-go/blackmagic v1.0.3
+go: downloading github.com/fxamacker/cbor/v2 v2.8.0
+go: downloading go.opentelemetry.io/auto/sdk v1.1.0
+go: downloading k8s.io/kube-openapi v0.0.0-20250318190949-c8a335a9a2ff
+go: downloading golang.org/x/text v0.28.0
+go: downloading golang.org/x/crypto v0.41.0
+go: downloading github.com/stoewer/go-strcase v1.3.1
+go: downloading github.com/antlr4-go/antlr/v4 v4.13.1
+go: downloading dario.cat/mergo v1.0.2
+go: downloading github.com/spf13/cast v1.8.0
+go: downloading golang.org/x/time v0.12.0
+go: downloading github.com/google/gnostic-models v0.6.9
+go: downloading github.com/gorilla/websocket v1.5.4-0.20250319132907-e064f32e3674
+go: downloading golang.org/x/term v0.34.0
+go: downloading github.com/google/btree v1.1.3
+go: downloading golang.org/x/oauth2 v0.30.0
+go: downloading github.com/emicklei/go-restful/v3 v3.12.2
+go: downloading github.com/go-openapi/swag v0.23.1
+go: downloading github.com/go-openapi/jsonpointer v0.21.1
+go: downloading github.com/mailru/easyjson v0.9.0
+go: downloading golang.org/x/exp v0.0.0-20250506013437-ce4c2cf36ca6
+2026-05-11T11:46:08.320611Z	info	model	add config default
+2026-05-11T11:46:08.320756Z	info	model	add config global-with-selector
+2026-05-11T11:46:08.320809Z	info	model	add config global-with-ref
+2026-05-11T11:46:08.320842Z	info	model	add config default
+2026-05-11T11:46:08.320878Z	info	model	add config default
+2026-05-11T11:46:08.320909Z	info	model	add config with-selector
+2026-05-11T11:46:08.320946Z	info	model	add config with-targetref
+2026-05-11T11:46:08.320977Z	info	model	add config ignored-gateway-selector
+2026-05-11T11:46:08.321022Z	info	model	add config with-targetref
+2026-05-11T11:46:08.321063Z	info	model	add config with-targetref-service
+2026-05-11T11:46:08.321169Z	info	model	add config global-peer-with-selector
+2026-05-11T11:46:08.321207Z	info	model	add config default
+2026-05-11T11:46:08.321237Z	info	model	add config ignored-newer-default
+2026-05-11T11:46:08.321294Z	info	model	add config peer-with-selector
+2026-05-11T11:46:08.321349Z	info	model	add config ignored-newer
+2026-05-11T11:46:08.321392Z	info	model	add config default
+2026-05-11T11:46:08.321455Z	info	model	add config ignored-another-newer
+2026-05-11T11:46:08.321705Z	warn	model	Namespace/mesh-level PeerAuthentication is already defined for "istio-config" at time 2020-02-02 02:02:02 +0000 UTC. Ignore "ignored-another-newer" which was created at time 2020-02-02 02:02:03 +0000 UTC
+2026-05-11T11:46:08.321764Z	warn	model	Namespace/mesh-level PeerAuthentication is already defined for "foo" at time 2020-02-02 02:02:02 +0000 UTC. Ignore "ignored-newer-default" which was created at time 2020-02-02 02:02:03 +0000 UTC
+2026-05-11T11:46:08.321851Z	warn	model	Namespace/mesh-level PeerAuthentication is already defined for "istio-config" at time 2020-02-02 02:02:02 +0000 UTC. Ignore "ignored-newer" which was created at time 2020-02-02 02:02:04 +0000 UTC
+2026-05-11T11:46:08.425099Z	info	model	add config default
+2026-05-11T11:46:08.425255Z	info	model	add config global-with-selector
+2026-05-11T11:46:08.425289Z	info	model	add config global-with-ref
+2026-05-11T11:46:08.425317Z	info	model	add config default
+2026-05-11T11:46:08.425355Z	info	model	add config default
+2026-05-11T11:46:08.425387Z	info	model	add config with-selector
+2026-05-11T11:46:08.425430Z	info	model	add config with-targetref
+2026-05-11T11:46:08.425465Z	info	model	add config ignored-gateway-selector
+2026-05-11T11:46:08.425496Z	info	model	add config with-targetref
+2026-05-11T11:46:08.425525Z	info	model	add config with-targetref-service
+2026-05-11T11:46:08.425560Z	info	model	add config global-peer-with-selector
+2026-05-11T11:46:08.425602Z	info	model	add config default
+2026-05-11T11:46:08.425649Z	info	model	add config ignored-newer-default
+2026-05-11T11:46:08.425706Z	info	model	add config peer-with-selector
+2026-05-11T11:46:08.425749Z	info	model	add config ignored-newer
+2026-05-11T11:46:08.425772Z	info	model	add config default
+2026-05-11T11:46:08.425816Z	info	model	add config ignored-another-newer
+2026-05-11T11:46:08.426018Z	warn	model	Namespace/mesh-level PeerAuthentication is already defined for "istio-config" at time 2020-02-02 02:02:02 +0000 UTC. Ignore "ignored-another-newer" which was created at time 2020-02-02 02:02:03 +0000 UTC
+2026-05-11T11:46:08.426082Z	warn	model	Namespace/mesh-level PeerAuthentication is already defined for "foo" at time 2020-02-02 02:02:02 +0000 UTC. Ignore "ignored-newer-default" which was created at time 2020-02-02 02:02:03 +0000 UTC
+2026-05-11T11:46:08.426139Z	warn	model	Namespace/mesh-level PeerAuthentication is already defined for "istio-config" at time 2020-02-02 02:02:02 +0000 UTC. Ignore "ignored-newer" which was created at time 2020-02-02 02:02:04 +0000 UTC
+2026-05-11T11:46:08.473683Z	info	model	add config default
+2026-05-11T11:46:08.473857Z	info	model	add config global-with-selector
+2026-05-11T11:46:08.473988Z	info	model	add config global-with-ref
+2026-05-11T11:46:08.474066Z	info	model	add config default
+2026-05-11T11:46:08.474131Z	info	model	add config default
+2026-05-11T11:46:08.474217Z	info	model	add config with-selector
+2026-05-11T11:46:08.474322Z	info	model	add config with-targetref
+2026-05-11T11:46:08.474376Z	info	model	add config ignored-gateway-selector
+2026-05-11T11:46:08.474474Z	info	model	add config with-targetref
+2026-05-11T11:46:08.474551Z	info	model	add config with-targetref-service
+2026-05-11T11:46:08.474632Z	info	model	add config global-peer-with-selector
+2026-05-11T11:46:08.474724Z	info	model	add config default
+2026-05-11T11:46:08.474835Z	info	model	add config ignored-newer-default
+2026-05-11T11:46:08.474922Z	info	model	add config peer-with-selector
+2026-05-11T11:46:08.475295Z	warn	model	Namespace/mesh-level PeerAuthentication is already defined for "foo" at time 2020-02-02 02:02:02 +0000 UTC. Ignore "ignored-newer-default" which was created at time 2020-02-02 02:02:03 +0000 UTC
+2026-05-11T11:46:08.482686Z	info	Successfully serving on http://localhost:46453
+2026-05-11T11:46:08.482954Z	info	model	add config default
+2026-05-11T11:46:08.483064Z	info	model	add config global-with-selector
+2026-05-11T11:46:08.483169Z	info	model	add config with-selector
+2026-05-11T11:46:08.485871Z	error	Server failed to serve in "http://localhost:46453": http: Server closed
+2026-05-11T11:46:08.501819Z	info	model	Full push, new service foo/foo.com
+2026-05-11T11:46:08.502407Z	info	model	Full push, new service bar/bar.com
+2026-05-11T11:46:08.517888Z	error	model	envoyfilter testns/test failed to build envoy filter value: Envoy filter: could not resolve Any message type: type.googleapis.com/thisisaninvalidtype
+2026-05-11T11:46:08.542820Z	warn	model	skipping server on gateway not-default/foo3, duplicate host names: [*]
+2026-05-11T11:46:08.543194Z	warn	model	skipping server on gateway not-default-2/foo4, duplicate host names: [*]
+2026-05-11T11:46:08.543538Z	warn	model	skipping server on gateway not-default/foo5, duplicate host names: [*]
+==================
+WARNING: DATA RACE
+Read at 0x00c000d05ec0 by goroutine 951:
+  istio.io/istio/pilot/pkg/model.sanitizeServerHostNamespace()
+      /work/upstream/pilot/pkg/model/gateway.go:577 +0xca
+  istio.io/istio/pilot/pkg/model.TestRace_57593_InPlace.func2()
+      /work/upstream/pilot/pkg/model/istio-57593_race_test.go:53 +0x8b
+
+Previous write at 0x00c000d05ec0 by goroutine 948:
+  istio.io/istio/pilot/pkg/model.sanitizeServerHostNamespace()
+      /work/upstream/pilot/pkg/model/gateway.go:581 +0x215
+  istio.io/istio/pilot/pkg/model.TestRace_57593_InPlace.func1()
+      /work/upstream/pilot/pkg/model/istio-57593_race_test.go:46 +0x8b
+
+Goroutine 951 (running) created at:
+  istio.io/istio/pilot/pkg/model.TestRace_57593_InPlace()
+      /work/upstream/pilot/pkg/model/istio-57593_race_test.go:51 +0x34b
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1792 +0x225
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1851 +0x44
+
+Goroutine 948 (finished) created at:
+  istio.io/istio/pilot/pkg/model.TestRace_57593_InPlace()
+      /work/upstream/pilot/pkg/model/istio-57593_race_test.go:44 +0x404
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1792 +0x225
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1851 +0x44
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c000d05ed0 by goroutine 952:
+  istio.io/istio/pilot/pkg/model.sanitizeServerHostNamespace()
+      /work/upstream/pilot/pkg/model/gateway.go:577 +0xca
+  istio.io/istio/pilot/pkg/model.TestRace_57593_InPlace.func1()
+      /work/upstream/pilot/pkg/model/istio-57593_race_test.go:46 +0x8b
+
+Previous write at 0x00c000d05ed0 by goroutine 948:
+  istio.io/istio/pilot/pkg/model.sanitizeServerHostNamespace()
+      /work/upstream/pilot/pkg/model/gateway.go:581 +0x215
+  istio.io/istio/pilot/pkg/model.TestRace_57593_InPlace.func1()
+      /work/upstream/pilot/pkg/model/istio-57593_race_test.go:46 +0x8b
+
+Goroutine 952 (running) created at:
+  istio.io/istio/pilot/pkg/model.TestRace_57593_InPlace()
+      /work/upstream/pilot/pkg/model/istio-57593_race_test.go:44 +0x404
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1792 +0x225
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1851 +0x44
+
+Goroutine 948 (finished) created at:
+  istio.io/istio/pilot/pkg/model.TestRace_57593_InPlace()
+      /work/upstream/pilot/pkg/model/istio-57593_race_test.go:44 +0x404
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1792 +0x225
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1851 +0x44
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c000d05ee0 by goroutine 953:
+  istio.io/istio/pilot/pkg/model.sanitizeServerHostNamespace()
+      /work/upstream/pilot/pkg/model/gateway.go:577 +0xca
+  istio.io/istio/pilot/pkg/model.TestRace_57593_InPlace.func2()
+      /work/upstream/pilot/pkg/model/istio-57593_race_test.go:53 +0x8b
+
+Previous write at 0x00c000d05ee0 by goroutine 948:
+  istio.io/istio/pilot/pkg/model.sanitizeServerHostNamespace()
+      /work/upstream/pilot/pkg/model/gateway.go:587 +0x365
+  istio.io/istio/pilot/pkg/model.TestRace_57593_InPlace.func1()
+      /work/upstream/pilot/pkg/model/istio-57593_race_test.go:46 +0x8b
+
+Goroutine 953 (running) created at:
+  istio.io/istio/pilot/pkg/model.TestRace_57593_InPlace()
+      /work/upstream/pilot/pkg/model/istio-57593_race_test.go:51 +0x34b
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1792 +0x225
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1851 +0x44
+
+Goroutine 948 (finished) created at:
+  istio.io/istio/pilot/pkg/model.TestRace_57593_InPlace()
+      /work/upstream/pilot/pkg/model/istio-57593_race_test.go:44 +0x404
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1792 +0x225
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1851 +0x44
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c000be09e0 by goroutine 1050:
+  istio.io/istio/pilot/pkg/model.sanitizeServerHostNamespace()
+      /work/upstream/pilot/pkg/model/gateway.go:577 +0xca
+  istio.io/istio/pilot/pkg/model.TestRace_57593_InPlace.func1()
+      /work/upstream/pilot/pkg/model/istio-57593_race_test.go:46 +0x8b
+
+Previous write at 0x00c000be09e0 by goroutine 1048:
+  istio.io/istio/pilot/pkg/model.sanitizeServerHostNamespace()
+      /work/upstream/pilot/pkg/model/gateway.go:587 +0x365
+  istio.io/istio/pilot/pkg/model.TestRace_57593_InPlace.func1()
+      /work/upstream/pilot/pkg/model/istio-57593_race_test.go:46 +0x8b
+
+Goroutine 1050 (running) created at:
+  istio.io/istio/pilot/pkg/model.TestRace_57593_InPlace()
+      /work/upstream/pilot/pkg/model/istio-57593_race_test.go:44 +0x404
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1792 +0x225
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1851 +0x44
+
+Goroutine 1048 (running) created at:
+  istio.io/istio/pilot/pkg/model.TestRace_57593_InPlace()
+      /work/upstream/pilot/pkg/model/istio-57593_race_test.go:44 +0x404
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1792 +0x225
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1851 +0x44
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c001218000 by goroutine 1253:
+  istio.io/istio/pilot/pkg/model.sanitizeServerHostNamespace()
+      /work/upstream/pilot/pkg/model/gateway.go:581 +0x215
+  istio.io/istio/pilot/pkg/model.TestRace_57593_InPlace.func2()
+      /work/upstream/pilot/pkg/model/istio-57593_race_test.go:53 +0x8b
+
+Previous read at 0x00c001218000 by goroutine 1249:
+  istio.io/istio/pilot/pkg/model.sanitizeServerHostNamespace()
+      /work/upstream/pilot/pkg/model/gateway.go:577 +0xca
+  istio.io/istio/pilot/pkg/model.TestRace_57593_InPlace.func2()
+      /work/upstream/pilot/pkg/model/istio-57593_race_test.go:53 +0x8b
+
+Goroutine 1253 (running) created at:
+  istio.io/istio/pilot/pkg/model.TestRace_57593_InPlace()
+      /work/upstream/pilot/pkg/model/istio-57593_race_test.go:51 +0x34b
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1792 +0x225
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1851 +0x44
+
+Goroutine 1249 (running) created at:
+  istio.io/istio/pilot/pkg/model.TestRace_57593_InPlace()
+      /work/upstream/pilot/pkg/model/istio-57593_race_test.go:51 +0x34b
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1792 +0x225
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1851 +0x44
+==================
+
+...truncated to first 5 WARNING: DATA RACE blocks (original 11 blocks)...

@@ -3,73 +3,36 @@
 | Field | Value |
 |---|---|
 | Project | tidb |
-| Reference | https://github.com/pingcap/tidb/pull/38374 |
-| Bug commit | `accff686216c` |
+| Reference | https://github.com/tidb/tidb/pull/38374 |
 | Category | data_race |
 | Oracle | RACE |
-| Primary diff file | `domain/domain_sysvars.go` |
+| Primary diff file | `br/pkg/restore/BUILD.bazel` |
+| Base image | `gonb-tidb-38374-base:latest` (built by gonb-prebuild for this sample) |
 
+**Soft issue — H9 drift**: race detector frame is NOT in any file modified by `fix.diff`. The fix likely suppresses race via a side-effect path (e.g. removes a goroutine that walked into the racy code) rather than directly addressing the racing line. Effective for bug reproduction; downstream fix-experiment tools should verify root-cause is addressed.
 
-## Race report excerpt
+## In-place reproduction
 
-The following stack trace is captured by Go's race detector when running the bug build:
+This sample uses the original upstream source at the bug commit (pre-built into the base image — no SSH-clone required at sample-build time).
 
-```
-# WHITE_BOX_UPSTREAM_NOT_REPRODUCIBLE
-# Sample: tidb-38374
-# Reason: target_dir_removed_in_master_after_legacy_purge
-# Detail: docker re-run on upstream failed; v3 worker attempted with --memory=12g --cpus=6 --timeout=900s
-# Stderr: 
-# 
-# This sample's race trace was originally captured during dataset construction
-# (see marker.real_frame_hits + marker.bug_races). The current dataset<sid>/
-# verified_test.go references upstream types and cannot trigger the race in standalone
-# docker without the full upstream source tree. The marker remains ab_class=A based on
-# the original docker validation.
-# 
-# Mitigation: in the public artifact's REPRO_GUIDE.md, note that ~10% of A samples
-# (24 / 263) require an upstream checkout. The remaining ~90% (239 / 263) reproduce
-# standalone via samples/<sid>/run.sh.
-```
+### Build & run bug
 
-(Full trace in `race_report_bug.txt`.)
-
-## How to reproduce
-
-### 1. SSH agent setup (one-time)
 ```bash
-eval $(ssh-agent -a /tmp/ssh-agent-gonb.sock)
-ssh-add ~/.ssh/id_ed25519
-export SSH_AUTH_SOCK=/tmp/ssh-agent-gonb.sock
-```
-
-### 2. Build bug image
-```bash
-DOCKER_BUILDKIT=1 docker build --ssh default -f bug.Dockerfile -t gonb-tidb-38374-bug .
-```
-
-### 3. Trigger race
-```bash
-docker run --rm --memory=2g --cpus=1 gonb-tidb-38374-bug \
-  sh -c "cd /work/pr2t-test && go test -race -vet=off -count=20 -timeout=180s ./..."
+docker build -f bug.Dockerfile -t tidb-38374-bug .
+docker run --rm --cpus=2 --memory=2g tidb-38374-bug \
+  sh -c "go test -race -vet=off -count=10 -timeout=300s ."
 # Expected: WARNING: DATA RACE + FAIL
 ```
 
-### 4. Verify fix
+### Build & run fix
+
 ```bash
-DOCKER_BUILDKIT=1 docker build --ssh default -f fix.Dockerfile -t gonb-tidb-38374-fix .
-docker run --rm --memory=2g --cpus=1 gonb-tidb-38374-fix \
-  sh -c "cd /work/pr2t-test && go test -race -vet=off -count=20 -timeout=180s ./..."
-# Expected: PASS (race not triggered)
+docker build -f fix.Dockerfile -t tidb-38374-fix .
+docker run --rm --cpus=2 --memory=2g tidb-38374-fix \
+  sh -c "go test -race -vet=off -count=10 -timeout=300s ."
+# Expected: PASS (PR fix suppresses the race)
 ```
 
-## HTTPS fallback (if SSH blocked)
+## Race report
 
-If `git@github.com:` clone fails in your environment:
-```bash
-sed -i 's|git@github.com:|https://github.com/|g' bug.Dockerfile fix.Dockerfile
-# Also remove the --mount=type=ssh hint (HTTPS doesn't need it)
-sed -i 's|--mount=type=ssh ||g' bug.Dockerfile fix.Dockerfile
-DOCKER_BUILDKIT=1 docker build -f bug.Dockerfile -t gonb-tidb-38374-bug .
-# (then run as above, no --ssh flag)
-```
+See `race_report_bug.txt` for the captured race detector output from a bug build run.

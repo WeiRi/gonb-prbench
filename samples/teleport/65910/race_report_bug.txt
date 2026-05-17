@@ -1,64 +1,58 @@
 WARNING: DATA RACE
-Write at 0x00c00028ed78 by goroutine 73:
+Write at 0x00c000af4538 by goroutine 455:
   github.com/gravitational/teleport/lib/srv/app/gcp.(*handler).getToken.func1()
-      /workspace/lib/srv/app/gcp/handler.go:274 +0x244
+      /work/upstream/lib/srv/app/gcp/handler.go:275 +0x1e8
 
-Previous read at 0x00c00028ed78 by goroutine 52:
+Previous read at 0x00c000af4538 by goroutine 71:
   github.com/gravitational/teleport/lib/srv/app/gcp.(*handler).getToken()
-      /workspace/lib/srv/app/gcp/handler.go:284 +0x527
+      /work/upstream/lib/srv/app/gcp/handler.go:285 +0x527
   github.com/gravitational/teleport/lib/srv/app/gcp.TestRace_65910.func2()
-      /workspace/lib/srv/app/gcp/handler_race_test.go:87 +0x239
+      /work/upstream/lib/srv/app/gcp/teleport_65910_race_test.go:87 +0x239
   github.com/gravitational/teleport/lib/srv/app/gcp.TestRace_65910.gowrap1()
-      /workspace/lib/srv/app/gcp/handler_race_test.go:89 +0x41
+      /work/upstream/lib/srv/app/gcp/teleport_65910_race_test.go:89 +0x41
 
-Goroutine 73 (running) created at:
+Goroutine 455 (running) created at:
   github.com/gravitational/teleport/lib/srv/app/gcp.(*handler).getToken()
-      /workspace/lib/srv/app/gcp/handler.go:273 +0x3aa
+      /work/upstream/lib/srv/app/gcp/handler.go:274 +0x3aa
   github.com/gravitational/teleport/lib/srv/app/gcp.TestRace_65910.func2()
-      /workspace/lib/srv/app/gcp/handler_race_test.go:87 +0x239
+      /work/upstream/lib/srv/app/gcp/teleport_65910_race_test.go:87 +0x239
   github.com/gravitational/teleport/lib/srv/app/gcp.TestRace_65910.gowrap1()
-      /workspace/lib/srv/app/gcp/handler_race_test.go:89 +0x41
+      /work/upstream/lib/srv/app/gcp/teleport_65910_race_test.go:89 +0x41
 
-Goroutine 52 (running) created at:
+Goroutine 71 (finished) created at:
   github.com/gravitational/teleport/lib/srv/app/gcp.TestRace_65910()
-      /workspace/lib/srv/app/gcp/handler_race_test.go:80 +0x285
+      /work/upstream/lib/srv/app/gcp/teleport_65910_race_test.go:80 +0x27e
   testing.tRunner()
       /usr/local/go/src/testing/testing.go:1934 +0x21c
   testing.(*T).Run.gowrap1()
       /usr/local/go/src/testing/testing.go:1997 +0x44
-==================
 ==================
 WARNING: DATA RACE
-Write at 0x00c000a0f3c0 by goroutine 73:
+Write at 0x00c000b4cc40 by goroutine 455:
   github.com/gravitational/teleport/lib/srv/app/gcp.(*handler).getToken.func1()
-      /workspace/lib/srv/app/gcp/handler.go:274 +0x288
+      /work/upstream/lib/srv/app/gcp/handler.go:275 +0x22d
 
-Previous read at 0x00c000a0f3c0 by goroutine 52:
+Previous read at 0x00c000b4cc40 by goroutine 71:
   github.com/gravitational/teleport/lib/srv/app/gcp.(*handler).getToken()
-      /workspace/lib/srv/app/gcp/handler.go:284 +0x4fe
+      /work/upstream/lib/srv/app/gcp/handler.go:285 +0x4fe
   github.com/gravitational/teleport/lib/srv/app/gcp.TestRace_65910.func2()
-      /workspace/lib/srv/app/gcp/handler_race_test.go:87 +0x239
+      /work/upstream/lib/srv/app/gcp/teleport_65910_race_test.go:87 +0x239
   github.com/gravitational/teleport/lib/srv/app/gcp.TestRace_65910.gowrap1()
-      /workspace/lib/srv/app/gcp/handler_race_test.go:89 +0x41
+      /work/upstream/lib/srv/app/gcp/teleport_65910_race_test.go:89 +0x41
 
-Goroutine 73 (running) created at:
+Goroutine 455 (running) created at:
   github.com/gravitational/teleport/lib/srv/app/gcp.(*handler).getToken()
-      /workspace/lib/srv/app/gcp/handler.go:273 +0x3aa
+      /work/upstream/lib/srv/app/gcp/handler.go:274 +0x3aa
   github.com/gravitational/teleport/lib/srv/app/gcp.TestRace_65910.func2()
-      /workspace/lib/srv/app/gcp/handler_race_test.go:87 +0x239
+      /work/upstream/lib/srv/app/gcp/teleport_65910_race_test.go:87 +0x239
   github.com/gravitational/teleport/lib/srv/app/gcp.TestRace_65910.gowrap1()
-      /workspace/lib/srv/app/gcp/handler_race_test.go:89 +0x41
+      /work/upstream/lib/srv/app/gcp/teleport_65910_race_test.go:89 +0x41
 
-Goroutine 52 (running) created at:
+Goroutine 71 (finished) created at:
   github.com/gravitational/teleport/lib/srv/app/gcp.TestRace_65910()
-      /workspace/lib/srv/app/gcp/handler_race_test.go:80 +0x285
+      /work/upstream/lib/srv/app/gcp/teleport_65910_race_test.go:80 +0x27e
   testing.tRunner()
       /usr/local/go/src/testing/testing.go:1934 +0x21c
   testing.(*T).Run.gowrap1()
       /usr/local/go/src/testing/testing.go:1997 +0x44
 ==================
-    testing.go:1617: race detected during execution of test
---- FAIL: TestRace_65910 (0.16s)
-FAIL
-FAIL	github.com/gravitational/teleport/lib/srv/app/gcp	0.340s
-FAIL

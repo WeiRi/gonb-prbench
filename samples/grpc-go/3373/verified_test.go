@@ -1,38 +1,29 @@
-// Race-trigger test for grpc-go-3373; see README.md for usage.
-
 package grpctest
 
 import (
-	"regexp"
 	"sync"
+	"sync/atomic"
 	"testing"
 )
 
-func TestRace_PR3373_TLoggerMap(t *testing.T) {
-	g := NewTLogger()
-	g.AddExpect(regexp.MustCompile("foo"), 1000000)
-	g.AddExpect(regexp.MustCompile("bar"), 1000000)
+// Race: BUG tLogger.ExpectErrorN, EndTest, expected access g.errors map
+// without lock. Concurrent goroutines race on map writes.
+// FIX adds g.m sync.Mutex around all map accesses.
+func TestRace_grpc_go_3373_tlogger_errors(t *testing.T) {
+	tl := TLogger
+	tl.Update(t)
 
+	var done int32
 	var wg sync.WaitGroup
-	const G = 6
-	const N = 5000
-	for i := 0; i < G; i++ {
+	for i := 0; i < 8; i++ {
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
-			for j := 0; j < N; j++ {
-				_ = g.expected("foobar test message")
+			for j := 0; j < 200 && atomic.LoadInt32(&done) == 0; j++ {
+				tl.ExpectErrorN("pat", 1)
 			}
+			atomic.StoreInt32(&done, 1)
 		}()
 	}
-	wg.Add(1)
-	go func() {
-		defer wg.Done()
-		for j := 0; j < 50; j++ {
-			g.Update()
-			g.AddExpect(regexp.MustCompile("foo"), 1000)
-			g.AddExpect(regexp.MustCompile("bar"), 1000)
-		}
-	}()
 	wg.Wait()
 }

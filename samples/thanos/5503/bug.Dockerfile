@@ -1,21 +1,12 @@
-# syntax=docker/dockerfile:1.4
-# bug.Dockerfile for thanos-5503 — full upstream clone at bug commit
-FROM golang:1.25
-RUN apt-get update && apt-get install -y --no-install-recommends git ca-certificates patch && rm -rf /var/lib/apt/lists/*
-RUN mkdir -p /root/.ssh && ssh-keyscan -t rsa,ed25519 github.com >> /root/.ssh/known_hosts 2>/dev/null
-ENV GOPROXY=https://goproxy.cn,direct GOSUMDB=off GOFLAGS=-mod=mod CGO_ENABLED=1
+# bug.Dockerfile for thanos-5503 (Recipe A in-place)
+FROM gonb-thanos-5503-base:latest
 
-# === Full upstream at bug commit ===
-RUN --mount=type=ssh git clone --depth=200 git@github.com:thanos-io/thanos.git /work/upstream
-WORKDIR /work/upstream
-RUN --mount=type=ssh git fetch --depth=200 origin 9b6903b58c23e83814a5d11d9403270e1dbbdad9 && git checkout --detach 9b6903b58c23e83814a5d11d9403270e1dbbdad9
-RUN --mount=type=ssh go mod download 2>&1 | tail -10 || true
+WORKDIR /work/upstream/pkg/compact
+# Keep existing tests (admission gate handles cleanup at runtime)
 
-# === Race-triggering artefact in isolated sub-package ===
-WORKDIR /work/pr2t-test
-COPY go.mod ./
-COPY verified_test.go ./
-COPY *.go ./
+COPY verified_test_inplace.go ./thanos_5503_race_test.go
 
-WORKDIR /work
-# NO CMD — race trigger command is in README
+# Compile check
+RUN go test -race -vet=off -c -o /dev/null . 2>&1 | tail -10 || true
+
+CMD go test -race -vet=off -count=10 -timeout=300s .

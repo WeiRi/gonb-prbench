@@ -1,0 +1,69 @@
+thudart
+diff --git a/service/internal/entities/storage.go b/service/internal/entities/storage.go
+index b94ddf51..0ac35b32 100644
+--- a/service/internal/entities/storage.go
++++ b/service/internal/entities/storage.go
+@@ -60,15 +60,38 @@ func GetAll() *variableBase {
+ }
+ 
+ func GetEntities() entitiesByClass {
+-	return contents.Entities
++	rwmutex.RLock()
++
++	copiedEntities := make(entitiesByClass, len(contents.Entities))
++
++	for entityName, entityInstances := range contents.Entities {
++		copiedInstances := make(entityInstancesByKey, len(entityInstances))
++
++		for key, entity := range entityInstances {
++			copiedInstances[key] = entity
++		}
++		copiedEntities[entityName] = copiedInstances
++	}
++
++	rwmutex.RUnlock()
++
++	return copiedEntities
+ }
+ 
+ func GetEntityInstances(entityName string) entityInstancesByKey {
++	rwmutex.RLock()
++	defer rwmutex.RUnlock()
++
+ 	if entities, ok := contents.Entities[entityName]; ok {
+-		return entities
++		copiedInstances := make(entityInstancesByKey, len(entities))
++
++		for key, entity := range entities {
++			copiedInstances[key] = entity
++		}
++		return copiedInstances
+ 	}
+ 
+-	return nil
++	return make(entityInstancesByKey, 0)
+ }
+ 
+ func AddEntity(entityName string, entityKey string, data any) {
+diff --git a/service/internal/entities/templates.go b/service/internal/entities/templates.go
+index 46b5bff9..ccb67f0b 100644
+--- a/service/internal/entities/templates.go
++++ b/service/internal/entities/templates.go
+@@ -91,7 +91,7 @@ func ParseTemplateWithArgs(source string, ent *Entity, args map[string]string) s
+ 	}
+ 
+ 	templateVariables := &variableBase{
+-		OliveTin:      contents.OliveTin,
++		OliveTin:      GetAll().OliveTin,
+ 		Arguments:     args,
+ 		CurrentEntity: entdata,
+ 	}
+@@ -126,5 +126,8 @@ func ParseTemplateBoolWith(source string, ent *Entity) bool {
+ }
+ 
+ func ClearEntities(entityType string) {
++	rwmutex.Lock()
++	defer rwmutex.Unlock()
++
+ 	delete(contents.Entities, entityType)
+ }

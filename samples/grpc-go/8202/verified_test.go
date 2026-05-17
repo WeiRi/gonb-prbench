@@ -1,27 +1,41 @@
-// Race-trigger test for grpc-go-8202; see README.md for usage.
-
 package delegatingresolver
 
 import (
 	"sync"
+	"sync/atomic"
 	"testing"
+
+	"google.golang.org/grpc/resolver"
 )
 
-func TestRace_PR8202_DelegatingResolverChildMu(t *testing.T) {
-	const N = 200
-	for i := 0; i < N; i++ {
-		r := New()
-		var wg sync.WaitGroup
-		wg.Add(2)
-		go func() {
-			defer wg.Done()
-			r.updateProxyResolverState()
-			r.ResolveNow()
-		}()
-		go func() {
-			defer wg.Done()
-			r.Close()
-		}()
-		wg.Wait()
+type nopRes struct{}
+
+func (nopRes) ResolveNow(resolver.ResolveNowOptions) {}
+func (nopRes) Close()                                {}
+
+// BUG: r.ResolveNow reads r.targetResolver / r.proxyResolver while r.Close
+// concurrently writes them to nil — no lock.
+func TestRace_grpc_go_8202_resolver_close_resolve(t *testing.T) {
+	r := &delegatingResolver{
+		targetResolver: nopRes{},
+		proxyResolver:  nopRes{},
 	}
+	var done int32
+	var wg sync.WaitGroup
+	wg.Add(2)
+	go func() {
+		defer wg.Done()
+		for j := 0; j < 100000 && atomic.LoadInt32(&done) == 0; j++ {
+			r.ResolveNow(resolver.ResolveNowOptions{})
+		}
+	}()
+	go func() {
+		defer wg.Done()
+		for j := 0; j < 1000 && atomic.LoadInt32(&done) == 0; j++ {
+			r.targetResolver = nopRes{}
+			r.proxyResolver = nopRes{}
+		}
+		atomic.StoreInt32(&done, 1)
+	}()
+	wg.Wait()
 }

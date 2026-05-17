@@ -1,34 +1,23 @@
 WARNING: DATA RACE
-Read at 0x00c00019c128 by goroutine 10:
-  ase/etcd-6587.(*watcherStream).resume()
-      /work/watch.go:33 +0xa7
-  ase/etcd-6587.TestRace_PR6587_InitReqRevRace.func3()
-      /work/verified_test.go:31 +0x9f
+Read at 0x00c420104048 by goroutine 10:
+  github.com/coreos/etcd/clientv3.TestRace_PR6587_InitReqRevRace.func3()
+      /go/src/github.com/coreos/etcd/clientv3/watch.go:33 +0x6f
 
-Previous write at 0x00c00019c128 by goroutine 8:
-  ase/etcd-6587.(*watcherStream).serveSubstream()
-      /work/watch.go:27 +0xbb
-  ase/etcd-6587.TestRace_PR6587_InitReqRevRace.func1()
-      /work/verified_test.go:19 +0x84
+Previous write at 0x00c420104048 by goroutine 8:
+  github.com/coreos/etcd/clientv3.(*watcherStream).serveSubstream()
+      /go/src/github.com/coreos/etcd/clientv3/watch.go:27 +0x9a
+  github.com/coreos/etcd/clientv3.TestRace_PR6587_InitReqRevRace.func1()
+      /go/src/github.com/coreos/etcd/clientv3/etcd_6587_race_test.go:19 +0x5e
 
 Goroutine 10 (running) created at:
-  ase/etcd-6587.TestRace_PR6587_InitReqRevRace()
-      /work/verified_test.go:28 +0x64
+  github.com/coreos/etcd/clientv3.TestRace_PR6587_InitReqRevRace()
+      /go/src/github.com/coreos/etcd/clientv3/etcd_6587_race_test.go:28 +0xfd
   testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
+      /usr/local/go/src/testing/testing.go:777 +0x16d
 
-Goroutine 8 (running) created at:
-  ase/etcd-6587.TestRace_PR6587_InitReqRevRace()
-      /work/verified_test.go:17 +0x224
+Goroutine 8 (finished) created at:
+  github.com/coreos/etcd/clientv3.TestRace_PR6587_InitReqRevRace()
+      /go/src/github.com/coreos/etcd/clientv3/etcd_6587_race_test.go:17 +0xa5
   testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
+      /usr/local/go/src/testing/testing.go:777 +0x16d
 ==================
-    testing.go:1398: race detected during execution of test
---- FAIL: TestRace_PR6587_InitReqRevRace (0.00s)
-FAIL
-FAIL	ase/etcd-6587	0.016s
-FAIL

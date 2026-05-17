@@ -1,38 +1,62 @@
 WARNING: DATA RACE
-Write at 0x00c0000d8540 by goroutine 8:
-  runtime.mapassign_fast64()
-      /usr/local/go/src/runtime/map_fast64.go:93 +0x0
-  ase/go-ethereum-14940.(*TxPool).Reset()
-      /work/tx_pool.go:38 +0x104
-  ase/go-ethereum-14940.TestRace_14940_journal_rotate_vs_reset.func1()
-      /work/verified_test.go:18 +0xa9
+Write at 0x00c0000ceed0 by goroutine 10:
+  runtime.mapassign()
+      /usr/local/go/src/runtime/map.go:579 +0x0
+  github.com/ethereum/go-ethereum/core.TestRace_14940_local_vs_writer.func2()
+      /go/src/github.com/ethereum/go-ethereum/core/14940_race_test.go:41 +0x272
 
-Previous read at 0x00c0000d8540 by goroutine 9:
+Previous read at 0x00c0000ceed0 by goroutine 9:
   runtime.mapiterinit()
       /usr/local/go/src/runtime/map.go:816 +0x0
-  ase/go-ethereum-14940.(*TxPool).RotateJournal()
-      /work/tx_pool.go:25 +0x18d
-  ase/go-ethereum-14940.TestRace_14940_journal_rotate_vs_reset.func2()
-      /work/verified_test.go:24 +0xea
+  github.com/ethereum/go-ethereum/core.(*TxPool).local()
+      /go/src/github.com/ethereum/go-ethereum/core/tx_pool.go:434 +0xb0
+  github.com/ethereum/go-ethereum/core.TestRace_14940_local_vs_writer.func1()
+      /go/src/github.com/ethereum/go-ethereum/core/14940_race_test.go:32 +0xb7
 
-Goroutine 8 (running) created at:
-  ase/go-ethereum-14940.TestRace_14940_journal_rotate_vs_reset()
-      /work/verified_test.go:15 +0x1e4
+Goroutine 10 (running) created at:
+  github.com/ethereum/go-ethereum/core.TestRace_14940_local_vs_writer()
+      /go/src/github.com/ethereum/go-ethereum/core/14940_race_test.go:36 +0x550
   testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
+      /usr/local/go/src/testing/testing.go:1595 +0x261
+  testing.(*T).Run.func1()
+      /usr/local/go/src/testing/testing.go:1648 +0x44
 
-Goroutine 9 (running) created at:
-  ase/go-ethereum-14940.TestRace_14940_journal_rotate_vs_reset()
-      /work/verified_test.go:21 +0x28c
+Goroutine 9 (finished) created at:
+  github.com/ethereum/go-ethereum/core.TestRace_14940_local_vs_writer()
+      /go/src/github.com/ethereum/go-ethereum/core/14940_race_test.go:29 +0x45c
   testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
+      /usr/local/go/src/testing/testing.go:1595 +0x261
+  testing.(*T).Run.func1()
+      /usr/local/go/src/testing/testing.go:1648 +0x44
 ==================
---- FAIL: TestRace_14940_journal_rotate_vs_reset (0.00s)
-    testing.go:1398: race detected during execution of test
-FAIL
-FAIL	ase/go-ethereum-14940	0.020s
-FAIL
+WARNING: DATA RACE
+Write at 0x00c0000cee70 by goroutine 10:
+  runtime.mapassign()
+      /usr/local/go/src/runtime/map.go:579 +0x0
+  github.com/ethereum/go-ethereum/core.TestRace_14940_local_vs_writer.func2()
+      /go/src/github.com/ethereum/go-ethereum/core/14940_race_test.go:42 +0x4e4
+
+Previous read at 0x00c0000cee70 by goroutine 9:
+  runtime.mapaccess1()
+      /usr/local/go/src/runtime/map.go:396 +0x0
+  github.com/ethereum/go-ethereum/core.(*TxPool).local()
+      /go/src/github.com/ethereum/go-ethereum/core/tx_pool.go:435 +0x137
+  github.com/ethereum/go-ethereum/core.TestRace_14940_local_vs_writer.func1()
+      /go/src/github.com/ethereum/go-ethereum/core/14940_race_test.go:32 +0xb7
+
+Goroutine 10 (running) created at:
+  github.com/ethereum/go-ethereum/core.TestRace_14940_local_vs_writer()
+      /go/src/github.com/ethereum/go-ethereum/core/14940_race_test.go:36 +0x550
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1595 +0x261
+  testing.(*T).Run.func1()
+      /usr/local/go/src/testing/testing.go:1648 +0x44
+
+Goroutine 9 (finished) created at:
+  github.com/ethereum/go-ethereum/core.TestRace_14940_local_vs_writer()
+      /go/src/github.com/ethereum/go-ethereum/core/14940_race_test.go:29 +0x45c
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1595 +0x261
+  testing.(*T).Run.func1()
+      /usr/local/go/src/testing/testing.go:1648 +0x44
+==================

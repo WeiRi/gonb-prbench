@@ -1,144 +1,54 @@
 WARNING: DATA RACE
-Write at 0x00c0000d9020 by goroutine 39:
+Write at 0x00c0000c8270 by goroutine 38:
   runtime.mapassign_faststr()
-      /usr/local/go/src/internal/runtime/maps/runtime_faststr_swiss.go:263 +0x0
-  ase/cockroach-69538.(*Registry).AddMetric()
-      /work/registry.go:16 +0xa9
-  ase/cockroach-69538.TestRace_69538.func2()
-      /work/verified_test.go:37 +0x84
-  ase/cockroach-69538.TestRace_69538.gowrap1()
-      /work/verified_test.go:38 +0x41
+      /usr/local/go/src/runtime/map_faststr.go:202 +0x0
+  github.com/cockroachdb/cockroach/pkg/util/metric.(*Registry).AddMetric()
+      /work/upstream/pkg/util/metric/registry.go:16 +0xc4
+  github.com/cockroachdb/cockroach/pkg/util/metric.TestRace_69538.func2()
+      /work/upstream/pkg/util/metric/cockroach_69538_race_test.go:37 +0x86
 
-Previous read at 0x00c0000d9020 by goroutine 8:
-  runtime.mapIterStart()
-      /usr/local/go/src/runtime/map_swiss.go:160 +0x0
-  ase/cockroach-69538.(*Registry).Each()
-      /work/registry.go:21 +0xe4
-  ase/cockroach-69538.TestRace_69538.func1()
-      /work/verified_test.go:28 +0x9c
+Previous read at 0x00c0000c8270 by goroutine 8:
+  runtime.mapiterinit()
+      /usr/local/go/src/runtime/map.go:802 +0x0
+  github.com/cockroachdb/cockroach/pkg/util/metric.(*Registry).Each()
+      /work/upstream/pkg/util/metric/registry.go:21 +0xb1
+  github.com/cockroachdb/cockroach/pkg/util/metric.TestRace_69538.func1()
+      /work/upstream/pkg/util/metric/cockroach_69538_race_test.go:28 +0x78
 
-Goroutine 39 (running) created at:
-  ase/cockroach-69538.TestRace_69538()
-      /work/verified_test.go:35 +0x1c8
+Goroutine 38 (running) created at:
+  github.com/cockroachdb/cockroach/pkg/util/metric.TestRace_69538()
+      /work/upstream/pkg/util/metric/cockroach_69538_race_test.go:35 +0xdd
   testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1934 +0x21c
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1997 +0x44
+      /usr/local/go/src/testing/testing.go:1203 +0x202
 
 Goroutine 8 (finished) created at:
-  ase/cockroach-69538.TestRace_69538()
-      /work/verified_test.go:26 +0xe5
+  github.com/cockroachdb/cockroach/pkg/util/metric.TestRace_69538()
+      /work/upstream/pkg/util/metric/cockroach_69538_race_test.go:26 +0x78
   testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1934 +0x21c
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1997 +0x44
-==================
+      /usr/local/go/src/testing/testing.go:1203 +0x202
 ==================
 WARNING: DATA RACE
-Write at 0x00c000190018 by goroutine 42:
-  ase/cockroach-69538.(*Registry).AddMetric()
-      /work/registry.go:16 +0xb5
-  ase/cockroach-69538.TestRace_69538.func2()
-      /work/verified_test.go:37 +0x84
-  ase/cockroach-69538.TestRace_69538.gowrap1()
-      /work/verified_test.go:38 +0x41
+Write at 0x00c000114088 by goroutine 40:
+  github.com/cockroachdb/cockroach/pkg/util/metric.(*Registry).AddMetric()
+      /work/upstream/pkg/util/metric/registry.go:16 +0xd9
+  github.com/cockroachdb/cockroach/pkg/util/metric.TestRace_69538.func2()
+      /work/upstream/pkg/util/metric/cockroach_69538_race_test.go:37 +0x86
 
-Previous write at 0x00c000190018 by goroutine 39:
-  ase/cockroach-69538.(*Registry).AddMetric()
-      /work/registry.go:16 +0xb5
-  ase/cockroach-69538.TestRace_69538.func2()
-      /work/verified_test.go:37 +0x84
-  ase/cockroach-69538.TestRace_69538.gowrap1()
-      /work/verified_test.go:38 +0x41
+Previous write at 0x00c000114088 by goroutine 39:
+  github.com/cockroachdb/cockroach/pkg/util/metric.(*Registry).AddMetric()
+      /work/upstream/pkg/util/metric/registry.go:16 +0xd9
+  github.com/cockroachdb/cockroach/pkg/util/metric.TestRace_69538.func2()
+      /work/upstream/pkg/util/metric/cockroach_69538_race_test.go:37 +0x86
 
-Goroutine 42 (running) created at:
-  ase/cockroach-69538.TestRace_69538()
-      /work/verified_test.go:35 +0x1c8
+Goroutine 40 (running) created at:
+  github.com/cockroachdb/cockroach/pkg/util/metric.TestRace_69538()
+      /work/upstream/pkg/util/metric/cockroach_69538_race_test.go:35 +0xdd
   testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1934 +0x21c
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1997 +0x44
+      /usr/local/go/src/testing/testing.go:1203 +0x202
 
 Goroutine 39 (finished) created at:
-  ase/cockroach-69538.TestRace_69538()
-      /work/verified_test.go:35 +0x1c8
+  github.com/cockroachdb/cockroach/pkg/util/metric.TestRace_69538()
+      /work/upstream/pkg/util/metric/cockroach_69538_race_test.go:35 +0xdd
   testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1934 +0x21c
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1997 +0x44
+      /usr/local/go/src/testing/testing.go:1203 +0x202
 ==================
-==================
-WARNING: DATA RACE
-Write at 0x00c0000d9020 by goroutine 45:
-  runtime.mapassign_faststr()
-      /usr/local/go/src/internal/runtime/maps/runtime_faststr_swiss.go:263 +0x0
-  ase/cockroach-69538.(*Registry).AddMetric()
-      /work/registry.go:16 +0xa9
-  ase/cockroach-69538.TestRace_69538.func2()
-      /work/verified_test.go:37 +0x84
-  ase/cockroach-69538.TestRace_69538.gowrap1()
-      /work/verified_test.go:38 +0x41
-
-Previous write at 0x00c0000d9020 by goroutine 38:
-  runtime.mapassign_faststr()
-      /usr/local/go/src/internal/runtime/maps/runtime_faststr_swiss.go:263 +0x0
-  ase/cockroach-69538.(*Registry).AddMetric()
-      /work/registry.go:16 +0xa9
-  ase/cockroach-69538.TestRace_69538.func2()
-      /work/verified_test.go:37 +0x84
-  ase/cockroach-69538.TestRace_69538.gowrap1()
-      /work/verified_test.go:38 +0x41
-
-Goroutine 45 (running) created at:
-  ase/cockroach-69538.TestRace_69538()
-      /work/verified_test.go:35 +0x1c8
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1934 +0x21c
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1997 +0x44
-
-Goroutine 38 (finished) created at:
-  ase/cockroach-69538.TestRace_69538()
-      /work/verified_test.go:35 +0x1c8
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1934 +0x21c
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1997 +0x44
-==================
-fatal error: concurrent map writes
-
-goroutine 112 [running]:
-internal/runtime/maps.fatal({0x647007?, 0x5e276a?})
-	/usr/local/go/src/runtime/panic.go:1046 +0x18
-ase/cockroach-69538.(*Registry).AddMetric(...)
-	/work/registry.go:16
-ase/cockroach-69538.TestRace_69538.func2(0x0)
-	/work/verified_test.go:37 +0xaa
-created by ase/cockroach-69538.TestRace_69538 in goroutine 6
-	/work/verified_test.go:35 +0x1c9
-
-goroutine 1 [chan receive]:
-testing.(*T).Run(0xc000216000, {0x644942, 0xe}, 0x6508c8)
-	/usr/local/go/src/testing/testing.go:2005 +0x9fe
-testing.runTests.func1(0xc000216000)
-	/usr/local/go/src/testing/testing.go:2477 +0x86
-testing.tRunner(0xc000216000, 0xc0000e9ae0)
-	/usr/local/go/src/testing/testing.go:1934 +0x21d
-testing.runTests(0xc0000102d0, {0x7b05c0, 0x1, 0x1}, {0x0?, 0x4b2225?, 0x7baa60?})
-	/usr/local/go/src/testing/testing.go:2475 +0x96d
-testing.(*M).Run(0xc0000d6780)
-	/usr/local/go/src/testing/testing.go:2337 +0xed5
-main.main()
-	_testmain.go:45 +0x165
-
-goroutine 6 [runnable]:
-sync.(*WaitGroup).Add(0xc00041c000, 0x1)
-	/usr/local/go/src/sync/waitgroup.go:77 +0x288
-ase/cockroach-69538.TestRace_69538(0xc0002161c0?)
-	/work/verified_test.go:34 +0x1f9
-testing.tRunner(0xc0002161c0, 0x6508c8)
-	/usr/local/go/src/testing/testing.go:1934 +0x21d
-created by testing.(*T).Run in goroutine 1
-	/usr/local/go/src/testing/testing.go:1997 +0x9d3
-FAIL	ase/cockroach-69538	0.026s
-FAIL

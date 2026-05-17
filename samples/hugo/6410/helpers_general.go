@@ -1,7 +1,7 @@
 // Production-code stand-in for hugo helpers/general.go (pre-fix DistinctLogger
 // path). Kept in a separate file so race detector reports frames here, not in
 // the _test.go.
-package hugo6410repro
+package helpers
 
 import (
 	"fmt"

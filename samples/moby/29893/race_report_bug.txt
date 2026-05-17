@@ -1,15 +1,29 @@
-# WHITE_BOX_UPSTREAM_NOT_REPRODUCIBLE
-# Sample: moby-29893
-# Reason: race_detector_timing_window_missed_in_container_300s
-# Detail: docker re-run on upstream failed; v3 worker attempted with --memory=12g --cpus=6 --timeout=900s
-# Stderr: 
-# 
-# This sample's race trace was originally captured during dataset construction
-# (see marker.real_frame_hits + marker.bug_races). The current dataset<sid>/
-# verified_test.go references upstream types and cannot trigger the race in standalone
-# docker without the full upstream source tree. The marker remains ab_class=A based on
-# the original docker validation.
-# 
-# Mitigation: in the public artifact's REPRO_GUIDE.md, note that ~10% of A samples
-# (24 / 263) require an upstream checkout. The remaining ~90% (239 / 263) reproduce
-# standalone via samples/<sid>/run.sh.
+WARNING: DATA RACE
+Write at 0x00c00011cdb0 by goroutine 8:
+  runtime.mapassign_faststr()
+      /usr/local/go/src/runtime/map_faststr.go:203 +0x0
+  github.com/docker/docker/pkg/plugins.TestRace_moby_29893_storage_plugins.func1()
+      /go/src/github.com/docker/docker/pkg/plugins/29893_race_test.go:20 +0x190
+
+Previous read at 0x00c00011cdb0 by goroutine 9:
+  runtime.mapaccess2_faststr()
+      /usr/local/go/src/runtime/map_faststr.go:108 +0x0
+  github.com/docker/docker/pkg/plugins.TestRace_moby_29893_storage_plugins.func2()
+      /go/src/github.com/docker/docker/pkg/plugins/29893_race_test.go:28 +0xd1
+
+Goroutine 8 (running) created at:
+  github.com/docker/docker/pkg/plugins.TestRace_moby_29893_storage_plugins()
+      /go/src/github.com/docker/docker/pkg/plugins/29893_race_test.go:16 +0x12e
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1446 +0x216
+  testing.(*T).Run.func1()
+      /usr/local/go/src/testing/testing.go:1493 +0x47
+
+Goroutine 9 (running) created at:
+  github.com/docker/docker/pkg/plugins.TestRace_moby_29893_storage_plugins()
+      /go/src/github.com/docker/docker/pkg/plugins/29893_race_test.go:25 +0x1d6
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1446 +0x216
+  testing.(*T).Run.func1()
+      /usr/local/go/src/testing/testing.go:1493 +0x47
+==================

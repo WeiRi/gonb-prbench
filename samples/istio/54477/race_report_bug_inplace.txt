@@ -1,0 +1,484 @@
+2026-05-11T11:42:11.178017Z	warn	unable to resolve TARGET_OUT. Dir /work/upstream/out/linux_amd64 does not exist
+2026-05-11T11:42:11.178122Z	warn	unable to resolve LOCAL_OUT. Dir /work/upstream/out/linux_amd64 does not exist
+2026-05-11T11:42:12.483527Z	info	ads	Push debounce stable[1] 2 for reason unknown:2: 50.726749ms since last change, 50.843129ms since last push, full=true
+2026-05-11T11:42:12.559992Z	info	ads	Push debounce stable[1] 2 for reason unknown:2: 50.725577ms since last change, 50.760389ms since last push, full=true
+2026-05-11T11:42:12.737890Z	info	ads	Push debounce stable[1] 4 for reason unknown:4: 50.729722ms since last change, 126.70883ms since last push, full=true
+2026-05-11T11:42:12.814483Z	info	ads	Push debounce stable[1] 1 for reason unknown:1: 50.362476ms since last change, 50.361718ms since last push, full=true
+2026-05-11T11:42:13.015995Z	info	ads	Push debounce stable[2] 1 for reason unknown:1: 191.371953ms since last change, 191.371259ms since last push, full=true
+==================
+WARNING: DATA RACE
+Read at 0x00c000d2a090 by goroutine 614:
+  runtime.mapiterinit()
+      /usr/local/go/src/runtime/map.go:816 +0x0
+  istio.io/istio/pilot/pkg/xds.(*DiscoveryServer).Debug()
+      /work/upstream/pilot/pkg/xds/debug.go:892 +0xa6
+  istio.io/istio/pilot/pkg/xds.TestRace_54477_InPlace.func2()
+      /work/upstream/pilot/pkg/xds/istio-54477_race_test.go:48 +0x1d3
+
+Previous write at 0x00c000d2a090 by goroutine 609:
+  runtime.mapassign_faststr()
+      /usr/local/go/src/runtime/map_faststr.go:203 +0x0
+  istio.io/istio/pilot/pkg/xds.(*DiscoveryServer).addDebugHandler()
+      /work/upstream/pilot/pkg/xds/debug.go:229 +0x76
+  istio.io/istio/pilot/pkg/xds.TestRace_54477_InPlace.func1()
+      /work/upstream/pilot/pkg/xds/istio-54477_race_test.go:35 +0x1a9
+  istio.io/istio/pilot/pkg/xds.TestRace_54477_InPlace.gowrap1()
+      /work/upstream/pilot/pkg/xds/istio-54477_race_test.go:40 +0x41
+
+Goroutine 614 (running) created at:
+  istio.io/istio/pilot/pkg/xds.TestRace_54477_InPlace()
+      /work/upstream/pilot/pkg/xds/istio-54477_race_test.go:44 +0x229
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 609 (running) created at:
+  istio.io/istio/pilot/pkg/xds.TestRace_54477_InPlace()
+      /work/upstream/pilot/pkg/xds/istio-54477_race_test.go:33 +0x3e4
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Read at 0x00c000873848 by goroutine 618:
+  istio.io/istio/pilot/pkg/xds.(*DiscoveryServer).Debug()
+      /work/upstream/pilot/pkg/xds/debug.go:892 +0x19a
+  istio.io/istio/pilot/pkg/xds.TestRace_54477_InPlace.func2()
+      /work/upstream/pilot/pkg/xds/istio-54477_race_test.go:48 +0x1d3
+
+Previous write at 0x00c000873848 by goroutine 611:
+  istio.io/istio/pilot/pkg/xds.(*DiscoveryServer).addDebugHandler()
+      /work/upstream/pilot/pkg/xds/debug.go:229 +0x84
+  istio.io/istio/pilot/pkg/xds.TestRace_54477_InPlace.func1()
+      /work/upstream/pilot/pkg/xds/istio-54477_race_test.go:35 +0x1a9
+  istio.io/istio/pilot/pkg/xds.TestRace_54477_InPlace.gowrap1()
+      /work/upstream/pilot/pkg/xds/istio-54477_race_test.go:40 +0x41
+
+Goroutine 618 (running) created at:
+  istio.io/istio/pilot/pkg/xds.TestRace_54477_InPlace()
+      /work/upstream/pilot/pkg/xds/istio-54477_race_test.go:44 +0x229
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 611 (running) created at:
+  istio.io/istio/pilot/pkg/xds.TestRace_54477_InPlace()
+      /work/upstream/pilot/pkg/xds/istio-54477_race_test.go:33 +0x3e4
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c000d2a090 by goroutine 615:
+  runtime.mapassign_faststr()
+      /usr/local/go/src/runtime/map_faststr.go:203 +0x0
+  istio.io/istio/pilot/pkg/xds.(*DiscoveryServer).addDebugHandler()
+      /work/upstream/pilot/pkg/xds/debug.go:229 +0x76
+  istio.io/istio/pilot/pkg/xds.TestRace_54477_InPlace.func1()
+      /work/upstream/pilot/pkg/xds/istio-54477_race_test.go:35 +0x1a9
+  istio.io/istio/pilot/pkg/xds.TestRace_54477_InPlace.gowrap1()
+      /work/upstream/pilot/pkg/xds/istio-54477_race_test.go:40 +0x41
+
+Previous read at 0x00c000d2a090 by goroutine 614:
+  runtime.mapiternext()
+      /usr/local/go/src/runtime/map.go:862 +0x0
+  runtime.mapiterinit()
+      /usr/local/go/src/runtime/map.go:859 +0x22e
+  istio.io/istio/pilot/pkg/xds.TestRace_54477_InPlace.func2()
+      /work/upstream/pilot/pkg/xds/istio-54477_race_test.go:48 +0x1d3
+
+Goroutine 615 (running) created at:
+  istio.io/istio/pilot/pkg/xds.TestRace_54477_InPlace()
+      /work/upstream/pilot/pkg/xds/istio-54477_race_test.go:33 +0x3e4
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 614 (running) created at:
+  istio.io/istio/pilot/pkg/xds.TestRace_54477_InPlace()
+      /work/upstream/pilot/pkg/xds/istio-54477_race_test.go:44 +0x229
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c000d2a090 by goroutine 623:
+  runtime.mapassign_faststr()
+      /usr/local/go/src/runtime/map_faststr.go:203 +0x0
+  istio.io/istio/pilot/pkg/xds.(*DiscoveryServer).addDebugHandler()
+      /work/upstream/pilot/pkg/xds/debug.go:229 +0x76
+  istio.io/istio/pilot/pkg/xds.TestRace_54477_InPlace.func1()
+      /work/upstream/pilot/pkg/xds/istio-54477_race_test.go:35 +0x1a9
+  istio.io/istio/pilot/pkg/xds.TestRace_54477_InPlace.gowrap1()
+      /work/upstream/pilot/pkg/xds/istio-54477_race_test.go:40 +0x41
+
+Previous write at 0x00c000d2a090 by goroutine 611:
+  runtime.mapassign_faststr()
+      /usr/local/go/src/runtime/map_faststr.go:203 +0x0
+  istio.io/istio/pilot/pkg/xds.(*DiscoveryServer).addDebugHandler()
+      /work/upstream/pilot/pkg/xds/debug.go:229 +0x76
+  istio.io/istio/pilot/pkg/xds.TestRace_54477_InPlace.func1()
+      /work/upstream/pilot/pkg/xds/istio-54477_race_test.go:35 +0x1a9
+  istio.io/istio/pilot/pkg/xds.TestRace_54477_InPlace.gowrap1()
+      /work/upstream/pilot/pkg/xds/istio-54477_race_test.go:40 +0x41
+
+Goroutine 623 (running) created at:
+  istio.io/istio/pilot/pkg/xds.TestRace_54477_InPlace()
+      /work/upstream/pilot/pkg/xds/istio-54477_race_test.go:33 +0x3e4
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 611 (running) created at:
+  istio.io/istio/pilot/pkg/xds.TestRace_54477_InPlace()
+      /work/upstream/pilot/pkg/xds/istio-54477_race_test.go:33 +0x3e4
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c000d2a090 by goroutine 621:
+  runtime.mapassign_faststr()
+      /usr/local/go/src/runtime/map_faststr.go:203 +0x0
+  istio.io/istio/pilot/pkg/xds.(*DiscoveryServer).addDebugHandler()
+      /work/upstream/pilot/pkg/xds/debug.go:229 +0x76
+  istio.io/istio/pilot/pkg/xds.TestRace_54477_InPlace.func1()
+      /work/upstream/pilot/pkg/xds/istio-54477_race_test.go:35 +0x1a9
+  istio.io/istio/pilot/pkg/xds.TestRace_54477_InPlace.gowrap1()
+      /work/upstream/pilot/pkg/xds/istio-54477_race_test.go:40 +0x41
+
+Previous read at 0x00c000d2a090 by goroutine 610:
+  runtime.mapiternext()
+      /usr/local/go/src/runtime/map.go:862 +0x0
+  istio.io/istio/pilot/pkg/xds.(*DiscoveryServer).Debug()
+      /work/upstream/pilot/pkg/xds/debug.go:892 +0xf4
+  istio.io/istio/pilot/pkg/xds.TestRace_54477_InPlace.func2()
+      /work/upstream/pilot/pkg/xds/istio-54477_race_test.go:48 +0x1d3
+
+Goroutine 621 (running) created at:
+  istio.io/istio/pilot/pkg/xds.TestRace_54477_InPlace()
+      /work/upstream/pilot/pkg/xds/istio-54477_race_test.go:33 +0x3e4
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 610 (running) created at:
+  istio.io/istio/pilot/pkg/xds.TestRace_54477_InPlace()
+      /work/upstream/pilot/pkg/xds/istio-54477_race_test.go:44 +0x229
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+fatal error: concurrent map iteration and map write
+
+goroutine 638 [running]:
+istio.io/istio/pilot/pkg/xds.(*DiscoveryServer).Debug(0xc000689600, {0x591d788, 0xc000b4c2c0}, 0x6?)
+	/work/upstream/pilot/pkg/xds/debug.go:892 +0xf5
+istio.io/istio/pilot/pkg/xds.TestRace_54477_InPlace.func2()
+	/work/upstream/pilot/pkg/xds/istio-54477_race_test.go:48 +0x1d4
+created by istio.io/istio/pilot/pkg/xds.TestRace_54477_InPlace in goroutine 630
+	/work/upstream/pilot/pkg/xds/istio-54477_race_test.go:44 +0x22a
+
+goroutine 1 [chan receive]:
+testing.(*T).Run(0xc00038f6c0, {0x51f045e, 0x16}, 0x538c200)
+	/usr/local/go/src/testing/testing.go:1750 +0x851
+testing.runTests.func1(0xc00038f6c0)
+	/usr/local/go/src/testing/testing.go:2161 +0x86
+testing.tRunner(0xc00038f6c0, 0xc000967a78)
+	/usr/local/go/src/testing/testing.go:1689 +0x21f
+testing.runTests(0xc000875938, {0x7cb09e0, 0x55, 0x55}, {0x65?, 0x40?, 0x7cd1d20?})
+	/usr/local/go/src/testing/testing.go:2159 +0x8bf
+testing.(*M).Run(0xc000a99400)
+	/usr/local/go/src/testing/testing.go:2027 +0xf18
+istio.io/istio/tests/util/leak.CheckMain({0x58e1620, 0xc000a99400})
+	/work/upstream/tests/util/leak/check.go:151 +0x36
+istio.io/istio/pilot/pkg/xds.TestMain(...)
+	/work/upstream/pilot/pkg/xds/leak_test.go:25
+main.main()
+	_testmain.go:237 +0x2dd
+
+goroutine 632 [sync.Mutex.Lock]:
+sync.runtime_SemacquireMutex(0x4b7c11?, 0x49?, 0xc000d27c88?)
+	/usr/local/go/src/runtime/sema.go:77 +0x25
+sync.(*Mutex).lockSlow(0xc0007ed020)
+	/usr/local/go/src/sync/mutex.go:171 +0x213
+sync.(*Mutex).Lock(0xc0007ed020)
+	/usr/local/go/src/sync/mutex.go:90 +0x55
+html/template.(*Template).escape(0xc0007d5350)
+	/usr/local/go/src/html/template/template.go:97 +0x66
+html/template.(*Template).Execute(0xc0007d5350, {0x74f4179f9098, 0xc000f02000}, {0x48ac200, 0xc000f12018})
+	/usr/local/go/src/html/template/template.go:121 +0x3f
+istio.io/istio/pilot/pkg/xds.(*DiscoveryServer).Debug(0xc000689600, {0x591d788, 0xc000f02000}, 0x6?)
+	/work/upstream/pilot/pkg/xds/debug.go:904 +0x3a5
+istio.io/istio/pilot/pkg/xds.TestRace_54477_InPlace.func2()
+	/work/upstream/pilot/pkg/xds/istio-54477_race_test.go:48 +0x1d4
+created by istio.io/istio/pilot/pkg/xds.TestRace_54477_InPlace in goroutine 630
+	/work/upstream/pilot/pkg/xds/istio-54477_race_test.go:44 +0x22a
+
+goroutine 607 [sleep]:
+time.Sleep(0xbebc200)
+	/usr/local/go/src/runtime/time.go:195 +0x115
+istio.io/istio/pilot/pkg/xds.TestDebounce.func7.1(0xc000c32aa0)
+	/work/upstream/pilot/pkg/xds/discovery_test.go:286 +0x93
+istio.io/istio/pilot/pkg/xds.debounce.func1(0xc000c32aa0, 0x1, {0xc000b43a90?, 0xc000b32fd0?, 0x7cd1d20?})
+	/work/upstream/pilot/pkg/xds/discovery.go:345 +0x67
+created by istio.io/istio/pilot/pkg/xds.debounce.func2 in goroutine 606
+	/work/upstream/pilot/pkg/xds/discovery.go:368 +0x82a
+
+goroutine 630 [runnable]:
+istio.io/istio/pilot/pkg/xds.TestRace_54477_InPlace(0xc00096ba00?)
+	/work/upstream/pilot/pkg/xds/istio-54477_race_test.go:44 +0x3f1
+testing.tRunner(0xc00096ba00, 0x538c200)
+	/usr/local/go/src/testing/testing.go:1689 +0x21f
+created by testing.(*T).Run in goroutine 1
+	/usr/local/go/src/testing/testing.go:1742 +0x826
+
+goroutine 633 [runnable]:
+net/http.(*routingIndex).addPattern(...)
+	/usr/local/go/src/net/http/routing_index.go:43
+net/http.(*ServeMux).registerErr(0xc0007995f0, {0xc000d82011, 0xf}, {0x58e1c00, 0xc000d84000})
+	/usr/local/go/src/net/http/server.go:2781 +0xbfc
+net/http.(*ServeMux).register(...)
+	/usr/local/go/src/net/http/server.go:2737
+net/http.(*ServeMux).HandleFunc(0xc0007995f0, {0xc000d82011, 0xf}, 0xc000d84000)
+	/usr/local/go/src/net/http/server.go:2712 +0x99
+istio.io/istio/pilot/pkg/xds.(*DiscoveryServer).addDebugHandler(0xc000689600, 0xc0007995f0, 0x0, {0xc000d82011, 0xf}, {0x51d04fe, 0x9}, 0x538c720)
+	/work/upstream/pilot/pkg/xds/debug.go:235 +0x196
+istio.io/istio/pilot/pkg/xds.TestRace_54477_InPlace.func1(0x1)
+	/work/upstream/pilot/pkg/xds/istio-54477_race_test.go:35 +0x1aa
+created by istio.io/istio/pilot/pkg/xds.TestRace_54477_InPlace in goroutine 630
+	/work/upstream/pilot/pkg/xds/istio-54477_race_test.go:33 +0x3e5
+
+goroutine 634 [sync.Mutex.Lock]:
+sync.runtime_SemacquireMutex(0x4b7c11?, 0x49?, 0xc000d23c88?)
+	/usr/local/go/src/runtime/sema.go:77 +0x25
+sync.(*Mutex).lockSlow(0xc0007ed020)
+	/usr/local/go/src/sync/mutex.go:171 +0x213
+sync.(*Mutex).Lock(0xc0007ed020)
+	/usr/local/go/src/sync/mutex.go:90 +0x55
+html/template.(*Template).escape(0xc0007d5350)
+	/usr/local/go/src/html/template/template.go:97 +0x66
+html/template.(*Template).Execute(0xc0007d5350, {0x74f4179f9098, 0xc000d92000}, {0x48ac200, 0xc000d88030})
+	/usr/local/go/src/html/template/template.go:121 +0x3f
+istio.io/istio/pilot/pkg/xds.(*DiscoveryServer).Debug(0xc000689600, {0x591d788, 0xc000d92000}, 0x6?)
+	/work/upstream/pilot/pkg/xds/debug.go:904 +0x3a5
+istio.io/istio/pilot/pkg/xds.TestRace_54477_InPlace.func2()
+	/work/upstream/pilot/pkg/xds/istio-54477_race_test.go:48 +0x1d4
+created by istio.io/istio/pilot/pkg/xds.TestRace_54477_InPlace in goroutine 630
+	/work/upstream/pilot/pkg/xds/istio-54477_race_test.go:44 +0x22a
+
+goroutine 635 [sync.Mutex.Lock]:
+sync.runtime_SemacquireMutex(0x7c80160?, 0xd0?, 0x4b7c49?)
+	/usr/local/go/src/runtime/sema.go:77 +0x25
+sync.(*Mutex).lockSlow(0xc0007995f0)
+	/usr/local/go/src/sync/mutex.go:171 +0x213
+sync.(*Mutex).Lock(0xc0007995f0)
+	/usr/local/go/src/sync/mutex.go:90 +0x55
+sync.(*RWMutex).Lock(0xc0007995f0)
+	/usr/local/go/src/sync/rwmutex.go:146 +0x45
+net/http.(*ServeMux).registerErr(0xc0007995f0, {0xc00108a011, 0xf}, {0x58e1c00, 0xc00108c000})
+	/usr/local/go/src/net/http/server.go:2767 +0x425
+net/http.(*ServeMux).register(...)
+	/usr/local/go/src/net/http/server.go:2737
+net/http.(*ServeMux).HandleFunc(0xc0007995f0, {0xc00108a011, 0xf}, 0xc00108c000)
+	/usr/local/go/src/net/http/server.go:2712 +0x99
+istio.io/istio/pilot/pkg/xds.(*DiscoveryServer).addDebugHandler(0xc000689600, 0xc0007995f0, 0x0, {0xc00108a011, 0xf}, {0x51d04fe, 0x9}, 0x538c720)
+	/work/upstream/pilot/pkg/xds/debug.go:235 +0x196
+istio.io/istio/pilot/pkg/xds.TestRace_54477_InPlace.func1(0x2)
+	/work/upstream/pilot/pkg/xds/istio-54477_race_test.go:35 +0x1aa
+created by istio.io/istio/pilot/pkg/xds.TestRace_54477_InPlace in goroutine 630
+	/work/upstream/pilot/pkg/xds/istio-54477_race_test.go:33 +0x3e5
+
+goroutine 636 [runnable]:
+html/template.(*escaper).escapeListConditionally(0xc0007ed038, {0x0, 0x0, 0x0, 0x0, {0x0, 0x0, 0x0}, 0x0, 0x0, ...}, ...)
+	/usr/local/go/src/html/template/escape.go:598 +0x568
+html/template.(*escaper).escapeTemplateBody(0xc0007ed038, {0x0, 0x0, 0x0, 0x0, {0x0, 0x0, 0x0}, 0x0, 0x0, ...}, ...)
+	/usr/local/go/src/html/template/escape.go:712 +0x2d2
+html/template.(*escaper).computeOutCtx(0xc0007ed038, {0x0, 0x0, 0x0, 0x0, {0x0, 0x0, 0x0}, 0x0, 0x0, ...}, ...)
+	/usr/local/go/src/html/template/escape.go:673 +0xca
+html/template.(*escaper).escapeTree(0xc0007ed038, {0x0, 0x0, 0x0, 0x0, {0x0, 0x0, 0x0}, 0x0, 0x0, ...}, ...)
+	/usr/local/go/src/html/template/escape.go:666 +0x737
+html/template.escapeTemplate(0xc0007d5350, {0x593d2d0, 0xc0007d53e0}, {0x51c9387, 0x5})
+	/usr/local/go/src/html/template/escape.go:24 +0xe5
+html/template.(*Template).escape(0xc0007d5350)
+	/usr/local/go/src/html/template/template.go:104 +0x2fd
+html/template.(*Template).Execute(0xc0007d5350, {0x74f4179f9098, 0xc000ba4400}, {0x48ac200, 0xc000bc21c8})
+	/usr/local/go/src/html/template/template.go:121 +0x3f
+istio.io/istio/pilot/pkg/xds.(*DiscoveryServer).Debug(0xc000689600, {0x591d788, 0xc000ba4400}, 0x6?)
+	/work/upstream/pilot/pkg/xds/debug.go:904 +0x3a5
+istio.io/istio/pilot/pkg/xds.TestRace_54477_InPlace.func2()
+	/work/upstream/pilot/pkg/xds/istio-54477_race_test.go:48 +0x1d4
+created by istio.io/istio/pilot/pkg/xds.TestRace_54477_InPlace in goroutine 630
+	/work/upstream/pilot/pkg/xds/istio-54477_race_test.go:44 +0x22a
+
+goroutine 637 [semacquire]:
+net/http.(*ServeMux).registerErr(0xc0007995f0, {0xc001016011, 0xf}, {0x58e1c00, 0xc001018000})
+	/usr/local/go/src/net/http/server.go:2764 +0x2cb
+net/http.(*ServeMux).register(...)
+	/usr/local/go/src/net/http/server.go:2737
+net/http.(*ServeMux).HandleFunc(0xc0007995f0, {0xc001016011, 0xf}, 0xc001018000)
+	/usr/local/go/src/net/http/server.go:2712 +0x99
+istio.io/istio/pilot/pkg/xds.(*DiscoveryServer).addDebugHandler(0xc000689600, 0xc0007995f0, 0x0, {0xc001016011, 0xf}, {0x51d04fe, 0x9}, 0x538c720)
+	/work/upstream/pilot/pkg/xds/debug.go:235 +0x196
+istio.io/istio/pilot/pkg/xds.TestRace_54477_InPlace.func1(0x3)
+	/work/upstream/pilot/pkg/xds/istio-54477_race_test.go:35 +0x1aa
+created by istio.io/istio/pilot/pkg/xds.TestRace_54477_InPlace in goroutine 630
+	/work/upstream/pilot/pkg/xds/istio-54477_race_test.go:33 +0x3e5
+
+goroutine 639 [runnable]:
+net/http.parsePattern({0xc000e82011, 0xf})
+	/usr/local/go/src/net/http/pattern.go:146 +0xb0a
+net/http.(*ServeMux).registerErr(0xc0007995f0, {0xc000e82011, 0xf}, {0x58e1c00, 0xc000e84000})
+	/usr/local/go/src/net/http/server.go:2753 +0x154
+net/http.(*ServeMux).register(...)
+	/usr/local/go/src/net/http/server.go:2737
+net/http.(*ServeMux).HandleFunc(0xc0007995f0, {0xc000e82011, 0xf}, 0xc000e84000)
+	/usr/local/go/src/net/http/server.go:2712 +0x99
+istio.io/istio/pilot/pkg/xds.(*DiscoveryServer).addDebugHandler(0xc000689600, 0xc0007995f0, 0x0, {0xc000e82011, 0xf}, {0x51d04fe, 0x9}, 0x538c720)
+	/work/upstream/pilot/pkg/xds/debug.go:235 +0x196
+istio.io/istio/pilot/pkg/xds.TestRace_54477_InPlace.func1(0x4)
+	/work/upstream/pilot/pkg/xds/istio-54477_race_test.go:35 +0x1aa
+created by istio.io/istio/pilot/pkg/xds.TestRace_54477_InPlace in goroutine 630
+	/work/upstream/pilot/pkg/xds/istio-54477_race_test.go:33 +0x3e5
+
+goroutine 640 [sync.Mutex.Lock]:
+sync.runtime_SemacquireMutex(0x4b7c11?, 0x49?, 0xc000c1dc88?)
+	/usr/local/go/src/runtime/sema.go:77 +0x25
+sync.(*Mutex).lockSlow(0xc0007ed020)
+	/usr/local/go/src/sync/mutex.go:171 +0x213
+sync.(*Mutex).Lock(0xc0007ed020)
+	/usr/local/go/src/sync/mutex.go:90 +0x55
+html/template.(*Template).escape(0xc0007d5350)
+	/usr/local/go/src/html/template/template.go:97 +0x66
+html/template.(*Template).Execute(0xc0007d5350, {0x74f4179f9098, 0xc000c98200}, {0x48ac200, 0xc000cb2018})
+	/usr/local/go/src/html/template/template.go:121 +0x3f
+istio.io/istio/pilot/pkg/xds.(*DiscoveryServer).Debug(0xc000689600, {0x591d788, 0xc000c98200}, 0x6?)
+	/work/upstream/pilot/pkg/xds/debug.go:904 +0x3a5
+istio.io/istio/pilot/pkg/xds.TestRace_54477_InPlace.func2()
+	/work/upstream/pilot/pkg/xds/istio-54477_race_test.go:48 +0x1d4
+created by istio.io/istio/pilot/pkg/xds.TestRace_54477_InPlace in goroutine 630
+	/work/upstream/pilot/pkg/xds/istio-54477_race_test.go:44 +0x22a
+
+goroutine 642 [semacquire]:
+bufio.NewReaderSize(...)
+	/usr/local/go/src/bufio/bufio.go:54
+bufio.NewReader(...)
+	/usr/local/go/src/bufio/bufio.go:60
+net/http/httptest.NewRequest({0x51c7e02, 0x3}, {0x51ca7f5, 0x6}, {0x0, 0x0})
+	/usr/local/go/src/net/http/httptest/httptest.go:44 +0x185
+istio.io/istio/pilot/pkg/xds.TestRace_54477_InPlace.func2()
+	/work/upstream/pilot/pkg/xds/istio-54477_race_test.go:47 +0x1bb
+created by istio.io/istio/pilot/pkg/xds.TestRace_54477_InPlace in goroutine 630
+	/work/upstream/pilot/pkg/xds/istio-54477_race_test.go:44 +0x22a
+
+goroutine 643 [runnable]:
+istio.io/istio/pilot/pkg/xds.(*DiscoveryServer).addDebugHandler(0xc000689600, 0xc0007995f0, 0x0, {0xc001214011, 0xf}, {0x51d04fe, 0x9}, 0x538c720)
+	/work/upstream/pilot/pkg/xds/debug.go:229 +0x77
+istio.io/istio/pilot/pkg/xds.TestRace_54477_InPlace.func1(0x6)
+	/work/upstream/pilot/pkg/xds/istio-54477_race_test.go:35 +0x1aa
+created by istio.io/istio/pilot/pkg/xds.TestRace_54477_InPlace in goroutine 630
+	/work/upstream/pilot/pkg/xds/istio-54477_race_test.go:33 +0x3e5
+
+goroutine 644 [semacquire]:
+net/url.parse({0xc00131801c, 0x6}, 0x1)
+	/usr/local/go/src/net/url/url.go:517 +0x156
+net/url.ParseRequestURI({0xc00131801c, 0x6})
+	/usr/local/go/src/net/url/url.go:495 +0x3a
+net/http.readRequest(0xc00131c000)
+	/usr/local/go/src/net/http/request.go:1095 +0x6ed
+net/http.ReadRequest(0xc00131c000)
+	/usr/local/go/src/net/http/request.go:1042 +0x2f
+net/http/httptest.NewRequest({0x51c7e02, 0x3}, {0x51ca7f5, 0x6}, {0x0, 0x0})
+	/usr/local/go/src/net/http/httptest/httptest.go:44 +0x285
+istio.io/istio/pilot/pkg/xds.TestRace_54477_InPlace.func2()
+	/work/upstream/pilot/pkg/xds/istio-54477_race_test.go:47 +0x1bb
+created by istio.io/istio/pilot/pkg/xds.TestRace_54477_InPlace in goroutine 630
+	/work/upstream/pilot/pkg/xds/istio-54477_race_test.go:44 +0x22a
+
+goroutine 645 [runnable]:
+runtime.CallersFrames(...)
+	/usr/local/go/src/runtime/symtab.go:77
+runtime.Caller(0x3)
+	/usr/local/go/src/runtime/extern.go:301 +0x75
+net/http.(*ServeMux).registerErr(0xc0007995f0, {0xc000f8a011, 0xf}, {0x58e1c00, 0xc001190020})
+	/usr/local/go/src/net/http/server.go:2760 +0x29c
+net/http.(*ServeMux).register(...)
+	/usr/local/go/src/net/http/server.go:2737
+net/http.(*ServeMux).HandleFunc(0xc0007995f0, {0xc000f8a011, 0xf}, 0xc001190020)
+	/usr/local/go/src/net/http/server.go:2712 +0x99
+istio.io/istio/pilot/pkg/xds.(*DiscoveryServer).addDebugHandler(0xc000689600, 0xc0007995f0, 0x0, {0xc000f8a011, 0xf}, {0x51d04fe, 0x9}, 0x538c720)
+	/work/upstream/pilot/pkg/xds/debug.go:235 +0x196
+istio.io/istio/pilot/pkg/xds.TestRace_54477_InPlace.func1(0x7)
+	/work/upstream/pilot/pkg/xds/istio-54477_race_test.go:35 +0x1aa
+created by istio.io/istio/pilot/pkg/xds.TestRace_54477_InPlace in goroutine 630
+	/work/upstream/pilot/pkg/xds/istio-54477_race_test.go:33 +0x3e5
+
+goroutine 646 [sync.Mutex.Lock]:
+sync.runtime_SemacquireMutex(0x4b7c11?, 0x49?, 0xc00100cc88?)
+	/usr/local/go/src/runtime/sema.go:77 +0x25
+sync.(*Mutex).lockSlow(0xc0007ed020)
+	/usr/local/go/src/sync/mutex.go:171 +0x213
+sync.(*Mutex).Lock(0xc0007ed020)
+	/usr/local/go/src/sync/mutex.go:90 +0x55
+html/template.(*Template).escape(0xc0007d5350)
+	/usr/local/go/src/html/template/template.go:97 +0x66
+html/template.(*Template).Execute(0xc0007d5350, {0x74f4179f9098, 0xc00118c000}, {0x48ac200, 0xc00119c018})
+	/usr/local/go/src/html/template/template.go:121 +0x3f
+istio.io/istio/pilot/pkg/xds.(*DiscoveryServer).Debug(0xc000689600, {0x591d788, 0xc00118c000}, 0x6?)
+	/work/upstream/pilot/pkg/xds/debug.go:904 +0x3a5
+istio.io/istio/pilot/pkg/xds.TestRace_54477_InPlace.func2()
+	/work/upstream/pilot/pkg/xds/istio-54477_race_test.go:48 +0x1d4
+created by istio.io/istio/pilot/pkg/xds.TestRace_54477_InPlace in goroutine 630
+	/work/upstream/pilot/pkg/xds/istio-54477_race_test.go:44 +0x22a
+
+goroutine 647 [runnable]:
+istio.io/istio/pilot/pkg/xds.(*DiscoveryServer).allowAuthenticatedOrLocalhost(...)
+	/work/upstream/pilot/pkg/xds/debug.go:239
+istio.io/istio/pilot/pkg/xds.(*DiscoveryServer).addDebugHandler(0xc000689600, 0xc0007995f0, 0x0, {0xc001100011, 0xf}, {0x51d04fe, 0x9}, 0x538c720)
+	/work/upstream/pilot/pkg/xds/debug.go:235 +0xe5
+istio.io/istio/pilot/pkg/xds.TestRace_54477_InPlace.func1(0x8)
+	/work/upstream/pilot/pkg/xds/istio-54477_race_test.go:35 +0x1aa
+created by istio.io/istio/pilot/pkg/xds.TestRace_54477_InPlace in goroutine 630
+	/work/upstream/pilot/pkg/xds/istio-54477_race_test.go:33 +0x3e5
+
+goroutine 648 [sync.Mutex.Lock]:
+sync.runtime_SemacquireMutex(0x4b7c11?, 0x0?, 0x30?)
+	/usr/local/go/src/runtime/sema.go:77 +0x25
+sync.(*Mutex).lockSlow(0xc0007ed020)
+	/usr/local/go/src/sync/mutex.go:171 +0x213
+sync.(*Mutex).Lock(0xc0007ed020)
+	/usr/local/go/src/sync/mutex.go:90 +0x55
+html/template.(*Template).escape(0xc0007d5350)
+	/usr/local/go/src/html/template/template.go:97 +0x66
+html/template.(*Template).Execute(0xc0007d5350, {0x74f4179f9098, 0xc001410000}, {0x48ac200, 0xc001420018})
+	/usr/local/go/src/html/template/template.go:121 +0x3f
+istio.io/istio/pilot/pkg/xds.(*DiscoveryServer).Debug(0xc000689600, {0x591d788, 0xc001410000}, 0x6?)
+	/work/upstream/pilot/pkg/xds/debug.go:904 +0x3a5
+istio.io/istio/pilot/pkg/xds.TestRace_54477_InPlace.func2()
+	/work/upstream/pilot/pkg/xds/istio-54477_race_test.go:48 +0x1d4
+created by istio.io/istio/pilot/pkg/xds.TestRace_54477_InPlace in goroutine 630
+	/work/upstream/pilot/pkg/xds/istio-54477_race_test.go:44 +0x22a
+
+goroutine 649 [runnable]:
+istio.io/istio/pilot/pkg/xds.TestRace_54477_InPlace.gowrap1()
+	/work/upstream/pilot/pkg/xds/istio-54477_race_test.go:33
+runtime.goexit({})
+	/usr/local/go/src/runtime/asm_amd64.s:1695 +0x1
+created by istio.io/istio/pilot/pkg/xds.TestRace_54477_InPlace in goroutine 630
+	/work/upstream/pilot/pkg/xds/istio-54477_race_test.go:33 +0x3e5
+FAIL	istio.io/istio/pilot/pkg/xds	1.962s
+FAIL

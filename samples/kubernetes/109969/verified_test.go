@@ -1,25 +1,59 @@
+// Whitebox PoC for kubernetes-109969: data race on Response.User when
+// AuthenticatedGroupAdder modifies a shared user.Info backing array via append.
+// Production code in authenticated_group_adder.go.
 package group
 
 import (
+	"net/http"
 	"sync"
 	"testing"
+
+	"k8s.io/apiserver/pkg/authentication/authenticator"
+	"k8s.io/apiserver/pkg/authentication/user"
 )
 
 func TestRace_109969_GroupAdderSharedBackingArray(t *testing.T) {
-	const N = 200
-	// Caller owns a *shared* slice with extra capacity (e.g. from a cache).
-	for n := 0; n < N; n++ {
-		base := make([]string, 0, 16)
-		base = append(base, "user1", "user2")
-		// Two concurrent goroutines pass DIFFERENT Response structs but with
-		// User.Groups all pointing to the SAME shared backing array.
-		r1 := &Response{User: &DefaultInfo{Name: "a", Groups: base}}
-		r2 := &Response{User: &DefaultInfo{Name: "b", Groups: base}}
-		var wg sync.WaitGroup
-		ag := &AuthenticatedGroupAdder{}
-		wg.Add(2)
-		go func() { defer wg.Done(); ag.AuthenticateRequest(r1) }()
-		go func() { defer wg.Done(); ag.AuthenticateRequest(r2) }()
-		wg.Wait()
+	const numGoroutines = 50
+	const iterations = 200
+
+	var wg sync.WaitGroup
+	for g := 0; g < numGoroutines; g++ {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			for j := 0; j < iterations; j++ {
+				capacity := make([]string, 0, 16)
+				capacity = append(capacity, "user1", "user2")
+
+				response := &authenticator.Response{
+					User: &user.DefaultInfo{
+						Name:   "a",
+						Groups: capacity,
+					},
+				}
+
+				ag := &AuthenticatedGroupAdder{
+					Authenticator: authenticator.RequestFunc(func(req *http.Request) (*authenticator.Response, bool, error) {
+						return response, true, nil
+					}),
+				}
+
+				req1, _ := http.NewRequest("GET", "/", nil)
+				req2, _ := http.NewRequest("GET", "/", nil)
+
+				var innerWg sync.WaitGroup
+				innerWg.Add(2)
+				go func() {
+					defer innerWg.Done()
+					ag.AuthenticateRequest(req1)
+				}()
+				go func() {
+					defer innerWg.Done()
+					ag.AuthenticateRequest(req2)
+				}()
+				innerWg.Wait()
+			}
+		}()
 	}
+	wg.Wait()
 }

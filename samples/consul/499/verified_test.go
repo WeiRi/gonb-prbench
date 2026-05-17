@@ -1,82 +1,38 @@
-// consul-499: Fix potential race condition on shutdown (pool.reap/server.handleConsulConn)
-// Original race: ConnPool.shutdown bool read without lock in reap() (pool.go:361)
-// Fix: replaced racy bool check with channel select (<-p.shutdownCh).
-// Original diff files: consul/pool.go, consul/rpc.go
-// Original frame hits: consul/pool.go:361, consul/rpc.go:152
-
-package consul499
+package consul
 
 import (
+	"io"
 	"sync"
 	"testing"
+	"time"
 )
 
-// ConnPool replicates the racy ConnPool struct from consul/pool.go
-type ConnPool struct {
-	mu         sync.Mutex
-	pool       map[string]*Conn
-	shutdown   bool
-	shutdownCh chan struct{}
-}
-
-type Conn struct {
-	refCount int32
-}
-
-func NewConnPool() *ConnPool {
-	p := &ConnPool{
-		pool:       make(map[string]*Conn),
-		shutdownCh: make(chan struct{}),
-	}
-	return p
-}
-
-// Shutdown writes shutdown=true with lock held
-func (p *ConnPool) Shutdown() {
-	p.mu.Lock()
-	if p.shutdown {
-		p.mu.Unlock()
-		return
-	}
-	p.shutdown = true
-	p.mu.Unlock()
-	close(p.shutdownCh)
-}
-
-// reap reads p.shutdown WITHOUT the lock (RACY - original line pool.go:361)
-func (p *ConnPool) reap() {
-	for !p.shutdown {
-		select {
-		case <-p.shutdownCh:
-			return
-		default:
-		}
-		p.mu.Lock()
-		_ = len(p.pool)
-		p.mu.Unlock()
-	}
-}
-
-// TestRace reproduces the race on ConnPool.shutdown bool.
-// 60 goroutines call Shutdown() concurrently while reap() reads shutdown.
-func TestRace(t *testing.T) {
-	iterations := 300
+// TestRace_Consul499_ReapShutdown triggers the race between ConnPool.reap()
+// reading p.shutdown without lock (pool.go:361) and Shutdown() writing
+// p.shutdown under p.Lock().
+//
+// Fix: changed reap() from "for !p.shutdown" to "for { select { case
+// <-p.shutdownCh: return; case <-time.After(time.Second): } }"
+//
+// NOTE: Requires proper consul dependency resolution (go mod tidy with
+// compatible dependency versions from the consul-499 era).
+func TestRace_Consul499_ReapShutdown(t *testing.T) {
+	const numGoroutines = 50
+	const iterations = 200
 
 	for i := 0; i < iterations; i++ {
-		p := NewConnPool()
+		// NewPool with maxTime > 0 launches reap() goroutine automatically
+		p := NewPool(io.Discard, time.Hour, 5, nil)
 
 		var wg sync.WaitGroup
-		wg.Add(1)
-		go func() {
-			defer wg.Done()
-			p.reap()
-		}()
 
-		for g := 0; g < 60; g++ {
+		// Concurrent Shutdown calls write p.shutdown=true under p.Lock(),
+		// racing with reap's unlocked read of p.shutdown
+		for g := 0; g < numGoroutines; g++ {
 			wg.Add(1)
 			go func() {
 				defer wg.Done()
-				p.Shutdown()
+				_ = p.Shutdown()
 			}()
 		}
 

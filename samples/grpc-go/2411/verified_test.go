@@ -1,39 +1,66 @@
-// Race-trigger test for grpc-go-2411; see README.md for usage.
-
 package channelz
 
 import (
 	"sync"
+	"sync/atomic"
 	"testing"
 )
 
-func TestRace_PR2411_ChannelzGetChannel(t *testing.T) {
-	m := NewChannelMap()
-	const N = 200
-	for i := int64(0); i < N; i++ {
-		m.Add(i, &realChannel{v: int32(i)})
+// fakeChannel implements Channel for race test.
+type fakeChannel struct{}
+
+func (fakeChannel) ChannelzMetric() *ChannelInternalMetric { return &ChannelInternalMetric{} }
+
+// Race: BUG channelMap.GetChannel reads `cn.c.ChannelzMetric()` AFTER RUnlock;
+// concurrent goroutine (via channel.deleteSelfFromMap) sets `cn.c = &dummyChannel{}`
+// under Lock. The cn.c field read after RUnlock races with the field write.
+// FIX captures `chanCopy := cn.c` BEFORE RUnlock.
+func TestRace_grpc_go_2411_channelmap_chanCopy(t *testing.T) {
+	cm := &channelMap{
+		topLevelChannels: map[int64]struct{}{},
+		servers:          map[int64]*server{},
+		channels:         map[int64]*channel{},
+		subChannels:      map[int64]*subChannel{},
+		listenSockets:    map[int64]*listenSocket{},
+		normalSockets:    map[int64]*normalSocket{},
+	}
+	const cid = int64(1)
+	cm.channels[cid] = &channel{
+		id:          cid,
+		c:           fakeChannel{},
+		nestedChans: map[int64]string{},
+		subChans:    map[int64]string{},
+		cm:          cm,
+		trace:       &channelTrace{},
 	}
 
+	var done int32
 	var wg sync.WaitGroup
-	const G = 6
-	const ITERS = 5000
-
-	for g := 0; g < G; g++ {
+	// reader: many GetChannel calls
+	for i := 0; i < 8; i++ {
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
-			for i := 0; i < ITERS; i++ {
-				_ = m.GetChannel(int64(i % N))
+			for j := 0; j < 5000 && atomic.LoadInt32(&done) == 0; j++ {
+				_ = cm.GetChannel(cid)
 			}
 		}()
 	}
+	// writer: flip cn.c between fakeChannel and dummyChannel
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
-		for i := 0; i < ITERS; i++ {
-			m.DeleteSelfFromMap(int64(i % N))
-			m.Add(int64(i%N), &realChannel{v: int32(i)})
+		cn := cm.channels[cid]
+		for j := 0; j < 50000 && atomic.LoadInt32(&done) == 0; j++ {
+			cm.mu.Lock()
+			if j%2 == 0 {
+				cn.c = &dummyChannel{}
+			} else {
+				cn.c = fakeChannel{}
+			}
+			cm.mu.Unlock()
 		}
+		atomic.StoreInt32(&done, 1)
 	}()
 	wg.Wait()
 }

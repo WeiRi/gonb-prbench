@@ -1,70 +1,25 @@
 WARNING: DATA RACE
-Write at 0x00c000016228 by goroutine 12:
-  ase/nomad-14538.(*FileRotator).purgeOldFiles()
-      /work/rotator.go:26 +0xc9
-  ase/nomad-14538.TestRace_OldestLogFileIdx.func1()
-      /work/verified_test.go:25 +0xa4
-  ase/nomad-14538.TestRace_OldestLogFileIdx.gowrap2()
-      /work/verified_test.go:27 +0x41
+Read at 0x00c0000e2358 by goroutine 9:
+  github.com/hashicorp/nomad/client/logmon/logging.TestRace_14538_oldestLogFileIdx.func2()
+      /work/upstream/client/logmon/logging/14538_race_test.go:28 +0xcc
 
-Previous write at 0x00c000016228 by goroutine 8:
-  ase/nomad-14538.(*FileRotator).purgeOldFiles()
-      /work/rotator.go:26 +0xc9
-  ase/nomad-14538.TestRace_OldestLogFileIdx.func1()
-      /work/verified_test.go:25 +0xa4
-  ase/nomad-14538.TestRace_OldestLogFileIdx.gowrap2()
-      /work/verified_test.go:27 +0x41
+Previous write at 0x00c0000e2358 by goroutine 8:
+  github.com/hashicorp/nomad/client/logmon/logging.TestRace_14538_oldestLogFileIdx.func1()
+      /work/upstream/client/logmon/logging/14538_race_test.go:20 +0xb6
 
-Goroutine 12 (running) created at:
-  ase/nomad-14538.TestRace_OldestLogFileIdx()
-      /work/verified_test.go:22 +0x257
+Goroutine 9 (running) created at:
+  github.com/hashicorp/nomad/client/logmon/logging.TestRace_14538_oldestLogFileIdx()
+      /work/upstream/client/logmon/logging/14538_race_test.go:24 +0x2b6
   testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
+      /usr/local/go/src/testing/testing.go:1439 +0x213
+  testing.(*T).Run.func1()
+      /usr/local/go/src/testing/testing.go:1486 +0x47
 
 Goroutine 8 (finished) created at:
-  ase/nomad-14538.TestRace_OldestLogFileIdx()
-      /work/verified_test.go:22 +0x257
+  github.com/hashicorp/nomad/client/logmon/logging.TestRace_14538_oldestLogFileIdx()
+      /work/upstream/client/logmon/logging/14538_race_test.go:17 +0x1ce
   testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
+      /usr/local/go/src/testing/testing.go:1439 +0x213
+  testing.(*T).Run.func1()
+      /usr/local/go/src/testing/testing.go:1486 +0x47
 ==================
-==================
-WARNING: DATA RACE
-Read at 0x00c000016228 by goroutine 68:
-  ase/nomad-14538.(*FileRotator).nextFile()
-      /work/rotator.go:31 +0xc5
-  ase/nomad-14538.TestRace_OldestLogFileIdx.func2()
-      /work/verified_test.go:33 +0xb3
-
-Previous write at 0x00c000016228 by goroutine 66:
-  ase/nomad-14538.(*FileRotator).purgeOldFiles()
-      /work/rotator.go:26 +0xc9
-  ase/nomad-14538.TestRace_OldestLogFileIdx.func1()
-      /work/verified_test.go:25 +0xa4
-  ase/nomad-14538.TestRace_OldestLogFileIdx.gowrap2()
-      /work/verified_test.go:27 +0x41
-
-Goroutine 68 (running) created at:
-  ase/nomad-14538.TestRace_OldestLogFileIdx()
-      /work/verified_test.go:30 +0x3b2
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
-
-Goroutine 66 (finished) created at:
-  ase/nomad-14538.TestRace_OldestLogFileIdx()
-      /work/verified_test.go:22 +0x257
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
-==================
-    testing.go:1398: race detected during execution of test
---- FAIL: TestRace_OldestLogFileIdx (0.00s)
-FAIL
-FAIL	ase/nomad-14538	0.020s
-FAIL

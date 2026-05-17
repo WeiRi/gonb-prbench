@@ -1,39 +1,61 @@
-// Race-trigger test for grpc-go-1687; see README.md for usage.
-
 package transport
 
 import (
+	"context"
+	"net/http"
+	"net/http/httptest"
 	"sync"
 	"testing"
+
+	"google.golang.org/grpc/status"
 )
 
-func TestRace_PR1687_WriteStatusVsClose(t *testing.T) {
-	const iters = 200
-	for i := 0; i < iters; i++ {
-		ht := newSHT()
+type flusherRecorder struct {
+	*httptest.ResponseRecorder
+}
 
-		go ht.runStream()
+func (f *flusherRecorder) Flush() {}
+func (f *flusherRecorder) CloseNotify() <-chan bool {
+	return make(chan bool, 1)
+}
 
+// BUG: WriteStatus calls close(ht.writes) but DOES NOT close ht.closedCh first.
+// A subsequent ht.do() (called from Write/WriteHeader) does select on
+// `ht.writes <- fn` (BUG: no closedCh, so picks send) → panic: send on closed channel.
+// PR #1687 calls ht.Close() (closes closedCh) BEFORE close(writes) so do() sees
+// <-closedCh and returns ErrConnClosing.
+func TestRace_1687_use_after_writestatus(t *testing.T) {
+	for iter := 0; iter < 50; iter++ {
+		rw := &flusherRecorder{httptest.NewRecorder()}
+		req := httptest.NewRequest(http.MethodPost, "/", nil)
+		ht := &serverHandlerTransport{
+			rw:       rw,
+			req:      req,
+			writes:   make(chan func(), 1),
+			closedCh: make(chan struct{}),
+		}
+		// drain writes (must be running so do() can send)
+		drainDone := make(chan struct{})
+		go func() {
+			defer close(drainDone)
+			for fn := range ht.writes {
+				fn()
+			}
+		}()
+
+		// Sequence: WriteStatus first, then concurrent do() calls
+		st := status.New(0, "")
+		s := &Stream{ctx: context.Background()}
+		_ = ht.WriteStatus(s, st)
+		<-drainDone
+
+		// Now ht.writes is closed. Subsequent do() should panic in BUG.
 		var wg sync.WaitGroup
-
-		// Goroutine A: WriteStatus path — eventually does close(ht.writes).
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
-			defer func() { _ = recover() }()
-			_ = ht.WriteStatus("ok")
+			_ = ht.do(func() {})
 		}()
-
-		// Goroutine B: Write path — calls do() -> ht.writes <- fn.
-		// Races against A's close(ht.writes).
-		wg.Add(1)
-		go func() {
-			defer wg.Done()
-			defer func() { _ = recover() }()
-			_ = ht.Write([]byte("payload"))
-		}()
-
 		wg.Wait()
-		_ = ht.Close()
 	}
 }

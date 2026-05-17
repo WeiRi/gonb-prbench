@@ -4,92 +4,33 @@
 |---|---|
 | Project | cockroach |
 | Reference | https://github.com/cockroachdb/cockroach/pull/97305 |
-| Bug commit | `7e2df35a2f6b` |
 | Category | data_race |
 | Oracle | RACE |
 | Primary diff file | `pkg/sql/sqlstats/insights/detector.go` |
+| Base image | `gonb-cockroach-97305-base:latest` (built by gonb-prebuild for this sample) |
 
+## In-place reproduction
 
-## Race report excerpt
+This sample uses the original upstream source at the bug commit (pre-built into the base image — no SSH-clone required at sample-build time).
 
-The following stack trace is captured by Go's race detector when running the bug build:
+### Build & run bug
 
-```
-WARNING: DATA RACE
-Read at 0x00c000014248 by goroutine 12:
-  ase/cockroach-97305.(*Stream).Query()
-      /work/detector.go:14 +0x11e
-  ase/cockroach-97305.(*anomalyDetector).GetPercentileValues()
-      /work/detector.go:32 +0x104
-  ase/cockroach-97305.Test97305Race.func1()
-      /work/verified_test.go:15 +0x84
-
-Previous write at 0x00c000014248 by goroutine 8:
-  ase/cockroach-97305.(*Stream).Query()
-      /work/detector.go:14 +0x130
-  ase/cockroach-97305.(*anomalyDetector).GetPercentileValues()
-      /work/detector.go:32 +0x104
-  ase/cockroach-97305.Test97305Race.func1()
-      /work/verified_test.go:15 +0x84
-
-Goroutine 12 (running) created at:
-  ase/cockroach-97305.Test97305Race()
-      /work/verified_test.go:13 +0x1b3
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
-
-Goroutine 8 (finished) created at:
-  ase/cockroach-97305.Test97305Race()
-      /work/verified_test.go:13 +0x1b3
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
-==================
-==================
-WARNING: DATA RACE
-```
-
-(Full trace in `race_report_bug.txt`.)
-
-## How to reproduce
-
-### 1. SSH agent setup (one-time)
 ```bash
-eval $(ssh-agent -a /tmp/ssh-agent-gonb.sock)
-ssh-add ~/.ssh/id_ed25519
-export SSH_AUTH_SOCK=/tmp/ssh-agent-gonb.sock
-```
-
-### 2. Build bug image
-```bash
-DOCKER_BUILDKIT=1 docker build --ssh default -f bug.Dockerfile -t gonb-cockroach-97305-bug .
-```
-
-### 3. Trigger race
-```bash
-docker run --rm --memory=2g --cpus=1 gonb-cockroach-97305-bug \
-  sh -c "cd /work/pr2t-test && go test -race -vet=off -count=20 -timeout=180s ./..."
+docker build -f bug.Dockerfile -t cockroach-97305-bug .
+docker run --rm --cpus=2 --memory=2g cockroach-97305-bug \
+  sh -c "go test -race -vet=off -count=10 -timeout=300s ."
 # Expected: WARNING: DATA RACE + FAIL
 ```
 
-### 4. Verify fix
+### Build & run fix
+
 ```bash
-DOCKER_BUILDKIT=1 docker build --ssh default -f fix.Dockerfile -t gonb-cockroach-97305-fix .
-docker run --rm --memory=2g --cpus=1 gonb-cockroach-97305-fix \
-  sh -c "cd /work/pr2t-test && go test -race -vet=off -count=20 -timeout=180s ./..."
-# Expected: PASS (race not triggered)
+docker build -f fix.Dockerfile -t cockroach-97305-fix .
+docker run --rm --cpus=2 --memory=2g cockroach-97305-fix \
+  sh -c "go test -race -vet=off -count=10 -timeout=300s ."
+# Expected: PASS (PR fix suppresses the race)
 ```
 
-## HTTPS fallback (if SSH blocked)
+## Race report
 
-If `git@github.com:` clone fails in your environment:
-```bash
-sed -i 's|git@github.com:|https://github.com/|g' bug.Dockerfile fix.Dockerfile
-# Also remove the --mount=type=ssh hint (HTTPS doesn't need it)
-sed -i 's|--mount=type=ssh ||g' bug.Dockerfile fix.Dockerfile
-DOCKER_BUILDKIT=1 docker build -f bug.Dockerfile -t gonb-cockroach-97305-bug .
-# (then run as above, no --ssh flag)
-```
+See `race_report_bug.txt` for the captured race detector output from a bug build run.

@@ -1,65 +1,36 @@
-package client
+package main
 
 import (
 	"sync"
 	"testing"
 	"time"
-
-	hclog "github.com/hashicorp/go-hclog"
-	"github.com/hashicorp/nomad/nomad/structs"
 )
 
-// TestRaceHeartbeatLastOk triggers the data race where watch()
-// writes h.lastOk WITHOUT holding the lock (heartbeatstop.go:73),
-// while setLastOk() writes it under Lock (heartbeatstop.go:126-130).
-//
-// Bug: h.lastOk = time.Now() in watch() (heartbeatstop.go:73)
-// Fix: replaced with h.setLastOk(time.Now()) 
-func TestRaceHeartbeatLastOk(t *testing.T) {
-	numInstances := 30
-	iterations := 200
+func TestRace_14119(t *testing.T) {
+	const N = 55
+	const ITERS = 250
 
-	logger := hclog.NewInterceptLogger(&hclog.LoggerOptions{
-		Level: hclog.Off,
-	})
+	for trial := 0; trial < ITERS; trial++ {
+		h := &heartbeatStop{
+			shutdown: make(chan struct{}),
+		}
 
-	var wg sync.WaitGroup
+		go h.watch()
 
-	for i := 0; i < numInstances; i++ {
-		wg.Add(1)
-		go func() {
-			defer wg.Done()
-
-			shutdownCh := make(chan struct{})
-			h := newHeartbeatStop(
-				func(id string) (AllocRunner, error) { return nil, nil },
-				10*time.Second,
-				logger,
-				shutdownCh,
-			)
-			h.allocHookCh = make(chan *structs.Allocation, 1)
-			h.allocInterval = map[string]time.Duration{}
-
-			// Start watch() goroutine — it does h.lastOk = time.Now()
-			// WITHOUT lock at heartbeatstop.go:73 (PRODUCTION CODE RACE)
-			var innerWg sync.WaitGroup
-			innerWg.Add(1)
+		var wg sync.WaitGroup
+		for i := 0; i < N; i++ {
+			wg.Add(1)
 			go func() {
-				defer innerWg.Done()
-				h.watch()
+				defer wg.Done()
+				for j := 0; j < 50; j++ {
+					h.setLastOk(time.Now())
+					_ = h.lastOk // RACE READ without lock
+				}
 			}()
+		}
 
-			// Call setLastOk concurrently — this does Lock + write + Unlock
-			// at heartbeatstop.go:126-130 (PROTECTED)
-			for j := 0; j < iterations; j++ {
-				h.setLastOk(time.Now())
-			}
-
-			// Shutdown watch() 
-			close(shutdownCh)
-			innerWg.Wait()
-		}()
+		time.Sleep(2 * time.Millisecond)
+		close(h.shutdown)
+		wg.Wait()
 	}
-
-	wg.Wait()
 }

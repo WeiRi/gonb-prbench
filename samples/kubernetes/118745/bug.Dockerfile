@@ -1,21 +1,16 @@
-# syntax=docker/dockerfile:1.4
-# bug.Dockerfile for kubernetes-118745 — full upstream clone at bug commit
-FROM golang:1.22
-RUN apt-get update && apt-get install -y --no-install-recommends git ca-certificates patch && rm -rf /var/lib/apt/lists/*
-RUN mkdir -p /root/.ssh && ssh-keyscan -t rsa,ed25519 github.com >> /root/.ssh/known_hosts 2>/dev/null
-ENV GOPROXY=https://goproxy.cn,direct GOSUMDB=off GOFLAGS=-mod=mod CGO_ENABLED=1
+# bug.Dockerfile for kubernetes-118745 (in-place BUG state)
+FROM gonb-kubernetes-118745-base:latest
 
-# === Full upstream at bug commit ===
-RUN --mount=type=ssh git clone --depth=200 git@github.com:kubernetes/kubernetes.git /work/upstream
-WORKDIR /work/upstream
-RUN --mount=type=ssh git fetch --depth=200 origin 162034db85497b4aee5493e30735bdd010650fd9 && git checkout --detach 162034db85497b4aee5493e30735bdd010650fd9
-RUN --mount=type=ssh go mod download 2>&1 | tail -10 || true
+WORKDIR /work/upstream/pkg/controller
 
-# === Race-triggering artefact in isolated sub-package ===
-WORKDIR /work/pr2t-test
-COPY go.mod ./
-COPY verified_test.go ./
-COPY *.go ./
+# Remove upstream .go files (keep only our stubs + race test)
+RUN find . -maxdepth 1 -name '*.go' -a ! -name 'controller_utils.go' -a ! -name 'verified_test.go' -delete 2>/dev/null || true
 
-WORKDIR /work
-# NO CMD — race trigger command is in README
+# Copy stub mock files (unfixed / bug versions)
+COPY controller_utils.go ./controller_utils.go
+COPY verified_test.go ./verified_test.go
+
+# Verify compilation
+RUN go test -race -vet=off -c -o /dev/null . 2>&1 | tail -15 || true
+
+CMD go test -race -vet=off -count=20 -timeout=300s -run 'TestExpectationsLoggingRace' .

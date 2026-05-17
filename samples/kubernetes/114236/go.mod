@@ -1,3 +1,2 @@
-module ase/kubernetes-114236
-
-go 1.20
+module kubernetes-114236
+go 1.22

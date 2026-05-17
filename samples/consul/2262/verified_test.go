@@ -1,49 +1,30 @@
 package agent
 
 import (
+	"io"
 	"sync"
+	"sync/atomic"
 	"testing"
 )
 
-// TestGatedWriterRace reproduces the data race in GatedWriter.Write() where
-// w.buf = append(w.buf, p2) is done under RLock() instead of Lock().
-// PR 2262: upgrade RWMutex RLock to Lock in GatedWriter.Write() for safe buffer append.
-func TestGatedWriterRace(t *testing.T) {
-	// Use a discard-like writer; in the unbuffered path (flush=true) it would
-	// be used, but since we never flush, all writes go to buf.
-	var nop nopWriter
-	gw := &GatedWriter{
-		Writer: &nop,
-	}
+// BUG: GatedWriter.Write holds RLock while appending to w.buf.
+// Concurrent goroutines under RLock → concurrent slice append → race on buf header.
+// FIX (PR #2262): upgrade to Lock for the append path.
+func TestRace_2262_gatedwriter_write(t *testing.T) {
+	gw := &GatedWriter{Writer: io.Discard}
 
-	data := []byte("hello")
-
+	var done int32
 	var wg sync.WaitGroup
-	numGoroutines := 60
-	iterations := 300
-
-	for g := 0; g < numGoroutines; g++ {
+	for i := 0; i < 8; i++ {
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
-			for i := 0; i < iterations; i++ {
-				gw.Write(data)
+			payload := []byte("payload")
+			for j := 0; j < 2000 && atomic.LoadInt32(&done) == 0; j++ {
+				_, _ = gw.Write(payload)
 			}
 		}()
 	}
-
 	wg.Wait()
-
-	// After all writes, buf should have numGoroutines * iterations entries
-	expected := numGoroutines * iterations
-	if len(gw.buf) != expected {
-		t.Logf("buf length: %d, expected: %d (race may cause loss)", len(gw.buf), expected)
-	}
-}
-
-// nopWriter implements io.Writer (discards writes)
-type nopWriter struct{}
-
-func (n *nopWriter) Write(p []byte) (int, error) {
-	return len(p), nil
+	atomic.StoreInt32(&done, 1)
 }

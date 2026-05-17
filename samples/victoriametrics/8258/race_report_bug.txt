@@ -1,15 +1,70 @@
-# WHITE_BOX_UPSTREAM_NOT_REPRODUCIBLE
-# Sample: victoriametrics-8258
-# Reason: race_detector_timing_window_missed_in_container_300s
-# Detail: docker re-run on upstream failed; v3 worker attempted with --memory=12g --cpus=6 --timeout=900s
-# Stderr: 
-# 
-# This sample's race trace was originally captured during dataset construction
-# (see marker.real_frame_hits + marker.bug_races). The current dataset<sid>/
-# verified_test.go references upstream types and cannot trigger the race in standalone
-# docker without the full upstream source tree. The marker remains ab_class=A based on
-# the original docker validation.
-# 
-# Mitigation: in the public artifact's REPRO_GUIDE.md, note that ~10% of A samples
-# (24 / 263) require an upstream checkout. The remaining ~90% (239 / 263) reproduce
-# standalone via samples/<sid>/run.sh.
+WARNING: DATA RACE
+Read at 0x00c0001c8308 by goroutine 43:
+  github.com/VictoriaMetrics/VictoriaMetrics/app/vmalert/notifier.(*AlertManager).send()
+      /work/upstream/app/vmalert/notifier/alertmanager.go:75 +0x19e
+  github.com/VictoriaMetrics/VictoriaMetrics/app/vmalert/notifier.(*AlertManager).Send()
+      /work/upstream/app/vmalert/notifier/alertmanager.go:64 +0xe4
+  github.com/VictoriaMetrics/VictoriaMetrics/app/vmalert/notifier.TestRace_8258_AlertsSlice.func3()
+      /work/upstream/app/vmalert/notifier/vm_8258_race_test.go:42 +0x107
+
+Previous write at 0x00c0001c8308 by goroutine 14:
+  github.com/VictoriaMetrics/VictoriaMetrics/app/vmalert/notifier.(*AlertManager).send()
+      /work/upstream/app/vmalert/notifier/alertmanager.go:80 +0x319
+  github.com/VictoriaMetrics/VictoriaMetrics/app/vmalert/notifier.(*AlertManager).Send()
+      /work/upstream/app/vmalert/notifier/alertmanager.go:64 +0xe4
+  github.com/VictoriaMetrics/VictoriaMetrics/app/vmalert/notifier.TestRace_8258_AlertsSlice.func3()
+      /work/upstream/app/vmalert/notifier/vm_8258_race_test.go:42 +0x107
+
+Goroutine 43 (running) created at:
+  github.com/VictoriaMetrics/VictoriaMetrics/app/vmalert/notifier.TestRace_8258_AlertsSlice()
+      /work/upstream/app/vmalert/notifier/vm_8258_race_test.go:39 +0x4c4
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1690 +0x226
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1743 +0x44
+
+Goroutine 14 (running) created at:
+  github.com/VictoriaMetrics/VictoriaMetrics/app/vmalert/notifier.TestRace_8258_AlertsSlice()
+      /work/upstream/app/vmalert/notifier/vm_8258_race_test.go:39 +0x4c4
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1690 +0x226
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1743 +0x44
+==================
+WARNING: DATA RACE
+Write at 0x00c0001c83f8 by goroutine 18322:
+  github.com/VictoriaMetrics/VictoriaMetrics/app/vmalert/notifier.(*AlertManager).send()
+      /work/upstream/app/vmalert/notifier/alertmanager.go:80 +0x319
+  github.com/VictoriaMetrics/VictoriaMetrics/app/vmalert/notifier.(*AlertManager).Send()
+      /work/upstream/app/vmalert/notifier/alertmanager.go:64 +0xe4
+  github.com/VictoriaMetrics/VictoriaMetrics/app/vmalert/notifier.TestRace_8258_AlertsSlice.func3()
+      /work/upstream/app/vmalert/notifier/vm_8258_race_test.go:42 +0x107
+
+Previous read at 0x00c0001c83f8 by goroutine 18350:
+  github.com/VictoriaMetrics/VictoriaMetrics/app/vmalert/notifier.streamamRequest()
+      app/vmalert/notifier/alertmanager_request.qtpl:10 +0xea
+  github.com/VictoriaMetrics/VictoriaMetrics/app/vmalert/notifier.writeamRequest()
+      app/vmalert/notifier/alertmanager_request.qtpl:35 +0x9d
+  github.com/VictoriaMetrics/VictoriaMetrics/app/vmalert/notifier.(*AlertManager).send()
+      /work/upstream/app/vmalert/notifier/alertmanager.go:83 +0x4da
+  github.com/VictoriaMetrics/VictoriaMetrics/app/vmalert/notifier.(*AlertManager).Send()
+      /work/upstream/app/vmalert/notifier/alertmanager.go:64 +0xe4
+  github.com/VictoriaMetrics/VictoriaMetrics/app/vmalert/notifier.TestRace_8258_AlertsSlice.func3()
+      /work/upstream/app/vmalert/notifier/vm_8258_race_test.go:42 +0x107
+
+Goroutine 18322 (running) created at:
+  github.com/VictoriaMetrics/VictoriaMetrics/app/vmalert/notifier.TestRace_8258_AlertsSlice()
+      /work/upstream/app/vmalert/notifier/vm_8258_race_test.go:39 +0x4c4
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1690 +0x226
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1743 +0x44
+
+Goroutine 18350 (running) created at:
+  github.com/VictoriaMetrics/VictoriaMetrics/app/vmalert/notifier.TestRace_8258_AlertsSlice()
+      /work/upstream/app/vmalert/notifier/vm_8258_race_test.go:39 +0x4c4
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1690 +0x226
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1743 +0x44
+==================

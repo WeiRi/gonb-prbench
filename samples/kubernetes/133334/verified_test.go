@@ -1,3 +1,7 @@
+// Race test for k8s-133334: Sync-vs-Sync race on psuc.newCondition
+// BUG: Sync reads psuc.newCondition AFTER unlock; concurrent Sync goroutines
+// share the same condition pointer which syncStatus mutates (UpdatePodCondition).
+// FIX: Sync DeepCopies newCondition under lock, passes local copy to syncStatus.
 package apicalls
 
 import (
@@ -9,46 +13,34 @@ import (
 	"k8s.io/kubernetes/pkg/scheduler/framework"
 )
 
-func TestRace_133334(t *testing.T) {
-	var wg sync.WaitGroup
-	numGoroutines := 50
-	iters := 200
+func TestRace_133334_SyncOnly(t *testing.T) {
+	// ONE shared psuc — multiple goroutines call its Sync concurrently
+	pod := &v1.Pod{
+		ObjectMeta: metav1.ObjectMeta{UID: "test-uid", Name: "test-pod"},
+	}
+	psuc := NewPodStatusPatchCall(pod, &v1.PodCondition{
+		Type:    v1.PodScheduled,
+		Status:  v1.ConditionTrue,
+		Reason:  "initial",
+		Message: "init",
+	}, &framework.NominatingInfo{
+		NominatedNodeName: "node-a",
+		NominatingMode:    framework.ModeOverride,
+	})
 
-	for i := 0; i < numGoroutines; i++ {
+	var wg sync.WaitGroup
+	const N = 50
+	for i := 0; i < N; i++ {
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
-			for j := 0; j < iters; j++ {
-				// Bug: Sync reads psuc.newCondition (line 134) after releasing
-				// the lock (line 130), while Merge writes psuc.newCondition
-				// (line 152) without any lock. This is a data race.
-				pod := &v1.Pod{
-					ObjectMeta: metav1.ObjectMeta{
-						UID:  "test-uid",
-						Name: "test-pod",
-					},
-					Status: v1.PodStatus{},
+			for j := 0; j < 200; j++ {
+				p := &v1.Pod{
+					ObjectMeta: metav1.ObjectMeta{UID: "u", Name: "p"},
 				}
-				// Create psuc with nil condition so Merge will write to it
-				psuc := NewPodStatusPatchCall(pod, nil, &framework.NominatingInfo{
-					NominatedNodeName: "node-a",
-					NominatingMode:    framework.ModeOverride,
-				})
-				// Spawn goroutine that calls Merge to write newCondition
-				go func() {
-					psuc2 := NewPodStatusPatchCall(pod, &v1.PodCondition{
-						Type:   v1.PodScheduled,
-						Status: v1.ConditionTrue,
-					}, &framework.NominatingInfo{
-						NominatingMode: framework.ModeOverride,
-					})
-					psuc.Merge(psuc2)
-				}()
-				// Sync reads psuc.newCondition outside the lock - RACE
-				psuc.Sync(pod)
+				_, _ = psuc.Sync(p)
 			}
 		}()
 	}
-
 	wg.Wait()
 }

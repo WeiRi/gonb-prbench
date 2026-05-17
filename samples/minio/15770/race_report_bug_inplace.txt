@@ -1,0 +1,80 @@
+go: downloading github.com/minio/pkg v1.4.2
+go: downloading github.com/Shopify/sarama v1.36.0
+go: downloading github.com/minio/madmin-go v1.4.29
+go: downloading github.com/klauspost/compress v1.15.10
+go: downloading golang.org/x/sys v0.0.0-20220915200043-7b5979e65e41
+go: downloading github.com/rs/dnscache v0.0.0-20211102005908-e0241e321417
+go: downloading github.com/xdg/scram v1.0.5
+go: downloading github.com/minio/minio-go/v7 v7.0.40-0.20220928095841-8848d8affe8a
+go: downloading github.com/minio/sha256-simd v1.0.0
+go: downloading github.com/json-iterator/go v1.1.12
+go: downloading github.com/secure-io/sio-go v0.3.1
+go: downloading github.com/mattn/go-colorable v0.1.13
+go: downloading github.com/mattn/go-isatty v0.0.16
+go: downloading github.com/golang-jwt/jwt/v4 v4.4.2
+go: downloading github.com/minio/sio v0.3.0
+go: downloading github.com/minio/kes v0.21.0
+go: downloading golang.org/x/crypto v0.0.0-20220829220503-c86fa9a7ed90
+go: downloading github.com/buger/jsonparser v1.1.1
+go: downloading golang.org/x/sync v0.0.0-20220907140024-f12130a52804
+go: downloading github.com/klauspost/cpuid/v2 v2.1.1
+go: downloading github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd
+go: downloading github.com/modern-go/reflect2 v1.0.2
+go: downloading github.com/xdg/stringprep v1.0.3
+go: downloading github.com/shirou/gopsutil/v3 v3.22.8
+go: downloading github.com/prometheus/procfs v0.8.0
+go: downloading golang.org/x/net v0.0.0-20220909164309-bea034e7d591
+go: downloading github.com/tinylib/msgp v1.1.7-0.20211026165309-e818a1881b0e
+go: downloading github.com/prometheus/common v0.37.0
+go: downloading github.com/montanaflynn/stats v0.6.6
+go: downloading github.com/lestrrat-go/jwx v1.2.25
+go: downloading github.com/rjeczalik/notify v0.9.2
+go: downloading gopkg.in/ini.v1 v1.67.0
+go: downloading github.com/rs/xid v1.4.0
+go: downloading github.com/philhofer/fwd v1.1.2-0.20210722190033-5c56ac6d0bb9
+go: downloading github.com/jcmturner/gokrb5/v8 v8.4.3
+go: downloading github.com/eapache/queue v1.1.0
+go: downloading github.com/eapache/go-xerial-snappy v0.0.0-20180814174437-776d5712da21
+go: downloading github.com/jcmturner/gofork v1.7.6
+go: downloading github.com/eapache/go-resiliency v1.3.0
+go: downloading github.com/pierrec/lz4/v4 v4.1.16
+go: downloading github.com/rcrowley/go-metrics v0.0.0-20201227073835-cf1acfcdf475
+go: downloading github.com/tklauser/go-sysconf v0.3.10
+go: downloading github.com/lestrrat-go/option v1.0.0
+go: downloading github.com/lestrrat-go/iter v1.0.2
+go: downloading github.com/lestrrat-go/backoff/v2 v2.0.8
+go: downloading github.com/lestrrat-go/blackmagic v1.0.1
+go: downloading github.com/lestrrat-go/httpcc v1.0.1
+go: downloading github.com/tklauser/numcpus v0.5.0
+go: downloading github.com/hashicorp/go-uuid v1.0.3
+go: downloading github.com/jcmturner/aescts/v2 v2.0.0
+go: downloading github.com/jcmturner/dnsutils/v2 v2.0.0
+go: downloading github.com/jcmturner/rpc/v2 v2.0.3
+==================
+WARNING: DATA RACE
+Read at 0x00c0005a6060 by goroutine 33:
+  github.com/minio/minio/internal/rest.setupReqStatsUpdate.func3()
+      /work/upstream/internal/rest/rpc-stats.go:71 +0x47
+  github.com/minio/minio/internal/rest.TestRaceTCPDialStats_InPlace.func3()
+      /work/upstream/internal/rest/minio-15770_race_test.go:77 +0x1a7
+
+Previous write at 0x00c0005a6060 by goroutine 133:
+  github.com/minio/minio/internal/rest.setupReqStatsUpdate.func1()
+      /work/upstream/internal/rest/rpc-stats.go:61 +0x47
+  net.(*sysDialer).dialSingle()
+      /usr/local/go/src/net/dial.go:636 +0x16c
+  net.(*sysDialer).dialSerial()
+      /usr/local/go/src/net/dial.go:614 +0x291
+  net.(*sysDialer).dialParallel()
+      /usr/local/go/src/net/dial.go:515 +0x5da
+  net.(*Dialer).DialContext()
+      /usr/local/go/src/net/dial.go:506 +0xb35
+  net/http.(*Transport).dial()
+      /usr/local/go/src/net/http/transport.go:1196 +0x2d6
+  net/http.(*Transport).dialConn()
+      /usr/local/go/src/net/http/transport.go:1625 +0xdc4
+  net/http.(*Transport).dialConnFor()
+      /usr/local/go/src/net/http/transport.go:1467 +0x129
+  net/http.(*Transport).queueForDial.func1()
+      /usr/local/go/src/net/http/transport.go:1436 +0x44
+

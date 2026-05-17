@@ -1,34 +1,27 @@
 WARNING: DATA RACE
-Write at 0x00c0000d8528 by goroutine 8:
-  ase/go-ethereum-24685.(*diffLayer).flatten()
-      /work/difflayer.go:30 +0x8f
-  ase/go-ethereum-24685.TestRace_24685_diffLayer_Parent_vs_flatten.func1()
-      /work/verified_test.go:17 +0xb5
+Write at 0x00c000000c88 by goroutine 8:
+  github.com/ethereum/go-ethereum/core/state/snapshot.TestRace_go_ethereum_24685_difflayer_parent.func1()
+      /work/upstream/core/state/snapshot/24685_race_test.go:24 +0x116
 
-Previous read at 0x00c0000d8528 by goroutine 9:
-  ase/go-ethereum-24685.(*diffLayer).Parent()
-      /work/difflayer.go:22 +0xa7
-  ase/go-ethereum-24685.TestRace_24685_diffLayer_Parent_vs_flatten.func2()
-      /work/verified_test.go:23 +0x9f
+Previous read at 0x00c000000c88 by goroutine 9:
+  github.com/ethereum/go-ethereum/core/state/snapshot.(*diffLayer).Parent()
+      /work/upstream/core/state/snapshot/difflayer.go:261 +0xb5
+  github.com/ethereum/go-ethereum/core/state/snapshot.TestRace_go_ethereum_24685_difflayer_parent.func2()
+      /work/upstream/core/state/snapshot/24685_race_test.go:32 +0xa9
 
 Goroutine 8 (running) created at:
-  ase/go-ethereum-24685.TestRace_24685_diffLayer_Parent_vs_flatten()
-      /work/verified_test.go:14 +0x184
+  github.com/ethereum/go-ethereum/core/state/snapshot.TestRace_go_ethereum_24685_difflayer_parent()
+      /work/upstream/core/state/snapshot/24685_race_test.go:20 +0x26e
   testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
+      /usr/local/go/src/testing/testing.go:1446 +0x216
+  testing.(*T).Run.func1()
+      /usr/local/go/src/testing/testing.go:1493 +0x47
 
-Goroutine 9 (finished) created at:
-  ase/go-ethereum-24685.TestRace_24685_diffLayer_Parent_vs_flatten()
-      /work/verified_test.go:20 +0x22c
+Goroutine 9 (running) created at:
+  github.com/ethereum/go-ethereum/core/state/snapshot.TestRace_go_ethereum_24685_difflayer_parent()
+      /work/upstream/core/state/snapshot/24685_race_test.go:29 +0x356
   testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
+      /usr/local/go/src/testing/testing.go:1446 +0x216
+  testing.(*T).Run.func1()
+      /usr/local/go/src/testing/testing.go:1493 +0x47
 ==================
---- FAIL: TestRace_24685_diffLayer_Parent_vs_flatten (0.00s)
-    testing.go:1398: race detected during execution of test
-FAIL
-FAIL	ase/go-ethereum-24685	0.017s
-FAIL

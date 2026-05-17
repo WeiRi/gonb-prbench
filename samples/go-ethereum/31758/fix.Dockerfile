@@ -1,23 +1,10 @@
-# syntax=docker/dockerfile:1.4
-# fix.Dockerfile for go-ethereum-31758 — bug + fix.diff applied
-FROM golang:1.22
-RUN apt-get update && apt-get install -y --no-install-recommends git ca-certificates patch && rm -rf /var/lib/apt/lists/*
-RUN mkdir -p /root/.ssh && ssh-keyscan -t rsa,ed25519 github.com >> /root/.ssh/known_hosts 2>/dev/null
-ENV GOPROXY=https://goproxy.cn,direct GOSUMDB=off GOFLAGS=-mod=mod CGO_ENABLED=1
-
-# === Full upstream at bug commit ===
-RUN --mount=type=ssh git clone --depth=200 git@github.com:ethereum/go-ethereum.git /work/upstream
+FROM gonb-go-ethereum-31758-base-v2:latest
+RUN rm -rf /work/pr2t-test 2>/dev/null || true
 WORKDIR /work/upstream
-RUN --mount=type=ssh git fetch --depth=200 origin 341929ab962c46b910ce3bb4a0f4d22f2048b1c5 && git checkout --detach 341929ab962c46b910ce3bb4a0f4d22f2048b1c5
 COPY fix.diff /tmp/fix.diff
-RUN git apply --whitespace=nowarn /tmp/fix.diff || patch -p1 < /tmp/fix.diff
-RUN --mount=type=ssh go mod download 2>&1 | tail -10 || true
-
-# === Race-triggering artefact in isolated sub-package ===
-WORKDIR /work/pr2t-test
-COPY go.mod ./
-COPY verified_test.go ./
-COPY *.go ./
-
-WORKDIR /work
-# NO CMD
+RUN awk 'BEGIN{p=0} /^diff --git/{if ($0 ~ /legacypool\.go/ && $0 !~ /_test\.go/) p=1; else p=0} p==1' /tmp/fix.diff > /tmp/fix_prod.diff && \
+    patch -p1 -i /tmp/fix_prod.diff
+WORKDIR /work/upstream/core/txpool/legacypool
+RUN find . -maxdepth 1 -name "*_test.go" -exec sh -c 'mv "$1" "verified_test_$(basename $1)"' _ {} \; 2>/dev/null || true
+COPY verified_test.go ./31758_race_test.go
+RUN go test -race -vet=off -c -o /dev/null . 2>&1 | tail -10 || true

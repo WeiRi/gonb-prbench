@@ -2,41 +2,31 @@ package kubelet
 
 import (
 	"sync"
+	"sync/atomic"
 	"testing"
 
 	cadvisorapi "github.com/google/cadvisor/info/v1"
 )
 
-func TestRace_93717(t *testing.T) {
+// BUG: Kubelet.machineInfo is read by GetCachedMachineInfo and written
+// directly (no lock). Concurrent write/read race.
+func TestRace_kubernetes_93717_machineinfo(t *testing.T) {
 	kl := &Kubelet{}
-
+	var done int32
 	var wg sync.WaitGroup
-	n := 50
-
-	// Readers: call GetCachedMachineInfo which reads kl.machineInfo without lock
-	for i := 0; i < n; i++ {
-		wg.Add(1)
-		go func() {
-			defer wg.Done()
-			for j := 0; j < 200; j++ {
-				kl.GetCachedMachineInfo()
-			}
-		}()
-	}
-
-	// Writers: directly set kl.machineInfo without lock
-	for i := 0; i < n; i++ {
-		wg.Add(1)
-		go func() {
-			defer wg.Done()
-			for j := 0; j < 200; j++ {
-				kl.machineInfo = &cadvisorapi.MachineInfo{
-					NumCores:       j,
-					MemoryCapacity: uint64(j * 1000),
-				}
-			}
-		}()
-	}
-
+	wg.Add(2)
+	go func() {
+		defer wg.Done()
+		for j := 0; j < 100000 && atomic.LoadInt32(&done) == 0; j++ {
+			kl.machineInfo = &cadvisorapi.MachineInfo{NumCores: j}
+		}
+		atomic.StoreInt32(&done, 1)
+	}()
+	go func() {
+		defer wg.Done()
+		for j := 0; j < 1000000 && atomic.LoadInt32(&done) == 0; j++ {
+			_, _ = kl.GetCachedMachineInfo()
+		}
+	}()
 	wg.Wait()
 }

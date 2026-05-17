@@ -1,23 +1,26 @@
-# syntax=docker/dockerfile:1.4
-# fix.Dockerfile for moby-39645 — bug + fix.diff applied
-FROM golang:1.22
-RUN apt-get update && apt-get install -y --no-install-recommends git ca-certificates patch && rm -rf /var/lib/apt/lists/*
-RUN mkdir -p /root/.ssh && ssh-keyscan -t rsa,ed25519 github.com >> /root/.ssh/known_hosts 2>/dev/null
-ENV GOPROXY=https://goproxy.cn,direct GOSUMDB=off GOFLAGS=-mod=mod CGO_ENABLED=1
+# fix.Dockerfile for moby-39645 — apply fix.diff on top of BUG worktree
+FROM gonb-moby-39645-bug:latest
 
-# === Full upstream at bug commit ===
-RUN --mount=type=ssh git clone --depth=200 git@github.com:moby/moby.git /work/upstream
-WORKDIR /work/upstream
-RUN --mount=type=ssh git fetch --depth=200 origin 928381b2215c9608692e663e6ddfa9e609bc2d6f && git checkout --detach 928381b2215c9608692e663e6ddfa9e609bc2d6f
+ENV GOPATH=/go GO111MODULE=off
+
+# Remove old pr2t-test to prevent gate from picking up stub tests
+RUN rm -rf /work/pr2t-test
+
+# Set up GOPATH with source in correct location for vendor resolution
+RUN mkdir -p /go/src/github.com/docker && \
+    cp -r /work/upstream /go/src/github.com/docker/docker
+
+# Apply fix.diff to get FIX state
+WORKDIR /go/src/github.com/docker/docker
 COPY fix.diff /tmp/fix.diff
 RUN git apply --whitespace=nowarn /tmp/fix.diff || patch -p1 < /tmp/fix.diff
-RUN --mount=type=ssh go mod download 2>&1 | tail -10 || true
 
-# === Race-triggering artefact in isolated sub-package ===
-WORKDIR /work/pr2t-test
-COPY go.mod ./
-COPY verified_test.go ./
-COPY *.go ./
+WORKDIR /go/src/github.com/docker/docker/container
 
-WORKDIR /work
-# NO CMD
+RUN find . -maxdepth 1 -name "*_test.go" \
+    ! -name "*_race_test*" ! -name "*inplace_test*" ! -name "verified_test*" \
+    -delete 2>/dev/null || true && rm -f race_test.go
+
+COPY verified_test.go ./moby_39645_race_test.go
+
+RUN go test -race -vet=off -c -o /dev/null . 2>&1 | tail -10 || true

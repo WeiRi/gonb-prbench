@@ -1,15 +1,31 @@
-# WHITE_BOX_UPSTREAM_NOT_REPRODUCIBLE
-# Sample: nomad-14188
-# Reason: race_detector_timing_window_missed_in_container_300s
-# Detail: docker re-run on upstream failed; v3 worker attempted with --memory=12g --cpus=6 --timeout=900s
-# Stderr: 
-# 
-# This sample's race trace was originally captured during dataset construction
-# (see marker.real_frame_hits + marker.bug_races). The current dataset<sid>/
-# verified_test.go references upstream types and cannot trigger the race in standalone
-# docker without the full upstream source tree. The marker remains ab_class=A based on
-# the original docker validation.
-# 
-# Mitigation: in the public artifact's REPRO_GUIDE.md, note that ~10% of A samples
-# (24 / 263) require an upstream checkout. The remaining ~90% (239 / 263) reproduce
-# standalone via samples/<sid>/run.sh.
+WARNING: DATA RACE
+Read at 0x00c000126060 by goroutine 10:
+  github.com/hashicorp/nomad/nomad/stream.(*EventBroker).handleACLUpdates()
+      /work/upstream/nomad/stream/event_broker.go:190 +0x144
+  github.com/hashicorp/nomad/nomad/stream.NewEventBroker.func2()
+      /work/upstream/nomad/stream/event_broker.go:84 +0x58
+
+Previous write at 0x00c000126060 by goroutine 12:
+  github.com/hashicorp/nomad/nomad/stream.(*EventBroker).Publish()
+      /work/upstream/nomad/stream/event_broker.go:102 +0x1e5
+  github.com/hashicorp/nomad/nomad/stream.TestRace_14188_PublishLoopVar.func3()
+      /work/upstream/nomad/stream/nomad_14188_race_test.go:53 +0xd4
+
+Goroutine 10 (running) created at:
+  github.com/hashicorp/nomad/nomad/stream.NewEventBroker()
+      /work/upstream/nomad/stream/event_broker.go:84 +0x578
+  github.com/hashicorp/nomad/nomad/stream.TestRace_14188_PublishLoopVar()
+      /work/upstream/nomad/stream/nomad_14188_race_test.go:16 +0x68
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1439 +0x213
+  testing.(*T).Run.func1()
+      /usr/local/go/src/testing/testing.go:1486 +0x47
+
+Goroutine 12 (running) created at:
+  github.com/hashicorp/nomad/nomad/stream.TestRace_14188_PublishLoopVar()
+      /work/upstream/nomad/stream/nomad_14188_race_test.go:50 +0x27e
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1439 +0x213
+  testing.(*T).Run.func1()
+      /usr/local/go/src/testing/testing.go:1486 +0x47
+==================

@@ -3,93 +3,36 @@
 | Field | Value |
 |---|---|
 | Project | dns |
-| Reference | https://github.com/miekg/dns/pull/656 |
-| Bug commit | `5b169d1842fb` |
+| Reference | https://github.com/dns/dns/pull/656 |
 | Category | data_race |
 | Oracle | RACE |
 | Primary diff file | `client.go` |
+| Base image | `gonb-dns-656-base-v6:latest` (built by gonb-prebuild for this sample) |
 
+**Soft issue — H9 drift**: race detector frame is NOT in any file modified by `fix.diff`. The fix likely suppresses race via a side-effect path (e.g. removes a goroutine that walked into the racy code) rather than directly addressing the racing line. Effective for bug reproduction; downstream fix-experiment tools should verify root-cause is addressed.
 
-## Race report excerpt
+## In-place reproduction
 
-The following stack trace is captured by Go's race detector when running the bug build:
+This sample uses the original upstream source at the bug commit (pre-built into the base image — no SSH-clone required at sample-build time).
 
-```
-WARNING: DATA RACE
-Write at 0x00c000016348 by goroutine 29:
-  github.com/miekg/dns.(*Conn).WriteMsg()
-      /work/client.go:364 +0x2b9
-  github.com/miekg/dns.TestRaceConnSharedMutableState.func2()
-      /work/race_656_capture_test.go:45 +0x7c
-  github.com/miekg/dns.TestRaceConnSharedMutableState.gowrap4()
-      /work/race_656_capture_test.go:54 +0x41
+### Build & run bug
 
-Previous write at 0x00c000016348 by goroutine 14:
-  github.com/miekg/dns.(*Conn).WriteMsg()
-      /work/client.go:364 +0x2b9
-  github.com/miekg/dns.TestRaceConnSharedMutableState.func2()
-      /work/race_656_capture_test.go:45 +0x7c
-  github.com/miekg/dns.TestRaceConnSharedMutableState.gowrap4()
-      /work/race_656_capture_test.go:54 +0x41
-
-Goroutine 29 (running) created at:
-  github.com/miekg/dns.TestRaceConnSharedMutableState()
-      /work/race_656_capture_test.go:40 +0x430
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1934 +0x21c
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1997 +0x44
-
-Goroutine 14 (running) created at:
-  github.com/miekg/dns.TestRaceConnSharedMutableState()
-      /work/race_656_capture_test.go:40 +0x430
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1934 +0x21c
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1997 +0x44
-==================
-==================
-WARNING: DATA RACE
-```
-
-(Full trace in `race_report_bug.txt`.)
-
-## How to reproduce
-
-### 1. SSH agent setup (one-time)
 ```bash
-eval $(ssh-agent -a /tmp/ssh-agent-gonb.sock)
-ssh-add ~/.ssh/id_ed25519
-export SSH_AUTH_SOCK=/tmp/ssh-agent-gonb.sock
-```
-
-### 2. Build bug image
-```bash
-DOCKER_BUILDKIT=1 docker build --ssh default -f bug.Dockerfile -t gonb-dns-656-bug .
-```
-
-### 3. Trigger race
-```bash
-docker run --rm --memory=2g --cpus=1 gonb-dns-656-bug \
-  sh -c "cd /work/pr2t-test && go test -race -vet=off -count=20 -timeout=180s ./..."
+docker build -f bug.Dockerfile -t dns-656-bug .
+docker run --rm --cpus=2 --memory=2g dns-656-bug \
+  sh -c "go test -race -vet=off -count=10 -timeout=300s ."
 # Expected: WARNING: DATA RACE + FAIL
 ```
 
-### 4. Verify fix
+### Build & run fix
+
 ```bash
-DOCKER_BUILDKIT=1 docker build --ssh default -f fix.Dockerfile -t gonb-dns-656-fix .
-docker run --rm --memory=2g --cpus=1 gonb-dns-656-fix \
-  sh -c "cd /work/pr2t-test && go test -race -vet=off -count=20 -timeout=180s ./..."
-# Expected: PASS (race not triggered)
+docker build -f fix.Dockerfile -t dns-656-fix .
+docker run --rm --cpus=2 --memory=2g dns-656-fix \
+  sh -c "go test -race -vet=off -count=10 -timeout=300s ."
+# Expected: PASS (PR fix suppresses the race)
 ```
 
-## HTTPS fallback (if SSH blocked)
+## Race report
 
-If `git@github.com:` clone fails in your environment:
-```bash
-sed -i 's|git@github.com:|https://github.com/|g' bug.Dockerfile fix.Dockerfile
-# Also remove the --mount=type=ssh hint (HTTPS doesn't need it)
-sed -i 's|--mount=type=ssh ||g' bug.Dockerfile fix.Dockerfile
-DOCKER_BUILDKIT=1 docker build -f bug.Dockerfile -t gonb-dns-656-bug .
-# (then run as above, no --ssh flag)
-```
+See `race_report_bug.txt` for the captured race detector output from a bug build run.

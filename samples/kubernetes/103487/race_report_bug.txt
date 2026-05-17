@@ -1,94 +1,33 @@
 WARNING: DATA RACE
-Write at 0x00c0000ca450 by goroutine 11:
-  runtime.mapassign_faststr()
-      /usr/local/go/src/runtime/map_faststr.go:203 +0x0
-  ase/kubernetes-103487.(*Watcher).Modify()
-      /work/fixture.go:30 +0x351
-  ase/kubernetes-103487.(*tracker).add()
-      /work/fixture.go:56 +0x325
-  ase/kubernetes-103487.TestRace_103487_FixtureWatcher.func2()
-      /work/verified_test.go:26 +0x412
-
-Previous read at 0x00c0000ca450 by goroutine 10:
+Read at 0x00c00019e5a0 by goroutine 10:
   runtime.mapaccess1_faststr()
       /usr/local/go/src/runtime/map_faststr.go:13 +0x0
-  ase/kubernetes-103487.TestRace_103487_FixtureWatcher.func1()
-      /work/verified_test.go:20 +0xe6
+  k8s.io/client-go/testing.TestRace_103487_FixtureWatcher.func1()
+      /work/upstream/staging/src/k8s.io/client-go/testing/kubernetes_103487_race_test.go:20 +0xca
 
-Goroutine 11 (running) created at:
-  ase/kubernetes-103487.TestRace_103487_FixtureWatcher()
-      /work/verified_test.go:23 +0x67
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1595 +0x261
-  testing.(*T).Run.func1()
-      /usr/local/go/src/testing/testing.go:1648 +0x44
+Previous write at 0x00c00019e5a0 by goroutine 11:
+  runtime.mapassign_faststr()
+      /usr/local/go/src/runtime/map_faststr.go:203 +0x0
+  k8s.io/client-go/testing.(*Watcher).Modify()
+      /work/upstream/staging/src/k8s.io/client-go/testing/fixture.go:30 +0x32b
+  k8s.io/client-go/testing.(*tracker).add()
+      /work/upstream/staging/src/k8s.io/client-go/testing/fixture.go:56 +0x302
+  k8s.io/client-go/testing.TestRace_103487_FixtureWatcher.func2()
+      /work/upstream/staging/src/k8s.io/client-go/testing/kubernetes_103487_race_test.go:26 +0x3e4
 
-Goroutine 10 (finished) created at:
-  ase/kubernetes-103487.TestRace_103487_FixtureWatcher()
-      /work/verified_test.go:17 +0x496
+Goroutine 10 (running) created at:
+  k8s.io/client-go/testing.TestRace_103487_FixtureWatcher()
+      /work/upstream/staging/src/k8s.io/client-go/testing/kubernetes_103487_race_test.go:17 +0x496
   testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1595 +0x261
-  testing.(*T).Run.func1()
-      /usr/local/go/src/testing/testing.go:1648 +0x44
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 11 (finished) created at:
+  k8s.io/client-go/testing.TestRace_103487_FixtureWatcher()
+      /work/upstream/staging/src/k8s.io/client-go/testing/kubernetes_103487_race_test.go:23 +0x67
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
 ==================
-fatal error: concurrent map read and map write
-
-goroutine 170 [running]:
-ase/kubernetes-103487.TestRace_103487_FixtureWatcher.func1()
-	/work/verified_test.go:20 +0xe7
-created by ase/kubernetes-103487.TestRace_103487_FixtureWatcher in goroutine 6
-	/work/verified_test.go:17 +0x497
-
-goroutine 1 [chan receive]:
-testing.(*T).Run(0xc0000f8000, {0x5d6825, 0x1e}, 0x5dc5a8)
-	/usr/local/go/src/testing/testing.go:1649 +0x871
-testing.runTests.func1(0x0?)
-	/usr/local/go/src/testing/testing.go:2054 +0x85
-testing.tRunner(0xc0000f8000, 0xc0000dbaf8)
-	/usr/local/go/src/testing/testing.go:1595 +0x262
-testing.runTests(0xc0000ce0a0?, {0x6f1060, 0x1, 0x1}, {0x1c?, 0x1e?, 0x6fa120?})
-	/usr/local/go/src/testing/testing.go:2052 +0x8ae
-testing.(*M).Run(0xc0000ce0a0)
-	/usr/local/go/src/testing/testing.go:1925 +0xcd8
-main.main()
-	_testmain.go:47 +0x2be
-
-goroutine 6 [runnable]:
-ase/kubernetes-103487.TestRace_103487_FixtureWatcher(0x0?)
-	/work/verified_test.go:23 +0x4a5
-testing.tRunner(0xc0000f81a0, 0x5dc5a8)
-	/usr/local/go/src/testing/testing.go:1595 +0x262
-created by testing.(*T).Run in goroutine 1
-	/usr/local/go/src/testing/testing.go:1648 +0x846
-
-goroutine 172 [runnable]:
-ase/kubernetes-103487.TestRace_103487_FixtureWatcher.func1()
-	/work/verified_test.go:17
-created by ase/kubernetes-103487.TestRace_103487_FixtureWatcher in goroutine 6
-	/work/verified_test.go:17 +0x497
-
-goroutine 173 [runnable]:
-ase/kubernetes-103487.TestRace_103487_FixtureWatcher.func2()
-	/work/verified_test.go:23
-created by ase/kubernetes-103487.TestRace_103487_FixtureWatcher in goroutine 6
-	/work/verified_test.go:23 +0x68
-
-goroutine 174 [runnable]:
-ase/kubernetes-103487.TestRace_103487_FixtureWatcher.func1()
-	/work/verified_test.go:17
-created by ase/kubernetes-103487.TestRace_103487_FixtureWatcher in goroutine 6
-	/work/verified_test.go:17 +0x497
-
-goroutine 175 [runnable]:
-ase/kubernetes-103487.TestRace_103487_FixtureWatcher.func2()
-	/work/verified_test.go:23
-created by ase/kubernetes-103487.TestRace_103487_FixtureWatcher in goroutine 6
-	/work/verified_test.go:23 +0x68
-
-goroutine 176 [runnable]:
-ase/kubernetes-103487.TestRace_103487_FixtureWatcher.func1()
-	/work/verified_test.go:17
-created by ase/kubernetes-103487.TestRace_103487_FixtureWatcher in goroutine 6
-	/work/verified_test.go:17 +0x497
-FAIL	ase/kubernetes-103487	0.022s
-FAIL

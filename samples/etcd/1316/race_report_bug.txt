@@ -1,250 +1,50 @@
 WARNING: DATA RACE
-Write at 0x00c00018c008 by goroutine 15:
-  ase/etcd-1316.(*FollowerStats).Succ()
-      /work/leader.go:32 +0x1c9
-  ase/etcd-1316.TestRace_1316.func1()
-      /work/verified_test.go:21 +0xcd
+Read at 0x00c42001a0b8 by goroutine 9:
+  github.com/coreos/etcd/etcdserver/stats.(*FollowerStats).Succ()
+      /go/src/github.com/coreos/etcd/etcdserver/stats/leader.go:43 +0x45
+  github.com/coreos/etcd/etcdserver/stats.TestRace_1316.func1()
+      /go/src/github.com/coreos/etcd/etcdserver/stats/etcd_1316_race_test.go:21 +0x74
 
-Previous read at 0x00c00018c008 by goroutine 10:
-  ase/etcd-1316.(*FollowerStats).Succ()
-      /work/leader.go:30 +0x11d
-  ase/etcd-1316.TestRace_1316.func1()
-      /work/verified_test.go:21 +0xcd
-
-Goroutine 15 (running) created at:
-  ase/etcd-1316.TestRace_1316()
-      /work/verified_test.go:18 +0x9d
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
-
-Goroutine 10 (running) created at:
-  ase/etcd-1316.TestRace_1316()
-      /work/verified_test.go:18 +0x9d
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
-==================
-==================
-WARNING: DATA RACE
-Write at 0x00c00018c038 by goroutine 10:
-  ase/etcd-1316.(*FollowerStats).Succ()
-      /work/leader.go:31 +0x155
-  ase/etcd-1316.TestRace_1316.func1()
-      /work/verified_test.go:21 +0xcd
-
-Previous read at 0x00c00018c038 by goroutine 17:
-  ase/etcd-1316.(*FollowerStats).Succ()
-      /work/leader.go:30 +0xd5
-  ase/etcd-1316.TestRace_1316.func1()
-      /work/verified_test.go:21 +0xcd
-
-Goroutine 10 (running) created at:
-  ase/etcd-1316.TestRace_1316()
-      /work/verified_test.go:18 +0x9d
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
-
-Goroutine 17 (running) created at:
-  ase/etcd-1316.TestRace_1316()
-      /work/verified_test.go:18 +0x9d
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
-==================
-==================
-WARNING: DATA RACE
-Read at 0x00c00018c038 by goroutine 10:
-  ase/etcd-1316.(*FollowerStats).Succ()
-      /work/leader.go:32 +0x170
-  ase/etcd-1316.TestRace_1316.func1()
-      /work/verified_test.go:21 +0xcd
-
-Previous write at 0x00c00018c038 by goroutine 15:
-  ase/etcd-1316.(*FollowerStats).Succ()
-      /work/leader.go:31 +0x155
-  ase/etcd-1316.TestRace_1316.func1()
-      /work/verified_test.go:21 +0xcd
-
-Goroutine 10 (running) created at:
-  ase/etcd-1316.TestRace_1316()
-      /work/verified_test.go:18 +0x9d
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
-
-Goroutine 15 (running) created at:
-  ase/etcd-1316.TestRace_1316()
-      /work/verified_test.go:18 +0x9d
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
-==================
-==================
-WARNING: DATA RACE
-Write at 0x00c00018c038 by goroutine 9:
-  ase/etcd-1316.(*FollowerStats).Succ()
-      /work/leader.go:31 +0x155
-  ase/etcd-1316.TestRace_1316.func1()
-      /work/verified_test.go:21 +0xcd
-
-Previous read at 0x00c00018c038 by goroutine 12:
-  ase/etcd-1316.(*FollowerStats).Succ()
-      /work/leader.go:31 +0x13d
-  ase/etcd-1316.TestRace_1316.func1()
-      /work/verified_test.go:21 +0xcd
+Previous write at 0x00c42001a0b8 by goroutine 8:
+  github.com/coreos/etcd/etcdserver/stats.(*FollowerStats).Succ()
+      /go/src/github.com/coreos/etcd/etcdserver/stats/leader.go:46 +0xf5
+  github.com/coreos/etcd/etcdserver/stats.TestRace_1316.func1()
+      /go/src/github.com/coreos/etcd/etcdserver/stats/etcd_1316_race_test.go:21 +0x74
 
 Goroutine 9 (running) created at:
-  ase/etcd-1316.TestRace_1316()
-      /work/verified_test.go:18 +0x9d
+  github.com/coreos/etcd/etcdserver/stats.TestRace_1316()
+      /go/src/github.com/coreos/etcd/etcdserver/stats/etcd_1316_race_test.go:18 +0xef
   testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
+      /usr/local/go/src/testing/testing.go:777 +0x16d
 
-Goroutine 12 (running) created at:
-  ase/etcd-1316.TestRace_1316()
-      /work/verified_test.go:18 +0x9d
+Goroutine 8 (finished) created at:
+  github.com/coreos/etcd/etcdserver/stats.TestRace_1316()
+      /go/src/github.com/coreos/etcd/etcdserver/stats/etcd_1316_race_test.go:18 +0xef
   testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
-==================
+      /usr/local/go/src/testing/testing.go:777 +0x16d
 ==================
 WARNING: DATA RACE
-Write at 0x00c00018c008 by goroutine 9:
-  ase/etcd-1316.(*FollowerStats).Succ()
-      /work/leader.go:32 +0x1c9
-  ase/etcd-1316.TestRace_1316.func1()
-      /work/verified_test.go:21 +0xcd
+Read at 0x00c42001a088 by goroutine 9:
+  github.com/coreos/etcd/etcdserver/stats.(*FollowerStats).Succ()
+      /go/src/github.com/coreos/etcd/etcdserver/stats/leader.go:43 +0x5c
+  github.com/coreos/etcd/etcdserver/stats.TestRace_1316.func1()
+      /go/src/github.com/coreos/etcd/etcdserver/stats/etcd_1316_race_test.go:21 +0x74
 
-Previous write at 0x00c00018c008 by goroutine 12:
-  ase/etcd-1316.(*FollowerStats).Succ()
-      /work/leader.go:32 +0x1c9
-  ase/etcd-1316.TestRace_1316.func1()
-      /work/verified_test.go:21 +0xcd
+Previous write at 0x00c42001a088 by goroutine 8:
+  github.com/coreos/etcd/etcdserver/stats.(*FollowerStats).Succ()
+      /go/src/github.com/coreos/etcd/etcdserver/stats/leader.go:58 +0x1af
+  github.com/coreos/etcd/etcdserver/stats.TestRace_1316.func1()
+      /go/src/github.com/coreos/etcd/etcdserver/stats/etcd_1316_race_test.go:21 +0x74
 
 Goroutine 9 (running) created at:
-  ase/etcd-1316.TestRace_1316()
-      /work/verified_test.go:18 +0x9d
+  github.com/coreos/etcd/etcdserver/stats.TestRace_1316()
+      /go/src/github.com/coreos/etcd/etcdserver/stats/etcd_1316_race_test.go:18 +0xef
   testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
+      /usr/local/go/src/testing/testing.go:777 +0x16d
 
-Goroutine 12 (running) created at:
-  ase/etcd-1316.TestRace_1316()
-      /work/verified_test.go:18 +0x9d
+Goroutine 8 (finished) created at:
+  github.com/coreos/etcd/etcdserver/stats.TestRace_1316()
+      /go/src/github.com/coreos/etcd/etcdserver/stats/etcd_1316_race_test.go:18 +0xef
   testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
+      /usr/local/go/src/testing/testing.go:777 +0x16d
 ==================
-==================
-WARNING: DATA RACE
-Write at 0x00c00018c000 by goroutine 12:
-  ase/etcd-1316.(*FollowerStats).Succ()
-      /work/leader.go:33 +0x1e8
-  ase/etcd-1316.TestRace_1316.func1()
-      /work/verified_test.go:21 +0xcd
-
-Previous write at 0x00c00018c000 by goroutine 10:
-  ase/etcd-1316.(*FollowerStats).Succ()
-      /work/leader.go:33 +0x1e8
-  ase/etcd-1316.TestRace_1316.func1()
-      /work/verified_test.go:21 +0xcd
-
-Goroutine 12 (running) created at:
-  ase/etcd-1316.TestRace_1316()
-      /work/verified_test.go:18 +0x9d
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
-
-Goroutine 10 (running) created at:
-  ase/etcd-1316.TestRace_1316()
-      /work/verified_test.go:18 +0x9d
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
-==================
-==================
-WARNING: DATA RACE
-Read at 0x00c00018c000 by goroutine 12:
-  ase/etcd-1316.(*FollowerStats).Succ()
-      /work/leader.go:34 +0x1fe
-  ase/etcd-1316.TestRace_1316.func1()
-      /work/verified_test.go:21 +0xcd
-
-Previous write at 0x00c00018c000 by goroutine 9:
-  ase/etcd-1316.(*FollowerStats).Succ()
-      /work/leader.go:33 +0x1e8
-  ase/etcd-1316.TestRace_1316.func1()
-      /work/verified_test.go:21 +0xcd
-
-Goroutine 12 (running) created at:
-  ase/etcd-1316.TestRace_1316()
-      /work/verified_test.go:18 +0x9d
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
-
-Goroutine 9 (finished) created at:
-  ase/etcd-1316.TestRace_1316()
-      /work/verified_test.go:18 +0x9d
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
-==================
-==================
-WARNING: DATA RACE
-Write at 0x00c00018c038 by goroutine 17:
-  ase/etcd-1316.(*FollowerStats).Succ()
-      /work/leader.go:31 +0x155
-  ase/etcd-1316.TestRace_1316.func1()
-      /work/verified_test.go:21 +0xcd
-
-Previous write at 0x00c00018c038 by goroutine 8:
-  ase/etcd-1316.(*FollowerStats).Succ()
-      /work/leader.go:31 +0x155
-  ase/etcd-1316.TestRace_1316.func1()
-      /work/verified_test.go:21 +0xcd
-
-Goroutine 17 (running) created at:
-  ase/etcd-1316.TestRace_1316()
-      /work/verified_test.go:18 +0x9d
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
-
-Goroutine 8 (running) created at:
-  ase/etcd-1316.TestRace_1316()
-      /work/verified_test.go:18 +0x9d
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
-==================
-==================
-WARNING: DATA RACE
-Read at 0x00c00018c028 by goroutine 10:
-  ase/etcd-1316.(*FollowerStats).Succ()
-      /work/leader.go:34 +0x21e
-  ase/etcd-1316.TestRace_1316.func1()
-      /work/verified_test.go:21 +0xcd
-
-Previous write at 0x00c00018c028 by goroutine 13:
-  ase/etcd-1316.(*FollowerStats).Succ()
-      /work/leader.go:35 +0x256

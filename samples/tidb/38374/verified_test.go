@@ -1,6 +1,6 @@
 // Race-trigger test for tidb-38374; see README.md for usage.
 
-package domain
+package main
 
 import (
 	"sync"

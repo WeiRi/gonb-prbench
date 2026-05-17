@@ -1,34 +1,51 @@
-// Regression test for moby#22966 — pkg/discovery/memory/memory.go data race
-// PR: https://github.com/moby/moby/pull/22966
-package main
+package memory
 
 import (
-	"strconv"
 	"sync"
+	"sync/atomic"
 	"testing"
+	"time"
 )
 
-func TestRace_22966(t *testing.T) {
-	d := NewDiscovery()
-	const N = 50
-	const ITERS = 100
+func TestRace_moby_22966_register_vs_watch(t *testing.T) {
+	d := &Discovery{}
+	if err := d.Initialize("", 10*time.Millisecond, 0, nil); err != nil {
+		t.Fatal(err)
+	}
+
+	stopCh := make(chan struct{})
+	ch, errCh := d.Watch(stopCh)
+
+	var done atomic.Bool
 	var wg sync.WaitGroup
-	wg.Add(N * 2)
-	for i := 0; i < N; i++ {
-		go func(id int) {
-			defer wg.Done()
-			for j := 0; j < ITERS; j++ {
-				d.Register("host-" + strconv.Itoa(id) + "-" + strconv.Itoa(j))
+	wg.Add(3)
+
+	go func() {
+		defer wg.Done()
+		for !done.Load() {
+			select {
+			case <-ch:
+			case <-errCh:
+			case <-time.After(5 * time.Millisecond):
 			}
-		}(i)
-	}
-	for i := 0; i < N; i++ {
-		go func() {
-			defer wg.Done()
-			for j := 0; j < ITERS; j++ {
-				_ = d.Watch()
-			}
-		}()
-	}
+		}
+	}()
+
+	go func() {
+		defer wg.Done()
+		for i := 0; i < 500 && !done.Load(); i++ {
+			_ = d.Register("addr")
+		}
+		done.Store(true)
+	}()
+
+	go func() {
+		defer wg.Done()
+		for i := 0; i < 500 && !done.Load(); i++ {
+			_ = d.Register("addr2")
+		}
+	}()
+
 	wg.Wait()
+	close(stopCh)
 }

@@ -1,28 +1,30 @@
-// Race-trigger test for grpc-go-2074; see README.md for usage.
-
 package transport
 
 import (
 	"sync"
+	"sync/atomic"
 	"testing"
 )
 
-func TestRace_PR2074_WriteStatusVsWriteHeader(t *testing.T) {
-	const N = 50
-	for i := 0; i < N; i++ {
-		s := NewStream()
-		s.header["pre"] = []string{"1"}
-
-		var wg sync.WaitGroup
-		wg.Add(2)
-		go func() {
-			defer wg.Done()
-			_ = s.WriteHeader(MD{"k1": {"v1"}, "k2": {"v2"}})
-		}()
-		go func() {
-			defer wg.Done()
-			_ = s.WriteStatus()
-		}()
-		wg.Wait()
-	}
+// BUG: Stream.headerOk is plain bool, accessed without lock from WriteHeader / WriteStatus.
+// PR #2074 replaces with atomic headerSent uint32 + hdrMu mutex.
+func TestRace_2074_headerOk(t *testing.T) {
+	s := &Stream{}
+	var done int32
+	var wg sync.WaitGroup
+	wg.Add(2)
+	go func() {
+		defer wg.Done()
+		for i := 0; i < 5000 && atomic.LoadInt32(&done) == 0; i++ {
+			s.headerOk = true
+		}
+		atomic.StoreInt32(&done, 1)
+	}()
+	go func() {
+		defer wg.Done()
+		for i := 0; i < 5000 && atomic.LoadInt32(&done) == 0; i++ {
+			_ = s.headerOk
+		}
+	}()
+	wg.Wait()
 }

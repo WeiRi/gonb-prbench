@@ -1,15 +1,66 @@
-# WHITE_BOX_UPSTREAM_NOT_REPRODUCIBLE
-# Sample: hugo-14446
-# Reason: race_detector_timing_window_missed_in_container_300s
-# Detail: docker re-run on upstream failed; v3 worker attempted with --memory=12g --cpus=6 --timeout=900s
-# Stderr: 
-# 
-# This sample's race trace was originally captured during dataset construction
-# (see marker.real_frame_hits + marker.bug_races). The current dataset<sid>/
-# verified_test.go references upstream types and cannot trigger the race in standalone
-# docker without the full upstream source tree. The marker remains ab_class=A based on
-# the original docker validation.
-# 
-# Mitigation: in the public artifact's REPRO_GUIDE.md, note that ~10% of A samples
-# (24 / 263) require an upstream checkout. The remaining ~90% (239 / 263) reproduce
-# standalone via samples/<sid>/run.sh.
+WARNING: DATA RACE
+Write at 0x00c0002fe28f by goroutine 13:
+  github.com/gohugoio/hugo/config.(*CacheBuster).CompileConfig.func1.1()
+      /work/upstream/config/commonConfig.go:440 +0xc8
+  github.com/gohugoio/hugo/config.TestRace_hugo_14446_cachebuster_closure_match.func1()
+      /work/upstream/config/14446_race_test.go:40 +0xde
+  github.com/gohugoio/hugo/config.TestRace_hugo_14446_cachebuster_closure_match.gowrap1()
+      /work/upstream/config/14446_race_test.go:43 +0x41
+
+Previous write at 0x00c0002fe28f by goroutine 24:
+  github.com/gohugoio/hugo/config.(*CacheBuster).CompileConfig.func1.1()
+      /work/upstream/config/commonConfig.go:440 +0xc8
+  github.com/gohugoio/hugo/config.TestRace_hugo_14446_cachebuster_closure_match.func1()
+      /work/upstream/config/14446_race_test.go:40 +0xde
+  github.com/gohugoio/hugo/config.TestRace_hugo_14446_cachebuster_closure_match.gowrap1()
+      /work/upstream/config/14446_race_test.go:43 +0x41
+
+Goroutine 13 (running) created at:
+  github.com/gohugoio/hugo/config.TestRace_hugo_14446_cachebuster_closure_match()
+      /work/upstream/config/14446_race_test.go:33 +0x2d0
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1792 +0x225
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1851 +0x44
+
+Goroutine 24 (running) created at:
+  github.com/gohugoio/hugo/config.TestRace_hugo_14446_cachebuster_closure_match()
+      /work/upstream/config/14446_race_test.go:33 +0x2d0
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1792 +0x225
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1851 +0x44
+==================
+WARNING: DATA RACE
+Write at 0x00c0002fe28f by goroutine 24:
+  github.com/gohugoio/hugo/config.(*CacheBuster).CompileConfig.func1.1()
+      /work/upstream/config/commonConfig.go:440 +0xc8
+  github.com/gohugoio/hugo/config.TestRace_hugo_14446_cachebuster_closure_match.func1()
+      /work/upstream/config/14446_race_test.go:40 +0xde
+  github.com/gohugoio/hugo/config.TestRace_hugo_14446_cachebuster_closure_match.gowrap1()
+      /work/upstream/config/14446_race_test.go:43 +0x41
+
+Previous read at 0x00c0002fe28f by goroutine 10:
+  github.com/gohugoio/hugo/config.(*CacheBuster).CompileConfig.func1.1()
+      /work/upstream/config/commonConfig.go:442 +0xe4
+  github.com/gohugoio/hugo/config.TestRace_hugo_14446_cachebuster_closure_match.func1()
+      /work/upstream/config/14446_race_test.go:40 +0xde
+  github.com/gohugoio/hugo/config.TestRace_hugo_14446_cachebuster_closure_match.gowrap1()
+      /work/upstream/config/14446_race_test.go:43 +0x41
+
+Goroutine 24 (running) created at:
+  github.com/gohugoio/hugo/config.TestRace_hugo_14446_cachebuster_closure_match()
+      /work/upstream/config/14446_race_test.go:33 +0x2d0
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1792 +0x225
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1851 +0x44
+
+Goroutine 10 (running) created at:
+  github.com/gohugoio/hugo/config.TestRace_hugo_14446_cachebuster_closure_match()
+      /work/upstream/config/14446_race_test.go:33 +0x2d0
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1792 +0x225
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1851 +0x44
+==================

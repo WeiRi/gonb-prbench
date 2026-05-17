@@ -2,33 +2,33 @@ package grpc
 
 import (
 	"sync"
+	"sync/atomic"
 	"testing"
 )
 
-func TestRace_1688(t *testing.T) {
-	const N = 50
-	const ITERS = 200
-
+// BUG: ccBalancerWrapper has no `mu` field; concurrent writes to
+// ccb.subConns map (in NewSubConn / RemoveSubConn) race.
+func TestRace_grpc_go_1688_subconns_map(t *testing.T) {
 	ccb := &ccBalancerWrapper{
-		subConns: make(map[*acBalancerWrapper]struct{}),
+		subConns: map[*acBalancerWrapper]struct{}{},
 	}
-
+	keys := make([]*acBalancerWrapper, 16)
+	for i := range keys {
+		keys[i] = &acBalancerWrapper{}
+	}
+	var done int32
 	var wg sync.WaitGroup
-	wg.Add(N * 2)
-
-	for i := 0; i < N; i++ {
-		go func() {
+	for i := 0; i < 16; i++ {
+		wg.Add(1)
+		go func(idx int) {
 			defer wg.Done()
-			for j := 0; j < ITERS; j++ {
-				ccb.AddSC(&acBalancerWrapper{})
+			k := keys[idx]
+			for j := 0; j < 5000 && atomic.LoadInt32(&done) == 0; j++ {
+				ccb.subConns[k] = struct{}{}
+				delete(ccb.subConns, k)
 			}
-		}()
-		go func() {
-			defer wg.Done()
-			for j := 0; j < ITERS; j++ {
-				_ = ccb.IterateSC()
-			}
-		}()
+			atomic.StoreInt32(&done, 1)
+		}(i)
 	}
 	wg.Wait()
 }

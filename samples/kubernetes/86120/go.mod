@@ -1,3 +1,2 @@
-module ase/kubernetes-86120
-
-go 1.20
+module kubernetes-86120
+go 1.22

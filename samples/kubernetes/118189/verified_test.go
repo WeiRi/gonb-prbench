@@ -1,29 +1,43 @@
+// Whitebox PoC for kubernetes-118189: data race on TopologyCache fields
+// (hintsPopulatedByService, endpointsByService) between AddHints (write)
+// and HasPopulatedHints (read). The fix adds proper locking.
+// Production code in topologycache.go.
 package topologycache
 
 import (
-	"fmt"
 	"sync"
 	"testing"
+
+	discovery "k8s.io/api/discovery/v1"
+	"k8s.io/klog/v2/ktesting"
 )
 
 func TestRace_118189_TopologyCache(t *testing.T) {
-	const N = 100
+	const numGoroutines = 50
+	const iterations = 200
+
+	cache := NewTopologyCache()
+	logger, _ := ktesting.NewTestContext(t)
+
 	var wg sync.WaitGroup
-	tc := NewTopologyCache()
-	for n := 0; n < N; n++ {
+	for g := 0; g < numGoroutines; g++ {
 		wg.Add(2)
-		go func(n int) {
+		go func() {
 			defer wg.Done()
-			for i := 0; i < 30; i++ {
-				tc.AddHints(fmt.Sprintf("svc%d", n%5), "ipv4")
+			for j := 0; j < 50; j++ {
+				si := &SliceInfo{
+					ServiceKey:  "ns/svc",
+					AddressType: discovery.AddressTypeIPv4,
+				}
+				cache.AddHints(logger, si)
 			}
-		}(n)
-		go func(n int) {
+		}()
+		go func() {
 			defer wg.Done()
-			for i := 0; i < 30; i++ {
-				_ = tc.HasPopulatedHints(fmt.Sprintf("svc%d", n%5))
+			for j := 0; j < 50; j++ {
+				cache.HasPopulatedHints("ns/svc")
 			}
-		}(n)
+		}()
 	}
 	wg.Wait()
 }

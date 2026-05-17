@@ -1,23 +1,17 @@
-# syntax=docker/dockerfile:1.4
-# fix.Dockerfile for tidb-38374 — bug + fix.diff applied
-FROM golang:1.20
-RUN apt-get update && apt-get install -y --no-install-recommends git ca-certificates patch && rm -rf /var/lib/apt/lists/*
-RUN mkdir -p /root/.ssh && ssh-keyscan -t rsa,ed25519 github.com >> /root/.ssh/known_hosts 2>/dev/null
-ENV GOPROXY=https://goproxy.cn,direct GOSUMDB=off GOFLAGS=-mod=mod CGO_ENABLED=1
+# fix.Dockerfile for tidb-38374 — apply fix.diff (BUG state→FIX) + use FIX-API test
+FROM gonb-tidb-38374-base:latest
 
-# === Full upstream at bug commit ===
-RUN --mount=type=ssh git clone --depth=200 git@github.com:pingcap/tidb.git /work/upstream
 WORKDIR /work/upstream
-RUN --mount=type=ssh git fetch --depth=200 origin accff686216c62c8a1f7bdb597141e666e3f2bde && git checkout --detach accff686216c62c8a1f7bdb597141e666e3f2bde
+RUN rm -rf .git
 COPY fix.diff /tmp/fix.diff
-RUN git apply --whitespace=nowarn /tmp/fix.diff || patch -p1 < /tmp/fix.diff
-RUN --mount=type=ssh go mod download 2>&1 | tail -10 || true
+# Apply only the .go portions (skip BUILD.bazel and _test.go)
+RUN awk 'BEGIN{p=0} /^diff --git/{if ($0 !~ /_test\.go/ && $0 !~ /BUILD\.bazel/) p=1; else p=0} p==1' /tmp/fix.diff > /tmp/fix_prod.diff && \
+    git init --quiet && git add -A 2>/dev/null && git -c user.email=x@x -c user.name=x commit -m b -q 2>/dev/null && \
+    git apply --whitespace=nowarn /tmp/fix_prod.diff
 
-# === Race-triggering artefact in isolated sub-package ===
-WORKDIR /work/pr2t-test
-COPY go.mod ./
-COPY verified_test.go ./
-COPY *.go ./
+WORKDIR /work/upstream/sessionctx/variable
+RUN find . -maxdepth 1 -name "*_test.go" -delete 2>/dev/null
 
-WORKDIR /work
-# NO CMD
+COPY verified_test_fix.go ./tidb_38374_race_test.go
+
+RUN go test -race -vet=off -c -o /dev/null . 2>&1 | tail -10 || true

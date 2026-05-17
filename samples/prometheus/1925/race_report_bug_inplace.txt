@@ -1,0 +1,49 @@
+==================
+WARNING: DATA RACE
+Read at 0x00c0000c0170 by goroutine 18:
+  github.com/prometheus/prometheus/promql.(*lexer).scanNumber()
+      /go/src/github.com/prometheus/prometheus/promql/lex.go:809 +0x3c
+  github.com/prometheus/prometheus/promql.lexNumberOrDuration()
+      /go/src/github.com/prometheus/prometheus/promql/lex.go:788 +0x3b
+  github.com/prometheus/prometheus/promql.(*lexer).run()
+      /go/src/github.com/prometheus/prometheus/promql/lex.go:442 +0xa9
+  github.com/prometheus/prometheus/promql.lex.gowrap1()
+      /go/src/github.com/prometheus/prometheus/promql/lex.go:435 +0x1f
+
+Previous write at 0x00c0000c0170 by goroutine 12:
+  github.com/prometheus/prometheus/promql.TestLexer()
+      /go/src/github.com/prometheus/prometheus/promql/lex_test.go:442 +0x112
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 18 (running) created at:
+  github.com/prometheus/prometheus/promql.lex()
+      /go/src/github.com/prometheus/prometheus/promql/lex.go:435 +0x184
+  github.com/prometheus/prometheus/promql.TestLexer()
+      /go/src/github.com/prometheus/prometheus/promql/lex_test.go:441 +0xef
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 12 (running) created at:
+  testing.(*T).Run()
+      /usr/local/go/src/testing/testing.go:1742 +0x825
+  testing.runTests.func1()
+      /usr/local/go/src/testing/testing.go:2161 +0x85
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.runTests()
+      /usr/local/go/src/testing/testing.go:2159 +0x8be
+  testing.(*M).Run()
+      /usr/local/go/src/testing/testing.go:2027 +0xf17
+  main.main()
+      _testmain.go:87 +0x2bd
+==================
+--- FAIL: TestLexer (0.01s)
+    testing.go:1398: race detected during execution of test
+FAIL
+FAIL	github.com/prometheus/prometheus/promql	0.056s
+FAIL

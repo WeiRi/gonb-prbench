@@ -1,0 +1,109 @@
+diff --git a/hugolib/content_map_page.go b/hugolib/content_map_page.go
+index 8c7ecc34196..b5165b2a53c 100644
+--- a/hugolib/content_map_page.go
++++ b/hugolib/content_map_page.go
+@@ -47,7 +47,6 @@ func newPageMaps(h *HugoSites) *pageMaps {
+ 		workers: para.New(h.numWorkers),
+ 		pmaps:   mps,
+ 	}
+-
+ }
+ 
+ type pageMap struct {
+diff --git a/hugolib/hugo_sites.go b/hugolib/hugo_sites.go
+index 3183242b7c2..16de27b0d07 100644
+--- a/hugolib/hugo_sites.go
++++ b/hugolib/hugo_sites.go
+@@ -78,7 +78,8 @@ type HugoSites struct {
+ 	// As loaded from the /data dirs
+ 	data map[string]interface{}
+ 
+-	content *pageMaps
++	contentInit sync.Once
++	content     *pageMaps
+ 
+ 	// Keeps track of bundle directories and symlinks to enable partial rebuilding.
+ 	ContentChanges *contentChangeMap
+@@ -92,6 +93,13 @@ type HugoSites struct {
+ 	*testCounters
+ }
+ 
++func (h *HugoSites) getContentMaps() *pageMaps {
++	h.contentInit.Do(func() {
++		h.content = newPageMaps(h)
++	})
++	return h.content
++}
++
+ // Only used in tests.
+ type testCounters struct {
+ 	contentRenderCounter uint64
+@@ -253,7 +261,7 @@ func (h *HugoSites) PrintProcessingStats(w io.Writer) {
+ func (h *HugoSites) GetContentPage(filename string) page.Page {
+ 	var p page.Page
+ 
+-	h.content.walkBundles(func(b *contentNode) bool {
++	h.getContentMaps().walkBundles(func(b *contentNode) bool {
+ 		if b.p == nil || b.fi == nil {
+ 			return false
+ 		}
+@@ -706,7 +714,7 @@ func (h *HugoSites) renderCrossSitesArtifacts() error {
+ }
+ 
+ func (h *HugoSites) removePageByFilename(filename string) {
+-	h.content.withMaps(func(m *pageMap) error {
++	h.getContentMaps().withMaps(func(m *pageMap) error {
+ 		m.deleteBundleMatching(func(b *contentNode) bool {
+ 			if b.p == nil {
+ 				return false
+@@ -897,7 +905,7 @@ func (h *HugoSites) findPagesByKindIn(kind string, inPages page.Pages) page.Page
+ }
+ 
+ func (h *HugoSites) resetPageState() {
+-	h.content.walkBundles(func(n *contentNode) bool {
++	h.getContentMaps().walkBundles(func(n *contentNode) bool {
+ 		if n.p == nil {
+ 			return false
+ 		}
+@@ -914,7 +922,7 @@ func (h *HugoSites) resetPageState() {
+ }
+ 
+ func (h *HugoSites) resetPageStateFromEvents(idset identity.Identities) {
+-	h.content.walkBundles(func(n *contentNode) bool {
++	h.getContentMaps().walkBundles(func(n *contentNode) bool {
+ 		if n.p == nil {
+ 			return false
+ 		}
+diff --git a/hugolib/hugo_sites_build.go b/hugolib/hugo_sites_build.go
+index fac20e8833f..f39e7a7e53f 100644
+--- a/hugolib/hugo_sites_build.go
++++ b/hugolib/hugo_sites_build.go
+@@ -263,7 +263,7 @@ func (h *HugoSites) assemble(bcfg *BuildCfg) error {
+ 		return nil
+ 	}
+ 
+-	if err := h.content.AssemblePages(); err != nil {
++	if err := h.getContentMaps().AssemblePages(); err != nil {
+ 		return err
+ 	}
+ 
+diff --git a/hugolib/site.go b/hugolib/site.go
+index d544cb09571..a0390780aa9 100644
+--- a/hugolib/site.go
++++ b/hugolib/site.go
+@@ -1296,14 +1296,12 @@ func (s *Site) readAndProcessContent(filenames ...string) error {
+ 
+ 	proc := newPagesProcessor(s.h, sourceSpec)
+ 
+-	c := newPagesCollector(sourceSpec, s.h.content, s.Log, s.h.ContentChanges, proc, filenames...)
++	c := newPagesCollector(sourceSpec, s.h.getContentMaps(), s.Log, s.h.ContentChanges, proc, filenames...)
+ 
+ 	if err := c.Collect(); err != nil {
+ 		return err
+ 	}
+ 
+-	s.h.content = newPageMaps(s.h)
+-
+ 	return nil
+ }
+ 

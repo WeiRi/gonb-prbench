@@ -1,140 +1,50 @@
 WARNING: DATA RACE
-Write at 0x00c000096080 by goroutine 22:
-  ase/traefik-2287.(*HealthCheck).SetBackendsConfiguration()
-      /work/healthcheck.go:36 +0x1c8
-  ase/traefik-2287.TestRace_TR2287_SetBackendsRace.func1()
-      /work/verified_test.go:35 +0x1c3
-  ase/traefik-2287.TestRace_TR2287_SetBackendsRace.gowrap1()
-      /work/verified_test.go:37 +0x41
+Write at 0x00c4200daba0 by goroutine 9:
+  github.com/containous/traefik/healthcheck.(*HealthCheck).SetBackendsConfiguration()
+      /go/src/github.com/containous/traefik/healthcheck/healthcheck.go:78 +0x50
+  github.com/containous/traefik/healthcheck.TestRace_2287_SetBackends.func2()
+      /go/src/github.com/containous/traefik/healthcheck/traefik_2287_race_test.go:24 +0xb0
 
-Previous write at 0x00c000096080 by goroutine 8:
-  ase/traefik-2287.(*HealthCheck).SetBackendsConfiguration()
-      /work/healthcheck.go:36 +0x1c8
-  ase/traefik-2287.TestRace_TR2287_SetBackendsRace.func1()
-      /work/verified_test.go:35 +0x1c3
-  ase/traefik-2287.TestRace_TR2287_SetBackendsRace.gowrap1()
-      /work/verified_test.go:37 +0x41
+Previous write at 0x00c4200daba0 by goroutine 8:
+  github.com/containous/traefik/healthcheck.(*HealthCheck).SetBackendsConfiguration()
+      /go/src/github.com/containous/traefik/healthcheck/healthcheck.go:78 +0x50
+  github.com/containous/traefik/healthcheck.TestRace_2287_SetBackends.func2()
+      /go/src/github.com/containous/traefik/healthcheck/traefik_2287_race_test.go:24 +0xb0
 
-Goroutine 22 (running) created at:
-  ase/traefik-2287.TestRace_TR2287_SetBackendsRace()
-      /work/verified_test.go:28 +0xcd
+Goroutine 9 (running) created at:
+  github.com/containous/traefik/healthcheck.TestRace_2287_SetBackends()
+      /go/src/github.com/containous/traefik/healthcheck/traefik_2287_race_test.go:21 +0x133
   testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
+      /usr/local/go/src/testing/testing.go:777 +0x16d
 
 Goroutine 8 (running) created at:
-  ase/traefik-2287.TestRace_TR2287_SetBackendsRace()
-      /work/verified_test.go:28 +0xcd
+  github.com/containous/traefik/healthcheck.TestRace_2287_SetBackends()
+      /go/src/github.com/containous/traefik/healthcheck/traefik_2287_race_test.go:21 +0x133
   testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
-==================
+      /usr/local/go/src/testing/testing.go:777 +0x16d
 ==================
 WARNING: DATA RACE
-Read at 0x00c000096080 by goroutine 22:
-  ase/traefik-2287.(*HealthCheck).SetBackendsConfiguration()
-      /work/healthcheck.go:37 +0x204
-  ase/traefik-2287.TestRace_TR2287_SetBackendsRace.func1()
-      /work/verified_test.go:35 +0x1c3
-  ase/traefik-2287.TestRace_TR2287_SetBackendsRace.gowrap1()
-      /work/verified_test.go:37 +0x41
+Read at 0x00c4200daba8 by goroutine 9:
+  github.com/containous/traefik/healthcheck.(*HealthCheck).SetBackendsConfiguration()
+      /go/src/github.com/containous/traefik/healthcheck/healthcheck.go:79 +0x85
+  github.com/containous/traefik/healthcheck.TestRace_2287_SetBackends.func2()
+      /go/src/github.com/containous/traefik/healthcheck/traefik_2287_race_test.go:24 +0xb0
 
-Previous write at 0x00c000096080 by goroutine 8:
-  ase/traefik-2287.(*HealthCheck).SetBackendsConfiguration()
-      /work/healthcheck.go:36 +0x1c8
-  ase/traefik-2287.TestRace_TR2287_SetBackendsRace.func1()
-      /work/verified_test.go:35 +0x1c3
-  ase/traefik-2287.TestRace_TR2287_SetBackendsRace.gowrap1()
-      /work/verified_test.go:37 +0x41
+Previous write at 0x00c4200daba8 by goroutine 8:
+  github.com/containous/traefik/healthcheck.(*HealthCheck).SetBackendsConfiguration()
+      /go/src/github.com/containous/traefik/healthcheck/healthcheck.go:83 +0xe4
+  github.com/containous/traefik/healthcheck.TestRace_2287_SetBackends.func2()
+      /go/src/github.com/containous/traefik/healthcheck/traefik_2287_race_test.go:24 +0xb0
 
-Goroutine 22 (running) created at:
-  ase/traefik-2287.TestRace_TR2287_SetBackendsRace()
-      /work/verified_test.go:28 +0xcd
+Goroutine 9 (running) created at:
+  github.com/containous/traefik/healthcheck.TestRace_2287_SetBackends()
+      /go/src/github.com/containous/traefik/healthcheck/traefik_2287_race_test.go:21 +0x133
   testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
+      /usr/local/go/src/testing/testing.go:777 +0x16d
 
 Goroutine 8 (running) created at:
-  ase/traefik-2287.TestRace_TR2287_SetBackendsRace()
-      /work/verified_test.go:28 +0xcd
+  github.com/containous/traefik/healthcheck.TestRace_2287_SetBackends()
+      /go/src/github.com/containous/traefik/healthcheck/traefik_2287_race_test.go:21 +0x133
   testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
+      /usr/local/go/src/testing/testing.go:777 +0x16d
 ==================
-==================
-WARNING: DATA RACE
-Read at 0x00c00028f770 by goroutine 31:
-  runtime.mapiterinit()
-      /usr/local/go/src/runtime/map.go:816 +0x0
-  ase/traefik-2287.(*HealthCheck).SetBackendsConfiguration()
-      /work/healthcheck.go:37 +0x246
-  ase/traefik-2287.TestRace_TR2287_SetBackendsRace.func1()
-      /work/verified_test.go:35 +0x1c3
-  ase/traefik-2287.TestRace_TR2287_SetBackendsRace.gowrap1()
-      /work/verified_test.go:37 +0x41
-
-Previous write at 0x00c00028f770 by goroutine 22:
-  runtime.mapassign_faststr()
-      /usr/local/go/src/runtime/map_faststr.go:203 +0x0
-  ase/traefik-2287.TestRace_TR2287_SetBackendsRace.func1()
-      /work/verified_test.go:32 +0x17b
-  ase/traefik-2287.TestRace_TR2287_SetBackendsRace.gowrap1()
-      /work/verified_test.go:37 +0x41
-
-Goroutine 31 (running) created at:
-  ase/traefik-2287.TestRace_TR2287_SetBackendsRace()
-      /work/verified_test.go:28 +0xcd
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
-
-Goroutine 22 (running) created at:
-  ase/traefik-2287.TestRace_TR2287_SetBackendsRace()
-      /work/verified_test.go:28 +0xcd
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
-==================
-==================
-WARNING: DATA RACE
-Read at 0x00c000298978 by goroutine 31:
-  ase/traefik-2287.(*HealthCheck).SetBackendsConfiguration()
-      /work/healthcheck.go:37 +0x2a5
-  ase/traefik-2287.TestRace_TR2287_SetBackendsRace.func1()
-      /work/verified_test.go:35 +0x1c3
-  ase/traefik-2287.TestRace_TR2287_SetBackendsRace.gowrap1()
-      /work/verified_test.go:37 +0x41
-
-Previous write at 0x00c000298978 by goroutine 22:
-  ase/traefik-2287.TestRace_TR2287_SetBackendsRace.func1()
-      /work/verified_test.go:32 +0x187
-  ase/traefik-2287.TestRace_TR2287_SetBackendsRace.gowrap1()
-      /work/verified_test.go:37 +0x41
-
-Goroutine 31 (running) created at:
-  ase/traefik-2287.TestRace_TR2287_SetBackendsRace()
-      /work/verified_test.go:28 +0xcd
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
-
-Goroutine 22 (running) created at:
-  ase/traefik-2287.TestRace_TR2287_SetBackendsRace()
-      /work/verified_test.go:28 +0xcd
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
-==================
-    testing.go:1398: race detected during execution of test
---- FAIL: TestRace_TR2287_SetBackendsRace (0.30s)
-FAIL
-FAIL	ase/traefik-2287	0.327s
-FAIL

@@ -1,21 +1,18 @@
-# syntax=docker/dockerfile:1.4
-# bug.Dockerfile for moby-26695 — full upstream clone at bug commit
-FROM golang:1.16
-RUN apt-get update && apt-get install -y --no-install-recommends git ca-certificates patch && rm -rf /var/lib/apt/lists/*
-RUN mkdir -p /root/.ssh && ssh-keyscan -t rsa,ed25519 github.com >> /root/.ssh/known_hosts 2>/dev/null
-ENV GOPROXY=https://goproxy.cn,direct GOSUMDB=off GOFLAGS=-mod=mod CGO_ENABLED=1
+# bug.Dockerfile for moby-26695 (GOPATH-era, vendor mode)
+FROM gonb-moby-26695-base:latest
 
-# === Full upstream at bug commit ===
-RUN --mount=type=ssh git clone --depth=200 git@github.com:moby/moby.git /work/upstream
-WORKDIR /work/upstream
-RUN --mount=type=ssh git fetch --depth=200 origin 45a8f680263558657e98c899204a632153b60cde && git checkout --detach 45a8f680263558657e98c899204a632153b60cde
-RUN --mount=type=ssh go mod download 2>&1 | tail -10 || true
+ENV GOPATH=/go/src/github.com/docker/docker/vendor:/go
+ENV GO15VENDOREXPERIMENT=1
 
-# === Race-triggering artefact in isolated sub-package ===
-WORKDIR /work/pr2t-test
-COPY go.mod ./
-COPY verified_test.go ./
-COPY *.go ./
+# Revert fix.diff to get BUG state
+WORKDIR /go/src/github.com/docker/docker
+COPY fix.diff /tmp/fix.diff
+RUN git apply -R --whitespace=nowarn /tmp/fix.diff 2>/dev/null || patch -p1 -R < /tmp/fix.diff 2>/dev/null || true
 
-WORKDIR /work
-# NO CMD — race trigger command is in README
+WORKDIR /go/src/github.com/docker/docker/libcontainerd
+# Delete all _test.go (including empty leftover race_test.go), then plant ours
+RUN find . -maxdepth 1 -name "*_test.go" -delete 2>/dev/null || true
+
+COPY verified_test.go ./moby_26695_race_test.go
+
+RUN go test -race -vet=off -c -o /dev/null . 2>&1 | tail -10 || true

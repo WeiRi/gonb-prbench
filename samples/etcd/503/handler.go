@@ -1,4 +1,4 @@
-package lock
+package main
 
 var stopWatchChan = make(chan bool, 1)
 

@@ -1,34 +1,29 @@
 WARNING: DATA RACE
-Read at 0x00c0000bc8c8 by goroutine 9:
-  ase/tidb-38281.(*collationInfo).HasCoercibility()
-      /work/collation.go:17 +0xa7
-  ase/tidb-38281.TestRace_tidb_38281.func2()
-      /work/verified_test.go:24 +0x9f
+Read at 0x00c002a2cf08 by goroutine 83:
+  github.com/pingcap/tidb/expression.(*collationInfo).HasCoercibility()
+      /work/upstream/expression/collation.go:47 +0x9b
+  github.com/pingcap/tidb/expression.TestRace_38281_CoerInit.func2()
+      /work/upstream/expression/tidb_38281_race_test.go:25 +0x8f
 
-Previous write at 0x00c0000bc8c8 by goroutine 8:
-  ase/tidb-38281.(*collationInfo).SetCoercibility()
-      /work/collation.go:26 +0xc8
-  ase/tidb-38281.TestRace_tidb_38281.func1()
-      /work/verified_test.go:18 +0xa9
+Previous write at 0x00c002a2cf08 by goroutine 82:
+  github.com/pingcap/tidb/expression.(*collationInfo).SetCoercibility()
+      /work/upstream/expression/collation.go:57 +0xac
+  github.com/pingcap/tidb/expression.TestRace_38281_CoerInit.func1()
+      /work/upstream/expression/tidb_38281_race_test.go:19 +0x8f
 
-Goroutine 9 (running) created at:
-  ase/tidb-38281.TestRace_tidb_38281()
-      /work/verified_test.go:21 +0x56
+Goroutine 83 (running) created at:
+  github.com/pingcap/tidb/expression.TestRace_38281_CoerInit()
+      /work/upstream/expression/tidb_38281_race_test.go:22 +0x204
   testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
+      /usr/local/go/src/testing/testing.go:1576 +0x216
+  testing.(*T).Run.func1()
+      /usr/local/go/src/testing/testing.go:1629 +0x47
 
-Goroutine 8 (finished) created at:
-  ase/tidb-38281.TestRace_tidb_38281()
-      /work/verified_test.go:15 +0x17c
+Goroutine 82 (finished) created at:
+  github.com/pingcap/tidb/expression.TestRace_38281_CoerInit()
+      /work/upstream/expression/tidb_38281_race_test.go:16 +0x15a
   testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
+      /usr/local/go/src/testing/testing.go:1576 +0x216
+  testing.(*T).Run.func1()
+      /usr/local/go/src/testing/testing.go:1629 +0x47
 ==================
-    testing.go:1398: race detected during execution of test
---- FAIL: TestRace_tidb_38281 (0.00s)
-FAIL
-FAIL	ase/tidb-38281	0.020s
-FAIL

@@ -1,23 +1,11 @@
-# syntax=docker/dockerfile:1.4
-# fix.Dockerfile for nomad-14142 — bug + fix.diff applied
-FROM golang:1.22
-RUN apt-get update && apt-get install -y --no-install-recommends git ca-certificates patch && rm -rf /var/lib/apt/lists/*
-RUN mkdir -p /root/.ssh && ssh-keyscan -t rsa,ed25519 github.com >> /root/.ssh/known_hosts 2>/dev/null
-ENV GOPROXY=https://goproxy.cn,direct GOSUMDB=off GOFLAGS=-mod=mod CGO_ENABLED=1
-
-# === Full upstream at bug commit ===
-RUN --mount=type=ssh git clone --depth=200 git@github.com:hashicorp/nomad.git /work/upstream
+FROM gonb-nomad-14142-base:latest
+ENV GOPROXY=https://goproxy.cn,direct GOSUMDB=off
+RUN rm -rf /work/pr2t-test 2>/dev/null || true
 WORKDIR /work/upstream
-RUN --mount=type=ssh git fetch --depth=200 origin 094a455c93450523223cf88ee42345c5446311c7 && git checkout --detach 094a455c93450523223cf88ee42345c5446311c7
-COPY fix.diff /tmp/fix.diff
-RUN git apply --whitespace=nowarn /tmp/fix.diff || patch -p1 < /tmp/fix.diff
-RUN --mount=type=ssh go mod download 2>&1 | tail -10 || true
-
-# === Race-triggering artefact in isolated sub-package ===
-WORKDIR /work/pr2t-test
-COPY go.mod ./
-COPY verified_test.go ./
-COPY *.go ./
-
-WORKDIR /work
-# NO CMD
+RUN go mod download 2>&1 | tail -3 || true
+COPY fix_prod.diff /tmp/fix.diff
+RUN git apply --whitespace=nowarn /tmp/fix.diff
+WORKDIR /work/upstream/nomad
+RUN find . -maxdepth 1 -name "*_test.go" -delete 2>/dev/null || true
+COPY verified_test.go ./14142_race_test.go
+RUN go test -race -vet=off -c -o /dev/null . 2>&1 | tail -10 || true

@@ -1,23 +1,6 @@
-# syntax=docker/dockerfile:1.4
-# fix.Dockerfile for thanos-2354 — bug + fix.diff applied
-FROM golang:1.25
-RUN apt-get update && apt-get install -y --no-install-recommends git ca-certificates patch && rm -rf /var/lib/apt/lists/*
-RUN mkdir -p /root/.ssh && ssh-keyscan -t rsa,ed25519 github.com >> /root/.ssh/known_hosts 2>/dev/null
-ENV GOPROXY=https://goproxy.cn,direct GOSUMDB=off GOFLAGS=-mod=mod CGO_ENABLED=1
-
-# === Full upstream at bug commit ===
-RUN --mount=type=ssh git clone --depth=200 git@github.com:thanos-io/thanos.git /work/upstream
-WORKDIR /work/upstream
-RUN --mount=type=ssh git fetch --depth=200 origin b5298bacd5e2b6495bd34558f717f6a3c2f6a7a9 && git checkout --detach b5298bacd5e2b6495bd34558f717f6a3c2f6a7a9
-COPY fix.diff /tmp/fix.diff
-RUN git apply --whitespace=nowarn /tmp/fix.diff || patch -p1 < /tmp/fix.diff
-RUN --mount=type=ssh go mod download 2>&1 | tail -10 || true
-
-# === Race-triggering artefact in isolated sub-package ===
-WORKDIR /work/pr2t-test
-COPY go.mod ./
-COPY verified_test.go ./
-COPY *.go ./
-
+FROM golang:1.20
+ENV GOPROXY=off GOSUMDB=off CGO_ENABLED=1
 WORKDIR /work
-# NO CMD
+COPY go.mod bucket_fixed.go bucket.go verified_test.go ./
+RUN rm -f bucket.go && mv bucket_fixed.go bucket.go
+CMD ["sh","-c","go test -race -vet=off -count=10 -timeout=60s ."]

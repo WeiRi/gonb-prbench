@@ -1,23 +1,9 @@
-# syntax=docker/dockerfile:1.4
-# fix.Dockerfile for grpc-go-1687 — bug + fix.diff applied
-FROM golang:1.22
-RUN apt-get update && apt-get install -y --no-install-recommends git ca-certificates patch && rm -rf /var/lib/apt/lists/*
-RUN mkdir -p /root/.ssh && ssh-keyscan -t rsa,ed25519 github.com >> /root/.ssh/known_hosts 2>/dev/null
-ENV GOPROXY=https://goproxy.cn,direct GOSUMDB=off GOFLAGS=-mod=mod CGO_ENABLED=1
-
-# === Full upstream at bug commit ===
-RUN --mount=type=ssh git clone --depth=200 git@github.com:grpc/grpc-go.git /work/upstream
-WORKDIR /work/upstream
-RUN --mount=type=ssh git fetch --depth=200 origin a62701e4aa1d276bec70311251d62a478404d63f && git checkout --detach a62701e4aa1d276bec70311251d62a478404d63f
-COPY fix.diff /tmp/fix.diff
-RUN git apply --whitespace=nowarn /tmp/fix.diff || patch -p1 < /tmp/fix.diff
-RUN --mount=type=ssh go mod download 2>&1 | tail -10 || true
-
-# === Race-triggering artefact in isolated sub-package ===
-WORKDIR /work/pr2t-test
-COPY go.mod ./
-COPY verified_test.go ./
-COPY *.go ./
-
-WORKDIR /work
-# NO CMD
+FROM gonb-grpc-go-1687-base-v3:latest
+ENV GO111MODULE=off
+WORKDIR /go/src/google.golang.org/grpc
+COPY fix_prod.diff /tmp/fix.diff
+RUN git apply --whitespace=nowarn /tmp/fix.diff && grep -c writeStatusMu transport/handler_server.go
+WORKDIR /go/src/google.golang.org/grpc/transport
+RUN find . -maxdepth 1 -name "*_test.go" -delete 2>/dev/null || true
+COPY verified_test.go ./1687_race_test.go
+RUN go test -race -vet=off -c -o /dev/null . 2>&1 | tail -10 || true

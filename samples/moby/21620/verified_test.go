@@ -1,39 +1,37 @@
+//go:build linux
+// +build linux
+
 package libcontainerd
 
 import (
+	"strconv"
 	"sync"
+	"sync/atomic"
 	"testing"
 )
 
-func TestRace_21620(t *testing.T) {
-	// Bug: lock() reads clnt.containerMutexes[containerID] on line 25
-	// AFTER releasing clnt.Lock(). Another goroutine can concurrently
-	// write to clnt.containerMutexes via lock()'s map assignment on line 22.
-	// This causes a concurrent map read and map write, which is a data race
-	// in Go (can corrupt the map and crash).
-	clnt := &client{
+// BUG: client.lock(id) reads containerMutexes map AFTER Unlock; concurrent
+// goroutines write the map → race on map.
+func TestRace_moby_21620_libcontainerd_lock(t *testing.T) {
+	c := &client{
 		clientCommon: clientCommon{
-			backend:          nil,
-			containers:       make(map[string]*container),
-			containerMutexes: make(map[string]*sync.Mutex),
+			containers:       map[string]*container{},
+			containerMutexes: map[string]*sync.Mutex{},
 		},
 	}
-
+	var done int32
 	var wg sync.WaitGroup
-	nGoroutines := 50
-	nIters := 200
-
-	for i := 0; i < nGoroutines; i++ {
+	for i := 0; i < 16; i++ {
 		wg.Add(1)
-		go func(id int) {
+		go func(gid int) {
 			defer wg.Done()
-			for j := 0; j < nIters; j++ {
-				cid := string(rune('a' + (id+j)%26))
-				clnt.lock(cid)
-				clnt.unlock(cid)
+			id := "id" + strconv.Itoa(gid%3)
+			for j := 0; j < 5000 && atomic.LoadInt32(&done) == 0; j++ {
+				c.lock(id)
+				c.unlock(id)
 			}
+			atomic.StoreInt32(&done, 1)
 		}(i)
 	}
-
 	wg.Wait()
 }

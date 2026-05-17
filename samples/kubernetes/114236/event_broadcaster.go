@@ -1,61 +1,42 @@
-// Pre-fix event_broadcaster.go from PR #114236.
-// BUG: recordToSink returns the cached *Event directly (not DeepCopy), so the
-// client and the broadcaster's cache share the same object — a downstream
-// recorder mutates fields concurrently with another goroutine's read.
 package events
 
 import "sync"
 
+// Event mirrors eventsv1.Event for kubernetes-114236 stub.
 type Event struct {
-	mu     sync.Mutex
-	Series *EventSeries
-	Reason string
-	Count  int
+	Name  string
+	Count int32
 }
 
-type EventSeries struct {
-	Count            int
-	LastObservedTime int64
-}
+func (e *Event) DeepCopy() *Event { c := *e; return &c }
 
-// DeepCopy is the post-fix safe copy.
-func (e *Event) DeepCopy() *Event {
-	e.mu.Lock()
-	defer e.mu.Unlock()
-	c := &Event{Reason: e.Reason, Count: e.Count}
-	if e.Series != nil {
-		c.Series = &EventSeries{Count: e.Series.Count, LastObservedTime: e.Series.LastObservedTime}
-	}
-	return c
-}
+type eventKey struct{ Name string }
 
 type eventBroadcasterImpl struct {
 	mu         sync.Mutex
-	eventCache map[string]*Event
+	eventCache map[eventKey]*Event
 }
 
-func NewBroadcaster() *eventBroadcasterImpl {
-	return &eventBroadcasterImpl{eventCache: map[string]*Event{}}
+// attemptRecording mutates the event (simulating real recordEvent behavior).
+func (b *eventBroadcasterImpl) attemptRecording(e *Event) {
+	e.Count++ // mutation that races
 }
 
-// recordToSink (PRE-FIX): event_broadcaster.go:187 returns isomorphicEvent
-// directly without DeepCopy => caller can mutate the cached object.
-func (e *eventBroadcasterImpl) recordToSink(eventKey string, ev *Event) *Event {
-	e.mu.Lock()
-	if cached, ok := e.eventCache[eventKey]; ok {
-		// pre-fix: mutate cached.Series, then return cached object (not deep-copied).
-		cached.Series = &EventSeries{Count: cached.Count + 1, LastObservedTime: 1}
-		evToRecord := cached
-		e.mu.Unlock()
-		return evToRecord
+// recordToSink — BUG: returns the same cached pointer that attemptRecording mutates.
+func (b *eventBroadcasterImpl) recordToSink(ev *Event) {
+	var ev2 *Event
+	func() {
+		b.mu.Lock()
+		defer b.mu.Unlock()
+		k := eventKey{Name: ev.Name}
+		if cached, ok := b.eventCache[k]; ok {
+			ev2 = cached // BUG: return same pointer
+			return
+		}
+		b.eventCache[k] = ev
+		ev2 = ev // BUG: return same pointer
+	}()
+	if ev2 != nil {
+		go b.attemptRecording(ev2) // mutates ev2 → races with other goroutines reading it
 	}
-	e.eventCache[eventKey] = ev
-	e.mu.Unlock()
-	return ev
-}
-
-// attemptRecording -- caller side; mutates fields without lock.
-func attemptRecording(ev *Event) {
-	ev.Reason = "recorded"
-	ev.Count++
 }

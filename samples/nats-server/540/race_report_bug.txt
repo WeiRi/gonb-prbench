@@ -1,56 +1,23 @@
 WARNING: DATA RACE
-Write at 0x00c00011c188 by goroutine 126:
-  ase/nats-server-540.TestRaceHandleRoutezNc.func2()
-      /work/verified_test.go:65 +0xd7
+Write at 0x00c0002340e0 by goroutine 9:
+  github.com/nats-io/nats-server/server.TestRace_540_routez_nc.func2()
+      /go/src/github.com/nats-io/nats-server/server/540_race_test.go:44 +0xe4
 
-Previous read at 0x00c00011c188 by goroutine 91:
-  ase/nats-server-540.TestRaceHandleRoutezNc.func1()
-      /work/verified_test.go:51 +0xee
+Previous read at 0x00c0002340e0 by goroutine 8:
+  github.com/nats-io/nats-server/server.(*Server).HandleRoutez()
+      /go/src/github.com/nats-io/nats-server/server/monitor.go:325 +0x85d
+  github.com/nats-io/nats-server/server.TestRace_540_routez_nc.func1()
+      /go/src/github.com/nats-io/nats-server/server/540_race_test.go:36 +0x10c
 
-Goroutine 126 (running) created at:
-  ase/nats-server-540.TestRaceHandleRoutezNc()
-      /work/verified_test.go:60 +0x1d7
+Goroutine 9 (running) created at:
+  github.com/nats-io/nats-server/server.TestRace_540_routez_nc()
+      /go/src/github.com/nats-io/nats-server/server/540_race_test.go:40 +0x484
   testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1934 +0x21c
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1997 +0x44
+      /usr/local/go/src/testing/testing.go:1203 +0x202
 
-Goroutine 91 (running) created at:
-  ase/nats-server-540.TestRaceHandleRoutezNc()
-      /work/verified_test.go:39 +0xa4
+Goroutine 8 (running) created at:
+  github.com/nats-io/nats-server/server.TestRace_540_routez_nc()
+      /go/src/github.com/nats-io/nats-server/server/540_race_test.go:31 +0x444
   testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1934 +0x21c
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1997 +0x44
+      /usr/local/go/src/testing/testing.go:1203 +0x202
 ==================
-==================
-WARNING: DATA RACE
-Read at 0x00c00011c188 by goroutine 92:
-  ase/nats-server-540.TestRaceHandleRoutezNc.func1()
-      /work/verified_test.go:51 +0xee
-
-Previous write at 0x00c00011c188 by goroutine 127:
-  ase/nats-server-540.TestRaceHandleRoutezNc.func2()
-      /work/verified_test.go:68 +0xfd
-
-Goroutine 92 (running) created at:
-  ase/nats-server-540.TestRaceHandleRoutezNc()
-      /work/verified_test.go:39 +0xa4
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1934 +0x21c
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1997 +0x44
-
-Goroutine 127 (running) created at:
-  ase/nats-server-540.TestRaceHandleRoutezNc()
-      /work/verified_test.go:60 +0x1d7
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1934 +0x21c
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1997 +0x44
-==================
---- FAIL: TestRaceHandleRoutezNc (7.92s)
-    testing.go:1617: race detected during execution of test
-FAIL
-FAIL	ase/nats-server-540	7.951s
-FAIL

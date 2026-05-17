@@ -5,30 +5,24 @@ import (
 	"testing"
 )
 
-func TestRace_134379(t *testing.T) {
-	n := &node{
-		identity: objectReference{
-			OwnerReference: OwnerReference{
-				APIVersion: "v1", Kind: "Pod", Name: "test", UID: "test-uid",
-			},
-		},
-		dependents: make(map[*node]struct{}),
-	}
-
+func TestRace_134379_NodeStringRace(t *testing.T) {
+	n := &node{}
 	var wg sync.WaitGroup
-	numGoroutines := 50
-	iters := 200
-
-	for i := 0; i < numGoroutines; i++ {
-		wg.Add(1)
-		go func() {
-			defer wg.Done()
-			for j := 0; j < iters; j++ {
-				n.String()
-				n.markBeingDeleted()
-			}
-		}()
-	}
-
+	const N = 200
+	wg.Add(2)
+	// Writer: set beingDeleted under lock
+	go func() {
+		defer wg.Done()
+		for i := 0; i < N; i++ {
+			n.markBeingDeleted()
+		}
+	}()
+	// Reader: String() reads fields including beingDeleted/virtual; BUG only RLocks dependentsLock
+	go func() {
+		defer wg.Done()
+		for i := 0; i < N; i++ {
+			_ = n.String()
+		}
+	}()
 	wg.Wait()
 }

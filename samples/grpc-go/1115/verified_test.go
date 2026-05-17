@@ -1,5 +1,3 @@
-// Race-trigger test for grpc-go-1115; see README.md for usage.
-
 package transport
 
 import (
@@ -8,42 +6,38 @@ import (
 	"testing"
 )
 
-func TestRace_PR1115(t *testing.T) {
-	const iters = 200
-	for i := 0; i < iters; i++ {
-		ht := &serverHandlerTransport{
-			closedCh: make(chan struct{}),
-			writes:   make(chan func()),
-		}
-
-		// Pre-close closedCh: simulates Close() already having been invoked
-		// from the client-disconnect path.
-		close(ht.closedCh)
-
-		var wg sync.WaitGroup
-		// Goroutine A: simulate the tail of a completed WriteStatus that runs
-		// close(ht.writes) right at the moment another do() races in.
-		wg.Add(1)
-		go func() {
-			defer wg.Done()
-			defer func() { _ = recover() }()
-			close(ht.writes)
-		}()
-
-		// Goroutine B: a racing Write/WriteHeader calling do() — BUG hits
-		// 'send on closed channel' from handler_server.go's do().
-		wg.Add(1)
-		var bDone int32
-		go func() {
-			defer wg.Done()
-			defer func() {
-				_ = recover() // swallow runtime panic from BUG send-on-closed
-				atomic.StoreInt32(&bDone, 1)
-			}()
-			_ = ht.do(func() {})
-		}()
-
-		wg.Wait()
-		_ = atomic.LoadInt32(&bDone)
+// BUG: serverHandlerTransport.do() select picks `ht.writes <- fn` even when
+// closedCh is just-closed if both cases are ready. After the chosen write
+// proceeds, if another goroutine closes ht.writes too, panic: send on closed
+// channel.
+//
+// Reproduce: Write to ht.writes concurrently while closing ht.writes from
+// another goroutine — mimics the production race window.
+func TestRace_grpc_go_1115_send_closed(t *testing.T) {
+	ht := &serverHandlerTransport{
+		closedCh: make(chan struct{}),
+		writes:   make(chan func(), 1),
 	}
+	var done int32
+	var wg sync.WaitGroup
+	wg.Add(2)
+	go func() {
+		defer wg.Done()
+		defer func() {
+			if r := recover(); r != nil {
+				panic(r) // re-raise to bubble up
+			}
+		}()
+		fn := func() {}
+		for j := 0; j < 100 && atomic.LoadInt32(&done) == 0; j++ {
+			_ = ht.do(fn)
+		}
+	}()
+	go func() {
+		defer wg.Done()
+		close(ht.closedCh)
+		close(ht.writes)
+		atomic.StoreInt32(&done, 1)
+	}()
+	wg.Wait()
 }

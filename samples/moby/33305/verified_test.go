@@ -1,53 +1,39 @@
 package loggerutils
 
 import (
-	"os"
 	"sync"
+	"sync/atomic"
 	"testing"
 )
 
-func TestRace_33305(t *testing.T) {
-	tmpFile, err := os.CreateTemp("", "test-rotate-*.log")
+// Race: BUG LogPath() reads w.f without lock; Write triggers
+// checkCapacityAndRotate which reassigns w.f when capacity exceeded.
+// FIX adds w.mu.Lock to LogPath.
+func TestRace_moby_33305_rotatefile_logpath(t *testing.T) {
+	tmp := t.TempDir() + "/test.log"
+	// tiny capacity → every Write triggers rotation → w.f reassigned
+	w, err := NewRotateFileWriter(tmp, 2, 3)
 	if err != nil {
 		t.Fatal(err)
 	}
-	tmpPath := tmpFile.Name()
-	tmpFile.Close()
-	defer os.Remove(tmpPath)
-	defer os.Remove(tmpPath + ".1")
+	defer w.Close()
 
-	const N = 20
-	const ITERS = 500
-
-	for trial := 0; trial < 10; trial++ {
-		// Small capacity to force frequent rotations
-		w, err := NewRotateFileWriter(tmpPath, 100, 2)
-		if err != nil {
-			t.Fatal(err)
+	var done atomic.Bool
+	var wg sync.WaitGroup
+	wg.Add(2)
+	go func() {
+		defer wg.Done()
+		data := []byte("hello-world-hello-world")
+		for i := 0; i < 200 && !done.Load(); i++ {
+			_, _ = w.Write(data)
 		}
-
-		var wg sync.WaitGroup
-		wg.Add(N * 2)
-
-		for i := 0; i < N; i++ {
-			go func(id int) {
-				defer wg.Done()
-				for j := 0; j < ITERS; j++ {
-					w.Write([]byte("test log data that will fill up the small buffer quickly to trigger rotation\n"))
-				}
-			}(i)
+		done.Store(true)
+	}()
+	go func() {
+		defer wg.Done()
+		for i := 0; i < 200000 && !done.Load(); i++ {
+			_ = w.LogPath()
 		}
-
-		for i := 0; i < N; i++ {
-			go func() {
-				defer wg.Done()
-				for j := 0; j < ITERS; j++ {
-					_ = w.LogPath()
-				}
-			}()
-		}
-
-		wg.Wait()
-		w.Close()
-	}
+	}()
+	wg.Wait()
 }

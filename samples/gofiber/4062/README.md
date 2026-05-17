@@ -3,92 +3,36 @@
 | Field | Value |
 |---|---|
 | Project | gofiber |
-| Reference | https://github.com/gofiber/fiber/pull/4062 |
-| Bug commit | `b45321db1cd0` |
+| Reference | https://github.com/gofiber/gofiber/pull/4062 |
 | Category | data_race |
-| Oracle | RACE |
+| Oracle | PANIC_RUNTIME |
 | Primary diff file | `ctx.go` |
+| Base image | `gonb-gofiber-4062-base-v3:latest` (built by gonb-prebuild for this sample) |
 
+**Soft issue — alt-signal oracle**: race condition manifests as `PANIC_RUNTIME` (panic/fatal) rather than race-detector `WARNING: DATA RACE`. Tools that only grep "DATA RACE" will MISS this sample — also grep `panic:` and `fatal error:`.
 
-## Race report excerpt
+## In-place reproduction
 
-The following stack trace is captured by Go's race detector when running the bug build:
+This sample uses the original upstream source at the bug commit (pre-built into the base image — no SSH-clone required at sample-build time).
 
-```
-WARNING: DATA RACE
-Write at 0x00c000096080 by goroutine 9:
-  ase/gofiber-4062.(*DefaultCtx).release()
-      /work/ctx.go:37 +0x84
-  ase/gofiber-4062.TestRace_PR4062_ValueAfterRelease.func2()
-      /work/verified_test.go:32 +0x7d
+### Build & run bug
 
-Previous read at 0x00c000096080 by goroutine 8:
-  ase/gofiber-4062.(*DefaultCtx).Value()
-      /work/ctx.go:32 +0xd0
-  ase/gofiber-4062.TestRace_PR4062_ValueAfterRelease.func1()
-      /work/verified_test.go:23 +0xcb
-
-Goroutine 9 (running) created at:
-  ase/gofiber-4062.TestRace_PR4062_ValueAfterRelease()
-      /work/verified_test.go:30 +0x2a
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
-
-Goroutine 8 (running) created at:
-  ase/gofiber-4062.TestRace_PR4062_ValueAfterRelease()
-      /work/verified_test.go:20 +0x2e4
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
-==================
-    testing.go:1398: race detected during execution of test
---- FAIL: TestRace_PR4062_ValueAfterRelease (0.01s)
-FAIL
-FAIL	ase/gofiber-4062	0.029s
-FAIL
-```
-
-(Full trace in `race_report_bug.txt`.)
-
-## How to reproduce
-
-### 1. SSH agent setup (one-time)
 ```bash
-eval $(ssh-agent -a /tmp/ssh-agent-gonb.sock)
-ssh-add ~/.ssh/id_ed25519
-export SSH_AUTH_SOCK=/tmp/ssh-agent-gonb.sock
+docker build -f bug.Dockerfile -t gofiber-4062-bug .
+docker run --rm --cpus=2 --memory=2g gofiber-4062-bug \
+  sh -c "go test -race -vet=off -count=10 -timeout=300s ."
+# Expected: PANIC_RUNTIME + FAIL
 ```
 
-### 2. Build bug image
+### Build & run fix
+
 ```bash
-DOCKER_BUILDKIT=1 docker build --ssh default -f bug.Dockerfile -t gonb-gofiber-4062-bug .
+docker build -f fix.Dockerfile -t gofiber-4062-fix .
+docker run --rm --cpus=2 --memory=2g gofiber-4062-fix \
+  sh -c "go test -race -vet=off -count=10 -timeout=300s ."
+# Expected: PASS (PR fix suppresses the race)
 ```
 
-### 3. Trigger race
-```bash
-docker run --rm --memory=2g --cpus=1 gonb-gofiber-4062-bug \
-  sh -c "cd /work/pr2t-test && go test -race -vet=off -count=20 -timeout=180s ./..."
-# Expected: WARNING: DATA RACE + FAIL
-```
+## Race report
 
-### 4. Verify fix
-```bash
-DOCKER_BUILDKIT=1 docker build --ssh default -f fix.Dockerfile -t gonb-gofiber-4062-fix .
-docker run --rm --memory=2g --cpus=1 gonb-gofiber-4062-fix \
-  sh -c "cd /work/pr2t-test && go test -race -vet=off -count=20 -timeout=180s ./..."
-# Expected: PASS (race not triggered)
-```
-
-## HTTPS fallback (if SSH blocked)
-
-If `git@github.com:` clone fails in your environment:
-```bash
-sed -i 's|git@github.com:|https://github.com/|g' bug.Dockerfile fix.Dockerfile
-# Also remove the --mount=type=ssh hint (HTTPS doesn't need it)
-sed -i 's|--mount=type=ssh ||g' bug.Dockerfile fix.Dockerfile
-DOCKER_BUILDKIT=1 docker build -f bug.Dockerfile -t gonb-gofiber-4062-bug .
-# (then run as above, no --ssh flag)
-```
+See `race_report_bug.txt` for the captured race detector output from a bug build run.

@@ -1,250 +1,74 @@
 WARNING: DATA RACE
-Write at 0x00c0000d4598 by goroutine 14:
-  container/list.(*List).insert()
-      /usr/local/go/src/container/list/list.go:98 +0x7c
-  container/list.(*List).insertValue()
-      /usr/local/go/src/container/list/list.go:104 +0x1ac
-  container/list.(*List).PushBack()
-      /usr/local/go/src/container/list/list.go:152 +0x192
-  ase/consul-7567.Return()
-      /work/freeport.go:60 +0xd2
-  ase/consul-7567.TestFreeportResetRace.func1()
-      /work/verified_test.go:32 +0x89
-
-Previous read at 0x00c0000d4598 by goroutine 8:
-  container/list.(*List).Front()
-      /usr/local/go/src/container/list/list.go:70 +0x67
-  ase/consul-7567.checkFreedPorts()
-      /work/freeport.go:70 +0x42
-
-Goroutine 14 (running) created at:
-  ase/consul-7567.TestFreeportResetRace()
-      /work/verified_test.go:26 +0x249
+Write at 0x00000076c698 by goroutine 7:
+  github.com/hashicorp/consul/sdk/freeport.initialize()
+      /work/upstream/sdk/freeport/freeport.go:99 +0x392
+  github.com/hashicorp/consul/sdk/freeport.TestFreeportResetRace()
+      /work/upstream/sdk/freeport/consul_7567_race_test.go:19 +0xb2
   testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
+      /usr/local/go/src/testing/testing.go:1203 +0x202
 
-Goroutine 8 (running) created at:
-  ase/consul-7567.initialize()
-      /work/freeport.go:28 +0x558
-  ase/consul-7567.TestFreeportResetRace()
-      /work/verified_test.go:19 +0x67
+Previous read at 0x00000076c698 by goroutine 10:
+  github.com/hashicorp/consul/sdk/freeport.checkFreedPortsOnce()
+      /work/upstream/sdk/freeport/freeport.go:171 +0xb28
+  github.com/hashicorp/consul/sdk/freeport.checkFreedPorts()
+      /work/upstream/sdk/freeport/freeport.go:139 +0x6b
+
+Goroutine 7 (running) created at:
+  testing.(*T).Run()
+      /usr/local/go/src/testing/testing.go:1248 +0x5d7
+  testing.runTests.func1()
+      /usr/local/go/src/testing/testing.go:1521 +0xa6
   testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
-==================
-==================
-WARNING: DATA RACE
-Read at 0x00c0000d4568 by goroutine 12:
-  container/list.(*List).Front()
-      /usr/local/go/src/container/list/list.go:70 +0x164
-  ase/consul-7567.Take()
-      /work/freeport.go:45 +0x13a
-  ase/consul-7567.TestFreeportResetRace.func1()
-      /work/verified_test.go:30 +0x76
+      /usr/local/go/src/testing/testing.go:1203 +0x202
+  testing.runTests()
+      /usr/local/go/src/testing/testing.go:1519 +0x612
+  testing.(*M).Run()
+      /usr/local/go/src/testing/testing.go:1427 +0x3b3
+  main.main()
+      _testmain.go:49 +0x236
 
-Previous write at 0x00c0000d4568 by goroutine 14:
-  container/list.(*List).remove()
-      /usr/local/go/src/container/list/list.go:114 +0x3c4
-  container/list.(*List).Remove()
-      /usr/local/go/src/container/list/list.go:138 +0x1e5
-  ase/consul-7567.Take()
-      /work/freeport.go:49 +0x190
-  ase/consul-7567.TestFreeportResetRace.func1()
-      /work/verified_test.go:30 +0x76
-
-Goroutine 12 (running) created at:
-  ase/consul-7567.TestFreeportResetRace()
-      /work/verified_test.go:26 +0x249
+Goroutine 10 (running) created at:
+  github.com/hashicorp/consul/sdk/freeport.initialize()
+      /work/upstream/sdk/freeport/freeport.go:111 +0xa39
+  github.com/hashicorp/consul/sdk/freeport.TestFreeportResetRace()
+      /work/upstream/sdk/freeport/consul_7567_race_test.go:19 +0xb2
   testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
-
-Goroutine 14 (running) created at:
-  ase/consul-7567.TestFreeportResetRace()
-      /work/verified_test.go:26 +0x249
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
-==================
+      /usr/local/go/src/testing/testing.go:1203 +0x202
 ==================
 WARNING: DATA RACE
-Read at 0x00c0000d45d8 by goroutine 12:
-  container/list.(*List).remove()
-      /usr/local/go/src/container/list/list.go:109 +0x207
-  container/list.(*List).Remove()
-      /usr/local/go/src/container/list/list.go:138 +0x1e5
-  ase/consul-7567.Take()
-      /work/freeport.go:49 +0x190
-  ase/consul-7567.TestFreeportResetRace.func1()
-      /work/verified_test.go:30 +0x76
-
-Previous write at 0x00c0000d45d8 by goroutine 14:
-  container/list.(*List).remove()
-      /usr/local/go/src/container/list/list.go:110 +0x2a4
-  container/list.(*List).Remove()
-      /usr/local/go/src/container/list/list.go:138 +0x1e5
-  ase/consul-7567.Take()
-      /work/freeport.go:49 +0x190
-  ase/consul-7567.TestFreeportResetRace.func1()
-      /work/verified_test.go:30 +0x76
-
-Goroutine 12 (running) created at:
-  ase/consul-7567.TestFreeportResetRace()
-      /work/verified_test.go:26 +0x249
+Write at 0x00000076c6a8 by goroutine 7:
+  github.com/hashicorp/consul/sdk/freeport.initialize()
+      /work/upstream/sdk/freeport/freeport.go:100 +0x44d
+  github.com/hashicorp/consul/sdk/freeport.TestFreeportResetRace()
+      /work/upstream/sdk/freeport/consul_7567_race_test.go:19 +0xb2
   testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
+      /usr/local/go/src/testing/testing.go:1203 +0x202
 
-Goroutine 14 (running) created at:
-  ase/consul-7567.TestFreeportResetRace()
-      /work/verified_test.go:26 +0x249
+Previous read at 0x00000076c6a8 by goroutine 10:
+  github.com/hashicorp/consul/sdk/freeport.checkFreedPortsOnce()
+      /work/upstream/sdk/freeport/freeport.go:152 +0x2d9
+  github.com/hashicorp/consul/sdk/freeport.checkFreedPorts()
+      /work/upstream/sdk/freeport/freeport.go:139 +0x6b
+
+Goroutine 7 (running) created at:
+  testing.(*T).Run()
+      /usr/local/go/src/testing/testing.go:1248 +0x5d7
+  testing.runTests.func1()
+      /usr/local/go/src/testing/testing.go:1521 +0xa6
   testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
+      /usr/local/go/src/testing/testing.go:1203 +0x202
+  testing.runTests()
+      /usr/local/go/src/testing/testing.go:1519 +0x612
+  testing.(*M).Run()
+      /usr/local/go/src/testing/testing.go:1427 +0x3b3
+  main.main()
+      _testmain.go:49 +0x236
+
+Goroutine 10 (running) created at:
+  github.com/hashicorp/consul/sdk/freeport.initialize()
+      /work/upstream/sdk/freeport/freeport.go:111 +0xa39
+  github.com/hashicorp/consul/sdk/freeport.TestFreeportResetRace()
+      /work/upstream/sdk/freeport/consul_7567_race_test.go:19 +0xb2
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1203 +0x202
 ==================
-==================
-WARNING: DATA RACE
-Read at 0x00c0000d4540 by goroutine 9:
-  container/list.(*List).Front()
-      /usr/local/go/src/container/list/list.go:73 +0x179
-  ase/consul-7567.Take()
-      /work/freeport.go:45 +0x13a
-  ase/consul-7567.TestFreeportResetRace.func1()
-      /work/verified_test.go:30 +0x76
-
-Previous write at 0x00c0000d4540 by goroutine 14:
-  container/list.(*List).remove()
-      /usr/local/go/src/container/list/list.go:109 +0x224
-  container/list.(*List).Remove()
-      /usr/local/go/src/container/list/list.go:138 +0x1e5
-  ase/consul-7567.Take()
-      /work/freeport.go:49 +0x190
-  ase/consul-7567.TestFreeportResetRace.func1()
-      /work/verified_test.go:30 +0x76
-
-Goroutine 9 (running) created at:
-  ase/consul-7567.TestFreeportResetRace()
-      /work/verified_test.go:26 +0x249
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
-
-Goroutine 14 (finished) created at:
-  ase/consul-7567.TestFreeportResetRace()
-      /work/verified_test.go:26 +0x249
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
-==================
-==================
-WARNING: DATA RACE
-Read at 0x00c0000d4570 by goroutine 12:
-  container/list.(*List).lazyInit()
-      /usr/local/go/src/container/list/list.go:86 +0x108
-  container/list.(*List).PushBack()
-      /usr/local/go/src/container/list/list.go:151 +0x100
-  ase/consul-7567.Return()
-      /work/freeport.go:60 +0xd2
-  ase/consul-7567.TestFreeportResetRace.func1()
-      /work/verified_test.go:32 +0x89
-
-Previous write at 0x00c0000d4570 by goroutine 14:
-  container/list.(*List).insert()
-      /usr/local/go/src/container/list/list.go:95 +0x2f9
-  container/list.(*List).insertValue()
-      /usr/local/go/src/container/list/list.go:104 +0x1ac
-  container/list.(*List).PushBack()
-      /usr/local/go/src/container/list/list.go:152 +0x192
-  ase/consul-7567.Return()
-      /work/freeport.go:60 +0xd2
-  ase/consul-7567.TestFreeportResetRace.func1()
-      /work/verified_test.go:32 +0x89
-
-Goroutine 12 (running) created at:
-  ase/consul-7567.TestFreeportResetRace()
-      /work/verified_test.go:26 +0x249
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
-
-Goroutine 14 (finished) created at:
-  ase/consul-7567.TestFreeportResetRace()
-      /work/verified_test.go:26 +0x249
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
-==================
-==================
-WARNING: DATA RACE
-Read at 0x00c0000d4578 by goroutine 12:
-  container/list.(*List).PushBack()
-      /usr/local/go/src/container/list/list.go:152 +0x19d
-  ase/consul-7567.Return()
-      /work/freeport.go:60 +0xd2
-  ase/consul-7567.TestFreeportResetRace.func1()
-      /work/verified_test.go:32 +0x89
-
-Previous write at 0x00c0000d4578 by goroutine 14:
-  container/list.(*List).insert()
-      /usr/local/go/src/container/list/list.go:96 +0x34a
-  container/list.(*List).insertValue()
-      /usr/local/go/src/container/list/list.go:104 +0x1ac
-  container/list.(*List).PushBack()
-      /usr/local/go/src/container/list/list.go:152 +0x192
-  ase/consul-7567.Return()
-      /work/freeport.go:60 +0xd2
-  ase/consul-7567.TestFreeportResetRace.func1()
-      /work/verified_test.go:32 +0x89
-
-Goroutine 12 (running) created at:
-  ase/consul-7567.TestFreeportResetRace()
-      /work/verified_test.go:26 +0x249
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
-
-Goroutine 14 (finished) created at:
-  ase/consul-7567.TestFreeportResetRace()
-      /work/verified_test.go:26 +0x249
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
-==================
-==================
-WARNING: DATA RACE
-Read at 0x00c00018e018 by goroutine 8:
-  ase/consul-7567.checkFreedPorts()
-      /work/freeport.go:71 +0xc7
-
-Previous write at 0x00c00018e018 by goroutine 14:
-  container/list.(*List).insertValue()
-      /usr/local/go/src/container/list/list.go:104 +0x1c6
-  container/list.(*List).PushBack()
-      /usr/local/go/src/container/list/list.go:152 +0x192
-  ase/consul-7567.Return()
-      /work/freeport.go:60 +0xd2
-  ase/consul-7567.TestFreeportResetRace.func1()
-      /work/verified_test.go:32 +0x89
-
-Goroutine 8 (running) created at:
-  ase/consul-7567.initialize()
-      /work/freeport.go:28 +0x558
-  ase/consul-7567.TestFreeportResetRace()
-      /work/verified_test.go:19 +0x67
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44

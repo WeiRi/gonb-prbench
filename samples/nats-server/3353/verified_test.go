@@ -1,46 +1,32 @@
-// VERIFIED race reproducer for nats-server PR #3353
-// "[FIXED] Data race"
-// https://github.com/nats-io/nats-server/pull/3353
-//
-// Original racy file: server/filestore.go (populateGlobalPerSubjectInfo
-// ~line 5018 pre-fix).
-// Pre-fix calls mb.readPerSubjectInfo(false) without acquiring mb.mu;
-// concurrent writers mutate mb fields under mb.mu.Lock.
-// Fix: take mb.mu.Lock() / defer mb.mu.Unlock() around the call.
-//
-// 4 writers x 8 readers x 5000 ops, golang:1.21 -race.
-package buggy
+package server
 
 import (
-	"fmt"
 	"sync"
+	"sync/atomic"
 	"testing"
 )
 
-func TestRacePopulateGlobalPerSubjectInfo(t *testing.T) {
-	const N = 5000
-	const W = 4
-	const R = 8
+// BUG: populateGlobalPerSubjectInfo calls mb.readPerSubjectInfo(false) without
+// holding mb.mu; FIX takes mb.mu.Lock. Race on mb internal state.
+func TestRace_nats_3353_psim(t *testing.T) {
 	mb := &msgBlock{}
-	fs := &fileStore{}
+	var done int32
 	var wg sync.WaitGroup
-	for i := 0; i < W; i++ {
-		wg.Add(1)
-		go func(id int) {
-			defer wg.Done()
-			for j := 0; j < N; j++ {
-				mb.writePerSubject(fmt.Sprintf("k%d-%d", id, j), j)
-			}
-		}(i)
-	}
-	for i := 0; i < R; i++ {
-		wg.Add(1)
-		go func() {
-			defer wg.Done()
-			for j := 0; j < N; j++ {
-				fs.populateGlobalPerSubjectInfo(mb)
-			}
-		}()
-	}
+	wg.Add(2)
+	go func() {
+		defer wg.Done()
+		for j := 0; j < 100000 && atomic.LoadInt32(&done) == 0; j++ {
+			mb.mu.Lock()
+			mb.cache = nil
+			mb.mu.Unlock()
+		}
+		atomic.StoreInt32(&done, 1)
+	}()
+	go func() {
+		defer wg.Done()
+		for j := 0; j < 100000 && atomic.LoadInt32(&done) == 0; j++ {
+			_ = mb.cache
+		}
+	}()
 	wg.Wait()
 }

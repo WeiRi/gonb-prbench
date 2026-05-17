@@ -1,23 +1,4 @@
-# syntax=docker/dockerfile:1.4
-# fix.Dockerfile for prometheus-4096 — bug + fix.diff applied
-FROM golang:1.16
-RUN apt-get update && apt-get install -y --no-install-recommends git ca-certificates patch && rm -rf /var/lib/apt/lists/*
-RUN mkdir -p /root/.ssh && ssh-keyscan -t rsa,ed25519 github.com >> /root/.ssh/known_hosts 2>/dev/null
-ENV GOPROXY=https://goproxy.cn,direct GOSUMDB=off GOFLAGS=-mod=mod CGO_ENABLED=1
-
-# === Full upstream at bug commit ===
-RUN --mount=type=ssh git clone --depth=200 git@github.com:prometheus/prometheus.git /work/upstream
-WORKDIR /work/upstream
-RUN --mount=type=ssh git fetch --depth=200 origin 30c3e02864472b8d5b4c7eb0e94aaeae8ceb0e96 && git checkout --detach 30c3e02864472b8d5b4c7eb0e94aaeae8ceb0e96
-COPY fix.diff /tmp/fix.diff
-RUN git apply --whitespace=nowarn /tmp/fix.diff || patch -p1 < /tmp/fix.diff
-RUN --mount=type=ssh go mod download 2>&1 | tail -10 || true
-
-# === Race-triggering artefact in isolated sub-package ===
-WORKDIR /work/pr2t-test
-COPY go.mod ./
-COPY verified_test.go ./
-COPY *.go ./
-
-WORKDIR /work
-# NO CMD
+verified_test.goFROMverified_test.go verified_test.god3verified_test.go-verified_test.gopromverified_test.go-verified_test.go4096verified_test.go-verified_test.gofixverified_test.go-verified_test.gobaseverified_test.go:verified_test.golatestverified_test.go
+verified_test.goWORKDIRverified_test.go /verified_test.gogoverified_test.go/verified_test.gosrcverified_test.go/verified_test.gogithubverified_test.go.verified_test.gocomverified_test.go/verified_test.goprometheusverified_test.go/verified_test.goprometheusverified_test.go/verified_test.goscrapeverified_test.go
+verified_test.goRUNverified_test.go verified_test.gofindverified_test.go . -verified_test.gomaxdepthverified_test.go verified_test.go1verified_test.go -verified_test.gonameverified_test.go "*verified_test.go_testverified_test.go.verified_test.gogoverified_test.go" ! -verified_test.gonameverified_test.go "*verified_test.go_race_testverified_test.go*" ! -verified_test.gonameverified_test.go "*verified_test.goinplace_testverified_test.go*" ! -verified_test.gonameverified_test.go "verified_test.goverified_testverified_test.go*" -verified_test.godeleteverified_test.go verified_test.go2verified_test.go>/verified_test.godevverified_test.go/verified_test.gonullverified_test.go || verified_test.gotrueverified_test.go && verified_test.gormverified_test.go -verified_test.gofverified_test.go verified_test.gorace_testverified_test.go.verified_test.gogoverified_test.go
+verified_test.goCOPYverified_test.go verified_test.goverified_test_inplaceverified_test.go.verified_test.gogoverified_test.go ./verified_test.goprometheus_4096_race_testverified_test.go.verified_test.gogoverified_test.go

@@ -1,20 +1,34 @@
-// Regression test for etcd#4997
-// PR: https://github.com/etcd/etcd/pull/4997
-// FVM: SharedVar
-package main
-import ("sync"; "testing")
-type T_4997 struct { val int64 }
-func (t *T_4997) write(v int64) { t.val = v }
-func (t *T_4997) read() int64 { return t.val }
-func TestRace_4997(t *testing.T) {
-    obj := &T_4997{}
-    const N = 50; const ITERS = 100
-    var wg sync.WaitGroup; wg.Add(N * 2)
-    for i := 0; i < N; i++ { go func() { defer wg.Done()
-        for j := 0; j < ITERS; j++ { obj.write(int64(j)) }
-    }() }
-    for i := 0; i < N; i++ { go func() { defer wg.Done()
-        for j := 0; j < ITERS; j++ { _ = obj.read() }
-    }() }
-    wg.Wait()
+// Race test for etcd-4997 (etcdserver.consistentIndex)
+// Targets the race fixed by adding atomic.Load/Store in consistent_index.go
+// BUG: setConsistentIndex does `*i = consistentIndex(v)` (plain write),
+//      ConsistentIndex does `return uint64(*i)` (plain read) — concurrent
+//      access races on the uint64.
+package etcdserver
+
+import (
+	"sync"
+	"testing"
+)
+
+func TestRace_4997_ConsistentIndex(t *testing.T) {
+	var ci consistentIndex
+	const N = 50
+	const ITERS = 1000
+	var wg sync.WaitGroup
+	wg.Add(N * 2)
+	for i := 0; i < N; i++ {
+		go func(id int) {
+			defer wg.Done()
+			for j := 0; j < ITERS; j++ {
+				ci.setConsistentIndex(uint64(id*1000 + j))
+			}
+		}(i)
+		go func() {
+			defer wg.Done()
+			for j := 0; j < ITERS; j++ {
+				_ = ci.ConsistentIndex()
+			}
+		}()
+	}
+	wg.Wait()
 }

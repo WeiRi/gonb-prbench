@@ -1,36 +1,33 @@
 WARNING: DATA RACE
-Read at 0x00c000218370 by goroutine 35:
-  ase/kubernetes-88079.(*Dialer).CloseAll()
-      /work/connrotation.go:64 +0x16f
-  ase/kubernetes-88079.TestRace_88079.func3()
-      /work/verified_test.go:41 +0xa4
+Read at 0x00c000202b88 by goroutine 13:
+  k8s.io/client-go/util/connrotation.(*closableConn).Close()
+      /work/upstream/staging/src/k8s.io/client-go/util/connrotation/connrotation.go:103 +0x28
+  k8s.io/client-go/util/connrotation.(*Dialer).CloseAll()
+      /work/upstream/staging/src/k8s.io/client-go/util/connrotation/connrotation.go:62 +0x124
+  k8s.io/client-go/util/connrotation.TestRace_88079.func3()
+      /work/upstream/staging/src/k8s.io/client-go/util/connrotation/kubernetes_88079_race_test.go:41 +0xab
 
-Previous write at 0x00c000218370 by goroutine 16:
-  ase/kubernetes-88079.(*Dialer).DialContext()
-      /work/connrotation.go:49 +0x244
-  ase/kubernetes-88079.(*Dialer).Dial()
-      /work/connrotation.go:36 +0xf8
-  ase/kubernetes-88079.TestRace_88079.func2()
-      /work/verified_test.go:33 +0xc7
+Previous write at 0x00c000202b88 by goroutine 8:
+  k8s.io/client-go/util/connrotation.(*Dialer).DialContext()
+      /work/upstream/staging/src/k8s.io/client-go/util/connrotation/connrotation.go:88 +0x244
+  k8s.io/client-go/util/connrotation.(*Dialer).Dial()
+      /work/upstream/staging/src/k8s.io/client-go/util/connrotation/connrotation.go:68 +0xfe
+  k8s.io/client-go/util/connrotation.TestRace_88079.func2()
+      /work/upstream/staging/src/k8s.io/client-go/util/connrotation/kubernetes_88079_race_test.go:33 +0xca
 
-Goroutine 35 (running) created at:
-  ase/kubernetes-88079.TestRace_88079()
-      /work/verified_test.go:38 +0x12a
+Goroutine 13 (running) created at:
+  k8s.io/client-go/util/connrotation.TestRace_88079()
+      /work/upstream/staging/src/k8s.io/client-go/util/connrotation/kubernetes_88079_race_test.go:38 +0x12b
   testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
+      /usr/local/go/src/testing/testing.go:1595 +0x261
+  testing.(*T).Run.func1()
+      /usr/local/go/src/testing/testing.go:1648 +0x44
 
-Goroutine 16 (running) created at:
-  ase/kubernetes-88079.TestRace_88079()
-      /work/verified_test.go:30 +0x21c
+Goroutine 8 (finished) created at:
+  k8s.io/client-go/util/connrotation.TestRace_88079()
+      /work/upstream/staging/src/k8s.io/client-go/util/connrotation/kubernetes_88079_race_test.go:30 +0x21c
   testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
+      /usr/local/go/src/testing/testing.go:1595 +0x261
+  testing.(*T).Run.func1()
+      /usr/local/go/src/testing/testing.go:1648 +0x44
 ==================
-    testing.go:1398: race detected during execution of test
---- FAIL: TestRace_88079 (0.16s)
-FAIL
-FAIL	ase/kubernetes-88079	0.181s
-FAIL

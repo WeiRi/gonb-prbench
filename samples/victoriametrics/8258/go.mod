@@ -1,3 +1,2 @@
-module ase/victoriametrics-8258
-
-go 1.20
+module victoriametrics-8258
+go 1.22

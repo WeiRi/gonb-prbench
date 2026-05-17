@@ -2,33 +2,27 @@ package graphdriver
 
 import (
 	"sync"
+	"sync/atomic"
 	"testing"
 )
 
-type fakeChecker_30719 struct{}
+type noopChecker struct{}
 
-func (fakeChecker_30719) IsMounted(path string) bool { return false }
+func (noopChecker) IsMounted(path string) bool { return false }
 
-func TestRace_30719(t *testing.T) {
-	c := NewRefCounter(fakeChecker_30719{})
-	const N = 30
-	const ITERS = 200
+func TestRace_moby_30719_refcounter(t *testing.T) {
+	c := NewRefCounter(noopChecker{})
+	var done atomic.Bool
 	var wg sync.WaitGroup
-	wg.Add(N * 2)
-	for i := 0; i < N; i++ {
+	for i := 0; i < 16; i++ {
+		wg.Add(1)
 		go func() {
 			defer wg.Done()
-			for j := 0; j < ITERS; j++ {
-				_ = c.Increment("p")
+			for j := 0; j < 5000 && !done.Load(); j++ {
+				_ = c.Increment("p1")
+				_ = c.Decrement("p1")
 			}
-		}()
-	}
-	for i := 0; i < N; i++ {
-		go func() {
-			defer wg.Done()
-			for j := 0; j < ITERS; j++ {
-				_ = c.Decrement("p")
-			}
+			done.Store(true)
 		}()
 	}
 	wg.Wait()

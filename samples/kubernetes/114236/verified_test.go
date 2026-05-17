@@ -3,33 +3,28 @@ package events
 import (
 	"sync"
 	"testing"
+	"time"
 )
 
-func TestRace_114236_EventBroadcasterSharedCache(t *testing.T) {
-	const N = 200
-	for n := 0; n < N; n++ {
-		bc := NewBroadcaster()
-		// Pre-populate cache.
-		bc.eventCache["k"] = &Event{Reason: "init"}
+func TestRace_114236_EventBroadcasterShared(t *testing.T) {
+	bc := &eventBroadcasterImpl{eventCache: map[eventKey]*Event{}}
+	ev := &Event{Name: "ev1"}
 
-		var wg sync.WaitGroup
-		wg.Add(2)
-		// goroutine A: records (mutates returned event)
-		go func() {
-			defer wg.Done()
-			for i := 0; i < 50; i++ {
-				ev := bc.recordToSink("k", &Event{Reason: "x"})
-				attemptRecording(ev)
-			}
-		}()
-		// goroutine B: records concurrently — same eventKey -> same cached object
-		go func() {
-			defer wg.Done()
-			for i := 0; i < 50; i++ {
-				ev := bc.recordToSink("k", &Event{Reason: "y"})
-				attemptRecording(ev)
-			}
-		}()
-		wg.Wait()
-	}
+	const N = 100
+	var wg sync.WaitGroup
+	wg.Add(2)
+	go func() {
+		defer wg.Done()
+		for i := 0; i < N; i++ {
+			bc.recordToSink(ev)
+		}
+	}()
+	go func() {
+		defer wg.Done()
+		for i := 0; i < N; i++ {
+			bc.recordToSink(ev)
+		}
+	}()
+	wg.Wait()
+	time.Sleep(50 * time.Millisecond)
 }

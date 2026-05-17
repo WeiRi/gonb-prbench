@@ -1,3 +1,7 @@
+// Race test for nomad-14188 — loop variable pointer race in EventBroker.Publish
+// fix changes aclCh from chan *structs.Event to chan structs.Event
+// BUG: Publish loops `for _, event := range ...` and sends &event (pointer to reused loop var)
+// concurrent receivers race on event fields
 package stream
 
 import (
@@ -8,57 +12,47 @@ import (
 	"github.com/hashicorp/nomad/nomad/structs"
 )
 
-// TestRaceACLChannelPointerBug triggers the data race where Publish sends
-// a pointer to the range-loop variable (&event) on aclCh, causing the
-// receiver to see overwritten data from subsequent loop iterations.
-// Fix: change channel from chan *structs.Event to chan structs.Event (value type).
-func TestRaceACLChannelPointerBug(t *testing.T) {
-	ctx, cancel := context.WithCancel(context.Background())
-	defer cancel()
-
-	broker, err := NewEventBroker(ctx, nil, EventBrokerCfg{
-		EventBufferSize: 100,
-		Logger:          nil,
-	})
+func TestRace_14188_PublishLoopVar(t *testing.T) {
+	broker, err := NewEventBroker(context.Background(), nil, EventBrokerCfg{})
 	if err != nil {
-		t.Fatalf("failed to create event broker: %v", err)
+		t.Fatalf("NewEventBroker: %v", err)
 	}
 
-	var wg sync.WaitGroup
-
-	// Receiver goroutine: reads from aclCh (bug: receives *Event pointers
-	// that point to the range-loop variable which gets overwritten)
-	wg.Add(1)
+	// Drain aclCh to prevent buffer fill blocking
+	stop := make(chan struct{})
+	defer close(stop)
 	go func() {
-		defer wg.Done()
-		for i := 0; i < 100; i++ {
+		for {
 			select {
-			case evt := <-broker.aclCh:
-				// RACE: reading *evt fields while Publish loop
-				// modifies the underlying event variable
-				_ = evt.Topic
-				_ = evt.Type
-				_ = evt.Key
-				_ = evt.Index
-			case <-ctx.Done():
+			case <-stop:
 				return
+			case e := <-broker.aclCh:
+				_ = e
 			}
 		}
 	}()
 
-	// Publish ACL events in a loop. The range-loop variable &event
-	// pointer is reused, causing the data race.
-	for iter := 0; iter < 500; iter++ {
-		events := &structs.Events{
-			Index: uint64(iter),
+	// Build event sets that always trigger the ACL branch
+	makeEvents := func() *structs.Events {
+		return &structs.Events{
 			Events: []structs.Event{
-				{Topic: structs.TopicACLToken, Type: "acl-token-updated", Key: "token-1"},
-				{Topic: structs.TopicACLPolicy, Type: "acl-policy-updated", Key: "policy-1"},
-				{Topic: structs.TopicACLToken, Type: "acl-token-deleted", Key: "token-2"},
+				{Topic: structs.TopicACLToken, Type: "x"},
+				{Topic: structs.TopicACLPolicy, Type: "y"},
+				{Topic: structs.TopicACLToken, Type: "z"},
 			},
 		}
-		broker.Publish(events)
 	}
 
+	var wg sync.WaitGroup
+	const N = 30
+	for i := 0; i < N; i++ {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			for j := 0; j < 200; j++ {
+				broker.Publish(makeEvents())
+			}
+		}()
+	}
 	wg.Wait()
 }

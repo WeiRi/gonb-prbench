@@ -1,0 +1,12 @@
+diff --git a/core/tx_pool.go b/core/tx_pool.go
+--- a/core/tx_pool.go
++++ b/core/tx_pool.go
+@@ -429,6 +429,8 @@ func (pool *TxPool) Pending() (map[common.Address]types.Transactions, error) {
+ // account and sorted by nonce. The returned transaction set is a copy and can be
+ // freely modified by calling code.
+ func (pool *TxPool) local() map[common.Address]types.Transactions {
++	pool.mu.RLock()
++	defer pool.mu.RUnlock()
+ 	txs := make(map[common.Address]types.Transactions)
+ 	for addr := range pool.locals.accounts {
+ 		if pending := pool.pending[addr]; pending != nil {

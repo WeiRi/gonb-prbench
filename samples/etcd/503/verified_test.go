@@ -1,44 +1,30 @@
-package lock
+package v2
 
 import (
 	"sync"
 	"testing"
+	"time"
+
+	"github.com/coreos/go-etcd/etcd"
 )
 
-func TestRace_503(t *testing.T) {
-	var wg sync.WaitGroup
-	numGoroutines := 50
-	iterations := 200
+// BUG: handler.watch's goroutine has `case <-closeChan: stopWatchChan <- true`.
+// After watch's deferred close(stopWatchChan), the goroutine's send panics:
+// send on closed channel. PR #503 splits with a separate stopWrapChan.
+func TestRace_503_panic_send_on_closed_stopWatchChan(t *testing.T) {
+	// Drive h.client.Get to fail quickly via unreachable endpoint.
+	cli := etcd.NewClient([]string{"http://127.0.0.1:1"})
+	h := &handler{client: cli}
 
-	for g := 0; g < numGoroutines; g++ {
-		wg.Add(1)
+	for i := 0; i < 100; i++ {
+		closeChan := make(chan bool, 1)
 		go func() {
-			defer wg.Done()
-			for i := 0; i < iterations; i++ {
-				// Reproduce the exact channel pattern from buggy watch():
-				// stopWatchChan can be closed while goroutine tries to send
-				stopWatchChan := make(chan bool)
-				closeChan := make(chan bool)
-
-				barrier := make(chan struct{})
-
-				go func() {
-					close(barrier) // signal we're about to enter select
-					select {
-					case <-closeChan:
-						// RACE: sending on channel that may be closed
-						stopWatchChan <- true
-					case <-stopWatchChan:
-					}
-				}()
-
-				<-barrier        // wait for goroutine to be ready
-				close(closeChan) // trigger the closeChan case
-				// RACE: close vs send
-				close(stopWatchChan)
-			}
+			time.Sleep(1 * time.Millisecond)
+			close(closeChan)
 		}()
+		_ = h.watch("/lock-test", 0, closeChan)
 	}
-
-	wg.Wait()
+	// Allow goroutine panics (if any) to surface
+	time.Sleep(50 * time.Millisecond)
+	_ = sync.Mutex{}
 }

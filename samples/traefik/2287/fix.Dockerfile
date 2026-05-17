@@ -1,23 +1,15 @@
-# syntax=docker/dockerfile:1.4
-# fix.Dockerfile for traefik-2287 — bug + fix.diff applied
-FROM golang:1.16
-RUN apt-get update && apt-get install -y --no-install-recommends git ca-certificates patch && rm -rf /var/lib/apt/lists/*
-RUN mkdir -p /root/.ssh && ssh-keyscan -t rsa,ed25519 github.com >> /root/.ssh/known_hosts 2>/dev/null
-ENV GOPROXY=https://goproxy.cn,direct GOSUMDB=off GOFLAGS=-mod=mod CGO_ENABLED=1
+FROM gonb-traefik-2287-base:latest
 
-# === Full upstream at bug commit ===
-RUN --mount=type=ssh git clone --depth=200 git@github.com:traefik/traefik.git /work/upstream
-WORKDIR /work/upstream
-RUN --mount=type=ssh git fetch --depth=200 origin 9790aa91fed057179302ca5fa9f6244de0b3c99d && git checkout --detach 9790aa91fed057179302ca5fa9f6244de0b3c99d
+WORKDIR /go/src/github.com/containous/traefik
 COPY fix.diff /tmp/fix.diff
-RUN git apply --whitespace=nowarn /tmp/fix.diff || patch -p1 < /tmp/fix.diff
-RUN --mount=type=ssh go mod download 2>&1 | tail -10 || true
+RUN awk 'BEGIN{p=0} /^diff --git/{if ($0 ~ /healthcheck\.go/ && $0 !~ /_test\.go/) p=1; else p=0} p==1' /tmp/fix.diff > /tmp/fix_prod.diff && \
+    git init --quiet && git add -A 2>/dev/null && git -c user.email=x@x -c user.name=x commit -m b -q 2>/dev/null && \
+    git apply --whitespace=nowarn /tmp/fix_prod.diff
 
-# === Race-triggering artefact in isolated sub-package ===
-WORKDIR /work/pr2t-test
-COPY go.mod ./
-COPY verified_test.go ./
-COPY *.go ./
+WORKDIR /go/src/github.com/containous/traefik/healthcheck
+RUN rm -f race_2287_test.go && \
+    for f in *_test.go; do mv "$f" "verified_test_$(echo $f)"; done 2>/dev/null
 
-WORKDIR /work
-# NO CMD
+COPY verified_test.go ./traefik_2287_race_test.go
+
+RUN go test -race -vet=off -c -o /dev/null . 2>&1 | tail -10 || true

@@ -1,0 +1,65 @@
+==================
+WARNING: DATA RACE
+Read at 0x00c0001961b8 by goroutine 11:
+  ase/grpc-go-7128/credentials/tls/certprovider.(*Shared).Read()
+      /work/upstream/credentials/tls/certprovider/grpc-go-7128_race_bug_test.go:18 +0x84
+  ase/grpc-go-7128/credentials/tls/certprovider.TestRace_7128_InPlace.func2()
+      /work/upstream/credentials/tls/certprovider/grpc-go-7128_race_bug_test.go:31 +0x12
+
+Previous write at 0x00c0001961b8 by goroutine 8:
+  ase/grpc-go-7128/credentials/tls/certprovider.(*Shared).Write()
+      /work/upstream/credentials/tls/certprovider/grpc-go-7128_race_bug_test.go:14 +0x8a
+  ase/grpc-go-7128/credentials/tls/certprovider.TestRace_7128_InPlace.func1()
+      /work/upstream/credentials/tls/certprovider/grpc-go-7128_race_bug_test.go:30 +0x12
+
+Goroutine 11 (running) created at:
+  ase/grpc-go-7128/credentials/tls/certprovider.TestRace_7128_InPlace()
+      /work/upstream/credentials/tls/certprovider/grpc-go-7128_race_bug_test.go:31 +0xb3
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 8 (finished) created at:
+  ase/grpc-go-7128/credentials/tls/certprovider.TestRace_7128_InPlace()
+      /work/upstream/credentials/tls/certprovider/grpc-go-7128_race_bug_test.go:30 +0x197
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c0001961b8 by goroutine 18:
+  ase/grpc-go-7128/credentials/tls/certprovider.(*Shared).Write()
+      /work/upstream/credentials/tls/certprovider/grpc-go-7128_race_bug_test.go:14 +0x8a
+  ase/grpc-go-7128/credentials/tls/certprovider.TestRace_7128_InPlace.func1()
+      /work/upstream/credentials/tls/certprovider/grpc-go-7128_race_bug_test.go:30 +0x12
+
+Previous write at 0x00c0001961b8 by goroutine 10:
+  ase/grpc-go-7128/credentials/tls/certprovider.(*Shared).Write()
+      /work/upstream/credentials/tls/certprovider/grpc-go-7128_race_bug_test.go:14 +0x8a
+  ase/grpc-go-7128/credentials/tls/certprovider.TestRace_7128_InPlace.func1()
+      /work/upstream/credentials/tls/certprovider/grpc-go-7128_race_bug_test.go:30 +0x12
+
+Goroutine 18 (running) created at:
+  ase/grpc-go-7128/credentials/tls/certprovider.TestRace_7128_InPlace()
+      /work/upstream/credentials/tls/certprovider/grpc-go-7128_race_bug_test.go:30 +0x197
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 10 (finished) created at:
+  ase/grpc-go-7128/credentials/tls/certprovider.TestRace_7128_InPlace()
+      /work/upstream/credentials/tls/certprovider/grpc-go-7128_race_bug_test.go:30 +0x197
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+--- FAIL: TestRace_7128_InPlace (0.85s)
+    testing.go:1398: race detected during execution of test
+FAIL
+FAIL	ase/grpc-go-7128/credentials/tls/certprovider	16.521s
+FAIL

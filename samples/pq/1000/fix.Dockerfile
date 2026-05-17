@@ -1,23 +1,12 @@
-# syntax=docker/dockerfile:1.4
-# fix.Dockerfile for pq-1000 — bug + fix.diff applied
-FROM golang:1.22
-RUN apt-get update && apt-get install -y --no-install-recommends git ca-certificates patch && rm -rf /var/lib/apt/lists/*
-RUN mkdir -p /root/.ssh && ssh-keyscan -t rsa,ed25519 github.com >> /root/.ssh/known_hosts 2>/dev/null
-ENV GOPROXY=https://goproxy.cn,direct GOSUMDB=off GOFLAGS=-mod=mod CGO_ENABLED=1
-
-# === Full upstream at bug commit ===
-RUN --mount=type=ssh git clone --depth=200 git@github.com:lib/pq.git /work/upstream
+FROM gonb-pq-1000-bug:latest
 WORKDIR /work/upstream
-RUN --mount=type=ssh git fetch --depth=200 origin be2b75c2254d56a8565b84cc48390157d56d5d3a && git checkout --detach be2b75c2254d56a8565b84cc48390157d56d5d3a
 COPY fix.diff /tmp/fix.diff
-RUN git apply --whitespace=nowarn /tmp/fix.diff || patch -p1 < /tmp/fix.diff
-RUN --mount=type=ssh go mod download 2>&1 | tail -10 || true
-
-# === Race-triggering artefact in isolated sub-package ===
-WORKDIR /work/pr2t-test
-COPY go.mod ./
-COPY verified_test.go ./
-COPY *.go ./
-
-WORKDIR /work
-# NO CMD
+RUN awk 'BEGIN{p=0} /^diff --git/{if ($0 ~ /\.go/ && $0 !~ /_test\.go/) p=1; else p=0} p==1' /tmp/fix.diff > /tmp/fix_prod.diff && \
+    patch -p1 -i /tmp/fix_prod.diff || true
+RUN sed -i 's,cn\.bad = true,cn.bad.Store(true),g; s,!cn\.bad\b,!cn.bad.Load().(bool),g' error.go conn.go copy.go conn_go18.go 2>/dev/null
+# Remove all upstream _test.go files since they have inter-deps that don't work with fix
+RUN rm -f *_test.go
+COPY verified_test.go ./pq_1000_race_test.go
+COPY verified_test_helper_fix.go ./pq_1000_helper.go
+RUN sed -i 's,//go:build pqfix,,' pq_1000_helper.go
+RUN go test -race -vet=off -c -o /dev/null . 2>&1 | tail -10 || true

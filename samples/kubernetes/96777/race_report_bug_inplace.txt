@@ -1,0 +1,135 @@
+==================
+WARNING: DATA RACE
+Write at 0x00c000706480 by goroutine 65:
+  runtime.mapassign_faststr()
+      /usr/local/go/src/runtime/map_faststr.go:203 +0x0
+  k8s.io/kubernetes/pkg/scheduler/framework/plugins/volumebinding.(*VolumeBinding).Filter()
+      /work/upstream/pkg/scheduler/framework/plugins/volumebinding/volume_binding.go:209 +0x4f9
+  k8s.io/kubernetes/pkg/scheduler/framework/plugins/volumebinding.TestRace_96777_InPlace.func1()
+      /work/upstream/pkg/scheduler/framework/plugins/volumebinding/kubernetes-96777_race_test.go:89 +0x255
+  k8s.io/kubernetes/pkg/scheduler/framework/plugins/volumebinding.TestRace_96777_InPlace.gowrap1()
+      /work/upstream/pkg/scheduler/framework/plugins/volumebinding/kubernetes-96777_race_test.go:90 +0x41
+
+Previous write at 0x00c000706480 by goroutine 64:
+  runtime.mapassign_faststr()
+      /usr/local/go/src/runtime/map_faststr.go:203 +0x0
+  k8s.io/kubernetes/pkg/scheduler/framework/plugins/volumebinding.(*VolumeBinding).Filter()
+      /work/upstream/pkg/scheduler/framework/plugins/volumebinding/volume_binding.go:209 +0x4f9
+  k8s.io/kubernetes/pkg/scheduler/framework/plugins/volumebinding.TestRace_96777_InPlace.func2()
+      /work/upstream/pkg/scheduler/framework/plugins/volumebinding/kubernetes-96777_race_test.go:101 +0x255
+  k8s.io/kubernetes/pkg/scheduler/framework/plugins/volumebinding.TestRace_96777_InPlace.gowrap2()
+      /work/upstream/pkg/scheduler/framework/plugins/volumebinding/kubernetes-96777_race_test.go:102 +0x41
+
+Goroutine 65 (running) created at:
+  k8s.io/kubernetes/pkg/scheduler/framework/plugins/volumebinding.TestRace_96777_InPlace()
+      /work/upstream/pkg/scheduler/framework/plugins/volumebinding/kubernetes-96777_race_test.go:80 +0x744
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 64 (finished) created at:
+  k8s.io/kubernetes/pkg/scheduler/framework/plugins/volumebinding.TestRace_96777_InPlace()
+      /work/upstream/pkg/scheduler/framework/plugins/volumebinding/kubernetes-96777_race_test.go:93 +0x570
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+==================
+WARNING: DATA RACE
+Write at 0x00c000332308 by goroutine 65:
+  k8s.io/kubernetes/pkg/scheduler/framework/plugins/volumebinding.(*VolumeBinding).Filter()
+      /work/upstream/pkg/scheduler/framework/plugins/volumebinding/volume_binding.go:209 +0x508
+  k8s.io/kubernetes/pkg/scheduler/framework/plugins/volumebinding.TestRace_96777_InPlace.func1()
+      /work/upstream/pkg/scheduler/framework/plugins/volumebinding/kubernetes-96777_race_test.go:89 +0x255
+  k8s.io/kubernetes/pkg/scheduler/framework/plugins/volumebinding.TestRace_96777_InPlace.gowrap1()
+      /work/upstream/pkg/scheduler/framework/plugins/volumebinding/kubernetes-96777_race_test.go:90 +0x41
+
+Previous write at 0x00c000332308 by goroutine 66:
+  k8s.io/kubernetes/pkg/scheduler/framework/plugins/volumebinding.(*VolumeBinding).Filter()
+      /work/upstream/pkg/scheduler/framework/plugins/volumebinding/volume_binding.go:209 +0x508
+  k8s.io/kubernetes/pkg/scheduler/framework/plugins/volumebinding.TestRace_96777_InPlace.func2()
+      /work/upstream/pkg/scheduler/framework/plugins/volumebinding/kubernetes-96777_race_test.go:101 +0x255
+  k8s.io/kubernetes/pkg/scheduler/framework/plugins/volumebinding.TestRace_96777_InPlace.gowrap2()
+      /work/upstream/pkg/scheduler/framework/plugins/volumebinding/kubernetes-96777_race_test.go:102 +0x41
+
+Goroutine 65 (running) created at:
+  k8s.io/kubernetes/pkg/scheduler/framework/plugins/volumebinding.TestRace_96777_InPlace()
+      /work/upstream/pkg/scheduler/framework/plugins/volumebinding/kubernetes-96777_race_test.go:80 +0x744
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 66 (finished) created at:
+  k8s.io/kubernetes/pkg/scheduler/framework/plugins/volumebinding.TestRace_96777_InPlace()
+      /work/upstream/pkg/scheduler/framework/plugins/volumebinding/kubernetes-96777_race_test.go:93 +0x570
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+fatal error: concurrent map writes
+
+goroutine 188 [running]:
+k8s.io/kubernetes/pkg/scheduler/framework/plugins/volumebinding.(*VolumeBinding).Filter(0xc000706450, {0xc000287b08?, 0xc000a94f70?}, 0xc000706540, 0xc0001d2808, 0xc000294510)
+	/work/upstream/pkg/scheduler/framework/plugins/volumebinding/volume_binding.go:209 +0x4fa
+k8s.io/kubernetes/pkg/scheduler/framework/plugins/volumebinding.TestRace_96777_InPlace.func2(0x31)
+	/work/upstream/pkg/scheduler/framework/plugins/volumebinding/kubernetes-96777_race_test.go:101 +0x256
+created by k8s.io/kubernetes/pkg/scheduler/framework/plugins/volumebinding.TestRace_96777_InPlace in goroutine 56
+	/work/upstream/pkg/scheduler/framework/plugins/volumebinding/kubernetes-96777_race_test.go:93 +0x571
+
+goroutine 1 [chan receive]:
+testing.(*T).Run(0xc0004184e0, {0x228f6fd, 0x16}, 0x2350a90)
+	/usr/local/go/src/testing/testing.go:1750 +0x851
+testing.runTests.func1(0xc0004184e0)
+	/usr/local/go/src/testing/testing.go:2161 +0x86
+testing.tRunner(0xc0004184e0, 0xc00059db10)
+	/usr/local/go/src/testing/testing.go:1689 +0x21f
+testing.runTests(0xc00048a0d8, {0x31aa760, 0x2, 0x2}, {0xc00059dbb8?, 0xc00059dc00?, 0x31cc880?})
+	/usr/local/go/src/testing/testing.go:2159 +0x8bf
+testing.(*M).Run(0xc0000fe640)
+	/usr/local/go/src/testing/testing.go:2027 +0xf18
+main.main()
+	_testmain.go:49 +0x2be
+
+goroutine 6 [chan receive]:
+k8s.io/klog/v2.(*loggingT).flushDaemon(0x31cce80)
+	/go/pkg/mod/k8s.io/klog/v2@v2.4.0/klog.go:1169 +0x8b
+created by k8s.io/klog/v2.init.0 in goroutine 1
+	/go/pkg/mod/k8s.io/klog/v2@v2.4.0/klog.go:417 +0x1b8
+
+goroutine 56 [semacquire]:
+sync.runtime_Semacquire(0xc000437038?)
+	/usr/local/go/src/runtime/sema.go:62 +0x25
+sync.(*WaitGroup).Wait(0xc000437030)
+	/usr/local/go/src/sync/waitgroup.go:116 +0xa5
+k8s.io/kubernetes/pkg/scheduler/framework/plugins/volumebinding.TestRace_96777_InPlace(0xc000418680?)
+	/work/upstream/pkg/scheduler/framework/plugins/volumebinding/kubernetes-96777_race_test.go:104 +0x196
+testing.tRunner(0xc000418680, 0x2350a90)
+	/usr/local/go/src/testing/testing.go:1689 +0x21f
+created by testing.(*T).Run in goroutine 1
+	/usr/local/go/src/testing/testing.go:1742 +0x826
+
+goroutine 33 [sleep]:
+time.Sleep(0x3b9aca00)
+	/usr/local/go/src/runtime/time.go:195 +0x115
+k8s.io/kubernetes/pkg/scheduler/framework/runtime.(*metricsRecorder).run(0xc000486570)
+	/work/upstream/pkg/scheduler/framework/runtime/metrics_recorder.go:88 +0x53
+created by k8s.io/kubernetes/pkg/scheduler/framework/runtime.newMetricsRecorder in goroutine 1
+	/work/upstream/pkg/scheduler/framework/runtime/metrics_recorder.go:60 +0x1c7
+
+goroutine 187 [runnable]:
+sync.(*RWMutex).Unlock(0xc0007064e0)
+	/usr/local/go/src/sync/rwmutex.go:197 +0xd5
+k8s.io/kubernetes/pkg/scheduler/framework.(*CycleState).Unlock(...)
+	/work/upstream/pkg/scheduler/framework/cycle_state.go:119
+k8s.io/kubernetes/pkg/scheduler/framework/plugins/volumebinding.(*VolumeBinding).Filter(0xc000706450, {0xc000f14008?, 0xc000148f70?}, 0xc0007064e0, 0xc0001d2808, 0xc000f16000)
+	/work/upstream/pkg/scheduler/framework/plugins/volumebinding/volume_binding.go:210 +0x554
+k8s.io/kubernetes/pkg/scheduler/framework/plugins/volumebinding.TestRace_96777_InPlace.func1(0x31)
+	/work/upstream/pkg/scheduler/framework/plugins/volumebinding/kubernetes-96777_race_test.go:89 +0x256
+created by k8s.io/kubernetes/pkg/scheduler/framework/plugins/volumebinding.TestRace_96777_InPlace in goroutine 56
+	/work/upstream/pkg/scheduler/framework/plugins/volumebinding/kubernetes-96777_race_test.go:80 +0x745
+FAIL	k8s.io/kubernetes/pkg/scheduler/framework/plugins/volumebinding	0.108s
+FAIL

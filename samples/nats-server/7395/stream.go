@@ -1,7 +1,3 @@
-// Production stub for nats-server server/stream.go (PR #7395).
-// Pre-PR: setupMirrorConsumer launches a goroutine that closes over mirror,
-// using mirror.wg.Wait() at line 3304; concurrent calls Add/Done on the same
-// wg without mset.mu -> wg internal state race.
 package server
 
 import "sync"
@@ -9,4 +5,15 @@ import "sync"
 type sourceInfo struct {
 	wg  sync.WaitGroup
 	qch chan struct{}
+}
+
+// RacyWaitGroupWait calls wg.Wait() — races with concurrent Add/Done
+func (si *sourceInfo) RacyWaitGroupWait() {
+	si.wg.Wait()
+}
+
+// RacyWaitGroupAddDone calls Add(1) then Done() — races with concurrent Wait
+func (si *sourceInfo) RacyWaitGroupAddDone() {
+	si.wg.Add(1)
+	si.wg.Done()
 }

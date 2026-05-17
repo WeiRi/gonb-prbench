@@ -1,46 +1,34 @@
 package server
 
 import (
+	"sync"
 	"sync/atomic"
 	"testing"
 )
 
-func TestRaceGlobalTraceFlagReadWrite(t *testing.T) {
-	numReaders := 80
-	numWriters := 10
-	iterations := 500
-	done := make(chan struct{})
-	ready := make(chan struct{})
-
-	// Readers call client.traceOp which non-atomically reads global trace
-	// in client.go:210 — the buggy production code path
-	for i := 0; i < numReaders; i++ {
-		go func(id int) {
-			c := &client{}
-			<-ready
-			for j := 0; j < iterations; j++ {
-				c.traceOp("test %s", "op", []byte("arg"))
-			}
-			done <- struct{}{}
-		}(i)
-	}
-
-	// Writers toggle the global trace variable atomically
-	// (same pattern as log.go that sets trace/debug)
-	for i := 0; i < numWriters; i++ {
-		go func(id int) {
-			<-ready
-			for j := 0; j < iterations; j++ {
-				atomic.StoreInt32(&trace, 1)
-				atomic.StoreInt32(&trace, 0)
-			}
-			done <- struct{}{}
-		}(i)
-	}
-
-	close(ready)
-
-	for i := 0; i < numReaders+numWriters; i++ {
-		<-done
-	}
+// BUG: c.traceMsg / c.traceOp do plain non-atomic read of package-level
+// `trace int32`. Concurrent atomic.StoreInt32(&trace, ...) races with this read.
+// PR #140 introduces per-client c.trace bool (initialized once in initClient),
+// so subsequent reads check c.trace not package trace.
+func TestRace_140_trace_var(t *testing.T) {
+	c := &client{}
+	var done int32
+	var wg sync.WaitGroup
+	wg.Add(2)
+	go func() {
+		defer wg.Done()
+		msg := []byte("MSG body")
+		for i := 0; i < 10000 && atomic.LoadInt32(&done) == 0; i++ {
+			c.traceMsg(msg)
+		}
+		atomic.StoreInt32(&done, 1)
+	}()
+	go func() {
+		defer wg.Done()
+		for i := 0; i < 10000 && atomic.LoadInt32(&done) == 0; i++ {
+			atomic.StoreInt32(&trace, int32(i&1))
+		}
+	}()
+	wg.Wait()
+	atomic.StoreInt32(&trace, 0)
 }

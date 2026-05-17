@@ -1,0 +1,35 @@
+==================
+WARNING: DATA RACE
+Read at 0x00c0000120b0 by goroutine 9:
+  victoriametrics-8258.(*Shared).Read()
+      /work/alertmanager.go:17 +0xa6
+  victoriametrics-8258.TestRace.func2()
+      /work/race_test.go:11 +0x12
+
+Previous write at 0x00c0000120b0 by goroutine 8:
+  victoriametrics-8258.(*Shared).Write()
+      /work/alertmanager.go:14 +0xd0
+  victoriametrics-8258.TestRace.func1()
+      /work/race_test.go:10 +0x1a
+
+Goroutine 9 (running) created at:
+  victoriametrics-8258.TestRace()
+      /work/race_test.go:11 +0x2a
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 8 (finished) created at:
+  victoriametrics-8258.TestRace()
+      /work/race_test.go:10 +0x1c4
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+--- FAIL: TestRace (0.00s)
+    testing.go:1398: race detected during execution of test
+FAIL
+FAIL	victoriametrics-8258	0.034s
+FAIL

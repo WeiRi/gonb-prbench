@@ -2,41 +2,32 @@ package container
 
 import (
 	"sync"
+	"sync/atomic"
 	"testing"
 	"time"
 )
 
-func TestRace_22279(t *testing.T) {
-	// Bug: SetRunning closes s.waitChan and creates a new one WITHOUT
-	// holding s.Lock(). Concurrent WaitRunning calls read s.waitChan
-	// under lock, creating a data race on s.waitChan field.
+// BUG: WaitRunning reads s.waitChan after Unlock; if caller of SetRunning
+// doesn't externally serialize with WaitRunning, race on s.waitChan close+
+// reassign vs WaitRunning's wait(waitChan, timeout).
+func TestRace_moby_22279_waitchan(t *testing.T) {
 	s := NewState()
-
+	var done int32
 	var wg sync.WaitGroup
-	nGoroutines := 50
-	nIters := 200
-
-	// Goroutines that call WaitRunning
-	for i := 0; i < nGoroutines; i++ {
-		wg.Add(1)
-		go func() {
-			defer wg.Done()
-			for j := 0; j < nIters; j++ {
-				s.WaitRunning(-1 * time.Second)
-			}
-		}()
-	}
-
-	// Goroutines that call SetRunning (the write side of the race)
-	for i := 0; i < 10; i++ {
-		wg.Add(1)
-		go func() {
-			defer wg.Done()
-			for j := 0; j < nIters; j++ {
-				s.SetRunning(j+100, false)
-			}
-		}()
-	}
-
+	wg.Add(2)
+	go func() {
+		defer wg.Done()
+		for j := 0; j < 5000 && atomic.LoadInt32(&done) == 0; j++ {
+			// caller skipped Lock (mimics bug-prone caller pattern)
+			s.SetRunning(j, false)
+		}
+		atomic.StoreInt32(&done, 1)
+	}()
+	go func() {
+		defer wg.Done()
+		for j := 0; j < 5000 && atomic.LoadInt32(&done) == 0; j++ {
+			_, _ = s.WaitRunning(time.Microsecond)
+		}
+	}()
 	wg.Wait()
 }

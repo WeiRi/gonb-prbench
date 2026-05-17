@@ -1,49 +1,35 @@
 package ioutils
 
 import (
+	"errors"
 	"sync"
+	"sync/atomic"
 	"testing"
 )
 
-func TestRace_39445(t *testing.T) {
-	const TRIALS = 100
-	const READERS = 50
-	for trial := 0; trial < TRIALS; trial++ {
-		bp := NewBytesPipe()
-		var started sync.WaitGroup
-		var wg sync.WaitGroup
+// Race: BUG Read does `bp.mu.Unlock(); return 0, bp.closeErr` reading
+// closeErr after unlock; concurrent CloseWithError writes closeErr under
+// lock. FIX captures err := bp.closeErr before Unlock.
+func TestRace_moby_39445_bytespipe_closeerr(t *testing.T) {
+	bp := NewBytesPipe()
+	var done atomic.Bool
+	var wg sync.WaitGroup
+	buf := make([]byte, 4)
 
-		// Start all readers first; they will block on wait condition
-		started.Add(READERS)
-		wg.Add(READERS)
-		for i := 0; i < READERS; i++ {
-			go func() {
-				started.Done() // signal we've been spawned
-				defer wg.Done()
-				buf := make([]byte, 64)
-				bp.Read(buf)
-			}()
+	wg.Add(2)
+	go func() {
+		defer wg.Done()
+		for i := 0; i < 100000 && !done.Load(); i++ {
+			_, _ = bp.Read(buf)
 		}
-
-		// Wait for all readers to be spawned before closing, so they
-		// will all be either in the Read lock path or waiting on the
-		// condition variable.
-		started.Wait()
-
-		// Now close the pipe - this wakes all waiting readers and
-		// creates the race window on bp.closeErr at bytespipe.go:132
-		bp.Close()
-
-		// Some readers may have missed the broadcast if they didn't
-		// yet reach the Wait() call. Close again (no-op in pre-fix)
-		// to ensure they wake up too. Also call concurrently with
-		// exiting readers to widen the race window.
-		wg.Add(1)
-		go func() {
-			defer wg.Done()
-			bp.Close()
-		}()
-
-		wg.Wait()
-	}
+	}()
+	go func() {
+		defer wg.Done()
+		errs := []error{errors.New("e1"), errors.New("e2"), errors.New("e3")}
+		for i := 0; i < 100000 && !done.Load(); i++ {
+			_ = bp.CloseWithError(errs[i%3])
+		}
+		done.Store(true)
+	}()
+	wg.Wait()
 }

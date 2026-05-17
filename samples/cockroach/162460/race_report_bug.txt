@@ -1,214 +1,68 @@
 WARNING: DATA RACE
-Write at 0x00c000120070 by goroutine 10:
-  ase/cockroach-162460.(*DistSQLPlanner).CreatePhysPlan()
-      /work/distsql_physical_planner.go:20 +0x48
-  ase/cockroach-162460.Test162460Race.func1()
-      /work/verified_test.go:17 +0xa4
-  ase/cockroach-162460.Test162460Race.gowrap1()
-      /work/verified_test.go:21 +0x41
+Write at 0x00c000094060 by goroutine 15:
+  github.com/cockroachdb/cockroach/pkg/sql.(*DistSQLPlanner).CreatePhysPlan()
+      /work/upstream/pkg/sql/distsql_physical_planner.go:20 +0x48
+  github.com/cockroachdb/cockroach/pkg/sql.Test162460Race.func1()
+      /work/upstream/pkg/sql/cockroach_162460_race_test.go:17 +0x9e
+  github.com/cockroachdb/cockroach/pkg/sql.Test162460Race.gowrap1()
+      /work/upstream/pkg/sql/cockroach_162460_race_test.go:21 +0x41
 
-Previous write at 0x00c000120070 by goroutine 8:
-  ase/cockroach-162460.(*DistSQLPlanner).CreatePhysPlan()
-      /work/distsql_physical_planner.go:20 +0x48
-  ase/cockroach-162460.Test162460Race.func1()
-      /work/verified_test.go:17 +0xa4
-  ase/cockroach-162460.Test162460Race.gowrap1()
-      /work/verified_test.go:21 +0x41
+Previous read at 0x00c000094060 by goroutine 10:
+  github.com/cockroachdb/cockroach/pkg/sql.CheckRunner()
+      /work/upstream/pkg/sql/distsql_physical_planner.go:29 +0xae
+  github.com/cockroachdb/cockroach/pkg/sql.Test162460Race.func1()
+      /work/upstream/pkg/sql/cockroach_162460_race_test.go:19 +0xa9
+  github.com/cockroachdb/cockroach/pkg/sql.Test162460Race.gowrap1()
+      /work/upstream/pkg/sql/cockroach_162460_race_test.go:21 +0x41
 
-Goroutine 10 (running) created at:
-  ase/cockroach-162460.Test162460Race()
-      /work/verified_test.go:14 +0xad
+Goroutine 15 (running) created at:
+  github.com/cockroachdb/cockroach/pkg/sql.Test162460Race()
+      /work/upstream/pkg/sql/cockroach_162460_race_test.go:14 +0xaa
   testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
+      /usr/local/go/src/testing/testing.go:1934 +0x21c
   testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
+      /usr/local/go/src/testing/testing.go:1997 +0x44
 
-Goroutine 8 (finished) created at:
-  ase/cockroach-162460.Test162460Race()
-      /work/verified_test.go:14 +0xad
+Goroutine 10 (finished) created at:
+  github.com/cockroachdb/cockroach/pkg/sql.Test162460Race()
+      /work/upstream/pkg/sql/cockroach_162460_race_test.go:14 +0xaa
   testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
+      /usr/local/go/src/testing/testing.go:1934 +0x21c
   testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
-==================
+      /usr/local/go/src/testing/testing.go:1997 +0x44
 ==================
 WARNING: DATA RACE
-Write at 0x00c000120070 by goroutine 10:
-  ase/cockroach-162460.(*DistSQLPlanner).CreatePhysPlan.func1()
-      /work/distsql_physical_planner.go:22 +0x30
+Write at 0x00c000094060 by goroutine 9:
+  github.com/cockroachdb/cockroach/pkg/sql.(*DistSQLPlanner).CreatePhysPlan()
+      /work/upstream/pkg/sql/distsql_physical_planner.go:20 +0x48
+  github.com/cockroachdb/cockroach/pkg/sql.Test162460Race.func1()
+      /work/upstream/pkg/sql/cockroach_162460_race_test.go:17 +0x9e
+  github.com/cockroachdb/cockroach/pkg/sql.Test162460Race.gowrap1()
+      /work/upstream/pkg/sql/cockroach_162460_race_test.go:21 +0x41
+
+Previous write at 0x00c000094060 by goroutine 15:
+  github.com/cockroachdb/cockroach/pkg/sql.(*DistSQLPlanner).CreatePhysPlan.func1()
+      /work/upstream/pkg/sql/distsql_physical_planner.go:22 +0x30
   runtime.deferreturn()
-      /usr/local/go/src/runtime/panic.go:602 +0x5d
-  ase/cockroach-162460.Test162460Race.func1()
-      /work/verified_test.go:17 +0xa4
-  ase/cockroach-162460.Test162460Race.gowrap1()
-      /work/verified_test.go:21 +0x41
+      /usr/local/go/src/runtime/panic.go:589 +0x5d
+  github.com/cockroachdb/cockroach/pkg/sql.Test162460Race.func1()
+      /work/upstream/pkg/sql/cockroach_162460_race_test.go:17 +0x9e
+  github.com/cockroachdb/cockroach/pkg/sql.Test162460Race.gowrap1()
+      /work/upstream/pkg/sql/cockroach_162460_race_test.go:21 +0x41
 
-Previous read at 0x00c000120070 by goroutine 11:
-  ase/cockroach-162460.CheckRunner()
-      /work/distsql_physical_planner.go:29 +0xb3
-  ase/cockroach-162460.Test162460Race.func1()
-      /work/verified_test.go:19 +0xae
-  ase/cockroach-162460.Test162460Race.gowrap1()
-      /work/verified_test.go:21 +0x41
-
-Goroutine 10 (running) created at:
-  ase/cockroach-162460.Test162460Race()
-      /work/verified_test.go:14 +0xad
+Goroutine 9 (running) created at:
+  github.com/cockroachdb/cockroach/pkg/sql.Test162460Race()
+      /work/upstream/pkg/sql/cockroach_162460_race_test.go:14 +0xaa
   testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
+      /usr/local/go/src/testing/testing.go:1934 +0x21c
   testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
+      /usr/local/go/src/testing/testing.go:1997 +0x44
 
-Goroutine 11 (finished) created at:
-  ase/cockroach-162460.Test162460Race()
-      /work/verified_test.go:14 +0xad
+Goroutine 15 (finished) created at:
+  github.com/cockroachdb/cockroach/pkg/sql.Test162460Race()
+      /work/upstream/pkg/sql/cockroach_162460_race_test.go:14 +0xaa
   testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
+      /usr/local/go/src/testing/testing.go:1934 +0x21c
   testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
+      /usr/local/go/src/testing/testing.go:1997 +0x44
 ==================
-==================
-WARNING: DATA RACE
-Write at 0x00c000120070 by goroutine 12:
-  ase/cockroach-162460.(*DistSQLPlanner).CreatePhysPlan()
-      /work/distsql_physical_planner.go:20 +0x48
-  ase/cockroach-162460.Test162460Race.func1()
-      /work/verified_test.go:17 +0xa4
-  ase/cockroach-162460.Test162460Race.gowrap1()
-      /work/verified_test.go:21 +0x41
-
-Previous read at 0x00c000120070 by goroutine 9:
-  ase/cockroach-162460.CheckRunner()
-      /work/distsql_physical_planner.go:29 +0xb3
-  ase/cockroach-162460.Test162460Race.func1()
-      /work/verified_test.go:19 +0xae
-  ase/cockroach-162460.Test162460Race.gowrap1()
-      /work/verified_test.go:21 +0x41
-
-Goroutine 12 (running) created at:
-  ase/cockroach-162460.Test162460Race()
-      /work/verified_test.go:14 +0xad
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
-
-Goroutine 9 (finished) created at:
-  ase/cockroach-162460.Test162460Race()
-      /work/verified_test.go:14 +0xad
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
-==================
-==================
-WARNING: DATA RACE
-Write at 0x00c000120070 by goroutine 14:
-  ase/cockroach-162460.(*DistSQLPlanner).CreatePhysPlan()
-      /work/distsql_physical_planner.go:20 +0x48
-  ase/cockroach-162460.Test162460Race.func1()
-      /work/verified_test.go:17 +0xa4
-  ase/cockroach-162460.Test162460Race.gowrap1()
-      /work/verified_test.go:21 +0x41
-
-Previous read at 0x00c000120070 by goroutine 12:
-  ase/cockroach-162460.(*DistSQLPlanner).CreatePhysPlan()
-      /work/distsql_physical_planner.go:24 +0xd2
-  ase/cockroach-162460.Test162460Race.func1()
-      /work/verified_test.go:17 +0xa4
-  ase/cockroach-162460.Test162460Race.gowrap1()
-      /work/verified_test.go:21 +0x41
-
-Goroutine 14 (running) created at:
-  ase/cockroach-162460.Test162460Race()
-      /work/verified_test.go:14 +0xad
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
-
-Goroutine 12 (running) created at:
-  ase/cockroach-162460.Test162460Race()
-      /work/verified_test.go:14 +0xad
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
-==================
-==================
-WARNING: DATA RACE
-Read at 0x00c000120070 by goroutine 14:
-  ase/cockroach-162460.(*DistSQLPlanner).CreatePhysPlan()
-      /work/distsql_physical_planner.go:24 +0xd2
-  ase/cockroach-162460.Test162460Race.func1()
-      /work/verified_test.go:17 +0xa4
-  ase/cockroach-162460.Test162460Race.gowrap1()
-      /work/verified_test.go:21 +0x41
-
-Previous write at 0x00c000120070 by goroutine 12:
-  ase/cockroach-162460.(*DistSQLPlanner).CreatePhysPlan.func1()
-      /work/distsql_physical_planner.go:22 +0x30
-  runtime.deferreturn()
-      /usr/local/go/src/runtime/panic.go:602 +0x5d
-  ase/cockroach-162460.Test162460Race.func1()
-      /work/verified_test.go:17 +0xa4
-  ase/cockroach-162460.Test162460Race.gowrap1()
-      /work/verified_test.go:21 +0x41
-
-Goroutine 14 (running) created at:
-  ase/cockroach-162460.Test162460Race()
-      /work/verified_test.go:14 +0xad
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
-
-Goroutine 12 (running) created at:
-  ase/cockroach-162460.Test162460Race()
-      /work/verified_test.go:14 +0xad
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
-==================
-==================
-WARNING: DATA RACE
-Write at 0x00c000120070 by goroutine 28:
-  ase/cockroach-162460.(*DistSQLPlanner).CreatePhysPlan()
-      /work/distsql_physical_planner.go:20 +0x48
-  ase/cockroach-162460.Test162460Race.func1()
-      /work/verified_test.go:17 +0xa4
-  ase/cockroach-162460.Test162460Race.gowrap1()
-      /work/verified_test.go:21 +0x41
-
-Previous write at 0x00c000120070 by goroutine 22:
-  ase/cockroach-162460.(*DistSQLPlanner).CreatePhysPlan.func1()
-      /work/distsql_physical_planner.go:22 +0x30
-  runtime.deferreturn()
-      /usr/local/go/src/runtime/panic.go:602 +0x5d
-  ase/cockroach-162460.Test162460Race.func1()
-      /work/verified_test.go:17 +0xa4
-  ase/cockroach-162460.Test162460Race.gowrap1()
-      /work/verified_test.go:21 +0x41
-
-Goroutine 28 (running) created at:
-  ase/cockroach-162460.Test162460Race()
-      /work/verified_test.go:14 +0xad
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
-
-Goroutine 22 (running) created at:
-  ase/cockroach-162460.Test162460Race()
-      /work/verified_test.go:14 +0xad
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
-==================
---- FAIL: Test162460Race (0.00s)
-    testing.go:1398: race detected during execution of test
-FAIL
-FAIL	ase/cockroach-162460	0.018s
-FAIL

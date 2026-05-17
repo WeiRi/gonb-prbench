@@ -1,146 +1,25 @@
 WARNING: DATA RACE
-Write at 0x00c0000c23f0 by goroutine 14:
-  runtime.mapassign_faststr()
-      /usr/local/go/src/runtime/map_faststr.go:203 +0x0
-  ase/moby-47961.(*Client).AddHeader()
-      /work/client.go:22 +0xfc
-  ase/moby-47961.TestRace_47961.func1()
-      /work/verified_test.go:22 +0xd7
-  ase/moby-47961.TestRace_47961.func3()
-      /work/verified_test.go:24 +0x41
+Write at 0x00c000200d9a by goroutine 9:
+  github.com/docker/docker/client.TestRace_moby_47961_negotiated.func2()
+      /go/src/github.com/docker/docker/client/47961_race_test.go:25 +0xb9
 
-Previous write at 0x00c0000c23f0 by goroutine 8:
-  runtime.mapassign_faststr()
-      /usr/local/go/src/runtime/map_faststr.go:203 +0x0
-  ase/moby-47961.(*Client).AddHeader()
-      /work/client.go:22 +0xfc
-  ase/moby-47961.TestRace_47961.func1()
-      /work/verified_test.go:22 +0xd7
-  ase/moby-47961.TestRace_47961.func3()
-      /work/verified_test.go:24 +0x41
-
-Goroutine 14 (running) created at:
-  ase/moby-47961.TestRace_47961()
-      /work/verified_test.go:19 +0x104
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1595 +0x261
-  testing.(*T).Run.func1()
-      /usr/local/go/src/testing/testing.go:1648 +0x44
-
-Goroutine 8 (finished) created at:
-  ase/moby-47961.TestRace_47961()
-      /work/verified_test.go:19 +0x104
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1595 +0x261
-  testing.(*T).Run.func1()
-      /usr/local/go/src/testing/testing.go:1648 +0x44
-==================
-==================
-WARNING: DATA RACE
-Write at 0x00c000118088 by goroutine 9:
-  ase/moby-47961.(*Client).AddHeader()
-      /work/client.go:22 +0x108
-  ase/moby-47961.TestRace_47961.func1()
-      /work/verified_test.go:22 +0xd7
-  ase/moby-47961.TestRace_47961.func3()
-      /work/verified_test.go:24 +0x41
-
-Previous write at 0x00c000118088 by goroutine 8:
-  ase/moby-47961.(*Client).AddHeader()
-      /work/client.go:22 +0x108
-  ase/moby-47961.TestRace_47961.func1()
-      /work/verified_test.go:22 +0xd7
-  ase/moby-47961.TestRace_47961.func3()
-      /work/verified_test.go:24 +0x41
+Previous read at 0x00c000200d9a by goroutine 8:
+  github.com/docker/docker/client.TestRace_moby_47961_negotiated.func1()
+      /go/src/github.com/docker/docker/client/47961_race_test.go:19 +0xb4
 
 Goroutine 9 (running) created at:
-  ase/moby-47961.TestRace_47961()
-      /work/verified_test.go:19 +0x104
+  github.com/docker/docker/client.TestRace_moby_47961_negotiated()
+      /go/src/github.com/docker/docker/client/47961_race_test.go:22 +0x2d6
   testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1595 +0x261
+      /usr/local/go/src/testing/testing.go:1446 +0x216
   testing.(*T).Run.func1()
-      /usr/local/go/src/testing/testing.go:1648 +0x44
+      /usr/local/go/src/testing/testing.go:1493 +0x47
 
-Goroutine 8 (finished) created at:
-  ase/moby-47961.TestRace_47961()
-      /work/verified_test.go:19 +0x104
+Goroutine 8 (running) created at:
+  github.com/docker/docker/client.TestRace_moby_47961_negotiated()
+      /go/src/github.com/docker/docker/client/47961_race_test.go:16 +0x1ee
   testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1595 +0x261
+      /usr/local/go/src/testing/testing.go:1446 +0x216
   testing.(*T).Run.func1()
-      /usr/local/go/src/testing/testing.go:1648 +0x44
+      /usr/local/go/src/testing/testing.go:1493 +0x47
 ==================
-fatal error: concurrent map writes
-
-goroutine 25 [running]:
-ase/moby-47961.(*Client).AddHeader(...)
-	/work/client.go:22
-ase/moby-47961.TestRace_47961.func1(0x0?)
-	/work/verified_test.go:22 +0xfd
-created by ase/moby-47961.TestRace_47961 in goroutine 6
-	/work/verified_test.go:19 +0x105
-
-goroutine 1 [chan receive]:
-testing.(*T).Run(0xc000007ba0, {0x5d206d, 0xe}, 0x5dc078)
-	/usr/local/go/src/testing/testing.go:1649 +0x871
-testing.runTests.func1(0x0?)
-	/usr/local/go/src/testing/testing.go:2054 +0x85
-testing.tRunner(0xc000007ba0, 0xc0000d5af8)
-	/usr/local/go/src/testing/testing.go:1595 +0x262
-testing.runTests(0xc0000c60a0?, {0x6f1060, 0x1, 0x1}, {0x1c?, 0x1e?, 0x6fa120?})
-	/usr/local/go/src/testing/testing.go:2052 +0x8ae
-testing.(*M).Run(0xc0000c60a0)
-	/usr/local/go/src/testing/testing.go:1925 +0xcd8
-main.main()
-	_testmain.go:47 +0x2be
-
-goroutine 6 [runnable]:
-sync.(*WaitGroup).Add(0xc000014200, 0x1)
-	/usr/local/go/src/sync/waitgroup.go:43 +0x1dd
-ase/moby-47961.TestRace_47961(0x0?)
-	/work/verified_test.go:18 +0x127
-testing.tRunner(0xc000007d40, 0x5dc078)
-	/usr/local/go/src/testing/testing.go:1595 +0x262
-created by testing.(*T).Run in goroutine 1
-	/usr/local/go/src/testing/testing.go:1648 +0x846
-
-goroutine 22 [runnable]:
-ase/moby-47961.(*Client).AddHeader(...)
-	/work/client.go:22
-ase/moby-47961.TestRace_47961.func1(0x0?)
-	/work/verified_test.go:22 +0xfd
-created by ase/moby-47961.TestRace_47961 in goroutine 6
-	/work/verified_test.go:19 +0x105
-
-goroutine 29 [runnable]:
-ase/moby-47961.TestRace_47961.func3()
-	/work/verified_test.go:19
-runtime.goexit()
-	/usr/local/go/src/runtime/asm_amd64.s:1650 +0x1
-created by ase/moby-47961.TestRace_47961 in goroutine 6
-	/work/verified_test.go:19 +0x105
-
-goroutine 31 [runnable]:
-ase/moby-47961.TestRace_47961.func3()
-	/work/verified_test.go:19
-runtime.goexit()
-	/usr/local/go/src/runtime/asm_amd64.s:1650 +0x1
-created by ase/moby-47961.TestRace_47961 in goroutine 6
-	/work/verified_test.go:19 +0x105
-
-goroutine 32 [runnable]:
-ase/moby-47961.TestRace_47961.func3()
-	/work/verified_test.go:19
-runtime.goexit()
-	/usr/local/go/src/runtime/asm_amd64.s:1650 +0x1
-created by ase/moby-47961.TestRace_47961 in goroutine 6
-	/work/verified_test.go:19 +0x105
-
-goroutine 33 [runnable]:
-ase/moby-47961.TestRace_47961.func3()
-	/work/verified_test.go:19
-runtime.goexit()
-	/usr/local/go/src/runtime/asm_amd64.s:1650 +0x1
-created by ase/moby-47961.TestRace_47961 in goroutine 6
-	/work/verified_test.go:19 +0x105
-FAIL	ase/moby-47961	0.026s
-FAIL

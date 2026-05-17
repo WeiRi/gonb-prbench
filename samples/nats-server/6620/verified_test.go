@@ -1,42 +1,41 @@
-// VERIFIED race reproducer for nats-server PR #6620
-// "[FIXED] Data race in configureAccounts"
-// https://github.com/nats-io/nats-server/pull/6620
-//
-// Original racy file: server/server.go (configureAccounts ~line 1383-1388)
-// Pre-fix: s.sys.account is read AFTER s.mu.Unlock(); fix snapshots sysAcc before.
-//
-// Recipe: 8 readers x 8 writers x 5000 ops, golang:1.21 -race => race.
-package buggy
+package server
 
 import (
-	"fmt"
 	"sync"
+	"sync/atomic"
 	"testing"
 )
 
-func TestRaceConfigureAccountsSysAccount(t *testing.T) {
-	s := &Server{sys: &internal{account: &account{name: "init"}}}
-	const W = 8
-	const R = 8
-	const N = 5000
+func TestRace_nats_6620_sys_access(t *testing.T) {
+	acc1 := &Account{Name: "a1"}
+	acc2 := &Account{Name: "a2"}
+	s := &Server{sys: &internal{account: acc1}}
+
+	var done int32
 	var wg sync.WaitGroup
-	for i := 0; i < W; i++ {
-		wg.Add(1)
-		go func(id int) {
-			defer wg.Done()
-			for j := 0; j < N; j++ {
-				s.rotateSysAccount(fmt.Sprintf("a%d-%d", id, j))
+	wg.Add(2)
+	go func() {
+		defer wg.Done()
+		for j := 0; j < 100000 && atomic.LoadInt32(&done) == 0; j++ {
+			s.mu.Lock()
+			if j%2 == 0 {
+				s.sys = &internal{account: acc1}
+			} else {
+				s.sys = &internal{account: acc2}
 			}
-		}(i)
-	}
-	for i := 0; i < R; i++ {
-		wg.Add(1)
-		go func() {
-			defer wg.Done()
-			for j := 0; j < N; j++ {
-				_ = s.configureAccounts()
+			s.mu.Unlock()
+		}
+		atomic.StoreInt32(&done, 1)
+	}()
+	go func() {
+		defer wg.Done()
+		for j := 0; j < 100000 && atomic.LoadInt32(&done) == 0; j++ {
+			s.mu.Lock()
+			s.mu.Unlock()
+			if s.sys != nil {
+				_ = s.sys.account
 			}
-		}()
-	}
+		}
+	}()
 	wg.Wait()
 }

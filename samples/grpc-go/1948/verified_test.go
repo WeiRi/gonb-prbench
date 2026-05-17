@@ -1,42 +1,43 @@
 package grpc
 
 import (
-	"fmt"
+	"context"
 	"sync"
+	"sync/atomic"
 	"testing"
+
+	"google.golang.org/grpc/metadata"
 )
 
-// TestRace_1948_SliceBackingArray reproduces the data race from PR #1948.
-//
-// BUG: append(cc.dopts.callOptions, opts...) shares the backing array
-// when callOptions has extra capacity. Concurrent Invoke() calls race.
-func TestRace_1948_SliceBackingArray(t *testing.T) {
-	const N = 500
-	const G = 10
+// Race: BUG Invoke does `opts = append(cc.dopts.callOptions, opts...)`.
+// When cc.dopts.callOptions has extra capacity, concurrent Invoke calls
+// share the underlying array and race on the appended slot.
+// FIX uses combine() which always allocates a new slice.
+func TestRace_grpc_go_1948_invoke_callopts_append(t *testing.T) {
+	noop := func(ctx context.Context, method string, req, reply interface{},
+		cc *ClientConn, invoker UnaryInvoker, opts ...CallOption) error {
+		return nil
+	}
+	cc := &ClientConn{
+		dopts: dialOptions{
+			unaryInt: noop,
+			// extra capacity → shared underlying array on concurrent appends
+			callOptions: make([]CallOption, 0, 16),
+		},
+	}
 
+	var done int32
 	var wg sync.WaitGroup
-	for g := 0; g < G; g++ {
+	for i := 0; i < 16; i++ {
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
-			// Create callOptions with extra capacity to trigger the race.
-			// When a slice has cap > len, append writes to the same backing array.
-			callOpts := make([]CallOption, 0, 10)
-			cc := &ClientConn{dopts: dopts{callOptions: callOpts}}
-
-			var inner sync.WaitGroup
-			inner.Add(3)
-
-			for j := 0; j < 3; j++ {
-				go func(id int) {
-					defer inner.Done()
-					for k := 0; k < N; k++ {
-						cc.Invoke(CallOption{Key: fmt.Sprintf("opt-%d-%d", id, k), Val: k})
-					}
-				}(j)
+			var md metadata.MD
+			opt := Header(&md)
+			for j := 0; j < 5000 && atomic.LoadInt32(&done) == 0; j++ {
+				_ = cc.Invoke(context.Background(), "/test/Method", nil, nil, opt)
 			}
-
-			inner.Wait()
+			atomic.StoreInt32(&done, 1)
 		}()
 	}
 	wg.Wait()

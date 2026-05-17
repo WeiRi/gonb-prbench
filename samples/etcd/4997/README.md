@@ -3,83 +3,34 @@
 | Field | Value |
 |---|---|
 | Project | etcd |
-| Reference | https://github.com/etcd-io/etcd/pull/4997 |
-| Bug commit | `004ff3d4f02a` |
+| Reference | https://github.com/etcd/etcd/pull/4997 |
 | Category | data_race |
 | Oracle | RACE |
 | Primary diff file | `etcdserver/consistent_index.go` |
+| Base image | `gonb-etcd-4997-base` (built by gonb-prebuild for this sample) |
 
+## In-place reproduction
 
-## Race report excerpt
+This sample uses the original upstream source at the bug commit (pre-built into the base image — no SSH-clone required at sample-build time).
 
-The following stack trace is captured by Go's race detector when running the bug build:
+### Build & run bug
 
-```
-WARNING: DATA RACE
-Write at 0x00c4200e8068 by goroutine 9:
-  _/work.TestRace_4997.func1()
-      /work/verified_test.go:7 +0x6b
-
-Previous write at 0x00c4200e8068 by goroutine 8:
-  _/work.TestRace_4997.func1()
-      /work/verified_test.go:7 +0x6b
-
-Goroutine 9 (running) created at:
-  _/work.TestRace_4997()
-      /work/verified_test.go:13 +0xdb
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:777 +0x16d
-
-Goroutine 8 (finished) created at:
-  _/work.TestRace_4997()
-      /work/verified_test.go:13 +0xdb
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:777 +0x16d
-==================
---- FAIL: TestRace_4997 (0.01s)
-	testing.go:730: race detected during execution of test
-FAIL
-FAIL	_/work	0.025s
-```
-
-(Full trace in `race_report_bug.txt`.)
-
-## How to reproduce
-
-### 1. SSH agent setup (one-time)
 ```bash
-eval $(ssh-agent -a /tmp/ssh-agent-gonb.sock)
-ssh-add ~/.ssh/id_ed25519
-export SSH_AUTH_SOCK=/tmp/ssh-agent-gonb.sock
-```
-
-### 2. Build bug image
-```bash
-DOCKER_BUILDKIT=1 docker build --ssh default -f bug.Dockerfile -t gonb-etcd-4997-bug .
-```
-
-### 3. Trigger race
-```bash
-docker run --rm --memory=2g --cpus=1 gonb-etcd-4997-bug \
-  sh -c "cd /work/pr2t-test && go test -race -vet=off -count=20 -timeout=180s ./..."
+docker build -f bug.Dockerfile -t etcd-4997-bug .
+docker run --rm --cpus=2 --memory=2g etcd-4997-bug \
+  sh -c "go test -race -vet=off -count=10 -timeout=300s ."
 # Expected: WARNING: DATA RACE + FAIL
 ```
 
-### 4. Verify fix
+### Build & run fix
+
 ```bash
-DOCKER_BUILDKIT=1 docker build --ssh default -f fix.Dockerfile -t gonb-etcd-4997-fix .
-docker run --rm --memory=2g --cpus=1 gonb-etcd-4997-fix \
-  sh -c "cd /work/pr2t-test && go test -race -vet=off -count=20 -timeout=180s ./..."
-# Expected: PASS (race not triggered)
+docker build -f fix.Dockerfile -t etcd-4997-fix .
+docker run --rm --cpus=2 --memory=2g etcd-4997-fix \
+  sh -c "go test -race -vet=off -count=10 -timeout=300s ."
+# Expected: PASS (PR fix suppresses the race)
 ```
 
-## HTTPS fallback (if SSH blocked)
+## Race report
 
-If `git@github.com:` clone fails in your environment:
-```bash
-sed -i 's|git@github.com:|https://github.com/|g' bug.Dockerfile fix.Dockerfile
-# Also remove the --mount=type=ssh hint (HTTPS doesn't need it)
-sed -i 's|--mount=type=ssh ||g' bug.Dockerfile fix.Dockerfile
-DOCKER_BUILDKIT=1 docker build -f bug.Dockerfile -t gonb-etcd-4997-bug .
-# (then run as above, no --ssh flag)
-```
+See `race_report_bug.txt` for the captured race detector output from a bug build run.

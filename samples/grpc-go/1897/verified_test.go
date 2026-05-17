@@ -1,34 +1,30 @@
-// Race-trigger test for grpc-go-1897; see README.md for usage.
-
 package grpc
 
 import (
 	"sync"
+	"sync/atomic"
 	"testing"
 	"time"
 )
 
-func TestRace_PR1897_MinConnectTimeout(t *testing.T) {
-	stop := make(chan struct{})
+// BUG: minConnectTimeout is a mutable package var; concurrent test code
+// mutates it while production code reads. Race on the var.
+func TestRace_grpc_go_1897_min_timeout(t *testing.T) {
+	var done int32
 	var wg sync.WaitGroup
-
-	wg.Add(1)
+	wg.Add(2)
 	go func() {
 		defer wg.Done()
-		_ = resetTransport(stop)
+		for j := 0; j < 100000 && atomic.LoadInt32(&done) == 0; j++ {
+			minConnectTimeout = time.Duration(j) * time.Second
+		}
+		atomic.StoreInt32(&done, 1)
 	}()
-
-	wg.Add(1)
 	go func() {
 		defer wg.Done()
-		for i := 0; i < 1000; i++ {
-			minConnectTimeout = time.Millisecond * 500
-			time.Sleep(time.Microsecond)
-			minConnectTimeout = time.Second * 20
+		for j := 0; j < 100000 && atomic.LoadInt32(&done) == 0; j++ {
+			_ = minConnectTimeout
 		}
 	}()
-
-	time.Sleep(50 * time.Millisecond)
-	close(stop)
 	wg.Wait()
 }

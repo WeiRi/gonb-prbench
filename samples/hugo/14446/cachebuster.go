@@ -2,7 +2,7 @@
 // Pre-PR: CompileConfig builds an inner closure that captures `match` from
 // the enclosing scope and writes to it (instead of declaring a local with
 // `:=`). Concurrent inner-closure invocations race on the captured `match`.
-package config
+package main
 
 import (
 	"regexp"

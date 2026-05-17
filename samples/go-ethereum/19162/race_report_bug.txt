@@ -1,68 +1,25 @@
 WARNING: DATA RACE
-Write at 0x00c0000d8510 by goroutine 8:
-  runtime.mapassign_faststr()
-      /usr/local/go/src/runtime/map_faststr.go:203 +0x0
-  ase/go-ethereum-19162.(*HandshakeController).Insert()
-      /work/handshake.go:31 +0x116
-  ase/go-ethereum-19162.TestRace_19162_HandshakeController_symKeyIndex.func1()
-      /work/verified_test.go:20 +0xa5
+Write at 0x00c000274fd8 by goroutine 8:
+  github.com/ethereum/go-ethereum/swarm/pss.(*HandshakeController).releaseKey()
+      /go/src/github.com/ethereum/go-ethereum/swarm/pss/handshake.go:221 +0x170
+  github.com/ethereum/go-ethereum/swarm/pss.TestRace_19162_releaseKey.func1()
+      /go/src/github.com/ethereum/go-ethereum/swarm/pss/19162_race_test.go:31 +0xe4
 
-Previous read at 0x00c0000d8510 by goroutine 9:
-  runtime.mapaccess1_faststr()
-      /usr/local/go/src/runtime/map_faststr.go:13 +0x0
-  ase/go-ethereum-19162.(*HandshakeController).Handler()
-      /work/handshake.go:37 +0xf6
-  ase/go-ethereum-19162.TestRace_19162_HandshakeController_symKeyIndex.func2()
-      /work/verified_test.go:26 +0xcd
+Previous write at 0x00c000274fd8 by goroutine 9:
+  github.com/ethereum/go-ethereum/swarm/pss.(*HandshakeController).releaseKey()
+      /go/src/github.com/ethereum/go-ethereum/swarm/pss/handshake.go:221 +0x170
+  github.com/ethereum/go-ethereum/swarm/pss.TestRace_19162_releaseKey.func2()
+      /go/src/github.com/ethereum/go-ethereum/swarm/pss/19162_race_test.go:38 +0xe4
 
 Goroutine 8 (running) created at:
-  ase/go-ethereum-19162.TestRace_19162_HandshakeController_symKeyIndex()
-      /work/verified_test.go:17 +0x1c4
+  github.com/ethereum/go-ethereum/swarm/pss.TestRace_19162_releaseKey()
+      /go/src/github.com/ethereum/go-ethereum/swarm/pss/19162_race_test.go:28 +0x558
   testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
+      /usr/local/go/src/testing/testing.go:1203 +0x202
 
-Goroutine 9 (finished) created at:
-  ase/go-ethereum-19162.TestRace_19162_HandshakeController_symKeyIndex()
-      /work/verified_test.go:23 +0x26c
+Goroutine 9 (running) created at:
+  github.com/ethereum/go-ethereum/swarm/pss.TestRace_19162_releaseKey()
+      /go/src/github.com/ethereum/go-ethereum/swarm/pss/19162_race_test.go:35 +0x5c4
   testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
+      /usr/local/go/src/testing/testing.go:1203 +0x202
 ==================
-==================
-WARNING: DATA RACE
-Write at 0x00c0000daa48 by goroutine 8:
-  ase/go-ethereum-19162.(*HandshakeController).Insert()
-      /work/handshake.go:31 +0x124
-  ase/go-ethereum-19162.TestRace_19162_HandshakeController_symKeyIndex.func1()
-      /work/verified_test.go:20 +0xa5
-
-Previous read at 0x00c0000daa48 by goroutine 9:
-  ase/go-ethereum-19162.(*HandshakeController).Handler()
-      /work/handshake.go:37 +0x104
-  ase/go-ethereum-19162.TestRace_19162_HandshakeController_symKeyIndex.func2()
-      /work/verified_test.go:26 +0xcd
-
-Goroutine 8 (running) created at:
-  ase/go-ethereum-19162.TestRace_19162_HandshakeController_symKeyIndex()
-      /work/verified_test.go:17 +0x1c4
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
-
-Goroutine 9 (finished) created at:
-  ase/go-ethereum-19162.TestRace_19162_HandshakeController_symKeyIndex()
-      /work/verified_test.go:23 +0x26c
-  testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
-==================
---- FAIL: TestRace_19162_HandshakeController_symKeyIndex (0.00s)
-    testing.go:1398: race detected during execution of test
-FAIL
-FAIL	ase/go-ethereum-19162	0.017s
-FAIL

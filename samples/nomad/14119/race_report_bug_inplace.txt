@@ -1,0 +1,77 @@
+go: downloading github.com/elazarl/go-bindata-assetfs v1.0.1-0.20200509193318-234c15e7648f
+go: downloading github.com/gorilla/handlers v1.5.1
+go: downloading github.com/hashicorp/go-checkpoint v0.0.0-20171009173528-1545e56e46de
+go: downloading github.com/hashicorp/go-discover v0.0.0-20210818145131-c573d69da192
+go: downloading github.com/hashicorp/logutils v1.0.0
+go: downloading github.com/rs/cors v1.8.2
+go: downloading github.com/circonus-labs/circonus-gometrics v2.3.1+incompatible
+go: downloading github.com/DataDog/datadog-go v3.2.0+incompatible
+go: downloading github.com/hashicorp/go-cty-funcs v0.0.0-20200930094925-2721b1e36840
+go: downloading github.com/zclconf/go-cty-yaml v1.0.2
+go: downloading github.com/felixge/httpsnoop v1.0.1
+go: downloading github.com/apparentlymart/go-cidr v1.0.1
+go: downloading github.com/bmatcuk/doublestar v1.1.5
+go: downloading github.com/denverdino/aliyungo v0.0.0-20190125010748-a747050bb1ba
+go: downloading github.com/Azure/azure-sdk-for-go v56.3.0+incompatible
+go: downloading github.com/Azure/go-autorest/autorest v0.11.20
+go: downloading github.com/Azure/go-autorest/autorest/azure/auth v0.5.1
+go: downloading github.com/digitalocean/godo v1.10.0
+go: downloading github.com/linode/linodego v0.7.1
+go: downloading github.com/hashicorp/mdns v1.0.4
+go: downloading github.com/gophercloud/gophercloud v0.1.0
+go: downloading github.com/packethost/packngo v0.1.1-0.20180711074735-b9cb5096f54c
+go: downloading github.com/nicolai86/scaleway-sdk v1.10.2-0.20180628010248-798f60e20bb2
+go: downloading github.com/softlayer/softlayer-go v0.0.0-20180806151055-260589d94c7d
+go: downloading github.com/tencentcloud/tencentcloud-sdk-go v1.0.162
+go: downloading github.com/joyent/triton-go v0.0.0-20190112182421-51ffac552869
+go: downloading github.com/hashicorp/vic v1.5.1-0.20190403131502-bbfe86ec9443
+go: downloading github.com/vmware/govmomi v0.18.0
+go: downloading github.com/circonus-labs/circonusllhist v0.1.3
+go: downloading github.com/tv42/httpunix v0.0.0-20150427012821-b75d8614f926
+go: downloading github.com/Azure/go-autorest v14.2.0+incompatible
+go: downloading github.com/google/go-querystring v0.0.0-20170111101155-53e6ce116135
+go: downloading github.com/Azure/go-autorest/tracing v0.6.0
+go: downloading github.com/dimchansky/utfbom v1.1.0
+go: downloading github.com/Azure/go-autorest/logger v0.2.1
+go: downloading github.com/Azure/go-autorest/autorest/adal v0.9.15
+go: downloading github.com/Azure/go-autorest/autorest/azure/cli v0.4.0
+go: downloading gopkg.in/resty.v1 v1.12.0
+go: downloading github.com/Azure/go-autorest/autorest/date v0.3.0
+go: downloading github.com/renier/xmlrpc v0.0.0-20170708154548-ce4a1a486c03
+go: downloading github.com/Azure/go-autorest/autorest/validation v0.3.0
+go: downloading github.com/Azure/go-autorest/autorest/to v0.4.0
+==================
+WARNING: DATA RACE
+Write at 0x00c00018c2a0 by goroutine 57:
+  github.com/hashicorp/nomad/client.(*heartbeatStop).setLastOk()
+      /work/upstream/client/heartbeatstop.go:129 +0xde
+  github.com/hashicorp/nomad/client.TestRace_14119_InPlace.func2()
+      /work/upstream/client/nomad-14119_race_test.go:35 +0xae
+
+Previous write at 0x00c00018c2a0 by goroutine 51:
+  github.com/hashicorp/nomad/client.(*heartbeatStop).watch()
+      /work/upstream/client/heartbeatstop.go:73 +0x64
+  github.com/hashicorp/nomad/client.TestRace_14119_InPlace.gowrap1()
+      /work/upstream/client/nomad-14119_race_test.go:25 +0x33
+
+Goroutine 57 (running) created at:
+  github.com/hashicorp/nomad/client.TestRace_14119_InPlace()
+      /work/upstream/client/nomad-14119_race_test.go:32 +0x293
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 51 (running) created at:
+  github.com/hashicorp/nomad/client.TestRace_14119_InPlace()
+      /work/upstream/client/nomad-14119_race_test.go:25 +0x246
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+--- FAIL: TestRace_14119_InPlace (1.13s)
+    testing.go:1398: race detected during execution of test
+FAIL
+FAIL	github.com/hashicorp/nomad/client	11.664s
+FAIL

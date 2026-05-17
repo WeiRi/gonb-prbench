@@ -1,30 +1,21 @@
 WARNING: DATA RACE
-Read at 0x00c000114008 by goroutine 33:
-  ase/swarmkit-1046.RunManagerLoopBUG.func1()
-      /work/node.go:17 +0x5b
+Write at 0x00c42010a488 by goroutine 18:
+  github.com/docker/swarmkit/agent.TestRace_swarmkit_1046_closure_capture.func2()
+      /go/src/github.com/docker/swarmkit/agent/1046_race_test.go:28 +0x62
 
-Previous write at 0x00c000114008 by goroutine 8:
-  ase/swarmkit-1046.RunManagerLoopBUG()
-      /work/node.go:25 +0x1c6
-  ase/swarmkit-1046.TestRace_swarmkit_1046.func1()
-      /work/verified_test.go:21 +0x104
+Previous read at 0x00c42010a488 by goroutine 17:
+  github.com/docker/swarmkit/agent.TestRace_swarmkit_1046_closure_capture.func1()
+      /go/src/github.com/docker/swarmkit/agent/1046_race_test.go:22 +0x62
 
-Goroutine 33 (running) created at:
-  ase/swarmkit-1046.RunManagerLoopBUG()
-      /work/node.go:14 +0x150
-  ase/swarmkit-1046.TestRace_swarmkit_1046.func1()
-      /work/verified_test.go:21 +0x104
-
-Goroutine 8 (finished) created at:
-  ase/swarmkit-1046.TestRace_swarmkit_1046()
-      /work/verified_test.go:15 +0x64
+Goroutine 18 (running) created at:
+  github.com/docker/swarmkit/agent.TestRace_swarmkit_1046_closure_capture()
+      /go/src/github.com/docker/swarmkit/agent/1046_race_test.go:26 +0xce
   testing.tRunner()
-      /usr/local/go/src/testing/testing.go:1689 +0x21e
-  testing.(*T).Run.gowrap1()
-      /usr/local/go/src/testing/testing.go:1742 +0x44
+      /usr/local/go/src/testing/testing.go:777 +0x16d
+
+Goroutine 17 (finished) created at:
+  github.com/docker/swarmkit/agent.TestRace_swarmkit_1046_closure_capture()
+      /go/src/github.com/docker/swarmkit/agent/1046_race_test.go:19 +0xa2
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:777 +0x16d
 ==================
-    testing.go:1398: race detected during execution of test
---- FAIL: TestRace_swarmkit_1046 (0.00s)
-FAIL
-FAIL	ase/swarmkit-1046	0.022s
-FAIL

@@ -1,0 +1,28 @@
+==================
+WARNING: DATA RACE
+Read at 0x00c4202158a8 by goroutine 15:
+  github.com/coreos/etcd/lease.(*Lease).Remaining()
+      /go/src/github.com/coreos/etcd/lease/lessor.go:554 +0x4a
+  github.com/coreos/etcd/lease.TestRace_7070_InPlace.func2()
+      /go/src/github.com/coreos/etcd/lease/etcd-7070_race_test.go:32 +0x5e
+
+Previous write at 0x00c4202158a8 by goroutine 14:
+  github.com/coreos/etcd/lease.TestRace_7070_InPlace.func1()
+      /go/src/github.com/coreos/etcd/lease/etcd-7070_race_test.go:27 +0x74
+
+Goroutine 15 (running) created at:
+  github.com/coreos/etcd/lease.TestRace_7070_InPlace()
+      /go/src/github.com/coreos/etcd/lease/etcd-7070_race_test.go:30 +0x92
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:777 +0x16d
+
+Goroutine 14 (finished) created at:
+  github.com/coreos/etcd/lease.TestRace_7070_InPlace()
+      /go/src/github.com/coreos/etcd/lease/etcd-7070_race_test.go:25 +0x66
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:777 +0x16d
+==================
+--- FAIL: TestRace_7070_InPlace (3.47s)
+	testing.go:730: race detected during execution of test
+FAIL
+FAIL	github.com/coreos/etcd/lease	33.268s

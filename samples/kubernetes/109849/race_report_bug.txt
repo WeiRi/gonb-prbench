@@ -1,250 +1,54 @@
 WARNING: DATA RACE
-Read at 0x00c0000ca3f0 by goroutine 21:
+Read at 0x00c0000c6000 by goroutine 19:
   runtime.mapaccess1_faststr()
       /usr/local/go/src/runtime/map_faststr.go:13 +0x0
-  ase/kubernetes-109849.(*server).disconnectClient()
-      /work/handler.go:49 +0x5c
-  ase/kubernetes-109849.TestRace_109849_DisconnectMapRace.func1.2()
-      /work/verified_test.go:48 +0xbb
+  k8s.io/kubernetes/pkg/kubelet/cm/devicemanager/plugin/v1beta1.(*server).disconnectClient()
+      /work/upstream/pkg/kubelet/cm/devicemanager/plugin/v1beta1/handler.go:49 +0x5c
+  k8s.io/kubernetes/pkg/kubelet/cm/devicemanager/plugin/v1beta1.TestRace_109849_DisconnectMapRace.func1.2()
+      /work/upstream/pkg/kubelet/cm/devicemanager/plugin/v1beta1/kubernetes_109849_race_test.go:48 +0xa5
 
-Previous write at 0x00c0000ca3f0 by goroutine 20:
+Previous write at 0x00c0000c6000 by goroutine 21:
   runtime.mapdelete_faststr()
       /usr/local/go/src/runtime/map_faststr.go:301 +0x0
-  ase/kubernetes-109849.(*server).deregisterClient()
-      /work/handler.go:44 +0xcc
-  ase/kubernetes-109849.TestRace_109849_DisconnectMapRace.func1.1()
-      /work/verified_test.go:40 +0xe5
+  k8s.io/kubernetes/pkg/kubelet/cm/devicemanager/plugin/v1beta1.(*server).deregisterClient()
+      /work/upstream/pkg/kubelet/cm/devicemanager/plugin/v1beta1/handler.go:44 +0xbb
+  k8s.io/kubernetes/pkg/kubelet/cm/devicemanager/plugin/v1beta1.(*server).disconnectClient()
+      /work/upstream/pkg/kubelet/cm/devicemanager/plugin/v1beta1/handler.go:50 +0x90
+  k8s.io/kubernetes/pkg/kubelet/cm/devicemanager/plugin/v1beta1.(*server).DeRegisterPlugin()
+      /work/upstream/pkg/kubelet/cm/devicemanager/plugin/v1beta1/handler.go:65 +0x97
+  k8s.io/kubernetes/pkg/kubelet/cm/devicemanager/plugin/v1beta1.TestRace_109849_DisconnectMapRace.func1.3()
+      /work/upstream/pkg/kubelet/cm/devicemanager/plugin/v1beta1/kubernetes_109849_race_test.go:56 +0xa5
 
-Goroutine 21 (running) created at:
-  ase/kubernetes-109849.TestRace_109849_DisconnectMapRace.func1()
-      /work/verified_test.go:45 +0x355
+Goroutine 19 (running) created at:
+  k8s.io/kubernetes/pkg/kubelet/cm/devicemanager/plugin/v1beta1.TestRace_109849_DisconnectMapRace.func1()
+      /work/upstream/pkg/kubelet/cm/devicemanager/plugin/v1beta1/kubernetes_109849_race_test.go:45 +0x338
 
-Goroutine 20 (finished) created at:
-  ase/kubernetes-109849.TestRace_109849_DisconnectMapRace.func1()
-      /work/verified_test.go:35 +0x28a
-==================
+Goroutine 21 (finished) created at:
+  k8s.io/kubernetes/pkg/kubelet/cm/devicemanager/plugin/v1beta1.TestRace_109849_DisconnectMapRace.func1()
+      /work/upstream/pkg/kubelet/cm/devicemanager/plugin/v1beta1/kubernetes_109849_race_test.go:53 +0xaf
 ==================
 WARNING: DATA RACE
-Read at 0x00c0000ca420 by goroutine 26:
+Read at 0x00c000120030 by goroutine 29:
   runtime.mapaccess1_faststr()
       /usr/local/go/src/runtime/map_faststr.go:13 +0x0
-  ase/kubernetes-109849.(*server).disconnectClient()
-      /work/handler.go:49 +0x5c
-  ase/kubernetes-109849.TestRace_109849_DisconnectMapRace.func1.2()
-      /work/verified_test.go:48 +0xbb
+  k8s.io/kubernetes/pkg/kubelet/cm/devicemanager/plugin/v1beta1.(*server).disconnectClient()
+      /work/upstream/pkg/kubelet/cm/devicemanager/plugin/v1beta1/handler.go:49 +0x5c
+  k8s.io/kubernetes/pkg/kubelet/cm/devicemanager/plugin/v1beta1.TestRace_109849_DisconnectMapRace.func1.2()
+      /work/upstream/pkg/kubelet/cm/devicemanager/plugin/v1beta1/kubernetes_109849_race_test.go:48 +0xa5
 
-Previous write at 0x00c0000ca420 by goroutine 27:
+Previous write at 0x00c000120030 by goroutine 28:
   runtime.mapdelete_faststr()
       /usr/local/go/src/runtime/map_faststr.go:301 +0x0
-  ase/kubernetes-109849.(*server).deregisterClient()
-      /work/handler.go:44 +0xcc
-  ase/kubernetes-109849.(*server).disconnectClient()
-      /work/handler.go:50 +0x90
-  ase/kubernetes-109849.(*server).DeRegisterPlugin()
-      /work/handler.go:65 +0x97
-  ase/kubernetes-109849.TestRace_109849_DisconnectMapRace.func1.3()
-      /work/verified_test.go:56 +0xbb
+  k8s.io/kubernetes/pkg/kubelet/cm/devicemanager/plugin/v1beta1.(*server).deregisterClient()
+      /work/upstream/pkg/kubelet/cm/devicemanager/plugin/v1beta1/handler.go:44 +0xbb
+  k8s.io/kubernetes/pkg/kubelet/cm/devicemanager/plugin/v1beta1.TestRace_109849_DisconnectMapRace.func1.1()
+      /work/upstream/pkg/kubelet/cm/devicemanager/plugin/v1beta1/kubernetes_109849_race_test.go:40 +0xcb
 
-Goroutine 26 (running) created at:
-  ase/kubernetes-109849.TestRace_109849_DisconnectMapRace.func1()
-      /work/verified_test.go:45 +0x355
+Goroutine 29 (running) created at:
+  k8s.io/kubernetes/pkg/kubelet/cm/devicemanager/plugin/v1beta1.TestRace_109849_DisconnectMapRace.func1()
+      /work/upstream/pkg/kubelet/cm/devicemanager/plugin/v1beta1/kubernetes_109849_race_test.go:45 +0x338
 
-Goroutine 27 (finished) created at:
-  ase/kubernetes-109849.TestRace_109849_DisconnectMapRace.func1()
-      /work/verified_test.go:53 +0xaf
+Goroutine 28 (finished) created at:
+  k8s.io/kubernetes/pkg/kubelet/cm/devicemanager/plugin/v1beta1.TestRace_109849_DisconnectMapRace.func1()
+      /work/upstream/pkg/kubelet/cm/devicemanager/plugin/v1beta1/kubernetes_109849_race_test.go:35 +0x278
 ==================
-==================
-WARNING: DATA RACE
-Read at 0x00c0000ca480 by goroutine 35:
-  runtime.mapaccess1_faststr()
-      /usr/local/go/src/runtime/map_faststr.go:13 +0x0
-  ase/kubernetes-109849.(*server).disconnectClient()
-      /work/handler.go:49 +0x5c
-  ase/kubernetes-109849.TestRace_109849_DisconnectMapRace.func1.2()
-      /work/verified_test.go:48 +0xbb
-
-Previous write at 0x00c0000ca480 by goroutine 34:
-  runtime.mapassign_faststr()
-      /usr/local/go/src/runtime/map_faststr.go:203 +0x0
-  ase/kubernetes-109849.(*server).registerClient()
-      /work/handler.go:37 +0xf5
-  ase/kubernetes-109849.TestRace_109849_DisconnectMapRace.func1.1()
-      /work/verified_test.go:39 +0xcb
-
-Goroutine 35 (running) created at:
-  ase/kubernetes-109849.TestRace_109849_DisconnectMapRace.func1()
-      /work/verified_test.go:45 +0x355
-
-Goroutine 34 (running) created at:
-  ase/kubernetes-109849.TestRace_109849_DisconnectMapRace.func1()
-      /work/verified_test.go:35 +0x28a
-==================
-==================
-WARNING: DATA RACE
-Write at 0x00c0000ca480 by goroutine 34:
-  runtime.mapdelete_faststr()
-      /usr/local/go/src/runtime/map_faststr.go:301 +0x0
-  ase/kubernetes-109849.(*server).deregisterClient()
-      /work/handler.go:44 +0xcc
-  ase/kubernetes-109849.TestRace_109849_DisconnectMapRace.func1.1()
-      /work/verified_test.go:40 +0xe5
-
-Previous read at 0x00c0000ca480 by goroutine 36:
-  runtime.mapaccess1_faststr()
-      /usr/local/go/src/runtime/map_faststr.go:13 +0x0
-  ase/kubernetes-109849.(*server).disconnectClient()
-      /work/handler.go:49 +0x5c
-  ase/kubernetes-109849.(*server).DeRegisterPlugin()
-      /work/handler.go:65 +0x97
-  ase/kubernetes-109849.TestRace_109849_DisconnectMapRace.func1.3()
-      /work/verified_test.go:56 +0xbb
-
-Goroutine 34 (running) created at:
-  ase/kubernetes-109849.TestRace_109849_DisconnectMapRace.func1()
-      /work/verified_test.go:35 +0x28a
-
-Goroutine 36 (running) created at:
-  ase/kubernetes-109849.TestRace_109849_DisconnectMapRace.func1()
-      /work/verified_test.go:53 +0xaf
-==================
-==================
-WARNING: DATA RACE
-Read at 0x00c00048e000 by goroutine 39:
-  runtime.mapaccess1_faststr()
-      /usr/local/go/src/runtime/map_faststr.go:13 +0x0
-  ase/kubernetes-109849.(*server).disconnectClient()
-      /work/handler.go:49 +0x5c
-  ase/kubernetes-109849.(*server).DeRegisterPlugin()
-      /work/handler.go:65 +0x97
-  ase/kubernetes-109849.TestRace_109849_DisconnectMapRace.func1.3()
-      /work/verified_test.go:56 +0xbb
-
-Previous write at 0x00c00048e000 by goroutine 38:
-  runtime.mapdelete_faststr()
-      /usr/local/go/src/runtime/map_faststr.go:301 +0x0
-  ase/kubernetes-109849.(*server).deregisterClient()
-      /work/handler.go:44 +0xcc
-  ase/kubernetes-109849.(*server).disconnectClient()
-      /work/handler.go:50 +0x90
-  ase/kubernetes-109849.TestRace_109849_DisconnectMapRace.func1.2()
-      /work/verified_test.go:48 +0xbb
-
-Goroutine 39 (running) created at:
-  ase/kubernetes-109849.TestRace_109849_DisconnectMapRace.func1()
-      /work/verified_test.go:53 +0xaf
-
-Goroutine 38 (running) created at:
-  ase/kubernetes-109849.TestRace_109849_DisconnectMapRace.func1()
-      /work/verified_test.go:45 +0x355
-==================
-==================
-WARNING: DATA RACE
-Write at 0x00c000714060 by goroutine 178:
-  runtime.mapassign_faststr()
-      /usr/local/go/src/runtime/map_faststr.go:203 +0x0
-  ase/kubernetes-109849.(*server).registerClient()
-      /work/handler.go:37 +0xf5
-  ase/kubernetes-109849.TestRace_109849_DisconnectMapRace.func1.1()
-      /work/verified_test.go:39 +0xcb
-
-Previous read at 0x00c000714060 by goroutine 180:
-  runtime.mapaccess1_faststr()
-      /usr/local/go/src/runtime/map_faststr.go:13 +0x0
-  ase/kubernetes-109849.(*server).disconnectClient()
-      /work/handler.go:49 +0x5c
-  ase/kubernetes-109849.(*server).DeRegisterPlugin()
-      /work/handler.go:65 +0x97
-  ase/kubernetes-109849.TestRace_109849_DisconnectMapRace.func1.3()
-      /work/verified_test.go:56 +0xbb
-
-Goroutine 178 (running) created at:
-  ase/kubernetes-109849.TestRace_109849_DisconnectMapRace.func1()
-      /work/verified_test.go:35 +0x28a
-
-Goroutine 180 (running) created at:
-  ase/kubernetes-109849.TestRace_109849_DisconnectMapRace.func1()
-      /work/verified_test.go:53 +0xaf
-==================
-fatal error: concurrent map read and map write
-
-goroutine 1235 [running]:
-ase/kubernetes-109849.(*server).disconnectClient(0xc0005c20d0, {0x5d1d2a, 0x8})
-	/work/handler.go:49 +0x5d
-ase/kubernetes-109849.TestRace_109849_DisconnectMapRace.func1.2()
-	/work/verified_test.go:48 +0xbc
-created by ase/kubernetes-109849.TestRace_109849_DisconnectMapRace.func1 in goroutine 12
-	/work/verified_test.go:45 +0x356
-
-goroutine 1 [chan receive]:
-testing.(*T).Run(0xc0000f8000, {0x5d83a4, 0x21}, 0x5dd498)
-	/usr/local/go/src/testing/testing.go:1649 +0x871
-testing.runTests.func1(0x0?)
-	/usr/local/go/src/testing/testing.go:2054 +0x85
-testing.tRunner(0xc0000f8000, 0xc0000dbaf8)
-	/usr/local/go/src/testing/testing.go:1595 +0x262
-testing.runTests(0xc0000ce0a0?, {0x6f3060, 0x1, 0x1}, {0x1c?, 0x1e?, 0x6fc120?})
-	/usr/local/go/src/testing/testing.go:2052 +0x8ae
-testing.(*M).Run(0xc0000ce0a0)
-	/usr/local/go/src/testing/testing.go:1925 +0xcd8
-main.main()
-	_testmain.go:47 +0x2be
-
-goroutine 6 [semacquire]:
-sync.runtime_Semacquire(0xc000014208?)
-	/usr/local/go/src/runtime/sema.go:62 +0x25
-sync.(*WaitGroup).Wait(0xc000014200)
-	/usr/local/go/src/sync/waitgroup.go:116 +0xa5
-ase/kubernetes-109849.TestRace_109849_DisconnectMapRace(0x0?)
-	/work/verified_test.go:64 +0xe5
-testing.tRunner(0xc0000f81a0, 0x5dd498)
-	/usr/local/go/src/testing/testing.go:1595 +0x262
-created by testing.(*T).Run in goroutine 1
-	/usr/local/go/src/testing/testing.go:1648 +0x846
-
-goroutine 7 [runnable]:
-ase/kubernetes-109849.TestRace_109849_DisconnectMapRace.func1()
-	/work/verified_test.go:45 +0x297
-created by ase/kubernetes-109849.TestRace_109849_DisconnectMapRace in goroutine 6
-	/work/verified_test.go:20 +0x57
-
-goroutine 8 [semacquire]:
-sync.runtime_Semacquire(0xc0003b2978?)
-	/usr/local/go/src/runtime/sema.go:62 +0x25
-sync.(*WaitGroup).Wait(0xc0003b2970)
-	/usr/local/go/src/sync/waitgroup.go:116 +0xa5
-ase/kubernetes-109849.TestRace_109849_DisconnectMapRace.func1()
-	/work/verified_test.go:60 +0xbd
-created by ase/kubernetes-109849.TestRace_109849_DisconnectMapRace in goroutine 6
-	/work/verified_test.go:20 +0x57
-
-goroutine 9 [semacquire]:
-sync.runtime_Semacquire(0xc00099e508?)
-	/usr/local/go/src/runtime/sema.go:62 +0x25
-sync.(*WaitGroup).Wait(0xc00099e500)
-	/usr/local/go/src/sync/waitgroup.go:116 +0xa5
-ase/kubernetes-109849.TestRace_109849_DisconnectMapRace.func1()
-	/work/verified_test.go:60 +0xbd
-created by ase/kubernetes-109849.TestRace_109849_DisconnectMapRace in goroutine 6
-	/work/verified_test.go:20 +0x57
-
-goroutine 10 [semacquire]:
-sync.runtime_Semacquire(0xc000495fd8?)
-	/usr/local/go/src/runtime/sema.go:62 +0x25
-sync.(*WaitGroup).Wait(0xc000495fd0)
-	/usr/local/go/src/sync/waitgroup.go:116 +0xa5
-ase/kubernetes-109849.TestRace_109849_DisconnectMapRace.func1()
-	/work/verified_test.go:60 +0xbd
-created by ase/kubernetes-109849.TestRace_109849_DisconnectMapRace in goroutine 6
-	/work/verified_test.go:20 +0x57
-
-goroutine 11 [semacquire]:
-sync.runtime_Semacquire(0xc000a97168?)
-	/usr/local/go/src/runtime/sema.go:62 +0x25
-sync.(*WaitGroup).Wait(0xc000a97160)
-	/usr/local/go/src/sync/waitgroup.go:116 +0xa5
-ase/kubernetes-109849.TestRace_109849_DisconnectMapRace.func1()
-	/work/verified_test.go:60 +0xbd
-created by ase/kubernetes-109849.TestRace_109849_DisconnectMapRace in goroutine 6
-	/work/verified_test.go:20 +0x57
-
-goroutine 12 [semacquire]:

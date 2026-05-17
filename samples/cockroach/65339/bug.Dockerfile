@@ -1,21 +1,16 @@
-# syntax=docker/dockerfile:1.4
-# bug.Dockerfile for cockroach-65339 — full upstream clone at bug commit
-FROM golang:1.22
-RUN apt-get update && apt-get install -y --no-install-recommends git ca-certificates patch && rm -rf /var/lib/apt/lists/*
-RUN mkdir -p /root/.ssh && ssh-keyscan -t rsa,ed25519 github.com >> /root/.ssh/known_hosts 2>/dev/null
-ENV GOPROXY=https://goproxy.cn,direct GOSUMDB=off GOFLAGS=-mod=mod CGO_ENABLED=1
+# bug.Dockerfile for cockroach-65339 (in-place BUG state)
+FROM gonb-cockroach-65339-base:latest
 
-# === Full upstream at bug commit ===
-RUN --mount=type=ssh git clone --depth=200 git@github.com:cockroachdb/cockroach.git /work/upstream
-WORKDIR /work/upstream
-RUN --mount=type=ssh git fetch --depth=200 origin 91e40c36aa18238544ab23bf66e0a69ccb703791 && git checkout --detach 91e40c36aa18238544ab23bf66e0a69ccb703791
-RUN --mount=type=ssh go mod download 2>&1 | tail -10 || true
+WORKDIR /work/upstream/pkg/util/tracing
 
-# === Race-triggering artefact in isolated sub-package ===
-WORKDIR /work/pr2t-test
-COPY go.mod ./
-COPY verified_test.go ./
-COPY *.go ./
+# Remove upstream .go files (keep only our stubs + race test)
+RUN find . -maxdepth 1 -name '*.go' -a ! -name 'crdbspan.go' -a ! -name 'verified_test.go' -delete 2>/dev/null || true
 
-WORKDIR /work
-# NO CMD — race trigger command is in README
+# Copy stub mock files (unfixed / bug versions)
+COPY crdbspan.go ./crdbspan.go
+COPY verified_test.go ./verified_test.go
+
+# Verify compilation
+RUN go test -race -vet=off -c -o /dev/null . 2>&1 | tail -15 || true
+
+CMD go test -race -vet=off -count=20 -timeout=300s -run 'Test65339Race' .

@@ -1,0 +1,80 @@
+==================
+WARNING: DATA RACE
+Read at 0x00c4201c6168 by goroutine 26:
+  github.com/coreos/etcd/mvcc.TestRace_6248_InPlace.func1()
+      /go/src/github.com/coreos/etcd/mvcc/kvstore.go:641 +0x90
+
+Previous write at 0x00c4201c6168 by goroutine 25:
+  github.com/coreos/etcd/mvcc.TestRace_6248_InPlace.func1()
+      /go/src/github.com/coreos/etcd/mvcc/kvstore.go:642 +0xe5
+
+Goroutine 26 (running) created at:
+  github.com/coreos/etcd/mvcc.TestRace_6248_InPlace()
+      /go/src/github.com/coreos/etcd/mvcc/etcd-6248_race_test.go:28 +0x258
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:777 +0x16d
+
+Goroutine 25 (running) created at:
+  github.com/coreos/etcd/mvcc.TestRace_6248_InPlace()
+      /go/src/github.com/coreos/etcd/mvcc/etcd-6248_race_test.go:28 +0x258
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:777 +0x16d
+==================
+--- FAIL: TestRace_6248_InPlace (0.25s)
+	testing.go:730: race detected during execution of test
+2026-05-11 07:13:24.266532 I | mvcc: store.index: compact 1
+2026-05-11 07:13:24.351709 I | mvcc: store.index: compact 2
+2026-05-11 07:13:24.351948 I | mvcc: store.index: compact 3
+2026-05-11 07:13:24.352179 I | mvcc: store.index: compact 4
+2026-05-11 07:13:24.352345 I | mvcc: store.index: compact 5
+2026-05-11 07:13:24.352514 I | mvcc: store.index: compact 6
+2026-05-11 07:13:24.352697 I | mvcc: store.index: compact 7
+2026-05-11 07:13:24.352855 I | mvcc: store.index: compact 8
+2026-05-11 07:13:24.352992 I | mvcc: store.index: compact 9
+2026-05-11 07:13:24.353088 I | mvcc: store.index: compact 10
+2026-05-11 07:13:24.353216 I | mvcc: store.index: compact 11
+2026-05-11 07:13:24.353309 I | mvcc: store.index: compact 12
+2026-05-11 07:13:24.353430 I | mvcc: store.index: compact 13
+2026-05-11 07:13:24.353534 I | mvcc: store.index: compact 14
+2026-05-11 07:13:24.353657 I | mvcc: store.index: compact 15
+2026-05-11 07:13:24.353774 I | mvcc: store.index: compact 16
+2026-05-11 07:13:24.353910 I | mvcc: store.index: compact 17
+2026-05-11 07:13:24.354020 I | mvcc: store.index: compact 18
+2026-05-11 07:13:24.354122 I | mvcc: store.index: compact 19
+2026-05-11 07:13:24.354297 I | mvcc: store.index: compact 1
+2026-05-11 07:13:24.355054 I | mvcc: store.index: compact 2
+2026-05-11 07:13:24.355275 I | mvcc: store.index: compact 3
+2026-05-11 07:13:24.355505 I | mvcc: store.index: compact 4
+2026-05-11 07:13:24.355712 I | mvcc: store.index: compact 5
+2026-05-11 07:13:24.355931 I | mvcc: store.index: compact 6
+2026-05-11 07:13:24.356140 I | mvcc: store.index: compact 7
+2026-05-11 07:13:24.356326 I | mvcc: store.index: compact 8
+2026-05-11 07:13:24.356525 I | mvcc: store.index: compact 9
+2026-05-11 07:13:24.356823 I | mvcc: store.index: compact 10
+2026-05-11 07:13:24.357150 I | mvcc: store.index: compact 11
+2026-05-11 07:13:24.357417 I | mvcc: store.index: compact 12
+2026-05-11 07:13:24.357697 I | mvcc: store.index: compact 13
+2026-05-11 07:13:24.357920 I | mvcc: store.index: compact 14
+2026-05-11 07:13:24.358102 I | mvcc: store.index: compact 15
+2026-05-11 07:13:24.358272 I | mvcc: store.index: compact 16
+2026-05-11 07:13:24.358459 I | mvcc: store.index: compact 17
+2026-05-11 07:13:24.358670 I | mvcc: store.index: compact 18
+2026-05-11 07:13:24.358851 I | mvcc: store.index: compact 19
+2026-05-11 07:13:24.400252 I | mvcc: store.index: compact 4
+2026-05-11 07:13:24.400842 I | mvcc: finished scheduled compaction at 4 (took 294.406µs)
+2026-05-11 07:13:24.407913 I | mvcc: store.index: compact 4
+2026-05-11 07:13:24.408610 I | mvcc: finished scheduled compaction at 4 (took 332.998µs)
+2026-05-11 07:13:24.546943 I | mvcc: store.index: compact 1
+2026-05-11 07:13:24.547742 I | mvcc: store.index: compact 2
+2026-05-11 07:13:24.548040 I | mvcc: finished scheduled compaction at 1 (took 814.561µs)
+2026-05-11 07:13:24.548514 I | mvcc: store.index: compact 3
+2026-05-11 07:13:24.548745 I | mvcc: finished scheduled compaction at 2 (took 516.225µs)
+2026-05-11 07:13:24.550099 I | mvcc: store.index: compact 4
+2026-05-11 07:13:24.550402 I | mvcc: finished scheduled compaction at 3 (took 1.488887ms)
+2026-05-11 07:13:24.550724 I | mvcc: finished scheduled compaction at 4 (took 75.551µs)
+2026-05-11 07:13:24.556221 I | mvcc: store.index: compact 0
+2026-05-11 07:13:24.556892 I | mvcc: store.index: compact 1
+2026-05-11 07:13:24.557038 I | mvcc: finished scheduled compaction at 0 (took 490.353µs)
+2026-05-11 07:13:24.557512 I | mvcc: store.index: compact 4
+2026-05-11 07:13:24.557634 I | mvcc: finished scheduled compaction at 1 (took 430.842µs)
+2026-05-11 07:13:24.606889 I | mvcc: store.index: compact 1

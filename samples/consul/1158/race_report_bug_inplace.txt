@@ -1,0 +1,35 @@
+==================
+WARNING: DATA RACE
+Read at 0x00c0000b4028 by goroutine 9:
+  consul1158.(*Lock).IsHeld()
+      /work/lock.go:12 +0x85
+  consul1158.TestRace.func2()
+      /work/lock_test.go:11 +0x12
+
+Previous write at 0x00c0000b4028 by goroutine 8:
+  consul1158.(*Lock).Unlock()
+      /work/lock.go:15 +0x91
+  consul1158.TestRace.func1()
+      /work/lock_test.go:10 +0x12
+
+Goroutine 9 (running) created at:
+  consul1158.TestRace()
+      /work/lock_test.go:11 +0x2a
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+
+Goroutine 8 (running) created at:
+  consul1158.TestRace()
+      /work/lock_test.go:10 +0x1dc
+  testing.tRunner()
+      /usr/local/go/src/testing/testing.go:1689 +0x21e
+  testing.(*T).Run.gowrap1()
+      /usr/local/go/src/testing/testing.go:1742 +0x44
+==================
+--- FAIL: TestRace (0.00s)
+    testing.go:1398: race detected during execution of test
+FAIL
+FAIL	consul1158	0.053s
+FAIL
