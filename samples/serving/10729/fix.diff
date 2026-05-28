@@ -1,0 +1,206 @@
+From 15cb7434523bc89a0615eaa9e603b3e35db4e218 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Markus=20Th=C3=B6mmes?= <markusthoemmes@me.com>
+Date: Tue, 9 Feb 2021 18:37:50 +0100
+Subject: [PATCH 1/2] Avoid deleting a stat if a request raced the reporter
+
+This prevents a race between the report routine and requests flowing in and out. Since we're trying to minimize contention of the request path, the locking routines try to grab as little write-locks as possible, to allow things to progress in parallel.
+
+That breaks though if a report would report AverageConcurrency == 0 and hence marking the stat for deletion. If between this being done and the entry actually being deleted (two separate locks as we only grab a read lock for determining the deletion) comes a nwe request, it'll grab the stat that is now going to be deleted and hence not seen by the next report routine.
+
+The In event is lost and the stats concurrency becomes negative, unrecoverably.
+---
+ pkg/activator/handler/concurrency_reporter.go | 25 +++++--
+ .../handler/concurrency_reporter_test.go      | 67 +++++++++++++++++++
+ 2 files changed, 86 insertions(+), 6 deletions(-)
+
+diff --git a/pkg/activator/handler/concurrency_reporter.go b/pkg/activator/handler/concurrency_reporter.go
+index a920a8313655..b3be93be2e51 100644
+--- a/pkg/activator/handler/concurrency_reporter.go
++++ b/pkg/activator/handler/concurrency_reporter.go
+@@ -23,6 +23,7 @@ import (
+ 	"sync"
+ 	"time"
+ 
++	"go.uber.org/atomic"
+ 	"go.uber.org/zap"
+ 	"k8s.io/apimachinery/pkg/types"
+ 	network "knative.dev/networking/pkg"
+@@ -46,6 +47,7 @@ const reportInterval = time.Second
+ type revisionStats struct {
+ 	stats        *network.RequestStats
+ 	firstRequest float64
++	refs         *atomic.Int64
+ }
+ 
+ // ConcurrencyReporter reports stats based on incoming requests and ticks.
+@@ -79,6 +81,7 @@ func NewConcurrencyReporter(ctx context.Context, podName string, statCh chan []a
+ // handleEvent handles request events (in, out) and updates the respective stats.
+ func (cr *ConcurrencyReporter) handleEvent(event network.ReqEvent) {
+ 	stat, msg := cr.getOrCreateStat(event)
++	defer stat.refs.Dec()
+ 	if msg != nil {
+ 		cr.statCh <- []asmetrics.StatMessage{*msg}
+ 	}
+@@ -89,14 +92,16 @@ func (cr *ConcurrencyReporter) handleEvent(event network.ReqEvent) {
+ // If absent it creates a new one and returns it, potentially returning a StatMessage too
+ // to trigger an immediate scale-from-0.
+ func (cr *ConcurrencyReporter) getOrCreateStat(event network.ReqEvent) (*revisionStats, *asmetrics.StatMessage) {
+-	stat := func() *revisionStats {
+-		cr.mux.RLock()
+-		defer cr.mux.RUnlock()
+-		return cr.stats[event.Key]
+-	}()
++	cr.mux.RLock()
++	stat := cr.stats[event.Key]
+ 	if stat != nil {
++		// Since this is incremented under the lock, it's guaranteed to be observed by
++		// the deletion routine.
++		stat.refs.Inc()
++		cr.mux.RUnlock()
+ 		return stat, nil
+ 	}
++	cr.mux.RUnlock()
+ 
+ 	// Doubly checked locking.
+ 	cr.mux.Lock()
+@@ -104,12 +109,16 @@ func (cr *ConcurrencyReporter) getOrCreateStat(event network.ReqEvent) (*revisio
+ 
+ 	stat = cr.stats[event.Key]
+ 	if stat != nil {
++		// Since this is incremented under the lock, it's guaranteed to be observed by
++		// the deletion routine.
++		stat.refs.Inc()
+ 		return stat, nil
+ 	}
+ 
+ 	stat = &revisionStats{
+ 		stats:        network.NewRequestStats(event.Time),
+ 		firstRequest: 1,
++		refs:         atomic.NewInt64(1),
+ 	}
+ 	cr.stats[event.Key] = stat
+ 
+@@ -136,7 +145,11 @@ func (cr *ConcurrencyReporter) report(now time.Time) []asmetrics.StatMessage {
+ 		cr.mux.Lock()
+ 		defer cr.mux.Unlock()
+ 		for _, key := range toDelete {
+-			delete(cr.stats, key)
++			// Avoid deleting the stat if a request raced fetching it while we've been
++			// busy reporting.
++			if cr.stats[key].refs.Load() == 0 {
++				delete(cr.stats, key)
++			}
+ 		}
+ 	}
+ 
+diff --git a/pkg/activator/handler/concurrency_reporter_test.go b/pkg/activator/handler/concurrency_reporter_test.go
+index 7c57f7bc2bfe..dd89ab457fff 100644
+--- a/pkg/activator/handler/concurrency_reporter_test.go
++++ b/pkg/activator/handler/concurrency_reporter_test.go
+@@ -460,6 +460,73 @@ func TestConcurrencyReporterHandler(t *testing.T) {
+ 	}
+ }
+ 
++func TestConcurrencyReporterRace(t *testing.T) {
++	cr, _, cancel := newTestReporter(t)
++	defer cancel()
++
++	base := time.Now()
++
++	// 1. Request in: Creates the stat (first part of handleEvent)
++	eventIn := network.ReqEvent{
++		Time: base,
++		Type: network.ReqIn,
++		Key:  rev1,
++	}
++	stats, _ := cr.getOrCreateStat(eventIn)
++
++	// 2. Report (will remove the stat immediately)
++	cr.report(base.Add(1 * time.Second))
++
++	// 3. HandleEvent (second part of handleEvent)
++	stats.stats.HandleEvent(eventIn)
++
++	// 4. Request out: Creates a new stat, now negative
++	cr.handleEvent(network.ReqEvent{
++		Time: base.Add(2 * time.Second),
++		Type: network.ReqOut,
++		Key:  rev1,
++	})
++
++	// 5. A negative report (if buggy)
++	got := cr.report(base.Add(2 * time.Second))
++	want := []asmetrics.StatMessage{{
++		Key: rev1,
++		Stat: asmetrics.Stat{
++			AverageConcurrentRequests: 1,
++			RequestCount:              1,
++			PodName:                   activatorPodName,
++		},
++	}}
++	if !cmp.Equal(got, want) {
++		t.Error("Unexpected stats (-want +got):", cmp.Diff(want, got))
++	}
++
++	// 6. It continues to work correctly.
++	cr.handleEvent(network.ReqEvent{
++		Time: base.Add(2500 * time.Millisecond),
++		Type: network.ReqIn,
++		Key:  rev1,
++	})
++	cr.handleEvent(network.ReqEvent{
++		Time: base.Add(3 * time.Second),
++		Type: network.ReqOut,
++		Key:  rev1,
++	})
++
++	got = cr.report(base.Add(3 * time.Second))
++	want = []asmetrics.StatMessage{{
++		Key: rev1,
++		Stat: asmetrics.Stat{
++			AverageConcurrentRequests: 0.5,
++			RequestCount:              1,
++			PodName:                   activatorPodName,
++		},
++	}}
++	if !cmp.Equal(got, want) {
++		t.Error("Unexpected stats (-want +got):", cmp.Diff(want, got))
++	}
++}
++
+ func TestMetricsReported(t *testing.T) {
+ 	reset()
+ 	cr, ctx, cancel := newTestReporter(t)
+
+From 3f40332136dc7a289921a078858f7fe4418dc067 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Markus=20Th=C3=B6mmes?= <markusthoemmes@me.com>
+Date: Wed, 10 Feb 2021 10:40:14 +0100
+Subject: [PATCH 2/2] Avoid pointer
+
+---
+ pkg/activator/handler/concurrency_reporter.go | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/pkg/activator/handler/concurrency_reporter.go b/pkg/activator/handler/concurrency_reporter.go
+index b3be93be2e51..f5aaad92c422 100644
+--- a/pkg/activator/handler/concurrency_reporter.go
++++ b/pkg/activator/handler/concurrency_reporter.go
+@@ -47,7 +47,7 @@ const reportInterval = time.Second
+ type revisionStats struct {
+ 	stats        *network.RequestStats
+ 	firstRequest float64
+-	refs         *atomic.Int64
++	refs         atomic.Int64
+ }
+ 
+ // ConcurrencyReporter reports stats based on incoming requests and ticks.
+@@ -118,8 +118,8 @@ func (cr *ConcurrencyReporter) getOrCreateStat(event network.ReqEvent) (*revisio
+ 	stat = &revisionStats{
+ 		stats:        network.NewRequestStats(event.Time),
+ 		firstRequest: 1,
+-		refs:         atomic.NewInt64(1),
+ 	}
++	stat.refs.Inc()
+ 	cr.stats[event.Key] = stat
+ 
+ 	return stat, &asmetrics.StatMessage{

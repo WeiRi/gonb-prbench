@@ -265,3 +265,9 @@ tidb-62900,tidb,62900,data_race,RACE,2025,pr,synthesized,pkg/ddl/executor.go,pin
 traefik-2287,traefik,2287,anonymous_function,RACE,2017,pr,synthesized,healthcheck/healthcheck.go,traefik/traefik,https://github.com/traefik/traefik/pull/2287,in_place
 victoriametrics-10860,victoriametrics,10860,order_violation,RACE,2026,pr,synthesized,app/vmauth/auth_config.go,VictoriaMetrics/VictoriaMetrics,https://github.com/VictoriaMetrics/VictoriaMetrics/pull/10860,replicated
 victoriametrics-8258,victoriametrics,8258,data_race,RACE,2025,pr,synthesized,app/vmalert/notifier/alertmanager.go,VictoriaMetrics/VictoriaMetrics,https://github.com/VictoriaMetrics/VictoriaMetrics/pull/8258,in_place
+etcd-21375,etcd,21375,data_race,PANIC,2025,pr,handcrafted,server/etcdserver/v3_server.go,etcd-io/etcd,https://github.com/etcd-io/etcd/pull/21375,replicated
+kubernetes-115282,kubernetes,115282,data_race,RACE,2023,pr,handcrafted,staging/src/k8s.io/apiserver/pkg/server/config.go,kubernetes/kubernetes,https://github.com/kubernetes/kubernetes/pull/115282,replicated
+kubernetes-94537,kubernetes,94537,data_race,PANIC,2020,pr,handcrafted,staging/src/k8s.io/legacy-cloud-providers/azure/cache/azure_cache.go,kubernetes/kubernetes,https://github.com/kubernetes/kubernetes/pull/94537,in_place
+kubernetes-98653,kubernetes,98653,data_race,PANIC,2021,pr,handcrafted,staging/src/k8s.io/apimachinery/pkg/watch/streamwatcher.go,kubernetes/kubernetes,https://github.com/kubernetes/kubernetes/pull/98653,in_place
+kubernetes-98956,kubernetes,98956,data_race,RACE,2021,pr,handcrafted,pkg/kubelet/kubelet_pods.go,kubernetes/kubernetes,https://github.com/kubernetes/kubernetes/pull/98956,in_place
+serving-10729,serving,10729,data_race,PANIC,2021,pr,handcrafted,pkg/activator/handler/concurrency_reporter.go,knative/serving,https://github.com/knative/serving/pull/10729,in_place

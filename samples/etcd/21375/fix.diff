@@ -1,0 +1,24 @@
+diff --git a/v3_server.go b/v3_server.go
+--- a/v3_server.go
++++ b/v3_server.go
+@@ -15,12 +15,17 @@
+ 
+ type EtcdServer struct{}
+ 
+-// requestCurrentIndex: BUG. Single select doesn't re-check leaderChangedNotifier
+-// after readStateC fires.
++// FIX: re-check leaderChangedNotifier after readStateC fires.
+ func (s *EtcdServer) requestCurrentIndex(leaderChangedNotifier <-chan struct{}, readStateC <-chan readState) (uint64, error) {
+ 	select {
+ 	case rs := <-readStateC:
+-		return rs.Index, nil
++		// FIX: don't return stale read; check leader changed first.
++		select {
++		case <-leaderChangedNotifier:
++			return 0, ErrLeaderChanged
++		default:
++			return rs.Index, nil
++		}
+ 	case <-leaderChangedNotifier:
+ 		return 0, ErrLeaderChanged
+ 	}

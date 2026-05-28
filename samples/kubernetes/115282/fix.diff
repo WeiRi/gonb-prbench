@@ -1,0 +1,50 @@
+diff --git a/config.go b/config.go
+index 1111111..2222222 100644
+--- a/config.go	2026-05-19 18:59:56.819438092 +0800
++++ b/config.go	2026-05-19 18:59:56.821438239 +0800
+@@ -1,29 +1,28 @@
+-// Production stub for k8s staging/src/k8s.io/apiserver/pkg/server/config.go (PR #115282).
+-// Models DefaultBuildHandlerChain returning a handler chain with a shared
+-// warningRecorder accessed concurrently by the request goroutine and the
+-// timeout goroutine. BUG: no lock around warnings slice.
+ package apiserver
+ 
++import "sync"
++
+ type warningRecorder struct {
++	mu       sync.Mutex
+ 	warnings []string
+ }
+ 
+ func (r *warningRecorder) AddWarning(s string) {
++	r.mu.Lock()
++	defer r.mu.Unlock()
+ 	r.warnings = append(r.warnings, s)
+ }
+ 
+ func (r *warningRecorder) Snapshot() []string {
++	r.mu.Lock()
++	defer r.mu.Unlock()
+ 	return append([]string(nil), r.warnings...)
+ }
+ 
+-// Chain is the value returned by DefaultBuildHandlerChain.
+ type Chain struct {
+ 	rec *warningRecorder
+ }
+ 
+-// ServeRequest emulates a request running through the chain: the request
+-// goroutine adds warnings, the timeout goroutine snapshots warnings. BUG:
+-// both unsynchronized -> race on the warnings slice.
+ func (c *Chain) ServeRequest() {
+ 	done := make(chan struct{})
+ 	go func() {
+@@ -38,8 +37,6 @@
+ 	<-done
+ }
+ 
+-// DefaultBuildHandlerChain wires WithWarningRecorder into the chain in the
+-// position that exposes the racy slice to both timeout and request paths.
+ func DefaultBuildHandlerChain() *Chain {
+ 	return &Chain{rec: &warningRecorder{}}
+ }

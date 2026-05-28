@@ -1,0 +1,63 @@
+From 90ddd5f72191fa1a89f21124b42585538f0cb807 Mon Sep 17 00:00:00 2001
+From: knight42 <anonymousknight96@gmail.com>
+Date: Sat, 5 Sep 2020 02:03:12 +0800
+Subject: [PATCH 1/2] test(azure::cache): deflake TestCacheNoConcurrentGet
+
+Signed-off-by: knight42 <anonymousknight96@gmail.com>
+---
+ .../legacy-cloud-providers/azure/cache/azure_cache_test.go  | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/staging/src/k8s.io/legacy-cloud-providers/azure/cache/azure_cache_test.go b/staging/src/k8s.io/legacy-cloud-providers/azure/cache/azure_cache_test.go
+index 40a45cc554cae..f8c6f9f059328 100644
+--- a/staging/src/k8s.io/legacy-cloud-providers/azure/cache/azure_cache_test.go
++++ b/staging/src/k8s.io/legacy-cloud-providers/azure/cache/azure_cache_test.go
+@@ -195,8 +195,10 @@ func TestCacheNoConcurrentGet(t *testing.T) {
+ 	var wg sync.WaitGroup
+ 	for i := 0; i < 5; i++ {
+ 		wg.Add(1)
+-		go cache.Get(key, CacheReadTypeDefault)
+-		wg.Done()
++		go func() {
++			defer wg.Done()
++			_, _ = cache.Get(key, CacheReadTypeDefault)
++		}()
+ 	}
+ 	v, err := cache.Get(key, CacheReadTypeDefault)
+ 	wg.Wait()
+
+From 2b1395a88aed3ee941be35b025fd3431a1afee36 Mon Sep 17 00:00:00 2001
+From: knight42 <anonymousknight96@gmail.com>
+Date: Sat, 5 Sep 2020 02:43:53 +0800
+Subject: [PATCH 2/2] fix(azure::cache): TimedCache.Getter should be called
+ once on the same key
+
+If a key have't been saved in TimedCache, and there are multiple
+goroutines getting this key, TimedCache.Getter might be invoked multiple
+times because the entry is overwritten in TimedCache.getInternal.
+
+Signed-off-by: knight42 <anonymousknight96@gmail.com>
+---
+ .../legacy-cloud-providers/azure/cache/azure_cache.go    | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/staging/src/k8s.io/legacy-cloud-providers/azure/cache/azure_cache.go b/staging/src/k8s.io/legacy-cloud-providers/azure/cache/azure_cache.go
+index 39c679ebc8d10..b88fbbad4d7f5 100644
+--- a/staging/src/k8s.io/legacy-cloud-providers/azure/cache/azure_cache.go
++++ b/staging/src/k8s.io/legacy-cloud-providers/azure/cache/azure_cache.go
+@@ -103,6 +103,15 @@ func (t *TimedCache) getInternal(key string) (*AzureCacheEntry, error) {
+ 	t.Lock.Lock()
+ 	defer t.Lock.Unlock()
+
++	// Another goroutine might have written the same key.
++	entry, exists, err = t.Store.GetByKey(key)
++	if err != nil {
++		return nil, err
++	}
++	if exists {
++		return entry.(*AzureCacheEntry), nil
++	}
++
+ 	// Still not found, add new entry with nil data.
+ 	// Note the data will be filled later by getter.
+ 	newEntry := &AzureCacheEntry{
